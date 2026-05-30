@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JPG to PDF - GovDocs Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <meta name="theme-color" content="#2563eb">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <meta name="description" content="Convert JPG Images to PDF Online. Combine your certificates and identity proofs into a single PDF document for government job uploads.">
@@ -33,19 +36,8 @@
 </head>
 <body class="bg-slate-50 text-slate-900">
     <!-- Unified Header -->
-    <header class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
-        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-200">G</div>
-                <h1 class="text-2xl font-black tracking-tight text-slate-900">GovDocs<span class="text-blue-600">.pro</span></h1>
-            </a>
-            <nav class="hidden lg:flex items-center gap-10 text-sm font-semibold text-slate-600 uppercase tracking-widest">
-                <button class="nav-trigger flex items-center gap-2 hover:text-blue-600 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
-                    Browse All Tools
-                </button>
-            </nav>
-        </div>
+    <header id="main-header" class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
+        <!-- Injected by header.js -->
     </header>
 
     <main class="container mx-auto px-4 py-12">
@@ -128,6 +120,49 @@
             </div>
         </div>
     </main>
+
+    <!-- Footer -->
+    <footer id="footer" class="bg-[#0f172a] text-slate-400 py-8 md:py-10 border-t border-slate-800">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 mb-6 md:mb-10 text-center md:text-left">
+                <!-- Brand Section -->
+                <div class="flex flex-col items-center md:items-start space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 bg-blue-600 rounded flex items-center justify-center text-white font-black text-xs">G</div>
+                        <span class="text-lg font-black tracking-tight text-white">GovDocs<span class="text-blue-500">.pro</span></span>
+                    </div>
+                    <p class="text-sm leading-relaxed max-w-xs">સરકારી ફોર્મ માટે ફોટો, PDF અને ડોક્યુમેન્ટ ટૂલ્સ.</p>
+                    <p class="text-[11px] font-medium text-slate-500">Made in Gujarat ❤️</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="space-y-4">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-widest">Quick Links</h4>
+                    <ul class="text-sm space-y-2.5">
+                        <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="photo-resize.html" class="hover:text-white transition-colors">Photo Resize</a></li>
+                        <li><a href="photo-compress.html" class="hover:text-white transition-colors">Photo Compress</a></li>
+                        <li><a href="jpg-to-pdf.html" class="hover:text-white transition-colors">JPG to PDF</a></li>
+                        <li><a href="pdf-merge.html" class="hover:text-white transition-colors">PDF Merge</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal Section -->
+                <div class="space-y-4">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-widest">Legal</h4>
+                    <ul class="text-sm space-y-2.5">
+                        <li><a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] font-medium text-slate-500">
+                <p>© 2025 GovDocs Pro. All Rights Reserved.</p>
+                <p class="bg-slate-800/50 px-2 py-1 rounded">Version: v1.0</p>
+            </div>
+        </div>
+    </footer>
 
     <!-- Core Logic -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>

@@ -10,11 +10,12 @@ const state = {
     cropper: null,
     bgColor: 'original',
     isTransparent: false,
-    isBlackAndWhite: false
+    isBlackAndWhite: false,
+    whiteBg: false
 };
 
 const updateStatus = (msg) => {
-    const statusMsg = document.getElementById('statusMsg');
+    const statusMsg = document.getElementById('statusMsg') || document.getElementById('pdfStatus');
     if (statusMsg) statusMsg.innerText = msg;
 };
 
@@ -88,6 +89,130 @@ document.addEventListener('DOMContentLoaded', () => {
     const contrastInput = document.getElementById('contrastInput');
     const manualWidth = document.getElementById('manualWidth');
     const manualHeight = document.getElementById('manualHeight');
+    const jpgInput = document.getElementById('jpgToPdfInput');
+    const jpgListSection = document.getElementById('list-section');
+    const jpgListContainer = document.getElementById('image-list-container');
+    const pdfMergeInput = document.getElementById('mergePdfInput');
+    const pdfListSection = document.getElementById('pdf-list-section');
+    const pdfListContainer = document.getElementById('pdf-list-container');
+
+    let selectedJpgFiles = [];
+    let selectedPdfFiles = [];
+
+    const renderPdfList = () => {
+        if (!pdfListContainer || !pdfListSection) return;
+        if (selectedPdfFiles.length === 0) {
+            pdfListSection.classList.add('hidden');
+            return;
+        }
+        pdfListSection.classList.remove('hidden');
+        pdfListContainer.innerHTML = selectedPdfFiles.map((file, index) => `
+            <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-red-50 text-red-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                    </div>
+                    <div class="text-sm font-bold text-slate-700 truncate max-w-[200px]">${file.name}</div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="pdf-move-up p-2 text-slate-400 hover:text-blue-600 ${index === 0 ? 'invisible' : ''}" data-index="${index}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
+                    </button>
+                    <button class="pdf-move-down p-2 text-slate-400 hover:text-blue-600 ${index === selectedPdfFiles.length - 1 ? 'invisible' : ''}" data-index="${index}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                    <button class="pdf-remove p-2 text-slate-400 hover:text-red-600" data-index="${index}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        pdfListContainer.querySelectorAll('.pdf-move-up').forEach(btn => btn.onclick = () => {
+            const i = parseInt(btn.dataset.index);
+            [selectedPdfFiles[i], selectedPdfFiles[i-1]] = [selectedPdfFiles[i-1], selectedPdfFiles[i]];
+            renderPdfList();
+        });
+        pdfListContainer.querySelectorAll('.pdf-move-down').forEach(btn => btn.onclick = () => {
+            const i = parseInt(btn.dataset.index);
+            [selectedPdfFiles[i], selectedPdfFiles[i+1]] = [selectedPdfFiles[i+1], selectedPdfFiles[i]];
+            renderPdfList();
+        });
+        pdfListContainer.querySelectorAll('.pdf-remove').forEach(btn => btn.onclick = () => {
+            const i = parseInt(btn.dataset.index);
+            selectedPdfFiles.splice(i, 1);
+            renderPdfList();
+        });
+    };
+
+    const handlePdfFiles = (files) => {
+        Array.from(files).forEach(file => {
+            if (file.type === 'application/pdf') selectedPdfFiles.push(file);
+        });
+        renderPdfList();
+    };
+
+    const renderJpgList = () => {
+        if (!jpgListContainer || !jpgListSection) return;
+        if (selectedJpgFiles.length === 0) {
+            jpgListSection.classList.add('hidden');
+            return;
+        }
+        jpgListSection.classList.remove('hidden');
+        jpgListContainer.innerHTML = selectedJpgFiles.map((item, index) => `
+            <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-slate-200 rounded-lg overflow-hidden flex-shrink-0">
+                        <img src="${item.preview}" class="w-full h-full object-cover" alt="Thumb">
+                    </div>
+                    <div class="text-sm font-bold text-slate-700 truncate max-w-[150px]">${item.file.name}</div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="move-up-btn p-2 text-slate-400 hover:text-blue-600 ${index === 0 ? 'invisible' : ''}" data-index="${index}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
+                    </button>
+                    <button class="move-down-btn p-2 text-slate-400 hover:text-blue-600 ${index === selectedJpgFiles.length - 1 ? 'invisible' : ''}" data-index="${index}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                    <button class="remove-btn p-2 text-slate-400 hover:text-red-600" data-index="${index}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        jpgListContainer.querySelectorAll('.move-up-btn').forEach(btn => {
+            btn.onclick = () => {
+                const i = parseInt(btn.dataset.index);
+                [selectedJpgFiles[i], selectedJpgFiles[i-1]] = [selectedJpgFiles[i-1], selectedJpgFiles[i]];
+                renderJpgList();
+            };
+        });
+        jpgListContainer.querySelectorAll('.move-down-btn').forEach(btn => {
+            btn.onclick = () => {
+                const i = parseInt(btn.dataset.index);
+                [selectedJpgFiles[i], selectedJpgFiles[i+1]] = [selectedJpgFiles[i+1], selectedJpgFiles[i]];
+                renderJpgList();
+            };
+        });
+        jpgListContainer.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.onclick = () => {
+                const i = parseInt(btn.dataset.index);
+                URL.revokeObjectURL(selectedJpgFiles[i].preview);
+                selectedJpgFiles.splice(i, 1);
+                renderJpgList();
+            };
+        });
+    };
+
+    const handleJpgFiles = (files) => {
+        Array.from(files).forEach(file => {
+            if (file.type.startsWith('image/')) {
+                selectedJpgFiles.push({ file, preview: URL.createObjectURL(file) });
+            }
+        });
+        renderJpgList();
+    };
 
     // Populate Preset Select dynamically from centralized engine
     if (presetSelect) {
@@ -129,12 +254,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 size: sizeInKb,
                 format: format
             });
+            
+            // Dispatch event for specialized tool pages (like 20KB compressor)
+            window.dispatchEvent(new CustomEvent('imageUploaded', { detail: { size: sizeInKb } }));
 
             renderPreview(img);
             updateStatus("ફાઇલ અપલોડ થઈ ગઈ છે. હવે ડાઉનલોડ બટન પર ક્લિક કરો.");
         };
         img.src = imageSrc;
     });
+
+    // --- PDF Tools Drag & Drop ---
+    const dropZone = document.getElementById('drop-zone');
+    if (dropZone) {
+        const isPdfMerge = !!document.getElementById('mergePdfBtn');
+        const isJpgToPdf = !!document.getElementById('convertJpgBtn') && !isPdfMerge;
+
+        if (isPdfMerge && pdfMergeInput) {
+            dropZone.onclick = () => pdfMergeInput.click();
+            dropZone.ondrop = (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('bg-blue-50');
+                handlePdfFiles(e.dataTransfer.files);
+            };
+            pdfMergeInput.onchange = (e) => handlePdfFiles(e.target.files);
+            document.getElementById('addMorePdfBtn')?.addEventListener('click', () => pdfMergeInput.click());
+        } else if (isJpgToPdf && jpgInput) {
+            dropZone.onclick = () => jpgInput.click();
+            dropZone.ondrop = (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('bg-blue-50');
+                handleJpgFiles(e.dataTransfer.files);
+            };
+            jpgInput.onchange = (e) => handleJpgFiles(e.target.files);
+            document.getElementById('addMoreBtn')?.addEventListener('click', () => jpgInput.click());
+        }
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('bg-blue-50'); };
+        dropZone.ondragleave = () => dropZone.classList.remove('bg-blue-50');
+    }
 
     // --- Photo Resize Tool: Apply Resize Logic ---
     const applyResizeBtn = document.getElementById('applyResize');
@@ -215,6 +372,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     format: 'JPEG'
                 });
 
+                // Dispatch event for specialized tool pages
+                window.dispatchEvent(new CustomEvent('imageCompressed', { detail: { size: sizeInKb } }));
+
                 updateStatus(`સફળતાપૂર્વક કમ્પ્રેસ થયું! નવી સાઈઝ: ${sizeInKb} KB`);
             };
             reader.readAsDataURL(blob);
@@ -286,15 +446,21 @@ function renderPreview(img) {
 async function downloadAdjusted(type) {
     if (!state.originalImage) return;
 
+    const presetSelect = document.getElementById('presetSelect');
+    const manualWidth = document.getElementById('manualWidth');
+    const manualHeight = document.getElementById('manualHeight');
+    const brightnessInput = document.getElementById('brightnessInput');
+    const contrastInput = document.getElementById('contrastInput');
+    const targetSizeInput = document.getElementById('targetSize');
+
     let targetWidth, targetHeight, minKb, maxKb;
 
-    if (presetSelect.value === 'custom') {
+    if (!presetSelect || presetSelect.value === 'custom') {
         targetWidth = parseInt(manualWidth?.value) || state.originalImage.naturalWidth;
         targetHeight = parseInt(manualHeight?.value) || state.originalImage.naturalHeight;
         
         // Handle compression target size for custom settings if the input exists
-        const targetKbInput = document.getElementById('targetSize');
-        maxKb = targetKbInput ? parseInt(targetKbInput.value) : 100;
+        maxKb = targetSizeInput ? parseInt(targetSizeInput.value) : 100;
         minKb = Math.max(5, maxKb - 20); // Basic range buffer for the engine
     } else {
         const preset = GOVT_PRESETS[presetSelect.value];
@@ -312,8 +478,13 @@ async function downloadAdjusted(type) {
     finalCanvas.height = targetHeight;
     const fCtx = finalCanvas.getContext('2d');
 
-    if (state.bgColor !== 'original') {
-        fCtx.fillStyle = state.bgColor;
+    // Check for explicit white background override (common in Passport tool)
+    let bgColor = state.bgColor;
+    const whiteBgCheck = document.getElementById('whiteBg');
+    if (whiteBgCheck && whiteBgCheck.checked) bgColor = 'white';
+
+    if (bgColor !== 'original') {
+        fCtx.fillStyle = bgColor;
         fCtx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
     }
 
@@ -333,18 +504,18 @@ async function downloadAdjusted(type) {
     const link = document.createElement('a');
     link.href = url;
     const extension = format === 'image/png' ? 'png' : 'jpg';
-    link.download = `${presetSelect.value}_${type}_${Math.round(blob.size/1024)}kb.${extension}`;
+    link.download = `${presetSelect?.value || 'custom'}_${type}_${Math.round(blob.size/1024)}kb.${extension}`;
     link.click();
 
     HistoryManager.save({
         toolName: type === 'sign' ? 'Signature Resize' : 'Photo Resize',
-        preset: presetSelect.value === 'custom' ? 'Custom' : GOVT_PRESETS[presetSelect.value]?.label,
+        preset: (!presetSelect || presetSelect.value === 'custom') ? 'Custom' : GOVT_PRESETS[presetSelect.value]?.label,
         size: `${Math.round(blob.size/1024)} KB`
     });
 
     updateStatus(`સફળતાપૂર્વક ડાઉનલોડ થયું! સાઈઝ: ${Math.round(blob.size/1024)} KB`);
     
-    setTimeout(() => URL.revokeObjectURL(url), 100);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
     return finalCanvas;
 }
 
@@ -390,12 +561,11 @@ const downloadFile = (data, name, type) => {
 };
 
 document.getElementById('convertJpgBtn')?.addEventListener('click', async () => {
-    const files = document.getElementById('jpgToPdfInput').files;
-    if (files.length === 0) return alert("કૃપા કરીને ઈમેજીસ પસંદ કરો");
+    if (selectedJpgFiles.length === 0) return alert("કૃપા કરીને ઈમેજીસ પસંદ કરો");
     
     if (pdfStatus) pdfStatus.innerText = "PDF બનાવી રહ્યા છીએ...";
     try {
-        const pdfBytes = await convertImagesToPdf(Array.from(files));
+        const pdfBytes = await convertImagesToPdf(selectedJpgFiles.map(i => i.file));
         downloadFile(pdfBytes, 'images_converted.pdf', 'application/pdf');
         
         HistoryManager.save({
@@ -409,12 +579,11 @@ document.getElementById('convertJpgBtn')?.addEventListener('click', async () => 
 });
 
 document.getElementById('mergePdfBtn')?.addEventListener('click', async () => {
-    const files = document.getElementById('mergePdfInput').files;
-    if (files.length < 2) return alert("મર્જ કરવા માટે ઓછામાં ઓછી 2 PDF પસંદ કરો");
+    if (selectedPdfFiles.length < 2) return alert("મર્જ કરવા માટે ઓછામાં ઓછી 2 PDF પસંદ કરો");
     
     if (pdfStatus) pdfStatus.innerText = "PDF મર્જ કરી રહ્યા છીએ...";
     try {
-        const pdfBytes = await mergePDFs(Array.from(files));
+        const pdfBytes = await mergePDFs(selectedPdfFiles);
         downloadFile(pdfBytes, 'merged_document.pdf', 'application/pdf');
 
         HistoryManager.save({

@@ -12,8 +12,7 @@ const ASSETS = [
     'pdf-logic.js',
     'robots.txt',
     'sitemap.xml',
-    '404.html',
-    'offline.html',
+    'manifest.json',
     'assets/icon-192.png',
     'https://cdn.tailwindcss.com',
     'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css',
@@ -48,7 +47,8 @@ self.addEventListener('fetch', (event) => {
             return response || fetch(event.request).catch(() => {
                 // If request is for a page/document, return offline fallback
                 if (event.request.mode === 'navigate') {
-                    return caches.match('offline.html');
+                    // Safely return cached index if offline.html is missing
+                    return caches.match('index.html');
                 }
             });
         })
