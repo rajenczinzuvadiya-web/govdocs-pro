@@ -58,16 +58,23 @@
                 </section>
 
                 <!-- Workspace (Hidden until image is uploaded) -->
-                <div id="previewArea" class="hidden lg:contents space-y-6 md:space-y-8 lg:space-y-0">
+                <div id="previewArea" class="hidden lg:grid lg:grid-cols-[1.2fr,1fr] lg:gap-8 lg:items-start space-y-6 md:space-y-8 lg:space-y-0">
                     
-                    <!-- 2. IMAGE PREVIEW & INFORMATION SECTION -->
-                    <section id="preview-section" class="card lg:col-start-2 lg:row-start-1" aria-label="Step 2: Image Preview and Details">
-                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 2: Preview & Information</h2>
+                    <!-- Left Column: Preview (First on Mobile) -->
+                    <section id="preview-section" class="card lg:row-span-2" aria-label="Step 2: Image Preview and Details">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest">Step 2: Preview & Information</h2>
+                            <button id="change-photo-btn" class="text-[10px] font-bold text-blue-600 hover:underline flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                Change Photo
+                            </button>
+                        </div>
                         <div id="image-preview-container"></div>
                     </section>
 
+                    <!-- Right Column: Controls -->
                     <!-- 3. COMPRESS SETTINGS -->
-                    <section id="settings-section" class="card lg:col-start-1 lg:row-start-2" aria-label="Step 3: Compression Settings">
+                    <section id="settings-section" class="card" aria-label="Step 3: Compression Settings">
                         <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 3: Compression Settings</h2>
                         
                         <div class="space-y-6">
@@ -98,7 +105,7 @@
                     </section>
 
                     <!-- 4. DOWNLOAD SECTION -->
-                    <section id="download-section" class="card lg:col-start-2 lg:row-start-2" aria-label="Step 4: Download">
+                    <section id="download-section" class="card" aria-label="Step 4: Download">
                         <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 4: Final Download</h2>
                         <button id="downloadPhoto" class="btn btn-primary mb-4 font-bold uppercase text-xs tracking-widest">
                             Download Photo

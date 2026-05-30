@@ -239,6 +239,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show the workspace
             if (previewArea) previewArea.classList.remove('hidden');
             
+            // Hide upload section to reduce scrolling
+            const uploadSection = document.getElementById('upload-section');
+            if (uploadSection) uploadSection.classList.add('hidden');
+
             // Set natural dimensions as defaults for manual inputs if empty (useful for compression tool)
             if (manualWidth && !manualWidth.value) manualWidth.value = img.naturalWidth;
             if (manualHeight && !manualHeight.value) manualHeight.value = img.naturalHeight;
@@ -613,5 +617,12 @@ document.getElementById('mergePdfBtn')?.addEventListener('click', async () => {
             const type = presetSelect?.getAttribute('data-tool-type') || 'photo';
             runQuickProcess(presetKey, type);
         };
+    });
+
+    // Handle Change Photo Button across all tool pages
+    document.addEventListener('click', (e) => {
+        if (e.target.id === 'change-photo-btn' || e.target.closest('#change-photo-btn')) {
+            document.getElementById('imageInput')?.click();
+        }
     });
 });
