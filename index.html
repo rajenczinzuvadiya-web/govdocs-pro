@@ -39,130 +39,216 @@
     <link rel="stylesheet" href="global.css">
     <style>
         .hero-gradient {
-            background: radial-gradient(circle at top right, var(--primary-light) 0%, var(--bg-alt) 100%);
+            background: linear-gradient(180deg, #fcfdfe 0%, #ffffff 100%);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #0f172a, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
 <body class="bg-white text-slate-900">
-    <header id="main-header" class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
-        <!-- Injected by header.js -->
+    <header id="main-header" class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md shadow-sm">
+        <div class="container mx-auto px-4 h-20 md:h-24 flex items-center justify-between">
+            <div class="flex flex-col">
+                <a href="index.html" class="flex items-center gap-2.5 mb-1">
+                    <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-blue-200">G</div>
+                    <span class="text-xl font-black tracking-tight text-slate-900 leading-none">GovDocs<span class="text-blue-600">.pro</span></span>
+                </a>
+                <span class="text-[9px] md:text-[10px] text-slate-500 font-bold uppercase tracking-[0.15em] pl-11">સરકારી કામ માટે તમારો વિશ્વસનીય સાથી</span>
+            </div>
+            <nav class="hidden lg:flex items-center gap-1 text-[12px] font-bold text-slate-600 uppercase tracking-wider">
+                <a href="index.html" class="px-4 py-2 text-blue-600 rounded-lg hover:bg-blue-50 transition-all">Home</a>
+                <button class="nav-trigger px-4 py-2 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Tools</button>
+                <a href="photo-resize.html" class="px-4 py-2 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Resize</a>
+                <a href="photo-compress.html" class="px-4 py-2 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Compress</a>
+                <a href="jpg-to-pdf.html" class="px-4 py-2 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">PDF Tools</a>
+            </nav>
+            <button class="nav-trigger lg:hidden p-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+            </button>
+        </div>
     </header>
 
     <main>
         <!-- Hero Section -->
-        <section class="hero-gradient py-10 md:py-32 border-b border-slate-100">
-            <div class="container mx-auto px-4 text-center">
-                <h1 class="text-3xl md:text-6xl font-black tracking-tight mb-3 md:mb-6 leading-tight">
-                    સરકારી ફોર્મ માટે ડોક્યુમેન્ટ્સ <br>
-                    <span class="text-blue-600">એક જ મિનિટમાં</span> તૈયાર કરો
+        <section class="hero-gradient pt-20 pb-28 md:pt-32 md:pb-40 border-b border-slate-100 overflow-hidden">
+            <div class="container mx-auto px-4 text-center max-w-5xl">
+                <div class="inline-flex items-center gap-2 px-5 py-2 bg-blue-50 text-blue-700 text-[12px] font-black rounded-full mb-10 border border-blue-100 uppercase tracking-[0.2em] shadow-sm animate-fade-in">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.955 0 0010 19.444a11.954 11.955 0 007.834-14.444l-7.834-2.908-7.834 2.908zM9 8a1 1 0 012 0v3a1 1 0 11-2 0V8zm1 5a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+                    100% સુરક્ષિત અને ખાનગી
+                </div>
+                <h1 class="text-5xl md:text-8xl font-black tracking-tight mb-8 text-slate-900 leading-[1.05]">
+                    <span class="text-blue-600">સરકારી ફોર્મ</span> માટેના <br>
+                    ડોક્યુમેન્ટ્સ તૈયાર કરો
                 </h1>
-                <p class="text-base md:text-xl text-slate-600 max-w-2xl mx-auto mb-6 md:mb-10">
-                    તમામ સરકારી ભરતી માટે ફોટો, સહી અને PDF ફાઇલ્સને ચોક્કસ સાઇઝ અને ફોર્મેટમાં ઓટોમેટિકલી બદલો.
+                <p class="text-xl md:text-3xl text-slate-500 max-w-4xl mx-auto mb-16 font-medium leading-relaxed">
+                    તમામ સરકારી ભરતી માટે ફોટો અને સહીને <span class="text-slate-900 font-bold">ચોક્કસ સાઇઝમાં</span> બદલો. તમારો ડેટા સેકન્ડોમાં પ્રોસેસ થાય છે - <span class="text-blue-600 font-bold">સુરક્ષિત રીતે</span> તમારા બ્રાઉઝરમાં.
                 </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-2.5 md:gap-4 max-w-md mx-auto px-4 sm:px-0">
-                    <button class="nav-trigger btn btn-primary flex-1 text-sm md:text-base py-3 md:py-4">બધા ટૂલ્સ જુઓ (Search)</button>
-                    <a href="#govt-services" class="btn btn-outline w-auto px-8">સેવાઓ</a>
+                
+                <!-- Premium Search Box -->
+                <div class="relative max-w-3xl mx-auto mb-20 group">
+                    <input type="text" placeholder="તમને શું ટૂલ જોઈએ છે? (e.g. Photo Resize)" 
+                        class="nav-trigger w-full pl-8 pr-48 py-7 bg-white border border-slate-200 rounded-[2rem] shadow-2xl shadow-blue-100/40 text-slate-900 font-bold focus:border-blue-500 outline-none transition-all cursor-pointer text-lg">
+                    <button class="nav-trigger absolute right-3.5 top-3.5 btn btn-primary !w-auto !min-h-0 !py-4 !px-12 rounded-[1.5rem] text-sm font-black tracking-widest uppercase">ટૂલ શોધો</button>
+                </div>
+
+                <!-- Quick Benefits -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 max-w-4xl mx-auto mb-16">
+                    <div class="flex items-center justify-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        100% સુરક્ષિત
+                    </div>
+                    <div class="flex items-center justify-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest opacity-80">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        ઝડપી પ્રોસેસિંગ
+                    </div>
+                    <div class="flex items-center justify-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        બિલકુલ ફ્રી
+                    </div>
+                    <div class="flex items-center justify-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        મોબાઇલ ફ્રેન્ડલી
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Popular Tools Section -->
-        <section id="popular-tools" class="py-12 md:py-20 bg-white">
-            <div class="container mx-auto px-4">
-                <h2 class="text-2xl md:text-3xl font-black mb-8 md:mb-12 text-center">Popular Tools</h2>
-                <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
-                    <a href="photo-resize.html" class="card card-interactive p-2.5 md:p-6">
-                        <div class="w-8 h-8 md:w-12 md:h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-1 md:mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" /></svg>
+        <section id="popular-tools" class="py-24 bg-white">
+            <div class="container mx-auto px-4 max-w-6xl">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">પોપ્યુલર ટૂલ્સ</h2>
+                    <p class="text-slate-500 font-bold uppercase tracking-widest text-[11px]">તમારા કામને ઝડપી બનાવવા માટેના સૌથી વધુ વપરાતા ટૂલ્સ</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Horizontal SaaS Style Cards -->
+                    <a href="photo-resize.html" class="card card-interactive flex items-center gap-5 !p-5 group">
+                        <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5"/></svg>
                         </div>
-                        <h3 class="text-sm md:text-xl font-bold mb-1 md:mb-2">Photo Resize</h3>
-                        <p class="text-slate-500 text-[10px] md:text-sm italic">ફોટાની સાઇઝ (Height/Width) બદલો.</p>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-black text-slate-900 leading-tight mb-1">Photo Resize</h3>
+                            <p class="text-[13px] text-slate-500 font-medium">પહોળાઈ અને ઊંચાઈ પિક્સેલ મુજબ બદલો.</p>
+                        </div>
+                        <div class="text-slate-300 group-hover:text-blue-600 transition-colors pr-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                        </div>
                     </a>
-                    <a href="photo-compress.html" class="card card-interactive p-2.5 md:p-6">
-                        <div class="w-8 h-8 md:w-12 md:h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mb-1 md:mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+
+                    <a href="photo-compress.html" class="card card-interactive flex items-center gap-5 !p-5 group">
+                        <div class="w-16 h-16 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-green-600 group-hover:text-white transition-all duration-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
                         </div>
-                        <h3 class="text-sm md:text-xl font-bold mb-1 md:mb-2">Photo Compress</h3>
-                        <p class="text-slate-500 text-[10px] md:text-sm italic">ફોટાને ચોક્કસ KB માં કમ્પ્રેસ કરો.</p>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-black text-slate-900 leading-tight mb-1">Photo Compress</h3>
+                            <p class="text-[13px] text-slate-500 font-medium">ફોટાને ચોક્કસ KB માં કમ્પ્રેસ કરો.</p>
+                        </div>
+                        <div class="text-slate-300 group-hover:text-green-600 transition-colors pr-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                        </div>
                     </a>
-                    <a href="20kb-photo.html" class="card card-interactive !p-3 md:!p-6">
-                        <div class="w-8 h-8 md:w-12 md:h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center mb-1.5 md:mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+
+                    <a href="20kb-photo.html" class="card card-interactive flex items-center gap-5 !p-5 group">
+                        <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         </div>
-                        <h3 class="text-sm md:text-xl font-bold mb-1 md:mb-2">20KB Compressor</h3>
-                        <p class="text-slate-500 text-[10px] md:text-sm italic">ફોટાને ૨૦ KB માં કમ્પ્રેસ કરો.</p>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-black text-slate-900 leading-tight mb-1">20KB Compressor</h3>
+                            <p class="text-[13px] text-slate-500 font-medium">ફોટાને ૨૦ KB માં ઓટોમેટિક કમ્પ્રેસ કરો.</p>
+                        </div>
+                        <div class="text-slate-300 group-hover:text-emerald-600 transition-colors pr-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                        </div>
                     </a>
-                    <a href="passport-photo.html" class="card card-interactive p-2.5 md:p-6">
-                        <div class="w-8 h-8 md:w-12 md:h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mb-1 md:mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+
+                    <a href="passport-photo.html" class="card card-interactive flex items-center gap-5 !p-5 group">
+                        <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-amber-600 group-hover:text-white transition-all duration-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
-                        <h3 class="text-sm md:text-xl font-bold mb-1 md:mb-2">Passport Photo Maker</h3>
-                        <p class="text-slate-500 text-[10px] md:text-sm italic">પાસપોર્ટ સાઇઝનો ફોટો ઓનલાઈન બનાવો.</p>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-black text-slate-900 leading-tight mb-1">Passport Maker</h3>
+                            <p class="text-[13px] text-slate-500 font-medium">પાસપોર્ટ સાઇઝનો ફોટો ઓનલાઈન બનાવો.</p>
+                        </div>
+                        <div class="text-slate-300 group-hover:text-amber-600 transition-colors pr-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                        </div>
                     </a>
-                    <a href="signature-resize.html" class="card card-interactive p-2.5 md:p-6">
-                        <div class="w-8 h-8 md:w-12 md:h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center mb-1 md:mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+
+                    <a href="jpg-to-pdf.html" class="card card-interactive flex items-center gap-5 !p-5 group">
+                        <div class="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-red-600 group-hover:text-white transition-all duration-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
-                        <h3 class="text-sm md:text-xl font-bold mb-1 md:mb-2">Signature Tools</h3>
-                        <p class="text-slate-500 text-[10px] md:text-sm italic">સહી રીસાઇઝ અને બેકગ્રાઉન્ડ રીમુવ કરો.</p>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-black text-slate-900 leading-tight mb-1">JPG to PDF</h3>
+                            <p class="text-[13px] text-slate-500 font-medium">ઈમેજ ફાઈલ્સને PDF માં ફેરવો.</p>
+                        </div>
+                        <div class="text-slate-300 group-hover:text-red-600 transition-colors pr-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                        </div>
                     </a>
-                    <a href="jpg-to-pdf.html" class="card card-interactive p-2.5 md:p-6">
-                        <div class="w-8 h-8 md:w-12 md:h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mb-1 md:mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+
+                    <a href="pdf-merge.html" class="card card-interactive flex items-center gap-5 !p-5 group">
+                        <div class="w-16 h-16 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-rose-600 group-hover:text-white transition-all duration-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         </div>
-                        <h3 class="text-sm md:text-xl font-bold mb-1 md:mb-2">JPG to PDF</h3>
-                        <p class="text-slate-500 text-[10px] md:text-sm italic">ઇમેજ ફાઇલ્સને PDF માં ફેરવો.</p>
-                    </a>
-                    <a href="pdf-merge.html" class="card card-interactive p-2.5 md:p-6">
-                        <div class="w-8 h-8 md:w-12 md:h-12 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mb-1 md:mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-black text-slate-900 leading-tight mb-1">PDF Merge</h3>
+                            <p class="text-[13px] text-slate-500 font-medium">બહુવિધ PDF ફાઇલ્સને મર્જ કરો.</p>
                         </div>
-                        <h3 class="text-sm md:text-xl font-bold mb-1 md:mb-2">PDF Merge</h3>
-                        <p class="text-slate-500 text-[10px] md:text-sm italic">બહુવિધ PDF ફાઇલ્સને મર્જ કરો.</p>
+                        <div class="text-slate-300 group-hover:text-rose-600 transition-colors pr-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                        </div>
                     </a>
                 </div>
             </div>
         </section>
 
-        <!-- Government Services Section -->
-        <section id="govt-services" class="py-10 md:py-20 bg-slate-50">
-            <div class="container mx-auto px-4">
-                <h2 class="text-2xl md:text-3xl font-black mb-2 md:mb-4 text-center">Supported Services</h2>
-                <p class="text-slate-500 text-center mb-6 md:mb-12 italic text-sm md:text-base">તમામ ભરતીના સચોટ માપદંડો ઉપલબ્ધ છે.</p>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
-                    <div class="bg-white p-3 md:p-6 rounded-xl border border-slate-100 text-center font-bold shadow-sm hover:border-blue-500 transition-all cursor-default text-sm md:text-base">SSC</div>
-                    <div class="bg-white p-3 md:p-6 rounded-xl border border-slate-100 text-center font-bold shadow-sm hover:border-blue-500 transition-all cursor-default text-sm md:text-base">UPSC</div>
-                    <div class="bg-white p-3 md:p-6 rounded-xl border border-slate-100 text-center font-bold shadow-sm hover:border-blue-500 transition-all cursor-default text-sm md:text-base">Railway</div>
-                    <div class="bg-white p-3 md:p-6 rounded-xl border border-slate-100 text-center font-bold shadow-sm hover:border-blue-500 transition-all cursor-default text-sm md:text-base">Police</div>
-                    <div class="bg-white p-3 md:p-6 rounded-xl border border-slate-100 text-center font-bold shadow-sm hover:border-blue-500 transition-all cursor-default text-sm md:text-base">Passport</div>
+        <!-- Why GovDocs Section -->
+        <section class="py-24 bg-slate-50 border-y border-slate-100">
+            <div class="container mx-auto px-4 max-w-6xl">
+                <div class="text-center mb-20">
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">શા માટે GovDocs Pro?</h2>
+                    <p class="text-slate-500 max-w-2xl mx-auto font-medium">અમે ઉમેદવારો માટે ડોક્યુમેન્ટ બનાવવાની પ્રક્રિયા સરળ અને સુરક્ષિત બનાવી છે.</p>
                 </div>
-            </div>
-        </section>
-
-        <!-- Features Section -->
-        <section class="py-10 md:py-20 bg-white">
-            <div class="container mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                    <div class="text-center">
-                        <div class="w-12 h-12 md:w-16 md:h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
+                    <div class="text-center group">
+                        <div class="w-16 h-16 bg-white text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100 group-hover:border-blue-200 group-hover:bg-blue-50 transition-all">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                         </div>
-                        <h4 class="text-xl font-bold mb-3">100% Privacy</h4>
-                        <p class="text-slate-500 text-sm">તમારી ફાઇલ્સ ક્યારેય સર્વર પર અપલોડ થતી નથી. બધું જ તમારા બ્રાઉઝરમાં પ્રોસેસ થાય છે.</p>
+                        <h4 class="text-lg font-black mb-2 text-slate-900 leading-tight">100% સુરક્ષિત</h4>
+                        <p class="text-sm text-slate-500 font-medium">તમારો ડેટા ખાનગી રહે છે.</p>
                     </div>
-                    <div class="text-center">
-                        <div class="w-12 h-12 md:w-16 md:h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    <div class="text-center group">
+                        <div class="w-16 h-16 bg-white text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100 group-hover:border-blue-200 group-hover:bg-blue-50 transition-all">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                         </div>
-                        <h4 class="text-xl font-bold mb-3">Lightning Fast</h4>
-                        <p class="text-slate-500 text-sm">કોઈ જ પ્રતીક્ષા નહીં. ઇમેજ રીસાઇઝ અને ડાઉનલોડ કરો માત્ર થોડી સેકન્ડમાં.</p>
+                        <h4 class="text-lg font-black mb-2 text-slate-900 leading-tight">ઝડપી પરિણામ</h4>
+                        <p class="text-sm text-slate-500 font-medium">સેકન્ડોમાં ફાઈલ તૈયાર.</p>
                     </div>
-                    <div class="text-center">
-                        <div class="w-12 h-12 md:w-16 md:h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                    <div class="text-center group">
+                        <div class="w-16 h-16 bg-white text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100 group-hover:border-blue-200 group-hover:bg-blue-50 transition-all">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
-                        <h4 class="text-xl font-bold mb-3">Exact KB Output</h4>
-                        <p class="text-slate-500 text-sm">ગમે તેટલી KB સાઇઝ માં ફાઇલ મેળવો. સરકારી પોર્ટલ ક્યારેય ફાઇલ રિજેક્ટ નહીં કરે.</p>
+                        <h4 class="text-lg font-black mb-2 text-slate-900 leading-tight">બિલકુલ ફ્રી</h4>
+                        <p class="text-sm text-slate-500 font-medium">કોઈ છુપાયેલ ચાર્જ નથી.</p>
+                    </div>
+                    <div class="text-center group">
+                        <div class="w-16 h-16 bg-white text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100 group-hover:border-blue-200 group-hover:bg-blue-50 transition-all">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        </div>
+                        <h4 class="text-lg font-black mb-2 text-slate-900 leading-tight">મોબાઇલ ફ્રેન્ડલી</h4>
+                        <p class="text-sm text-slate-500 font-medium">મોબાઇલ પર સરળતાથી વાપરો.</p>
+                    </div>
+                    <div class="text-center group">
+                        <div class="w-16 h-16 bg-white text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100 group-hover:border-blue-200 group-hover:bg-blue-50 transition-all">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3"/></svg>
+                        </div>
+                        <h4 class="text-lg font-black mb-2 text-slate-900 leading-tight">24/7 સપોર્ટ</h4>
+                        <p class="text-sm text-slate-500 font-medium">હંમેશા તમારી સેવામાં.</p>
                     </div>
                 </div>
             </div>

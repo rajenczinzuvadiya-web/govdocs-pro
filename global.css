@@ -8,7 +8,9 @@
     --bg-alt: #f8fafc;
     --text-main: #0f172a;
     --text-muted: #475569;
+    --text-light: #64748b;
     --border-main: #e2e8f0;
+    --border-light: #f1f5f9;
     --white: #ffffff;
     
     /* Shadows */
@@ -56,7 +58,7 @@ main {
 .btn-primary {
     background-color: var(--primary);
     color: var(--white);
-    box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
+    box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.3);
 }
 
 .btn-primary:hover {
