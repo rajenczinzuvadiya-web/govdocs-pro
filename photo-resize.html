@@ -43,25 +43,25 @@
     </header>
 
     <main class="container mx-auto px-4 py-12">
-        <div class="max-w-4xl mx-auto">
+        <div class="max-w-4xl mx-auto lg:max-w-6xl">
             <div class="mb-12 text-center">
                 <h1 class="text-4xl font-black mb-4">Photo Resize</h1>
                 <p class="text-slate-600 italic">ફોટાની પહોળાઈ અને ઊંચાઈ પિક્સેલ મુજબ બદલો.</p>
             </div>
 
-            <div class="max-w-2xl mx-auto space-y-6 md:space-y-8">
+            <div class="max-w-2xl mx-auto lg:max-w-none lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start space-y-6 md:space-y-8 lg:space-y-0">
                 
                 <!-- 1. UPLOAD IMAGE SECTION -->
-                <section id="upload-section" class="card" aria-label="Step 1: Upload Photo">
+                <section id="upload-section" class="card lg:col-start-1 lg:row-start-1" aria-label="Step 1: Upload Photo">
                     <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 1: Upload Photo</h2>
                     <div id="image-upload-container"></div>
                 </section>
 
                 <!-- Workspace (Hidden until image is uploaded) -->
-                <div id="previewArea" class="hidden space-y-6 md:space-y-8">
+                <div id="previewArea" class="hidden lg:contents space-y-6 md:space-y-8 lg:space-y-0">
                     
                     <!-- One-Click Quick Actions -->
-                    <section id="quick-actions" class="card" aria-label="One-Click Processing">
+                    <section id="quick-actions" class="card lg:col-start-1 lg:row-start-2" aria-label="One-Click Processing">
                         <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Quick Government Processing (One-Click)</h2>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                             <button class="quick-process-btn btn-primary !text-[10px] !py-2 !min-h-0 shadow-none" data-preset="ssc">SSC Mode</button>
@@ -73,13 +73,13 @@
                     </section>
 
                     <!-- 1. IMAGE PREVIEW & 2. IMAGE INFORMATION SECTION -->
-                    <section id="preview-section" class="card" aria-label="Step 2: Image Preview and Details">
+                    <section id="preview-section" class="card lg:col-start-2 lg:row-start-1" aria-label="Step 2: Image Preview and Details">
                         <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 2: Preview & Information</h2>
                         <div id="image-preview-container"></div>
                     </section>
 
                     <!-- 3, 4, 5. RESIZE SETTINGS (WIDTH/HEIGHT & RESIZE BUTTON) -->
-                    <section id="settings-section" class="card" aria-label="Step 3: Custom Dimensions">
+                    <section id="settings-section" class="card lg:col-start-1 lg:row-start-3" aria-label="Step 3: Custom Dimensions">
                         <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 3: Custom Resize Settings</h2>
                         
                         <div class="space-y-6">
@@ -107,7 +107,7 @@
                     </section>
 
                     <!-- 6. DOWNLOAD SECTION -->
-                    <section id="download-section" class="card" aria-label="Step 4: Download">
+                    <section id="download-section" class="card lg:col-start-2 lg:row-start-2" aria-label="Step 4: Download">
                         <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 4: Final Download</h2>
                         <button id="downloadPhoto" class="btn btn-primary mb-4 font-bold uppercase text-xs tracking-widest">
                             Download Photo

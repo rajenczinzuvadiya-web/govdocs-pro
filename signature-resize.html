@@ -100,6 +100,17 @@
                                 </div>
                             </div>
 
+                            <!-- KB Quick Presets -->
+                            <div class="pt-4 border-t border-slate-100">
+                                <h3 class="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-4">Quick KB Presets</h3>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button type="button" class="compress-preset p-3 border border-slate-200 rounded-xl text-xs font-bold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all text-slate-600" data-kb="10">10 KB</button>
+                                    <button type="button" class="compress-preset p-3 border border-slate-200 rounded-xl text-xs font-bold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all text-slate-600" data-kb="20">20 KB</button>
+                                    <button type="button" class="compress-preset p-3 border border-slate-200 rounded-xl text-xs font-bold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all text-slate-600" data-kb="50">50 KB</button>
+                                </div>
+                                <input type="hidden" id="targetSize" value="20">
+                            </div>
+
                             <!-- Signature Enhancements -->
                             <div class="pt-4 border-t border-slate-100">
                                 <h3 class="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-4">Signature Enhancements</h3>
@@ -111,6 +122,10 @@
                                     <label class="flex items-center gap-3 cursor-pointer group">
                                         <input type="checkbox" id="transparentSign" class="w-5 h-5 text-blue-600 rounded-lg border-slate-300 focus:ring-blue-500">
                                         <span class="text-sm font-bold text-slate-700 group-hover:text-blue-600 transition-colors">Transparent PNG (પારદર્શક)</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 cursor-pointer group">
+                                        <input type="checkbox" id="whiteBgCheck" class="w-5 h-5 text-blue-600 rounded-lg border-slate-300 focus:ring-blue-500" checked>
+                                        <span class="text-sm font-bold text-slate-700 group-hover:text-blue-600 transition-colors">White Background (સફેદ)</span>
                                     </label>
                                     <label class="flex items-center gap-3 cursor-pointer group">
                                         <input type="checkbox" id="autoCrop" class="w-5 h-5 text-blue-600 rounded-lg border-slate-300 focus:ring-blue-500">

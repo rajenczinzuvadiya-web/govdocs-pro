@@ -471,8 +471,18 @@ async function downloadAdjusted(type) {
         maxKb = config.maxKb;
     }
 
-    // Get cropped canvas from cropper with exact dimensions
-    const croppedCanvas = state.cropper.getCroppedCanvas({ width: targetWidth, height: targetHeight });
+    // Get raw cropped canvas from user selection
+    let sourceCanvas = state.cropper.getCroppedCanvas();
+
+    // Auto Crop Whitespace (Signature isolation logic)
+    const autoCropCheck = document.getElementById('autoCrop');
+    if (autoCropCheck && autoCropCheck.checked) {
+        sourceCanvas = Engine.autoCropWhitespace(sourceCanvas);
+    }
+
+    // Resize isolating area to exact target dimensions
+    const resizedCanvas = Engine.resizeImage(sourceCanvas, targetWidth, targetHeight);
+
     const finalCanvas = document.createElement('canvas');
     finalCanvas.width = targetWidth;
     finalCanvas.height = targetHeight;
@@ -480,7 +490,7 @@ async function downloadAdjusted(type) {
 
     // Check for explicit white background override (common in Passport tool)
     let bgColor = state.bgColor;
-    const whiteBgCheck = document.getElementById('whiteBg');
+    const whiteBgCheck = document.getElementById('whiteBg') || document.getElementById('whiteBgCheck');
     if (whiteBgCheck && whiteBgCheck.checked) bgColor = 'white';
 
     if (bgColor !== 'original') {
@@ -494,7 +504,7 @@ async function downloadAdjusted(type) {
         isBlackAndWhite: type === 'sign' && state.isBlackAndWhite
     });
     
-    fCtx.drawImage(croppedCanvas, 0, 0);
+    fCtx.drawImage(resizedCanvas, 0, 0);
 
     updateStatus("પ્રોસેસિંગ ચાલુ છે...");
     const format = (type === 'sign' && state.isTransparent) ? 'image/png' : 'image/jpeg';
