@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JPG to PDF - GovDocs Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="description" content="Convert JPG Images to PDF Online. Combine your certificates and identity proofs into a single PDF document for government job uploads.">
+    <link rel="canonical" href="https://govdocs.pro/jpg-to-pdf.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Convert JPG to PDF Online - GovDocs Pro">
+    <meta property="og:description" content="Easily convert and combine images into a secure PDF for document uploads.">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "GovDocs JPG to PDF Converter",
+      "operatingSystem": "All",
+      "applicationCategory": "MultimediaApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      },
+      "featureList": "Batch JPG to PDF, Multiple image support, Secure processing"
+    }
+    </script>
+    <link rel="stylesheet" href="global.css">
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <!-- Unified Header -->
+    <header class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-200">G</div>
+                <h1 class="text-2xl font-black tracking-tight text-slate-900">GovDocs<span class="text-blue-600">.pro</span></h1>
+            </a>
+            <nav class="hidden lg:flex items-center gap-10 text-sm font-semibold text-slate-600 uppercase tracking-widest">
+                <button class="nav-trigger flex items-center gap-2 hover:text-blue-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                    Browse All Tools
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-12 text-center">
+                <h1 class="text-4xl font-black mb-4">JPG to PDF</h1>
+                <p class="text-slate-600 italic">બહુવિધ ઈમેજીસને એક PDF ફાઇલમાં રૂપાંતરિત કરો.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto space-y-6 md:space-y-8">
+                
+                <!-- 1. UPLOAD SECTION -->
+                <section id="upload-section" class="card" aria-label="Step 1: Upload Images">
+                    <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 1: Upload Multiple Images</h2>
+                    <div id="drop-zone" class="group relative p-8 md:p-10 border-2 border-dashed border-slate-300 rounded-3xl bg-white hover:bg-blue-50 hover:border-blue-400 transition-all cursor-pointer text-center">
+                        <input type="file" id="jpgToPdfInput" accept="image/jpeg,image/png" multiple class="hidden">
+                        <div class="flex flex-col items-center">
+                            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-red-600 group-hover:text-white transition-all shadow-lg shadow-red-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                            <p class="text-slate-900 font-bold text-lg mb-1">ઈમેજીસ પસંદ કરો</p>
+                            <p class="text-slate-400 text-sm mb-2">તમે એક સાથે ઘણી ઈમેજીસ પસંદ કરી શકો છો</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. IMAGE LIST & REORDER SECTION -->
+                <section id="list-section" class="card hidden" aria-label="Step 2: Manage Images">
+                    <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 2: Reorder & Remove</h2>
+                    <div id="image-list-container" class="space-y-3">
+                        <!-- Sample UI Item (Placeholder) -->
+                        <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-slate-200 rounded-lg overflow-hidden flex-shrink-0">
+                                    <img src="" class="w-full h-full object-cover" alt="Thumb">
+                                </div>
+                                <div class="text-sm font-bold text-slate-700 truncate max-w-[150px]">image_01.jpg</div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="p-2 text-slate-400 hover:text-blue-600"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg></button>
+                                <button class="p-2 text-slate-400 hover:text-blue-600"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></button>
+                                <button class="p-2 text-slate-400 hover:text-red-600"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="addMoreBtn" class="mt-4 w-full py-3 border-2 border-dashed border-slate-200 rounded-xl text-xs font-bold text-slate-400 hover:border-blue-400 hover:text-blue-600 transition-all">
+                        + Add More Images
+                    </button>
+                </section>
+
+                <!-- 3. ACTION & DOWNLOAD SECTION -->
+                <section id="action-section" class="card" aria-label="Step 3: Convert and Download">
+                    <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 3: Convert & Download</h2>
+                    <div class="flex flex-col gap-4">
+                        <button id="convertJpgBtn" class="btn btn-primary font-bold uppercase text-xs tracking-widest">
+                            Generate PDF
+                        </button>
+                        
+                        <div id="pdfStatusContainer" class="w-full p-3 bg-blue-50 text-blue-700 rounded-lg text-center border border-blue-100">
+                            <p id="pdfStatus" class="text-xs font-bold uppercase tracking-tight text-slate-500">Ready to convert</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Compatibility Hooks for app.js -->
+                <div class="hidden">
+                    <div id="image-upload-container"></div>
+                    <div id="image-preview-container"></div>
+                    <div id="previewArea"></div>
+                    <select id="presetSelect"><option value="custom"></option></select>
+                    <input type="number" id="manualWidth">
+                    <input type="number" id="manualHeight">
+                    <input type="range" id="brightnessInput">
+                    <input type="range" id="contrastInput">
+                    <button id="downloadPhoto"></button>
+                    <button id="printSheet"></button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Core Logic -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script type="module" src="navigator.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Name - GovDocs Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- External Dependencies -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/global.css">
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <!-- Shared Header -->
+    <header class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
+        <div class="container mx-auto px-4 h-16 md:h-20 flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-200">G</div>
+                <h1 class="text-2xl font-black tracking-tight text-slate-900">GovDocs<span class="text-blue-600">.pro</span></h1>
+            </a>
+            <nav class="hidden lg:flex items-center gap-10 text-sm font-semibold text-slate-600 uppercase tracking-widest">
+                <a href="../../index.html" class="hover:text-blue-600 transition-colors">Home</a>
+                <a href="../../index.html#popular-tools" class="hover:text-blue-600 transition-colors">Photo Tools</a>
+                <a href="../../index.html#popular-tools" class="hover:text-blue-600 transition-colors">PDF Tools</a>
+                <a href="../../index.html#govt-services" class="hover:text-blue-600 transition-colors">Government Presets</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+        <div class="max-w-4xl mx-auto w-full">
+            <!-- Tool Header -->
+            <div class="mb-8 md:mb-12 text-center">
+                <h1 class="text-3xl md:text-4xl font-black mb-3">Tool Name</h1>
+                <p class="text-slate-600 italic text-sm md:text-base">બહુવિધ ઈમેજીસ પસંદ કરો અને તેને એક PDF માં રૂપાંતરિત કરો.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto space-y-6 md:space-y-8">
+                
+                <!-- 1. UPLOAD AREA -->
+                <section id="upload-area" class="card">
+                    <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">1. Upload Area</h2>
+                    <div id="image-upload-container"></div>
+                </section>
+
+                <!-- WORKSPACE (Hidden until upload) -->
+                <div id="previewArea" class="hidden space-y-6 md:space-y-8">
+                    
+                    <!-- 2. PREVIEW AREA -->
+                    <section id="preview-area" class="card">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">2. Preview Area</h2>
+                        <div id="image-preview-container"></div>
+                    </section>
+
+                    <!-- 3. SETTINGS AREA -->
+                    <section id="settings-area" class="card">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">3. Settings Area</h2>
+                        <div class="space-y-4">
+                            <!-- Presets or specific tool settings go here -->
+                            <div>
+                                <label class="block text-sm font-bold mb-2">પરીક્ષા પસંદ કરો (Presets):</label>
+                                <select id="presetSelect" class="input-field">
+                                    <option value="custom">Custom Dimensions</option>
+                                    <!-- Options populated from govt_presets.js -->
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 4. OUTPUT & DOWNLOAD AREA -->
+                    <section id="download-area" class="card">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">4. Output & Download</h2>
+                        
+                        <div class="flex flex-col gap-3">
+                            <button id="downloadPhoto" class="btn btn-primary">
+                                ડાઉનલોડ ફાઇલ (Download Result)
+                            </button>
+                            <button id="printSheet" class="btn btn-outline">
+                                પ્રિન્ટ શીટ બનાવો (Print Sheet)
+                            </button>
+                        </div>
+
+                        <!-- Status Messages -->
+                        <div id="statusContainer" class="mt-4 p-3 bg-blue-50 text-blue-700 rounded-lg text-center text-xs font-bold">
+                            <p id="statusMsg">ફાઇલ પ્રોસેસ કરવા માટે તૈયાર છે</p>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Core Logic Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    
+    <!-- Load Modular Components & Utils -->
+    <script type="module">
+        import { ImageUploader } from '../components/image-uploader.js';
+        import { ImagePreviewer } from '../components/image-previewer.js';
+        // Tool specific logic will be imported here
+    </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!-- Moved to tools/folder -->
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Compress - GovDocs Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <meta name="description" content="Compress photos to 20KB, 50KB, or 100KB online. Perfect for SSC, UPSC, and Gujarat government job portals. High quality JPEG compression.">
+    <link rel="canonical" href="https://govdocs.pro/photo-compress.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Compress Photo to 20KB/50KB Online">
+    <meta property="og:description" content="Reduce image file size for government portals without losing quality.">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "GovDocs Photo Compressor",
+      "operatingSystem": "All",
+      "applicationCategory": "ImageEditor",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      },
+      "featureList": "20KB compression, 50KB compression, GPSC/SSC compatible"
+    }
+    </script>
+
+    <!-- Cropper.js CSS and PDF-Lib (required for app.js logic) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <link rel="stylesheet" href="global.css">
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <header id="main-header" class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
+        <!-- Injected by header.js -->
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-12 text-center">
+                <h1 class="text-4xl font-black mb-4">Photo Compress</h1>
+                <p class="text-slate-600 italic">ફોટાની સાઈઝ (KB) ઘટાડો.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto space-y-6 md:space-y-8">
+                
+                <!-- 1. UPLOAD IMAGE SECTION -->
+                <section id="upload-section" class="card" aria-label="Step 1: Upload Photo">
+                    <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 1: Upload Photo</h2>
+                    <div id="image-upload-container"></div>
+                </section>
+
+                <!-- Workspace (Hidden until image is uploaded) -->
+                <div id="previewArea" class="hidden space-y-6 md:space-y-8">
+                    
+                    <!-- 2. IMAGE PREVIEW & INFORMATION SECTION -->
+                    <section id="preview-section" class="card" aria-label="Step 2: Image Preview and Details">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 2: Preview & Information</h2>
+                        <div id="image-preview-container"></div>
+                    </section>
+
+                    <!-- 3. COMPRESS SETTINGS -->
+                    <section id="settings-section" class="card" aria-label="Step 3: Compression Settings">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 3: Compression Settings</h2>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-bold mb-2 text-slate-700 uppercase text-[10px] tracking-wider">Government Presets</label>
+                                <select id="presetSelect" class="input-field">
+                                    <option value="custom">Custom / None</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold mb-2 text-slate-700 uppercase text-[10px] tracking-wider">Quick Presets</label>
+                                <div class="grid grid-cols-4 gap-2">
+                                    <button type="button" class="compress-preset p-3 border border-slate-200 rounded-xl text-xs font-bold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all text-slate-600" data-kb="20">20 KB</button>
+                                    <button type="button" class="compress-preset p-3 border border-slate-200 rounded-xl text-xs font-bold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all text-slate-600" data-kb="50">50 KB</button>
+                                    <button type="button" class="compress-preset p-3 border border-slate-200 rounded-xl text-xs font-bold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all text-slate-600" data-kb="100">100 KB</button>
+                                    <button type="button" class="compress-preset p-3 border border-slate-200 rounded-xl text-xs font-bold hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50 transition-all text-slate-600" data-kb="200">200 KB</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold mb-2 text-slate-700 uppercase text-[10px] tracking-wider">Target Size (KB)</label>
+                                <input type="number" id="targetSize" class="input-field" value="50" placeholder="e.g. 50">
+                            </div>
+
+                            <button id="applyCompress" class="btn btn-outline border-blue-600 text-blue-600 hover:bg-blue-50 font-bold uppercase text-xs tracking-widest">
+                                Compress Image
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 4. DOWNLOAD SECTION -->
+                    <section id="download-section" class="card" aria-label="Step 4: Download">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 4: Final Download</h2>
+                        <button id="downloadPhoto" class="btn btn-primary mb-4 font-bold uppercase text-xs tracking-widest">
+                            Download Photo
+                        </button>
+
+                        <div id="statusContainer" class="w-full p-3 bg-blue-50 text-blue-700 rounded-lg text-center border border-blue-100">
+                            <p id="statusMsg" class="text-xs font-bold uppercase tracking-tight">Ready to process</p>
+                        </div>
+                    </section>
+
+                    <!-- Compatibility Hooks for app.js logic -->
+                    <div class="hidden">
+                        <input type="range" id="brightnessInput" value="100">
+                        <input type="range" id="contrastInput" value="100">
+                        <input type="number" id="manualWidth">
+                        <input type="number" id="manualHeight">
+                        <button id="printSheet"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Load External Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <!-- Load tool logic -->
+    <script type="module" src="app.js"></script>
+    <script type="module" src="navigator.js"></script>
+</body>
+</html>

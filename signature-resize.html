@@ -1,0 +1,155 @@
+<!-- Moved to tools/folder -->
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Resize - GovDocs Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <meta name="description" content="Online Signature Resizer and Background Remover. Resize your signature for government job portals like SSC and GPSC. Create transparent signatures.">
+    <link rel="canonical" href="https://govdocs.pro/signature-resize.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Signature Resizer and Transparent Background Maker">
+    <meta property="og:description" content="Prepare your signature for govt job portals. Resize and remove background online.">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "GovDocs Signature Tool",
+      "operatingSystem": "All",
+      "applicationCategory": "ImageEditor",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      },
+      "featureList": "Auto-crop, Transparent PNG, Black & White enhancement"
+    }
+    </script>
+
+    <!-- Cropper.js CSS and PDF-Lib (required for app.js logic) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <link rel="stylesheet" href="global.css">
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <header id="main-header" class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
+        <!-- Injected by header.js -->
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-12 text-center">
+                <h1 class="text-4xl font-black mb-4">Signature Resize</h1>
+                <p class="text-slate-600 italic">સહી રીસાઇઝ કરો અને બેકગ્રાઉન્ડ દૂર કરો.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto space-y-6 md:space-y-8">
+                
+                <!-- 1. UPLOAD SIGNATURE SECTION -->
+                <section id="upload-section" class="card" aria-label="Step 1: Upload Signature">
+                    <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 1: Upload Signature</h2>
+                    <div id="image-upload-container"></div>
+                </section>
+
+                <!-- Workspace (Hidden until image is uploaded) -->
+                <div id="previewArea" class="hidden space-y-6 md:space-y-8">
+                    
+                    <!-- One-Click Quick Actions -->
+                    <section id="quick-actions" class="card" aria-label="One-Click Processing">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Quick Signature Processing (One-Click)</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <button class="quick-process-btn btn-primary !text-[10px] !py-2 !min-h-0 shadow-none" data-preset="ssc">SSC Mode</button>
+                            <button class="quick-process-btn btn-outline !text-[10px] !py-2 !min-h-0 shadow-none" data-preset="upsc">UPSC Mode</button>
+                            <button class="quick-process-btn btn-outline !text-[10px] !py-2 !min-h-0 shadow-none" data-preset="railway">Railway Mode</button>
+                            <button class="quick-process-btn btn-outline !text-[10px] !py-2 !min-h-0 shadow-none" data-preset="gpsc">GPSC Mode</button>
+                        </div>
+                        <p class="mt-3 text-[10px] text-slate-400 italic text-center">સહીનું માપ અને KB ઓટોમેટિક સેટ થઈ જશે.</p>
+                    </section>
+
+                    <!-- 2. PREVIEW & INFORMATION SECTION -->
+                    <section id="preview-section" class="card" aria-label="Step 2: Preview & Details">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 2: Preview & Information</h2>
+                        <div id="image-preview-container"></div>
+                    </section>
+
+                    <!-- 3. RESIZE & SIGNATURE SETTINGS -->
+                    <section id="settings-section" class="card" aria-label="Step 3: Custom Resize Settings">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 3: Signature Settings</h2>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-bold mb-2 text-slate-700 uppercase text-[10px] tracking-wider">Government Job Presets</label>
+                                <select id="presetSelect" class="input-field">
+                                    <option value="custom">Custom Size</option>
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold mb-2 text-slate-700 uppercase text-[10px] tracking-wider">Width (px)</label>
+                                    <input type="number" id="manualWidth" class="input-field" value="400" placeholder="Width">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold mb-2 text-slate-700 uppercase text-[10px] tracking-wider">Height (px)</label>
+                                    <input type="number" id="manualHeight" class="input-field" value="200" placeholder="Height">
+                                </div>
+                            </div>
+
+                            <!-- Signature Enhancements -->
+                            <div class="pt-4 border-t border-slate-100">
+                                <h3 class="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-4">Signature Enhancements</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <label class="flex items-center gap-3 cursor-pointer group">
+                                        <input type="checkbox" id="blackSign" class="w-5 h-5 text-blue-600 rounded-lg border-slate-300 focus:ring-blue-500">
+                                        <span class="text-sm font-bold text-slate-700 group-hover:text-blue-600 transition-colors">Black & White (ઘાટી સહી)</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 cursor-pointer group">
+                                        <input type="checkbox" id="transparentSign" class="w-5 h-5 text-blue-600 rounded-lg border-slate-300 focus:ring-blue-500">
+                                        <span class="text-sm font-bold text-slate-700 group-hover:text-blue-600 transition-colors">Transparent PNG (પારદર્શક)</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 cursor-pointer group">
+                                        <input type="checkbox" id="autoCrop" class="w-5 h-5 text-blue-600 rounded-lg border-slate-300 focus:ring-blue-500">
+                                        <span class="text-sm font-bold text-slate-700 group-hover:text-blue-600 transition-colors">Auto Crop White Space</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button id="applyResize" class="btn btn-outline border-blue-600 text-blue-600 hover:bg-blue-50 font-bold uppercase text-xs tracking-widest w-full">
+                                Resize & Process Signature
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 4. DOWNLOAD SECTION -->
+                    <section id="download-section" class="card" aria-label="Step 4: Download">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 4: Final Download</h2>
+                        <button id="downloadSign" class="btn btn-primary mb-4 font-bold uppercase text-xs tracking-widest">
+                            Download Signature
+                        </button>
+
+                        <div id="statusContainer" class="w-full p-3 bg-blue-50 text-blue-700 rounded-lg text-center border border-blue-100">
+                            <p id="statusMsg" class="text-xs font-bold uppercase tracking-tight">Ready to process</p>
+                        </div>
+                    </section>
+
+                    <!-- Compatibility Hooks for app.js -->
+                    <div class="hidden">
+                        <input type="range" id="brightnessInput" value="100">
+                        <input type="range" id="contrastInput" value="100">
+                        <button id="printSheet"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script type="module" src="app.js"></script>
+    <script type="module" src="navigator.js"></script>
+</body>
+</html>

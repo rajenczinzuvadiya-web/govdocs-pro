@@ -1,0 +1,138 @@
+<!-- Moved to tools/folder -->
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Resize - GovDocs Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <meta name="description" content="Online Photo Resizer for Government Jobs. Resize passport photos and signatures to exact pixel dimensions required for SSC, UPSC, and GPSC applications.">
+    <link rel="canonical" href="https://govdocs.pro/photo-resize.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Online Photo Resizer for Govt Job Applications">
+    <meta property="og:description" content="Adjust height and width in pixels for SSC, UPSC, and GPSC. Fast and secure.">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "GovDocs Photo Resizer",
+      "operatingSystem": "All",
+      "applicationCategory": "ImageEditor",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      },
+      "featureList": "Exact pixel resizing, Government presets, SSC/UPSC compatible"
+    }
+    </script>
+
+    <!-- Cropper.js CSS and PDF-Lib (required for app.js logic) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <link rel="stylesheet" href="global.css">
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <header id="main-header" class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
+        <!-- Injected by header.js -->
+    </header>
+
+    <main class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-12 text-center">
+                <h1 class="text-4xl font-black mb-4">Photo Resize</h1>
+                <p class="text-slate-600 italic">ફોટાની પહોળાઈ અને ઊંચાઈ પિક્સેલ મુજબ બદલો.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto space-y-6 md:space-y-8">
+                
+                <!-- 1. UPLOAD IMAGE SECTION -->
+                <section id="upload-section" class="card" aria-label="Step 1: Upload Photo">
+                    <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 1: Upload Photo</h2>
+                    <div id="image-upload-container"></div>
+                </section>
+
+                <!-- Workspace (Hidden until image is uploaded) -->
+                <div id="previewArea" class="hidden space-y-6 md:space-y-8">
+                    
+                    <!-- One-Click Quick Actions -->
+                    <section id="quick-actions" class="card" aria-label="One-Click Processing">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Quick Government Processing (One-Click)</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <button class="quick-process-btn btn-primary !text-[10px] !py-2 !min-h-0 shadow-none" data-preset="ssc">SSC Mode</button>
+                            <button class="quick-process-btn btn-outline !text-[10px] !py-2 !min-h-0 shadow-none" data-preset="upsc">UPSC Mode</button>
+                            <button class="quick-process-btn btn-outline !text-[10px] !py-2 !min-h-0 shadow-none" data-preset="railway">Railway Mode</button>
+                            <button class="quick-process-btn btn-outline !text-[10px] !py-2 !min-h-0 shadow-none" data-preset="gpsc">GPSC Mode</button>
+                        </div>
+                        <p class="mt-3 text-[10px] text-slate-400 italic text-center">તમામ માપદંડો અને KB ઓટોમેટિક સેટ થઈ જશે.</p>
+                    </section>
+
+                    <!-- 1. IMAGE PREVIEW & 2. IMAGE INFORMATION SECTION -->
+                    <section id="preview-section" class="card" aria-label="Step 2: Image Preview and Details">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 2: Preview & Information</h2>
+                        <div id="image-preview-container"></div>
+                    </section>
+
+                    <!-- 3, 4, 5. RESIZE SETTINGS (WIDTH/HEIGHT & RESIZE BUTTON) -->
+                    <section id="settings-section" class="card" aria-label="Step 3: Custom Dimensions">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 3: Custom Resize Settings</h2>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-bold mb-2 text-slate-700 uppercase text-[10px] tracking-wider">Government Presets</label>
+                                <select id="presetSelect" class="input-field">
+                                    <option value="custom">Custom Dimensions (મુજબ)</option>
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold mb-2 text-slate-700 uppercase text-[10px] tracking-wider">Custom Width (px)</label>
+                                    <input type="number" id="manualWidth" class="input-field" value="413" placeholder="Width">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold mb-2 text-slate-700 uppercase text-[10px] tracking-wider">Custom Height (px)</label>
+                                    <input type="number" id="manualHeight" class="input-field" value="531" placeholder="Height">
+                                </div>
+                            </div>
+
+                            <button id="applyResize" class="btn btn-outline border-blue-600 text-blue-600 hover:bg-blue-50 font-bold uppercase text-xs tracking-widest">
+                                Resize Image
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 6. DOWNLOAD SECTION -->
+                    <section id="download-section" class="card" aria-label="Step 4: Download">
+                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 4: Final Download</h2>
+                        <button id="downloadPhoto" class="btn btn-primary mb-4 font-bold uppercase text-xs tracking-widest">
+                            Download Photo
+                        </button>
+
+                        <div id="statusContainer" class="w-full p-3 bg-blue-50 text-blue-700 rounded-lg text-center border border-blue-100">
+                            <p id="statusMsg" class="text-xs font-bold uppercase tracking-tight">Ready to process</p>
+                        </div>
+                    </section>
+
+                    <!-- Compatibility Hooks for app.js -->
+                    <div class="hidden">
+                        <input type="range" id="brightnessInput" value="100">
+                        <input type="range" id="contrastInput" value="100">
+                        <button id="printSheet"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Load External Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <!-- Load tool logic -->
+    <script type="module" src="app.js"></script>
+    <script type="module" src="navigator.js"></script>
+</body>
+</html>
