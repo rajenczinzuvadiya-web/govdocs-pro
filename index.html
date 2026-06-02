@@ -1,317 +1,111 @@
 <!DOCTYPE html>
-<html lang="gu" class="scroll-smooth">
+<html lang="gu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GovDocs Pro - Prepare Government Documents in Seconds</title>
+    <title>GovDocs Pro - Documents & Photo Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
-    <meta name="theme-color" content="#2563eb">
-    <meta name="description" content="GovDocs Pro - Prepare your government job documents in seconds. Resize photos, compress to 20KB/50KB, convert JPG to PDF, and merge PDFs online for SSC, UPSC, GPSC, and more.">
-    <link rel="canonical" href="https://govdocs.pro/index.html" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://govdocs.pro/">
-    <meta property="og:title" content="GovDocs Pro - Government Document Preparation Tool">
-    <meta property="og:description" content="Resize and compress photos, signatures, and PDFs for government job applications (SSC, UPSC, GPSC).">
-    <meta property="og:image" content="https://govdocs.pro/assets/og-main.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://govdocs.pro/">
-    <meta property="twitter:title" content="GovDocs Pro - Document Tools for Govt Jobs">
-    <meta property="twitter:description" content="Prepare photos and PDFs for SSC, UPSC, and GPSC exams easily.">
-
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "url": "https://govdocs.pro/",
-      "name": "GovDocs Pro",
-      "description": "Online tool for government job document preparation."
-    }
-    </script>
     <link rel="stylesheet" href="global.css">
-    <style>
-        .hero-gradient {
-            background: linear-gradient(180deg, #fcfdfe 0%, #ffffff 100%);
-        }
-        .text-gradient {
-            background: linear-gradient(to right, #0f172a, #2563eb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-    </style>
 </head>
-<body class="bg-white text-slate-900">
-    <header id="main-header" class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md shadow-sm">
-        <div class="container mx-auto px-4 h-20 md:h-24 flex items-center justify-between">
-            <div class="flex flex-col">
-                <a href="index.html" class="flex items-center gap-2.5 mb-1">
-                    <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-blue-200">G</div>
-                    <span class="text-xl font-black tracking-tight text-slate-900 leading-none">GovDocs<span class="text-blue-600">.pro</span></span>
-                </a>
-                <span class="text-[9px] md:text-[10px] text-slate-500 font-bold uppercase tracking-[0.15em] pl-11">સરકારી કામ માટે તમારો વિશ્વસનીય સાથી</span>
-            </div>
-            <nav class="hidden lg:flex items-center gap-1 text-[12px] font-bold text-slate-600 uppercase tracking-wider">
-                <a href="index.html" class="px-4 py-2 text-blue-600 rounded-lg hover:bg-blue-50 transition-all">Home</a>
-                <button class="nav-trigger px-4 py-2 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Tools</button>
-                <a href="photo-resize.html" class="px-4 py-2 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Resize</a>
-                <a href="photo-compress.html" class="px-4 py-2 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">Compress</a>
-                <a href="jpg-to-pdf.html" class="px-4 py-2 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">PDF Tools</a>
-            </nav>
-            <button class="nav-trigger lg:hidden p-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
-            </button>
-        </div>
+<body class="bg-slate-50 text-slate-900">
+    <header id="main-header" class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
+        <!-- Injected by header.js -->
     </header>
 
-    <main>
+    <main class="container mx-auto px-4 pt-8 pb-4 md:pt-12 md:pb-8">
         <!-- Hero Section -->
-        <section class="hero-gradient pt-12 pb-16 md:pt-20 md:pb-24 border-b border-slate-100 overflow-hidden">
-            <div class="container mx-auto px-4 text-center max-w-5xl">
-                <div class="inline-flex items-center gap-2 px-5 py-2 bg-blue-50 text-blue-700 text-[12px] font-black rounded-full mb-6 border border-blue-100 uppercase tracking-[0.2em] shadow-sm animate-fade-in">
-                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.955 0 0010 19.444a11.954 11.955 0 007.834-14.444l-7.834-2.908-7.834 2.908zM9 8a1 1 0 012 0v3a1 1 0 11-2 0V8zm1 5a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
-                    100% સુરક્ષિત અને ખાનગી
-                </div>
-                <h1 class="text-4xl md:text-7xl font-black tracking-tight mb-6 text-slate-900 leading-[1.05]">
-                    <span class="text-blue-600">સરકારી ફોર્મ</span> માટેના <br>
-                    ડોક્યુમેન્ટ્સ તૈયાર કરો
-                </h1>
-                <p class="text-lg md:text-xl text-slate-500 max-w-4xl mx-auto mb-10 font-medium leading-relaxed">
-                    તમામ સરકારી ભરતી માટે ફોટો અને સહીને <span class="text-slate-900 font-bold">ચોક્કસ સાઇઝમાં</span> બદલો. તમારો ડેટા સેકન્ડોમાં પ્રોસેસ થાય છે - <span class="text-blue-600 font-bold">સુરક્ષિત રીતે</span> તમારા બ્રાઉઝરમાં.
-                </p>
-                
-                <!-- Premium Search Box -->
-                <div class="relative max-w-3xl mx-auto mb-10 group">
-                    <input type="text" placeholder="તમને શું ટૂલ જોઈએ છે? (e.g. Photo Resize)" 
-                        class="nav-trigger w-full pl-8 pr-48 py-5 bg-white border border-slate-200 rounded-[2rem] shadow-2xl shadow-blue-100/40 text-slate-900 font-bold focus:border-blue-500 outline-none transition-all cursor-pointer text-lg">
-                    <button class="nav-trigger absolute right-3 top-3 btn btn-primary !w-auto !min-h-0 !py-3.5 !px-12 rounded-[1.5rem] text-sm font-black tracking-widest uppercase">ટૂલ શોધો</button>
-                </div>
+        <section id="hero" class="max-w-4xl mx-auto text-center mb-6">
+            <p class="text-[10px] md:text-xs font-black uppercase text-slate-400 tracking-[0.3em] mb-6">
+                Photo • PDF • Document Tools
+            </p>
+            
+            <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-[1.1]">
+                <span class="text-blue-600">ડોક્યુમેન્ટ્સ અને ફોટા</span><br>
+                એક જ મિનિટમાં તૈયાર કરો
+            </h1>
 
-                <!-- Quick Benefits -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 max-w-4xl mx-auto">
-                    <div class="flex items-center justify-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest">
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                        100% સુરક્ષિત
-                    </div>
-                    <div class="flex items-center justify-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest opacity-80">
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        ઝડપી પ્રોસેસિંગ
-                    </div>
-                    <div class="flex items-center justify-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest">
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        બિલકુલ ફ્રી
-                    </div>
-                    <div class="flex items-center justify-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest">
-                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                        મોબાઇલ ફ્રેન્ડલી
-                    </div>
+            <p class="text-slate-600 text-lg md:text-xl max-w-2xl mx-auto mb-8 leading-relaxed">
+                ફોટા રિસાઇઝ કરો, કોમ્પ્રેસ કરો, PDF બનાવો અને તમારા ડોક્યુમેન્ટ્સને સરળતાથી મેનેજ કરો — એક જ જગ્યાએ.
+            </p>
+
+            <!-- Search Box -->
+            <div class="max-w-xl mx-auto mb-8 relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400 group-focus-within:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
                 </div>
+                <input type="text" id="tool-search-main" placeholder="ટૂલ્સ શોધો: દા.ત. Passport, PDF..." 
+                    class="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-3xl shadow-xl shadow-slate-200/50 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none text-base font-medium">
+            </div>
+
+            <!-- Feature Line -->
+            <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest">
+                <span>Resize</span>
+                <span class="text-slate-200">/</span>
+                <span>Compress</span>
+                <span class="text-slate-200">/</span>
+                <span>Convert</span>
+                <span class="text-slate-200">/</span>
+                <span>Create</span>
             </div>
         </section>
 
-        <!-- Popular Tools Section -->
-        <section id="popular-tools" class="py-20 bg-white">
-            <div class="container mx-auto px-4 max-w-7xl">
-                <div class="text-center mb-10">
-                    <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">પોપ્યુલર ટૂલ્સ</h2>
-                    <p class="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px]">તમારા કામને ઝડપી બનાવવા માટેના સૌથી વધુ વપરાતા ટૂલ્સ</p>
-                </div>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                    <!-- Photo Resize -->
-                    <a href="photo-resize.html" class="card card-interactive flex items-center gap-4 !p-4 group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-blue-500">
-                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5"/></svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-base font-black text-slate-900 leading-tight mb-0.5 truncate group-hover:text-blue-600 transition-colors duration-300">Photo Resize</h3>
-                            <p class="text-xs text-slate-500 font-medium truncate">પહોળાઈ અને ઊંચાઈ પિક્સેલ મુજબ બદલો.</p>
-                        </div>
-                        <div class="text-slate-200 group-hover:text-blue-600 transition-all duration-300 group-hover:translate-x-1.5 shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                        </div>
-                    </a>
-
-                    <!-- Photo Compress -->
-                    <a href="photo-compress.html" class="card card-interactive flex items-center gap-4 !p-4 group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-blue-500">
-                        <div class="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-green-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-base font-black text-slate-900 leading-tight mb-0.5 truncate group-hover:text-blue-600 transition-colors duration-300">Photo Compress</h3>
-                            <p class="text-xs text-slate-500 font-medium truncate">ફોટાને ચોક્કસ KB માં કમ્પ્રેસ કરો.</p>
-                        </div>
-                        <div class="text-slate-200 group-hover:text-blue-600 transition-all duration-300 group-hover:translate-x-1.5 shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                        </div>
-                    </a>
-
-                    <!-- 20KB Compressor -->
-                    <a href="20kb-photo.html" class="card card-interactive flex items-center gap-4 !p-4 group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-blue-500">
-                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-emerald-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-base font-black text-slate-900 leading-tight mb-0.5 truncate group-hover:text-blue-600 transition-colors duration-300">20KB Compressor</h3>
-                            <p class="text-xs text-slate-500 font-medium truncate">ફોટાને ૨૦ KB માં ઓટોમેટિક કમ્પ્રેસ કરો.</p>
-                        </div>
-                        <div class="text-slate-200 group-hover:text-blue-600 transition-all duration-300 group-hover:translate-x-1.5 shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                        </div>
-                    </a>
-
-                    <!-- Passport Maker -->
-                    <a href="passport-photo.html" class="card card-interactive flex items-center gap-4 !p-4 group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-blue-500">
-                        <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-amber-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-base font-black text-slate-900 leading-tight mb-0.5 truncate group-hover:text-blue-600 transition-colors duration-300">Passport Maker</h3>
-                            <p class="text-xs text-slate-500 font-medium truncate">પાસપોર્ટ સાઇઝનો ફોટો ઓનલાઈન બનાવો.</p>
-                        </div>
-                        <div class="text-slate-200 group-hover:text-blue-600 transition-all duration-300 group-hover:translate-x-1.5 shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                        </div>
-                    </a>
-
-                    <!-- JPG to PDF -->
-                    <a href="jpg-to-pdf.html" class="card card-interactive flex items-center gap-4 !p-4 group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-blue-500">
-                        <div class="w-12 h-12 bg-red-50 text-red-600 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-red-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-base font-black text-slate-900 leading-tight mb-0.5 truncate group-hover:text-blue-600 transition-colors duration-300">JPG to PDF</h3>
-                            <p class="text-xs text-slate-500 font-medium truncate">ઈમેજ ફાઈલ્સને PDF માં ફેરવો.</p>
-                        </div>
-                        <div class="text-slate-200 group-hover:text-blue-600 transition-all duration-300 group-hover:translate-x-1.5 shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                        </div>
-                    </a>
-
-                    <!-- PDF Merge -->
-                    <a href="pdf-merge.html" class="card card-interactive flex items-center gap-4 !p-4 group transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-blue-500">
-                        <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-rose-600 group-hover:text-white group-hover:scale-110 transition-all duration-300">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-base font-black text-slate-900 leading-tight mb-0.5 truncate group-hover:text-blue-600 transition-colors duration-300">PDF Merge</h3>
-                            <p class="text-xs text-slate-500 font-medium truncate">બહુવિધ PDF ફાઇલ્સને મર્જ કરો.</p>
-                        </div>
-                        <div class="text-slate-200 group-hover:text-blue-600 transition-all duration-300 group-hover:translate-x-1.5 shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-                        </div>
-                    </a>
-                </div>
+        <!-- Tool Directory / Cards Section -->
+        <section id="directory" class="max-w-6xl mx-auto">
+            <div id="tools-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                <!-- Tool cards will be rendered here by navigator.js or a separate script -->
             </div>
-        </section>
-
-        <!-- Why GovDocs Section -->
-        <section class="py-24 bg-slate-50 border-y border-slate-100">
-            <div class="container mx-auto px-4 max-w-6xl">
-                <div class="text-center mb-20">
-                    <h2 class="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">શા માટે GovDocs Pro?</h2>
-                    <p class="text-slate-500 max-w-2xl mx-auto font-medium">અમે ઉમેદવારો માટે ડોક્યુમેન્ટ બનાવવાની પ્રક્રિયા સરળ અને સુરક્ષિત બનાવી છે.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
-                    <div class="text-center group">
-                        <div class="w-16 h-16 bg-white text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100 group-hover:border-blue-200 group-hover:bg-blue-50 transition-all">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                        </div>
-                        <h4 class="text-lg font-black mb-2 text-slate-900 leading-tight">100% સુરક્ષિત</h4>
-                        <p class="text-sm text-slate-500 font-medium">તમારો ડેટા ખાનગી રહે છે.</p>
-                    </div>
-                    <div class="text-center group">
-                        <div class="w-16 h-16 bg-white text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100 group-hover:border-blue-200 group-hover:bg-blue-50 transition-all">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        </div>
-                        <h4 class="text-lg font-black mb-2 text-slate-900 leading-tight">ઝડપી પરિણામ</h4>
-                        <p class="text-sm text-slate-500 font-medium">સેકન્ડોમાં ફાઈલ તૈયાર.</p>
-                    </div>
-                    <div class="text-center group">
-                        <div class="w-16 h-16 bg-white text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100 group-hover:border-blue-200 group-hover:bg-blue-50 transition-all">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        </div>
-                        <h4 class="text-lg font-black mb-2 text-slate-900 leading-tight">બિલકુલ ફ્રી</h4>
-                        <p class="text-sm text-slate-500 font-medium">કોઈ છુપાયેલ ચાર્જ નથી.</p>
-                    </div>
-                    <div class="text-center group">
-                        <div class="w-16 h-16 bg-white text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100 group-hover:border-blue-200 group-hover:bg-blue-50 transition-all">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                        </div>
-                        <h4 class="text-lg font-black mb-2 text-slate-900 leading-tight">મોબાઇલ ફ્રેન્ડલી</h4>
-                        <p class="text-sm text-slate-500 font-medium">મોબાઇલ પર સરળતાથી વાપરો.</p>
-                    </div>
-                    <div class="text-center group">
-                        <div class="w-16 h-16 bg-white text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100 group-hover:border-blue-200 group-hover:bg-blue-50 transition-all">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3"/></svg>
-                        </div>
-                        <h4 class="text-lg font-black mb-2 text-slate-900 leading-tight">24/7 સપોર્ટ</h4>
-                        <p class="text-sm text-slate-500 font-medium">હંમેશા તમારી સેવામાં.</p>
-                    </div>
-                </div>
-            </div>
+            <div id="no-results" class="hidden text-center py-12 text-slate-400 text-sm">No tools found</div>
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer id="footer" class="bg-[#0f172a] text-slate-400 py-6 md:py-10 border-t border-slate-800">
-        <div class="container mx-auto px-4 max-w-6xl">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 mb-6 md:mb-10 text-center md:text-left">
-                <!-- Brand Section -->
-                <div class="flex flex-col items-center md:items-start space-y-3">
-                    <div class="flex items-center gap-2">
-                        <div class="w-7 h-7 bg-blue-600 rounded flex items-center justify-center text-white font-black text-xs">G</div>
-                        <span class="text-lg font-black tracking-tight text-white">GovDocs<span class="text-blue-500">.pro</span></span>
-                    </div>
-                    <p class="text-sm leading-relaxed max-w-xs">સરકારી ફોર્મ માટે ફોટો, PDF અને ડોક્યુમેન્ટ ટૂલ્સ.</p>
-                    <p class="text-[11px] font-medium text-slate-500">Made in Gujarat ❤️</p>
-                </div>
-
-                <!-- Quick Links -->
-                <div class="space-y-3">
-                    <h4 class="text-white font-bold text-xs uppercase tracking-widest">Quick Links</h4>
-                    <ul class="text-sm flex flex-wrap justify-center md:flex-col gap-x-4 gap-y-2 md:space-y-2.5">
-                        <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
-                        <li><a href="photo-resize.html" class="hover:text-white transition-colors">Photo Resize</a></li>
-                        <li><a href="photo-compress.html" class="hover:text-white transition-colors">Photo Compress</a></li>
-                        <li><a href="jpg-to-pdf.html" class="hover:text-white transition-colors">JPG to PDF</a></li>
-                        <li><a href="pdf-merge.html" class="hover:text-white transition-colors">PDF Merge</a></li>
-                    </ul>
-                </div>
-
-                <!-- Legal Section -->
-                <div class="space-y-3">
-                    <h4 class="text-white font-bold text-xs uppercase tracking-widest">Legal</h4>
-                    <ul class="text-sm flex flex-wrap justify-center md:flex-col gap-x-5 gap-y-2 md:space-y-2.5">
-                        <li><a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a></li>
-                        <li><a href="terms.html" class="hover:text-white transition-colors">Terms of Service</a></li>
-                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact Us</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] font-medium text-slate-500">
-                <p>© 2025 GovDocs Pro. All Rights Reserved.</p>
-                <p class="bg-slate-800/50 px-2 py-1 rounded">Version: v1.0</p>
-            </div>
-        </div>
+    <footer id="footer" class="bg-[#0f172a] text-slate-400 py-10 md:py-12 border-t border-slate-800">
+        <!-- Injected by footer.js -->
     </footer>
 
     <script type="module" src="navigator.js"></script>
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .catch(err => console.log('Service Worker registration failed: ', err));
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('tool-search-main');
+            const toolsList = document.getElementById('tools-list');
+
+            const filterTools = () => {
+                const query = searchInput.value.toLowerCase().trim();
+                const cards = toolsList.querySelectorAll('[data-tool]');
+                let visibleCount = 0;
+                
+                cards.forEach(card => {
+                    const title = (card.dataset.tool || '').toLowerCase();
+                    const keywords = (card.dataset.keywords || '').toLowerCase();
+                    const matches = title.includes(query) || keywords.includes(query);
+                    card.style.display = matches ? 'flex' : 'none';
+                    if (matches) visibleCount++;
+                });
+
+                // Toggle visibility of category groupings based on visible results
+                toolsList.querySelectorAll(':scope > div').forEach(group => {
+                    const hasVisible = group.querySelectorAll('[data-tool]:not([style*="display: none"])').length > 0;
+                    group.style.display = hasVisible ? 'block' : 'none';
+                });
+
+                const noResults = document.getElementById('no-results');
+                if (noResults) {
+                    noResults.style.display = (visibleCount === 0 && query !== '') ? 'block' : 'none';
+                }
+            };
+
+            searchInput?.addEventListener('input', filterTools);
+
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && searchInput) {
+                    searchInput.value = '';
+                    filterTools();
+                }
             });
-        }
+        });
     </script>
 </body>
 </html>

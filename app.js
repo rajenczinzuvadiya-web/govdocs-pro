@@ -11,12 +11,19 @@ const state = {
     bgColor: 'original',
     isTransparent: false,
     isBlackAndWhite: false,
-    whiteBg: false
+    whiteBg: false,
+    originalSizeKb: 0
 };
 
-const updateStatus = (msg) => {
+const updateStatus = (msg, type = 'ready') => {
+    const statusContainer = document.getElementById('statusContainer') || document.getElementById('pdfStatusContainer');
     const statusMsg = document.getElementById('statusMsg') || document.getElementById('pdfStatus');
     if (statusMsg) statusMsg.innerText = msg;
+    
+    if (statusContainer) {
+        statusContainer.classList.remove('status-ready', 'status-processing', 'status-success', 'status-error');
+        statusContainer.classList.add(`status-${type}`);
+    }
 };
 
 /**
@@ -29,7 +36,7 @@ async function runQuickProcess(presetKey, type) {
     if (!preset) return;
 
     const config = type === 'signature' ? preset.signature : preset.photo;
-    updateStatus(`${preset.label} મોડ: પ્રોસેસિંગ ચાલુ છે...`);
+    updateStatus(`${preset.label} મોડ: પ્રોસેસિંગ ચાલુ છે...`, 'processing');
 
     // 1. Sync the Manual/Preset UI (Optional but good for UX)
     const presetSelect = document.getElementById('presetSelect');
@@ -71,7 +78,7 @@ async function runQuickProcess(presetKey, type) {
             size: `${Math.round(blob.size / 1024)} KB`
         });
 
-        updateStatus(`${preset.label} ફાઇલ તૈયાર છે!`);
+        updateStatus(`${preset.label} ફાઇલ તૈયાર છે!`, 'success');
         setTimeout(() => URL.revokeObjectURL(url), 1000);
     };
     reader.readAsDataURL(blob);
@@ -154,11 +161,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderJpgList = () => {
         if (!jpgListContainer || !jpgListSection) return;
+        
+        const uploadSection = document.getElementById('upload-section');
+        const previewArea = document.getElementById('previewArea');
+
         if (selectedJpgFiles.length === 0) {
+            if (previewArea) previewArea.classList.add('hidden');
+            if (uploadSection) uploadSection.classList.remove('hidden');
             jpgListSection.classList.add('hidden');
             return;
         }
+        
         jpgListSection.classList.remove('hidden');
+        if (uploadSection) uploadSection.classList.add('hidden');
+        if (previewArea) previewArea.classList.remove('hidden');
+
+        // Update Stats
+        const imgCount = document.getElementById('img-count-display');
+        const pageCount = document.getElementById('page-count-display');
+        if (imgCount) imgCount.innerText = selectedJpgFiles.length;
+        if (pageCount) pageCount.innerText = selectedJpgFiles.length;
+
         jpgListContainer.innerHTML = selectedJpgFiles.map((item, index) => `
             <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl">
                 <div class="flex items-center gap-4">
@@ -251,6 +274,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const sizeInKb = Math.round((imageSrc.length * 0.75) / 1024);
             const mimeType = imageSrc.substring(imageSrc.indexOf(':') + 1, imageSrc.indexOf(';'));
             const format = mimeType.split('/')[1].toUpperCase();
+            
+            state.originalSizeKb = sizeInKb;
+            
+            // Initialize Stats Display
+            const originalDisplay = document.getElementById('original-size-display');
+            if (originalDisplay) originalDisplay.innerText = sizeInKb + ' KB';
+            const compressedDisplay = document.getElementById('compressed-size-display');
+            if (compressedDisplay) compressedDisplay.innerText = '-- KB';
+            const savedDisplay = document.getElementById('saved-percent-display');
+            if (savedDisplay) savedDisplay.innerText = '--%';
 
             ImagePreviewer.updateMetadata({
                 width: img.naturalWidth,
@@ -292,6 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             jpgInput.onchange = (e) => handleJpgFiles(e.target.files);
             document.getElementById('addMoreBtn')?.addEventListener('click', () => jpgInput.click());
+            document.getElementById('add-more-link')?.addEventListener('click', () => jpgInput.click());
         }
         dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('bg-blue-50'); };
         dropZone.ondragleave = () => dropZone.classList.remove('bg-blue-50');
@@ -307,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const height = parseInt(manualHeight?.value);
 
             if (!width || !height || width <= 0 || height <= 0) {
-                updateStatus("કૃપા કરીને સાચું માપ (પહોળાઈ અને ઊંચાઈ) દાખલ કરો.");
+                updateStatus("કૃપા કરીને સાચું માપ (પહોળાઈ અને ઊંચાઈ) દાખલ કરો.", 'error');
                 return;
             }
 
@@ -323,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const sizeInKb = Math.round((resizedDataUrl.length * 0.75) / 1024);
             ImagePreviewer.updateMetadata({ width, height, size: sizeInKb, format: 'JPEG' });
             
-            updateStatus(`ઇમેજ સફળતાપૂર્વક ${width}x${height} માં રીસાઇઝ થઈ ગઈ છે.`);
+            updateStatus(`ઇમેજ સફળતાપૂર્વક ${width}x${height} માં રીસાઇઝ થઈ ગઈ છે.`, 'success');
         };
     }
 
@@ -349,7 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            updateStatus(`ઇમેજને ${targetKb} KB માં કમ્પ્રેસ કરી રહ્યા છીએ...`);
+            updateStatus(`ઇમેજને ${targetKb} KB માં કમ્પ્રેસ કરી રહ્યા છીએ...`, 'processing');
 
             // Get current cropped area as canvas (width/height unchanged)
             const croppedCanvas = state.cropper.getCroppedCanvas();
@@ -510,7 +544,7 @@ async function downloadAdjusted(type) {
     
     fCtx.drawImage(resizedCanvas, 0, 0);
 
-    updateStatus("પ્રોસેસિંગ ચાલુ છે...");
+    updateStatus("પ્રોસેસિંગ ચાલુ છે...", 'processing');
     const format = (type === 'sign' && state.isTransparent) ? 'image/png' : 'image/jpeg';
     const blob = await Engine.compressToTargetKB(finalCanvas, minKb, maxKb, format);
     
@@ -527,7 +561,7 @@ async function downloadAdjusted(type) {
         size: `${Math.round(blob.size/1024)} KB`
     });
 
-    updateStatus(`સફળતાપૂર્વક ડાઉનલોડ થયું! સાઈઝ: ${Math.round(blob.size/1024)} KB`);
+    updateStatus(`સફળતાપૂર્વક ડાઉનલોડ થયું! સાઈઝ: ${Math.round(blob.size/1024)} KB`, 'success');
     
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     return finalCanvas;
@@ -536,9 +570,9 @@ async function downloadAdjusted(type) {
 async function generatePrintSheet() {
     const photoCanvas = await downloadAdjusted('photo');
     if (!photoCanvas) return;
-    updateStatus("પ્રિન્ટ શીટ બનાવી રહ્યા છીએ...");
+    updateStatus("પ્રિન્ટ શીટ બનાવી રહ્યા છીએ...", 'processing');
     await Engine.createPrintSheet(photoCanvas);
-    updateStatus("પ્રિન્ટ શીટ તૈયાર છે!");
+    updateStatus("પ્રિન્ટ શીટ તૈયાર છે!", 'success');
 }
 
 document.querySelectorAll('[data-color]').forEach(btn => {
@@ -577,7 +611,7 @@ const downloadFile = (data, name, type) => {
 document.getElementById('convertJpgBtn')?.addEventListener('click', async () => {
     if (selectedJpgFiles.length === 0) return alert("કૃપા કરીને ઈમેજીસ પસંદ કરો");
     
-    if (pdfStatus) pdfStatus.innerText = "PDF બનાવી રહ્યા છીએ...";
+    updateStatus("PDF બનાવી રહ્યા છીએ...", 'processing');
     try {
         const pdfBytes = await convertImagesToPdf(selectedJpgFiles.map(i => i.file));
         downloadFile(pdfBytes, 'images_converted.pdf', 'application/pdf');
@@ -588,14 +622,14 @@ document.getElementById('convertJpgBtn')?.addEventListener('click', async () => 
             size: `${Math.round(pdfBytes.length / 1024)} KB`
         });
 
-        if (pdfStatus) pdfStatus.innerText = "PDF સફળતાપૂર્વક ડાઉનલોડ થઈ ગઈ!";
-    } catch (e) { if (pdfStatus) pdfStatus.innerText = "ભૂલ આવી: " + e.message; }
+        updateStatus("PDF સફળતાપૂર્વક ડાઉનલોડ થઈ ગઈ!", 'success');
+    } catch (e) { updateStatus("ભૂલ આવી: " + e.message, 'error'); }
 });
 
 document.getElementById('mergePdfBtn')?.addEventListener('click', async () => {
     if (selectedPdfFiles.length < 2) return alert("મર્જ કરવા માટે ઓછામાં ઓછી 2 PDF પસંદ કરો");
     
-    if (pdfStatus) pdfStatus.innerText = "PDF મર્જ કરી રહ્યા છીએ...";
+    updateStatus("PDF મર્જ કરી રહ્યા છીએ...", 'processing');
     try {
         const pdfBytes = await mergePDFs(selectedPdfFiles);
         downloadFile(pdfBytes, 'merged_document.pdf', 'application/pdf');
@@ -606,8 +640,8 @@ document.getElementById('mergePdfBtn')?.addEventListener('click', async () => {
             size: `${Math.round(pdfBytes.length / 1024)} KB`
         });
 
-        if (pdfStatus) pdfStatus.innerText = "PDF સફળતાપૂર્વક મર્જ થઈ ગઈ!";
-    } catch (e) { if (pdfStatus) pdfStatus.innerText = "ભૂલ આવી: " + e.message; }
+        updateStatus("PDF સફળતાપૂર્વક મર્જ થઈ ગઈ!", 'success');
+    } catch (e) { updateStatus("ભૂલ આવી: " + e.message, 'error'); }
 });
 
     // --- Hook One-Click Buttons ---

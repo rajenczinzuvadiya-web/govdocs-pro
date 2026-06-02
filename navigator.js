@@ -7,14 +7,14 @@ import { Header } from './header.js';
 import { Footer } from './footer.js';
 
 const TOOLS = [
-    { id: 'photo-resize', title: 'Photo Resize', desc: 'Adjust Height/Width', gu: 'ફોટો રીસાઇઝ', cat: 'Photo Tools', link: 'photo-resize.html', icon: 'M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5' },
-    { id: 'photo-compress', title: 'Photo Compress', desc: 'Reduce File Size (KB)', gu: 'ફોટો કમ્પ્રેસ', cat: 'Photo Tools', link: 'photo-compress.html', icon: 'M19 14l-7 7m0 0l-7-7m7 7V3' },
-    { id: '20kb-photo', title: '20KB Compressor', desc: 'Compress photo to exactly 20KB', gu: '૨૦ KB ફોટો કમ્પ્રેસ', cat: 'Photo Tools', link: '20kb-photo.html', icon: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4' },
-    { id: 'passport-photo', title: 'Passport Photo Maker', desc: 'Generate Passport Sizes', gu: 'પાસપોર્ટ ફોટો', cat: 'Photo Tools', link: 'passport-photo.html', icon: 'M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { id: 'signature-resize', title: 'Signature Resize', desc: 'Resize & Transparent BG', gu: 'સહી રીસાઇઝ', cat: 'Signature Tools', link: 'signature-resize.html', icon: 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z' },
-    { id: 'jpg-to-pdf', title: 'JPG to PDF', desc: 'Convert images to PDF', gu: 'JPG થી PDF', cat: 'PDF Tools', link: 'jpg-to-pdf.html', icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' },
-    { id: 'pdf-merge', title: 'PDF Merge', desc: 'Combine multiple PDFs', gu: 'PDF મર્જ', cat: 'PDF Tools', link: 'pdf-merge.html', icon: 'M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
-    { id: 'ssc-preset', title: 'SSC Presets', desc: 'Government Job Sizes', gu: 'SSC માપદંડ', cat: 'Government Presets', link: 'photo-resize.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04' }
+    { id: 'photo-resize', title: 'Photo Resize', desc: 'Adjust Height/Width', gu: 'ફોટો રીસાઇઝ', cat: '📸 Photo Tools', link: 'photo-resize.html', icon: 'M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5', key: 'resize image photo size' },
+    { id: 'photo-compress', title: 'Photo Compress', desc: 'Reduce File Size (KB)', gu: 'ફોટો કમ્પ્રેસ', cat: '📸 Photo Tools', link: 'photo-compress.html', icon: 'M19 14l-7 7m0 0l-7-7m7 7V3', key: 'compress image photo' },
+    { id: '20kb-photo', title: '20KB Compressor', desc: 'Compress photo to exactly 20KB', gu: '૨૦ KB ફોટો કમ્પ્રેસ', cat: '📸 Photo Tools', link: '20kb-photo.html', icon: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4', key: '20kb compress image' },
+    { id: 'passport-photo', title: 'Passport Photo Maker', desc: 'Generate Passport Sizes', gu: 'પાસપોર્ટ ફોટો', cat: '📸 Photo Tools', link: 'passport-photo.html', icon: 'M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z', key: 'passport photo' },
+    { id: 'signature-resize', title: 'Signature Resize', desc: 'Resize & Transparent BG', gu: 'સહી રીસાઇઝ', cat: '✍️ Signature Tools', link: 'signature-resize.html', icon: 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z', key: 'sign, png, background, remove' },
+    { id: 'jpg-to-pdf', title: 'JPG to PDF', desc: 'Convert images to PDF', gu: 'JPG થી PDF', cat: '📄 PDF Tools', link: 'jpg-to-pdf.html', icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', key: 'jpg pdf convert' },
+    { id: 'pdf-merge', title: 'PDF Merge', desc: 'Combine multiple PDFs', gu: 'PDF મર્જ', cat: '📄 PDF Tools', link: 'pdf-merge.html', icon: 'M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', key: 'pdf merge combine' },
+    { id: 'ssc-preset', title: 'SSC Presets', desc: 'Standard Document Sizes', gu: 'SSC માપદંડ', cat: '📸 Photo Tools', link: 'photo-resize.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04', key: 'portal, recruitment' }
 ];
 
 export const Navigator = {
@@ -44,8 +44,8 @@ export const Navigator = {
                     </div>
                 </div>
 
-                <div class="flex-1 overflow-y-auto p-4 space-y-8">
-                    <div id="tools-list" class="space-y-8">
+                <div class="flex-1 overflow-y-auto p-4 space-y-5">
+                    <div id="sidebar-tools-list" class="space-y-5">
                         <!-- Content injected via renderTools -->
                     </div>
                     
@@ -79,10 +79,10 @@ export const Navigator = {
 
         list.innerHTML = Object.entries(groups).map(([cat, tools]) => `
             <div>
-                <h3 class="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] mb-4 ml-2">${cat}</h3>
-                <div class="space-y-1">
+                <h3 class="text-xs font-extrabold uppercase text-slate-500 tracking-wider mb-3 ml-2">${cat}</h3>
+                <div class="space-y-3">
                     ${tools.map(t => `
-                        <a href="${t.link}" class="flex items-center gap-4 p-3 rounded-xl hover:bg-blue-50 group transition-all">
+                        <a href="${t.link}" class="card-interactive flex items-center gap-4 p-4 bg-white border border-slate-200/60 rounded-2xl group shadow-sm">
                             <div class="w-10 h-10 bg-slate-100 text-slate-500 rounded-lg flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${t.icon}" /></svg>
                             </div>
@@ -129,20 +129,27 @@ export const Navigator = {
         const overlay = document.getElementById('nav-overlay');
         const sidebar = document.getElementById('nav-sidebar');
         const closeBtn = document.getElementById('close-nav');
-        const search = document.getElementById('tool-search');
+        const sidebarSearch = document.getElementById('tool-search');
+        const mainSearch = document.getElementById('tool-search-main');
         const triggers = document.querySelectorAll('.nav-trigger');
 
         const open = () => {
             overlay.classList.remove('hidden');
             sidebar.classList.remove('-translate-x-full');
             document.body.style.overflow = 'hidden';
-            setTimeout(() => search.focus(), 300);
+            setTimeout(() => sidebarSearch?.focus(), 300);
         };
 
         const close = () => {
             overlay.classList.add('hidden');
             sidebar.classList.add('-translate-x-full');
             document.body.style.overflow = '';
+        };
+
+        const syncSearch = (val) => {
+            if (sidebarSearch) sidebarSearch.value = val;
+            if (mainSearch) mainSearch.value = val;
+            this.renderTools(val);
         };
 
         triggers.forEach(btn => btn.onclick = open);
@@ -152,8 +159,18 @@ export const Navigator = {
         const clearBtn = document.getElementById('clear-history');
         if (clearBtn) clearBtn.onclick = () => HistoryManager.clear();
 
-        search.oninput = (e) => this.renderTools(e.target.value);
+        if (sidebarSearch) sidebarSearch.oninput = (e) => syncSearch(e.target.value);
+        if (mainSearch) mainSearch.oninput = (e) => syncSearch(e.target.value);
+
         window.addEventListener('historyUpdated', () => this.renderHistory());
+
+        // Sticky header scroll effect
+        const header = document.getElementById('main-header');
+        if (header) {
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('header-scrolled', window.scrollY > 0);
+            }, { passive: true });
+        }
 
         // Global shortcut
         window.addEventListener('keydown', (e) => {
@@ -161,7 +178,10 @@ export const Navigator = {
                 e.preventDefault();
                 open();
             }
-            if (e.key === 'Escape') close();
+            if (e.key === 'Escape') {
+                close();
+                syncSearch('');
+            }
         });
     }
 };

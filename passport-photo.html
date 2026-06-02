@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Passport Photo Maker - Indian Govt Presets - GovDocs Pro</title>
+    <title>Passport Photo Maker - Standard Presets - GovDocs Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
-    <meta name="description" content="Passport Size Photo Maker Online. Create Indian passport size photos (3.5x4.5 cm) for government applications, SSC, and UPSC exams.">
+    <meta name="description" content="Passport Size Photo Maker Online. Create standard passport size photos for various applications, IDs, and exams.">
     <link rel="canonical" href="https://govdocs.pro/passport-photo.html" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Indian Passport Size Photo Maker Online">
-    <meta property="og:description" content="Generate 3.5x4.5cm photos and 4x6 print sheets for govt applications.">
+    <meta property="og:title" content="Passport Size Photo Maker Online">
+    <meta property="og:description" content="Generate 3.5x4.5cm photos and 4x6 print sheets for online applications.">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -43,9 +43,9 @@
     </header>
 
     <main class="container mx-auto px-4 py-12">
-        <div class="max-w-4xl mx-auto lg:max-w-6xl">
-            <div class="mb-12 text-center">
-                <h1 class="text-4xl font-black mb-4">Passport Photo Maker</h1>
+        <div class="max-w-4xl mx-auto lg:max-w-6xl xl:max-w-7xl">
+            <div class="tool-header">
+                <h1 class="text-4xl md:text-5xl font-black mb-4 tracking-tight">Passport Photo Maker</h1>
                 <p class="text-slate-600 italic">પાસપોર્ટ સાઇઝનો ફોટો ઓનલાઈન બનાવો.</p>
             </div>
 
@@ -53,17 +53,17 @@
                 
                 <!-- 1. UPLOAD SECTION -->
                 <section id="upload-section" class="card lg:col-start-1 lg:row-start-1" aria-label="Step 1: Upload Photo">
-                    <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 1: Upload Photo</h2>
+                    <span class="section-title">Step 1: Upload Photo</span>
                     <div id="image-upload-container"></div>
                 </section>
 
                 <!-- Workspace (Hidden until image is uploaded) -->
-                <div id="previewArea" class="hidden lg:grid lg:grid-cols-[1.2fr,1fr] lg:gap-8 lg:items-start space-y-6 md:space-y-8 lg:space-y-0">
+                <div id="previewArea" class="hidden lg:col-span-2 lg:grid lg:grid-cols-[1.2fr,1fr] lg:gap-8 lg:items-start space-y-6 md:space-y-8 lg:space-y-0">
                     
                     <!-- Left Column: Preview (First on Mobile) -->
                     <section id="preview-section" class="card lg:row-span-2" aria-label="Step 2: Preview & Details">
                         <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest">Step 2: Preview & Information</h2>
+                            <span class="section-title !mb-0">Step 2: Preview & Information</span>
                             <button id="change-photo-btn" class="text-[10px] font-bold text-blue-600 hover:underline flex items-center gap-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                                 Change Photo
@@ -75,11 +75,11 @@
                     <!-- Right Column: Controls -->
                     <!-- 3. PASSPORT SETTINGS -->
                     <section id="settings-section" class="card" aria-label="Step 3: Passport Settings">
-                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 3: Passport Settings</h2>
+                        <span class="section-title">Step 3: Passport Settings</span>
                         
                         <div class="space-y-6">
                             <div>
-                                <label class="block text-sm font-bold mb-2 text-slate-700 uppercase text-[10px] tracking-wider">Select Size Preset</label>
+                                <label class="input-label">Select Size Preset</label>
                                 <select id="presetSelect" class="input-field">
                                     <option value="passport">Indian Passport (3.5 x 4.5 cm)</option>
                                     <option value="visa-us">US Visa (2 x 2 inch)</option>
@@ -90,11 +90,11 @@
 
                             <div id="custom-inputs" class="hidden grid grid-cols-2 gap-4 pt-2">
                                 <div>
-                                    <label class="block text-sm font-bold mb-2 text-slate-700 uppercase text-[10px] tracking-wider">Width (px)</label>
+                                    <label class="input-label">Width (px)</label>
                                     <input type="number" id="manualWidth" class="input-field" value="413">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-bold mb-2 text-slate-700 uppercase text-[10px] tracking-wider">Height (px)</label>
+                                    <label class="input-label">Height (px)</label>
                                     <input type="number" id="manualHeight" class="input-field" value="531">
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                                 </label>
                             </div>
 
-                            <button id="applyResize" class="btn btn-outline border-blue-600 text-blue-600 hover:bg-blue-50 font-bold uppercase text-xs tracking-widest w-full">
+                            <button id="applyResize" class="btn btn-primary font-bold uppercase text-xs tracking-widest w-full">
                                 Generate Passport Photo
                             </button>
                         </div>
@@ -118,7 +118,7 @@
 
                     <!-- 4. DOWNLOAD SECTION -->
                     <section id="download-section" class="card" aria-label="Step 4: Download">
-                        <h2 class="text-xs font-black uppercase text-slate-400 tracking-widest mb-4">Step 4: Final Download</h2>
+                        <span class="section-title">Step 4: Download</span>
                         <button id="downloadPhoto" class="btn btn-primary mb-4 font-bold uppercase text-xs tracking-widest">
                             Download Photo
                         </button>
@@ -126,8 +126,8 @@
                             Create 4x6 Print Sheet (8 Photos)
                         </button>
 
-                        <div id="statusContainer" class="w-full p-3 bg-blue-50 text-blue-700 rounded-lg text-center border border-blue-100">
-                            <p id="statusMsg" class="text-xs font-bold uppercase tracking-tight">Ready to process</p>
+                        <div id="statusContainer" class="status-box status-ready">
+                            <span id="statusMsg">Ready to process</span>
                         </div>
                     </section>
                 </div>
@@ -151,7 +151,7 @@
                         <div class="w-7 h-7 bg-blue-600 rounded flex items-center justify-center text-white font-black text-xs">G</div>
                         <span class="text-lg font-black tracking-tight text-white">GovDocs<span class="text-blue-500">.pro</span></span>
                     </div>
-                    <p class="text-sm leading-relaxed max-w-xs">સરકારી ફોર્મ માટે ફોટો, PDF અને ડોક્યુમેન્ટ ટૂલ્સ.</p>
+                    <p class="text-sm leading-relaxed max-w-xs">ફોટો, PDF અને ડોક્યુમેન્ટ મેનેજમેન્ટ માટે સ્માર્ટ ટૂલ્સ.</p>
                     <p class="text-[11px] font-medium text-slate-500">Made in Gujarat ❤️</p>
                 </div>
 
