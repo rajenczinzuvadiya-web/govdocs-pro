@@ -21,9 +21,62 @@ export const Navigator = {
     init() {
         Header.render();
         Footer.render();
+        this.injectHeaderSearch();
         this.injectSidebar();
         this.renderHistory();
         this.bindEvents();
+    },
+
+    injectHeaderSearch() {
+        const header = document.getElementById('main-header');
+        if (!header) return;
+
+        // Access the inner container of the header (or fallback to header itself)
+        const container = header.querySelector('.container') || header.firstElementChild || header;
+        
+        const desktopSearchHtml = `
+            <div id="header-search-wrapper" class="hidden md:flex items-center flex-1 max-w-[280px] min-w-[220px] mx-4 relative group">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-4 w-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input type="text" id="header-search-desktop" placeholder="Search tools..." class="w-full pl-10 pr-4 py-2.5 bg-slate-100 border border-transparent focus:bg-white rounded-full text-sm focus:ring-2 focus:ring-blue-500 transition-all outline-none">
+                <div id="header-search-results-desktop" class="absolute top-full mt-2 left-0 w-full bg-white rounded-xl shadow-xl border border-slate-100 hidden flex-col overflow-hidden z-50 max-h-80 overflow-y-auto"></div>
+            </div>
+        `;
+
+        const mobileSearchIconHtml = `
+            <div class="md:hidden flex items-center ml-auto mr-2">
+                <button id="header-search-icon-mobile" class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        const mobileSearchFieldHtml = `
+            <div id="header-search-field-mobile" class="hidden absolute top-full left-0 w-full bg-white border-b border-slate-200 p-3 shadow-lg z-[60]">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    </div>
+                    <input type="text" id="header-search-mobile-input" placeholder="Search tools..." class="w-full pl-10 pr-4 py-2.5 bg-slate-100 border-none rounded-xl text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <div id="header-search-results-mobile" class="absolute top-full mt-2 left-0 w-full bg-white rounded-xl shadow-xl border border-slate-100 hidden flex-col overflow-hidden z-50 max-h-80 overflow-y-auto"></div>
+                </div>
+            </div>
+        `;
+
+        const firstChild = container.firstElementChild; // Targeting location right after the Logo
+        if (firstChild) firstChild.insertAdjacentHTML('afterend', desktopSearchHtml);
+        else container.insertAdjacentHTML('afterbegin', desktopSearchHtml);
+
+        const lastChild = container.lastElementChild; // Targeting location right before the Navigation
+        if (lastChild) lastChild.insertAdjacentHTML('beforebegin', mobileSearchIconHtml);
+        else container.insertAdjacentHTML('beforeend', mobileSearchIconHtml);
+
+        header.insertAdjacentHTML('beforeend', mobileSearchFieldHtml);
     },
 
     injectSidebar() {
@@ -64,12 +117,15 @@ export const Navigator = {
     },
 
     renderTools(filter = '') {
-        const list = document.getElementById('tools-list');
+        const lists = [document.getElementById('tools-list'), document.getElementById('sidebar-tools-list')].filter(Boolean);
+        if (lists.length === 0) return;
+
         const groups = {};
 
         const filtered = TOOLS.filter(t => 
             t.title.toLowerCase().includes(filter.toLowerCase()) || 
-            t.gu.includes(filter)
+            t.gu.includes(filter) ||
+            (t.key && t.key.toLowerCase().includes(filter.toLowerCase()))
         );
 
         filtered.forEach(tool => {
@@ -77,7 +133,7 @@ export const Navigator = {
             groups[tool.cat].push(tool);
         });
 
-        list.innerHTML = Object.entries(groups).map(([cat, tools]) => `
+        const html = Object.entries(groups).map(([cat, tools]) => `
             <div>
                 <h3 class="text-xs font-extrabold uppercase text-slate-500 tracking-wider mb-3 ml-2">${cat}</h3>
                 <div class="space-y-3">
@@ -96,9 +152,43 @@ export const Navigator = {
             </div>
         `).join('');
 
-        if (filtered.length === 0) {
-            list.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">No tools found matching "${filter}"</div>`;
+        const emptyHtml = `<div class="text-center py-12 text-slate-400 text-sm">No tools found matching "${filter}"</div>`;
+        
+        lists.forEach(list => {
+            list.innerHTML = filtered.length > 0 ? html : emptyHtml;
+        });
+    },
+
+    renderDropdownResults(query, container) {
+        if (!container) return;
+        const val = query.toLowerCase().trim();
+        if (!val) {
+            container.classList.add('hidden');
+            return;
         }
+
+        const matches = TOOLS.filter(t => 
+            t.title.toLowerCase().includes(val) || 
+            t.gu.includes(val) || 
+            (t.key && t.key.toLowerCase().includes(val))
+        );
+
+        if (matches.length > 0) {
+            container.innerHTML = matches.map(t => `
+                <a href="${t.link}" class="flex items-center gap-3 p-3 hover:bg-slate-50 border-b border-slate-100 last:border-0 transition-colors">
+                    <div class="w-8 h-8 bg-slate-100 text-slate-500 rounded flex items-center justify-center shrink-0">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${t.icon}" /></svg>
+                    </div>
+                    <div class="min-w-0 text-left">
+                        <div class="text-sm font-bold text-slate-900 truncate">${t.title}</div>
+                        <div class="text-[10px] text-slate-500 truncate">${t.cat}</div>
+                    </div>
+                </a>
+            `).join('');
+        } else {
+            container.innerHTML = `<div class="p-4 text-center text-sm text-slate-500">No tools found for "${val}"</div>`;
+        }
+        container.classList.remove('hidden');
     },
 
     renderHistory() {
@@ -132,6 +222,12 @@ export const Navigator = {
         const sidebarSearch = document.getElementById('tool-search');
         const mainSearch = document.getElementById('tool-search-main');
         const triggers = document.querySelectorAll('.nav-trigger');
+        const dInput = document.getElementById('header-search-desktop');
+        const dResults = document.getElementById('header-search-results-desktop');
+        const mInput = document.getElementById('header-search-mobile-input');
+        const mResults = document.getElementById('header-search-results-mobile');
+        const mBtn = document.getElementById('header-search-icon-mobile');
+        const mField = document.getElementById('header-search-field-mobile');
 
         const open = () => {
             overlay.classList.remove('hidden');
@@ -147,9 +243,14 @@ export const Navigator = {
         };
 
         const syncSearch = (val) => {
-            if (sidebarSearch) sidebarSearch.value = val;
-            if (mainSearch) mainSearch.value = val;
+            if (sidebarSearch && sidebarSearch !== document.activeElement) sidebarSearch.value = val;
+            if (mainSearch && mainSearch !== document.activeElement) mainSearch.value = val;
+            if (dInput && dInput !== document.activeElement) dInput.value = val;
+            if (mInput && mInput !== document.activeElement) mInput.value = val;
+            
             this.renderTools(val);
+            if (dInput === document.activeElement) this.renderDropdownResults(val, dResults);
+            if (mInput === document.activeElement) this.renderDropdownResults(val, mResults);
         };
 
         triggers.forEach(btn => btn.onclick = open);
@@ -161,6 +262,39 @@ export const Navigator = {
 
         if (sidebarSearch) sidebarSearch.oninput = (e) => syncSearch(e.target.value);
         if (mainSearch) mainSearch.oninput = (e) => syncSearch(e.target.value);
+        if (dInput) dInput.oninput = (e) => syncSearch(e.target.value);
+        if (mInput) mInput.oninput = (e) => syncSearch(e.target.value);
+
+        if (mBtn && mField) {
+            mBtn.onclick = () => {
+                mField.classList.toggle('hidden');
+                if (!mField.classList.contains('hidden')) mInput.focus();
+            };
+        }
+
+        document.addEventListener('click', (e) => {
+            if (dInput && dResults && !dInput.contains(e.target) && !dResults.contains(e.target)) {
+                dResults.classList.add('hidden');
+            }
+            if (mField && mBtn && !mField.contains(e.target) && !mBtn.contains(e.target)) {
+                mField.classList.add('hidden');
+                if (mResults) mResults.classList.add('hidden');
+            }
+        });
+
+        if (dInput) dInput.addEventListener('focus', (e) => {
+            if (e.target.value.trim()) this.renderDropdownResults(e.target.value, dResults);
+        });
+
+        const handleEnter = (e, resultsContainer) => {
+            if (e.key === 'Enter' && resultsContainer && !resultsContainer.classList.contains('hidden')) {
+                const firstLink = resultsContainer.querySelector('a');
+                if (firstLink) firstLink.click();
+            }
+        };
+        
+        if (dInput) dInput.addEventListener('keydown', (e) => handleEnter(e, dResults));
+        if (mInput) mInput.addEventListener('keydown', (e) => handleEnter(e, mResults));
 
         window.addEventListener('historyUpdated', () => this.renderHistory());
 
