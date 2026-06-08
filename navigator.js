@@ -18,6 +18,9 @@ const TOOLS = [
 ];
 
 export const Navigator = {
+    currentTextFilter: '',
+    currentCategory: 'all',
+
     init() {
         Header.render();
         Footer.render();
@@ -98,7 +101,7 @@ export const Navigator = {
                 </div>
 
                 <div class="flex-1 overflow-y-auto p-4 space-y-5">
-                    <div id="sidebar-tools-list" class="space-y-5">
+                    <div id="sidebar-tools-list" class="space-y-3">
                         <!-- Content injected via renderTools -->
                     </div>
                     
@@ -116,43 +119,39 @@ export const Navigator = {
         this.renderTools();
     },
 
-    renderTools(filter = '') {
+    renderTools(filter = this.currentTextFilter, category = this.currentCategory) {
+        this.currentTextFilter = filter;
+        this.currentCategory = category;
+        
         const lists = [document.getElementById('tools-list'), document.getElementById('sidebar-tools-list')].filter(Boolean);
         if (lists.length === 0) return;
 
-        const groups = {};
-
-        const filtered = TOOLS.filter(t => 
-            t.title.toLowerCase().includes(filter.toLowerCase()) || 
-            t.gu.includes(filter) ||
-            (t.key && t.key.toLowerCase().includes(filter.toLowerCase()))
-        );
-
-        filtered.forEach(tool => {
-            if (!groups[tool.cat]) groups[tool.cat] = [];
-            groups[tool.cat].push(tool);
+        const filtered = TOOLS.filter(t => {
+            const matchesText = !filter || t.title.toLowerCase().includes(filter.toLowerCase()) || t.gu.includes(filter) || (t.key && t.key.toLowerCase().includes(filter.toLowerCase()));
+            let matchesCat = true;
+            
+            if (category === 'photo') matchesCat = t.cat.includes('Photo');
+            else if (category === 'pdf') matchesCat = t.cat.includes('PDF');
+            else if (category === 'signature') matchesCat = t.cat.includes('Signature');
+            else if (category === 'passport') matchesCat = t.id.includes('passport') || (t.key && t.key.includes('passport'));
+            else if (category === 'presets') matchesCat = t.id.includes('preset') || (t.key && t.key.includes('preset'));
+            
+            return matchesText && matchesCat;
         });
 
-        const html = Object.entries(groups).map(([cat, tools]) => `
-            <div>
-                <h3 class="text-xs font-extrabold uppercase text-slate-500 tracking-wider mb-3 ml-2">${cat}</h3>
-                <div class="space-y-3">
-                    ${tools.map(t => `
-                        <a href="${t.link}" class="card-interactive flex items-center gap-4 p-4 bg-white border border-slate-200/60 rounded-2xl group shadow-sm">
-                            <div class="w-10 h-10 bg-slate-100 text-slate-500 rounded-lg flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${t.icon}" /></svg>
-                            </div>
-                            <div>
-                                <div class="text-sm font-bold text-slate-900">${t.title}</div>
-                                <div class="text-[10px] text-slate-500 font-medium">${t.gu}</div>
-                            </div>
-                        </a>
-                    `).join('')}
+        const html = filtered.map(t => `
+            <a href="${t.link}" class="card-interactive flex items-center gap-4 p-4 bg-white border border-slate-200/60 rounded-2xl group shadow-sm h-full">
+                <div class="w-10 h-10 bg-slate-100 text-slate-500 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${t.icon}" /></svg>
                 </div>
-            </div>
+                <div class="min-w-0">
+                    <div class="text-sm font-bold text-slate-900 truncate">${t.title}</div>
+                    <div class="text-[10px] text-slate-500 font-medium truncate">${t.gu}</div>
+                </div>
+            </a>
         `).join('');
 
-        const emptyHtml = `<div class="text-center py-12 text-slate-400 text-sm">No tools found matching "${filter}"</div>`;
+        const emptyHtml = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">No tools found matching "${filter}"</div>`;
         
         lists.forEach(list => {
             list.innerHTML = filtered.length > 0 ? html : emptyHtml;
@@ -220,7 +219,6 @@ export const Navigator = {
         const sidebar = document.getElementById('nav-sidebar');
         const closeBtn = document.getElementById('close-nav');
         const sidebarSearch = document.getElementById('tool-search');
-        const mainSearch = document.getElementById('tool-search-main');
         const triggers = document.querySelectorAll('.nav-trigger');
         const dInput = document.getElementById('header-search-desktop');
         const dResults = document.getElementById('header-search-results-desktop');
@@ -244,11 +242,10 @@ export const Navigator = {
 
         const syncSearch = (val) => {
             if (sidebarSearch && sidebarSearch !== document.activeElement) sidebarSearch.value = val;
-            if (mainSearch && mainSearch !== document.activeElement) mainSearch.value = val;
             if (dInput && dInput !== document.activeElement) dInput.value = val;
             if (mInput && mInput !== document.activeElement) mInput.value = val;
             
-            this.renderTools(val);
+            this.renderTools(val, this.currentCategory);
             if (dInput === document.activeElement) this.renderDropdownResults(val, dResults);
             if (mInput === document.activeElement) this.renderDropdownResults(val, mResults);
         };
@@ -261,7 +258,6 @@ export const Navigator = {
         if (clearBtn) clearBtn.onclick = () => HistoryManager.clear();
 
         if (sidebarSearch) sidebarSearch.oninput = (e) => syncSearch(e.target.value);
-        if (mainSearch) mainSearch.oninput = (e) => syncSearch(e.target.value);
         if (dInput) dInput.oninput = (e) => syncSearch(e.target.value);
         if (mInput) mInput.oninput = (e) => syncSearch(e.target.value);
 
@@ -295,6 +291,34 @@ export const Navigator = {
         
         if (dInput) dInput.addEventListener('keydown', (e) => handleEnter(e, dResults));
         if (mInput) mInput.addEventListener('keydown', (e) => handleEnter(e, mResults));
+
+        // Pill Navigation Filter Logic
+        const filterPills = document.querySelectorAll('.filter-pill');
+        const toolsListContainer = document.getElementById('tools-list');
+
+        if (filterPills.length > 0 && toolsListContainer) {
+            toolsListContainer.style.transition = 'opacity 200ms ease-in-out';
+            
+            filterPills.forEach(pill => {
+                pill.addEventListener('click', (e) => {
+                    const target = e.currentTarget;
+                    if (target.classList.contains('active')) return;
+
+                    filterPills.forEach(p => {
+                        p.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-200', 'active', 'border-transparent');
+                        p.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+                    });
+                    target.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+                    target.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-200', 'active', 'border-transparent');
+
+                    toolsListContainer.style.opacity = '0';
+                    setTimeout(() => {
+                        this.renderTools(this.currentTextFilter, target.dataset.filter);
+                        toolsListContainer.style.opacity = '1';
+                    }, 200);
+                });
+            });
+        }
 
         window.addEventListener('historyUpdated', () => this.renderHistory());
 

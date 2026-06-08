@@ -189,3 +189,13 @@ input[type="range"]::-webkit-slider-runnable-track {
 .status-box.status-processing { background-color: var(--primary-light); color: var(--primary); border-style: dashed; }
 .status-box.status-success { background-color: #dcfce7 !important; color: #166534 !important; border-color: #bbf7d0 !important; }
 .status-box.status-error { background-color: #fee2e2 !important; color: #991b1b !important; border-color: #fecaca !important; }
+
+/* Scrollbar Hiding for Pill Navigation */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
