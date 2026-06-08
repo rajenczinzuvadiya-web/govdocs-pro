@@ -38,6 +38,16 @@ export const GOVT_PRESETS = {
         label: "Aadhaar Card Update",
         photo: { width: 413, height: 531, minKb: 10, maxKb: 50 },
         signature: { width: 413, height: 177, minKb: 10, maxKb: 50 }
+    },
+    pan: {
+        label: "PAN Card Size",
+        photo: { width: 213, height: 213, minKb: 20, maxKb: 50 },
+        signature: { width: 400, height: 200, minKb: 10, maxKb: 20 }
+    },
+    'visa-us': {
+        label: "US Visa (2 x 2 inch)",
+        photo: { width: 600, height: 600, minKb: 10, maxKb: 240 },
+        signature: { width: 600, height: 600, minKb: 10, maxKb: 240 }
     }
 };
 

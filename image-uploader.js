@@ -38,7 +38,10 @@ export const ImageUploader = {
         };
 
         dropZone.onclick = () => fileInput.click();
-        fileInput.onchange = (e) => processFile(e.target.files[0]);
+        fileInput.onchange = (e) => {
+            processFile(e.target.files[0]);
+            e.target.value = '';
+        };
 
         dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('border-blue-500', 'bg-blue-50'); };
         dropZone.ondragleave = () => { dropZone.classList.remove('border-blue-500', 'bg-blue-50'); };

@@ -229,21 +229,29 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const handleJpgFiles = (files) => {
+        let hasInvalidFile = false;
         Array.from(files).forEach(file => {
-            if (file.type.startsWith('image/')) {
+            if (file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png') {
                 selectedJpgFiles.push({ file, preview: URL.createObjectURL(file) });
+            } else {
+                hasInvalidFile = true;
             }
         });
+        if (hasInvalidFile) {
+            alert("Only JPG and PNG images are supported.");
+        }
         renderJpgList();
     };
 
     // Populate Preset Select dynamically from centralized engine
     if (presetSelect) {
         Object.entries(GOVT_PRESETS).forEach(([key, preset]) => {
-            const option = document.createElement('option');
-            option.value = key;
-            option.textContent = preset.label;
-            presetSelect.appendChild(option);
+            if (!presetSelect.querySelector(`option[value="${key}"]`)) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = preset.label;
+                presetSelect.appendChild(option);
+            }
         });
 
         // Determine context (Signature vs Photo)
@@ -314,7 +322,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 dropZone.classList.remove('bg-blue-50');
                 handlePdfFiles(e.dataTransfer.files);
             };
-            pdfMergeInput.onchange = (e) => handlePdfFiles(e.target.files);
+            pdfMergeInput.onchange = (e) => {
+                handlePdfFiles(e.target.files);
+                e.target.value = '';
+            };
             document.getElementById('addMorePdfBtn')?.addEventListener('click', () => pdfMergeInput.click());
         } else if (isJpgToPdf && jpgInput) {
             dropZone.onclick = () => jpgInput.click();
@@ -323,7 +334,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 dropZone.classList.remove('bg-blue-50');
                 handleJpgFiles(e.dataTransfer.files);
             };
-            jpgInput.onchange = (e) => handleJpgFiles(e.target.files);
+            jpgInput.onchange = (e) => {
+                handleJpgFiles(e.target.files);
+                e.target.value = '';
+            };
             document.getElementById('addMoreBtn')?.addEventListener('click', () => jpgInput.click());
             document.getElementById('add-more-link')?.addEventListener('click', () => jpgInput.click());
         }
