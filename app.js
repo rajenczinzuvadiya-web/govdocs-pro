@@ -1,5 +1,5 @@
 import { GOVT_PRESETS } from './govt_presets.js';
-import { mergePDFs, convertImagesToPdf } from './pdf-logic.js';
+import { mergePDFs, convertImagesToPdf, splitPdfByRange, splitPdfToZip } from './pdf-logic.js';
 import * as Engine from './image-engine.js';
 import { ImageUploader } from './image-uploader.js';
 import { ImagePreviewer } from './image-previewer.js';
@@ -16,8 +16,8 @@ const state = {
 };
 
 const updateStatus = (msg, type = 'ready') => {
-    const statusContainer = document.getElementById('statusContainer') || document.getElementById('pdfStatusContainer');
-    const statusMsg = document.getElementById('statusMsg') || document.getElementById('pdfStatus');
+    const statusContainer = document.getElementById('statusContainer') || document.getElementById('pdfStatusContainer') || document.getElementById('splitStatusContainer');
+    const statusMsg = document.getElementById('statusMsg') || document.getElementById('pdfStatus') || document.getElementById('splitStatusMsg');
     if (statusMsg) statusMsg.innerText = msg;
     
     if (statusContainer) {
@@ -314,8 +314,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dropZone) {
         const isPdfMerge = !!document.getElementById('mergePdfBtn');
         const isJpgToPdf = !!document.getElementById('convertJpgBtn') && !isPdfMerge;
+        const isPdfSplit = !!document.getElementById('splitPdfBtn');
 
-        if (isPdfMerge && pdfMergeInput) {
+        if (isPdfSplit) {
+            const splitInput = document.getElementById('splitPdfInput');
+            if (splitInput) {
+                dropZone.onclick = () => splitInput.click();
+                dropZone.ondrop = (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('bg-blue-50');
+                    if (e.dataTransfer.files[0]) handlePdfSplitFile(e.dataTransfer.files[0]);
+                };
+                splitInput.onchange = (e) => {
+                    if (e.target.files[0]) handlePdfSplitFile(e.target.files[0]);
+                };
+            }
+        } else if (isPdfMerge && pdfMergeInput) {
             dropZone.onclick = () => pdfMergeInput.click();
             dropZone.ondrop = (e) => {
                 e.preventDefault();
@@ -657,6 +671,133 @@ document.getElementById('mergePdfBtn')?.addEventListener('click', async () => {
         updateStatus("PDF સફળતાપૂર્વક મર્જ થઈ ગઈ!", 'success');
     } catch (e) { updateStatus("ભૂલ આવી: " + e.message, 'error'); }
 });
+
+    // --- PDF Split Specific Logic ---
+    let currentSplitFile = null;
+    let currentSplitPageCount = 0;
+    let splitResultUrl = null;
+
+    const handlePdfSplitFile = async (file) => {
+        if (file.type !== 'application/pdf') return alert("માત્ર PDF ફાઇલ માન્ય છે.");
+        currentSplitFile = file;
+        
+        // Parse total pages
+        const { PDFDocument } = PDFLib;
+        const arrayBuffer = await file.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(arrayBuffer);
+        currentSplitPageCount = pdfDoc.getPageCount();
+
+        // Update UI
+        document.getElementById('upload-section').classList.add('hidden');
+        document.getElementById('file-info-section').classList.remove('hidden');
+        document.getElementById('split-workspace').classList.remove('hidden');
+        document.getElementById('split-file-name').innerText = file.name;
+        document.getElementById('split-page-count').innerText = currentSplitPageCount;
+        
+        if (splitResultUrl) {
+            URL.revokeObjectURL(splitResultUrl);
+            splitResultUrl = null;
+            document.getElementById('downloadSplitBtn').classList.add('hidden');
+        }
+        updateStatus("ફાઇલ તૈયાર છે. વિકલ્પો પસંદ કરો.", 'ready');
+    };
+
+    document.getElementById('change-pdf-btn')?.addEventListener('click', () => {
+        document.getElementById('splitPdfInput')?.click();
+    });
+
+    // Toggle Range input visibility based on radio selection
+    document.querySelectorAll('input[name="splitMode"]')?.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const rangeContainer = document.getElementById('range-input-container');
+            if (e.target.value === 'range') {
+                rangeContainer.classList.remove('hidden');
+            } else {
+                rangeContainer.classList.add('hidden');
+            }
+        });
+    });
+
+    const parseRangeString = (str, maxPages) => {
+        const pages = new Set();
+        const parts = str.split(',');
+        for (let part of parts) {
+            part = part.trim();
+            if (!part) continue;
+            if (part.includes('-')) {
+                let [start, end] = part.split('-').map(Number);
+                if (isNaN(start) || isNaN(end) || start < 1 || end > maxPages || start > end) return null;
+                for (let i = start; i <= end; i++) pages.add(i - 1);
+            } else {
+                let num = Number(part);
+                if (isNaN(num) || num < 1 || num > maxPages) return null;
+                pages.add(num - 1);
+            }
+        }
+        return Array.from(pages).sort((a, b) => a - b);
+    };
+
+    document.getElementById('splitPdfBtn')?.addEventListener('click', async () => {
+        if (!currentSplitFile || currentSplitPageCount === 0) return;
+        
+        const mode = document.querySelector('input[name="splitMode"]:checked').value;
+        const dlBtn = document.getElementById('downloadSplitBtn');
+        dlBtn.classList.add('hidden');
+        
+        try {
+            if (mode === 'range') {
+                const rangeStr = document.getElementById('splitRangeInput').value;
+                const pageIndices = parseRangeString(rangeStr, currentSplitPageCount);
+                
+                if (!pageIndices || pageIndices.length === 0) {
+                    return updateStatus("અમાન્ય પેજ રેન્જ! કૃપા કરીને 1 થી " + currentSplitPageCount + " ની વચ્ચે યોગ્ય રેન્જ દાખલ કરો.", 'error');
+                }
+                
+                updateStatus("પેજ અલગ કરી રહ્યા છીએ...", 'processing');
+                const pdfBytes = await splitPdfByRange(currentSplitFile, pageIndices);
+                
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                splitResultUrl = URL.createObjectURL(blob);
+                
+                dlBtn.innerText = "Download PDF";
+                dlBtn.onclick = () => {
+                    const a = document.createElement('a');
+                    a.href = splitResultUrl;
+                    a.download = currentSplitFile.name.replace('.pdf', '_split.pdf');
+                    a.click();
+                };
+                
+                HistoryManager.save({ toolName: 'PDF Split', preset: 'Custom Range', size: `${Math.round(blob.size / 1024)} KB` });
+                updateStatus("સફળતાપૂર્વક અલગ કર્યું!", 'success');
+                
+            } else if (mode === 'extract') {
+                updateStatus("બધા પેજ અલગ કરી રહ્યા છીએ...", 'processing');
+                
+                const zipBlob = await splitPdfToZip(currentSplitFile, (current, total) => {
+                    updateStatus(`પ્રોસેસિંગ... (${current}/${total} પેજ)`, 'processing');
+                });
+                
+                splitResultUrl = URL.createObjectURL(zipBlob);
+                
+                dlBtn.innerText = "Download ZIP";
+                dlBtn.onclick = () => {
+                    const a = document.createElement('a');
+                    a.href = splitResultUrl;
+                    a.download = currentSplitFile.name.replace('.pdf', '_pages.zip');
+                    a.click();
+                };
+                
+                HistoryManager.save({ toolName: 'PDF Split', preset: 'Extract All', size: `${Math.round(zipBlob.size / 1024)} KB` });
+                updateStatus("ZIP ફાઇલ તૈયાર છે!", 'success');
+            }
+            
+            dlBtn.classList.remove('hidden');
+            
+        } catch (e) {
+            updateStatus("ભૂલ આવી: " + e.message, 'error');
+            console.error(e);
+        }
+    });
 
     // --- Hook One-Click Buttons ---
     document.querySelectorAll('.quick-process-btn').forEach(btn => {

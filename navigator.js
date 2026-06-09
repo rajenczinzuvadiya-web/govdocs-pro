@@ -14,7 +14,8 @@ const TOOLS = [
     { id: 'signature-resize', title: 'Signature Resize', desc: 'Resize & Transparent BG', gu: 'સહી રીસાઇઝ', cat: '✍️ Signature Tools', link: 'signature-resize.html', icon: 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z', key: 'sign, png, background, remove' },
     { id: 'jpg-to-pdf', title: 'JPG to PDF', desc: 'Convert images to PDF', gu: 'JPG થી PDF', cat: '📄 PDF Tools', link: 'jpg-to-pdf.html', icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', key: 'jpg pdf convert' },
     { id: 'pdf-merge', title: 'PDF Merge', desc: 'Combine multiple PDFs', gu: 'PDF મર્જ', cat: '📄 PDF Tools', link: 'pdf-merge.html', icon: 'M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', key: 'pdf merge combine' },
-    { id: 'ssc-preset', title: 'SSC Presets', desc: 'Standard Document Sizes', gu: 'SSC માપદંડ', cat: '📸 Photo Tools', link: 'photo-resize.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04', key: 'portal, recruitment' }
+    { id: 'ssc-preset', title: 'SSC Presets', desc: 'Standard Document Sizes', gu: 'SSC માપદંડ', cat: '📸 Photo Tools', link: 'photo-resize.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04', key: 'portal, recruitment' },
+    { id: 'pdf-split', title: 'PDF Split', desc: 'Extract or Separate Pages', gu: 'PDF અલગ કરો', cat: '📄 PDF Tools', link: 'pdf-split.html', icon: 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z', key: 'pdf split extract cut' }
 ];
 
 export const Navigator = {
