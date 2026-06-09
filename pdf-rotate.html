@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Rotate - GovDocs Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <meta name="description" content="Rotate PDF files online. Rotate all pages or specific page ranges quickly and securely.">
+    <link rel="canonical" href="https://govdocs.pro/pdf-rotate.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Rotate PDF Files Online - GovDocs Pro">
+    <meta property="og:description" content="Rotate specific pages in your PDF securely in your browser without quality loss.">
+
+    <link rel="stylesheet" href="global.css">
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <!-- Unified Header -->
+    <header id="main-header" class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white"></header>
+
+    <main class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto lg:max-w-6xl xl:max-w-7xl">
+            <div class="tool-header">
+                <h1 class="text-4xl md:text-5xl font-black mb-4 tracking-tight">PDF Rotate</h1>
+                <p class="text-slate-600 italic">PDF ના પેજને યોગ્ય દિશામાં ફેરવો.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto lg:max-w-none lg:grid lg:grid-cols-[1.2fr,1fr] lg:gap-8 lg:items-start space-y-6 md:space-y-8 lg:space-y-0">
+                
+                <!-- Left Column -->
+                <div class="space-y-6 md:space-y-8">
+                    <!-- 1. UPLOAD SECTION -->
+                    <section id="upload-section" class="card" aria-label="Step 1: Upload PDF">
+                        <span class="section-title">Step 1: Upload File</span>
+                        <div id="drop-zone" class="group relative p-8 md:p-12 border-2 border-dashed border-slate-200 rounded-3xl bg-white hover:bg-blue-50 hover:border-blue-400 transition-all cursor-pointer text-center">
+                            <input type="file" id="rotatePdfInput" accept="application/pdf" class="hidden">
+                            <div class="flex flex-col items-center">
+                                <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-lg shadow-blue-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                </div>
+                                <p class="text-slate-900 font-bold text-lg mb-1">PDF પસંદ કરો</p>
+                                <p class="text-slate-400 text-sm mb-2">ફેરવવા માટે ફાઇલ પસંદ કરો</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 2. FILE INFO SECTION (Hidden initially) -->
+                    <section id="file-info-section" class="card hidden" aria-label="File Information">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="section-title !mb-0">Selected File</span>
+                            <button id="change-rotate-pdf-btn" class="text-[10px] font-bold text-blue-600 hover:underline flex items-center gap-1">Change File</button>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-4">
+                            <div class="w-12 h-12 bg-red-50 text-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <div id="rotate-file-name" class="font-bold text-slate-800 truncate">filename.pdf</div>
+                                <div class="text-xs text-slate-500 mt-1">Total Pages: <span id="rotate-page-count" class="font-bold text-blue-600">0</span></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Right Column (Workspace hidden initially) -->
+                <div id="rotate-workspace" class="space-y-6 md:space-y-8 hidden">
+                    
+                    <!-- 3. ROTATE OPTIONS SECTION -->
+                    <section id="rotate-options-section" class="card" aria-label="Step 2: Rotation Options">
+                        <span class="section-title">Step 2: Rotation Settings</span>
+                        
+                        <div class="space-y-6">
+                            <!-- Target Pages -->
+                            <div class="space-y-3">
+                                <label class="input-label">Target Pages to Rotate</label>
+                                <label class="flex items-start gap-3 p-4 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
+                                    <input type="radio" name="rotateMode" value="all" checked class="mt-1 w-4 h-4 text-blue-600 focus:ring-blue-500">
+                                    <div>
+                                        <span class="block font-bold text-slate-800 text-sm">All Pages</span>
+                                        <span class="block text-xs text-slate-500 mt-0.5">Rotate entire document</span>
+                                    </div>
+                                </label>
+                                
+                                <label class="flex items-start gap-3 p-4 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
+                                    <input type="radio" name="rotateMode" value="range" class="mt-1 w-4 h-4 text-blue-600 focus:ring-blue-500">
+                                    <div class="w-full">
+                                        <span class="block font-bold text-slate-800 text-sm">Custom Page Range</span>
+                                        <span class="block text-xs text-slate-500 mt-0.5">Rotate specific pages only</span>
+                                        
+                                        <div id="rotate-range-input-container" class="mt-3 hidden transition-all">
+                                            <input type="text" id="rotateRangeInput" class="input-field !py-2 !text-sm" placeholder="e.g. 1-3, 5, 8-10">
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- Rotation Direction -->
+                            <div class="space-y-3">
+                                <label class="input-label">Rotation Direction</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button class="rotate-dir-btn btn btn-outline border-slate-200 text-slate-600 !text-[11px] !py-3 !min-h-0 flex flex-col gap-1 items-center" data-angle="-90">
+                                        <span class="text-lg">⤺</span> Left (-90°)
+                                    </button>
+                                    <button class="rotate-dir-btn btn btn-primary border-transparent text-white !text-[11px] !py-3 !min-h-0 flex flex-col gap-1 items-center" data-angle="90">
+                                        <span class="text-lg">⤼</span> Right (+90°)
+                                    </button>
+                                    <button class="rotate-dir-btn btn btn-outline border-slate-200 text-slate-600 !text-[11px] !py-3 !min-h-0 flex flex-col gap-1 items-center" data-angle="180">
+                                        <span class="text-lg">⇵</span> Flip (180°)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 4. ACTION & STATUS SECTION -->
+                    <section id="action-section" class="card" aria-label="Step 3: Execute and Download">
+                        <span class="section-title">Step 3: Apply & Download</span>
+                        
+                        <button id="rotatePdfActionBtn" class="btn btn-primary mb-4 font-bold uppercase text-xs tracking-widest">
+                            Apply Rotation
+                        </button>
+
+                        <div id="rotateStatusContainer" class="status-box status-ready">
+                            <span id="rotateStatusMsg">Ready to rotate</span>
+                        </div>
+
+                        <button id="downloadRotateBtn" class="btn btn-outline border-blue-600 text-blue-600 hover:bg-blue-50 font-bold uppercase text-xs tracking-widest mt-4 hidden">
+                            Download Result
+                        </button>
+                    </section>
+                </div>
+                
+                <!-- Compatibility Hooks for app.js -->
+                <div class="hidden">
+                    <div id="statusContainer"><span id="statusMsg"></span></div>
+                    <div id="pdfStatusContainer"><span id="pdfStatus"></span></div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer" class="bg-[#0f172a] text-slate-400 py-8 md:py-10 border-t border-slate-800">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 mb-6 md:mb-10 text-center md:text-left">
+                <div class="flex flex-col items-center md:items-start space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 bg-blue-600 rounded flex items-center justify-center text-white font-black text-xs">G</div>
+                        <span class="text-lg font-black tracking-tight text-white">GovDocs<span class="text-blue-500">.pro</span></span>
+                    </div>
+                    <p class="text-sm leading-relaxed max-w-xs">ફોટો, PDF અને ડોક્યુમેન્ટ મેનેજમેન્ટ માટે સ્માર્ટ ટૂલ્સ.</p>
+                    <p class="text-[11px] font-medium text-slate-500">Made in Gujarat ❤️</p>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-widest">Quick Links</h4>
+                    <ul class="text-sm space-y-2.5">
+                        <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="photo-resize.html" class="hover:text-white transition-colors">Photo Resize</a></li>
+                        <li><a href="jpg-to-pdf.html" class="hover:text-white transition-colors">JPG to PDF</a></li>
+                        <li><a href="pdf-merge.html" class="hover:text-white transition-colors">PDF Merge</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-widest">Legal</h4>
+                    <ul class="text-sm space-y-2.5">
+                        <li><a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-slate-800 flex flex-col justify-center items-center gap-4 text-[11px] font-medium text-slate-500">
+                <p>© 2025 GovDocs Pro. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    
+    <!-- Core Logic -->
+    <script type="module" src="navigator.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

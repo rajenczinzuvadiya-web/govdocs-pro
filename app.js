@@ -1,5 +1,5 @@
 import { GOVT_PRESETS } from './govt_presets.js';
-import { mergePDFs, convertImagesToPdf, splitPdfByRange, splitPdfToZip } from './pdf-logic.js';
+import { mergePDFs, convertImagesToPdf, splitPdfByRange, splitPdfToZip, rotatePdfPages } from './pdf-logic.js';
 import * as Engine from './image-engine.js';
 import { ImageUploader } from './image-uploader.js';
 import { ImagePreviewer } from './image-previewer.js';
@@ -12,12 +12,13 @@ const state = {
     isTransparent: false,
     isBlackAndWhite: false,
     whiteBg: false,
-    originalSizeKb: 0
+    originalSizeKb: 0,
+    mimeType: null
 };
 
 const updateStatus = (msg, type = 'ready') => {
-    const statusContainer = document.getElementById('statusContainer') || document.getElementById('pdfStatusContainer') || document.getElementById('splitStatusContainer');
-    const statusMsg = document.getElementById('statusMsg') || document.getElementById('pdfStatus') || document.getElementById('splitStatusMsg');
+    const statusContainer = document.getElementById('statusContainer') || document.getElementById('pdfStatusContainer') || document.getElementById('splitStatusContainer') || document.getElementById('rotateStatusContainer') || document.getElementById('qrStatusContainer');
+    const statusMsg = document.getElementById('statusMsg') || document.getElementById('pdfStatus') || document.getElementById('splitStatusMsg') || document.getElementById('rotateStatusMsg') || document.getElementById('qrStatusMsg');
     if (statusMsg) statusMsg.innerText = msg;
     
     if (statusContainer) {
@@ -87,6 +88,9 @@ async function runQuickProcess(presetKey, type) {
 document.addEventListener('DOMContentLoaded', () => {
     // --- Initialize Common Preview Component ---
     ImagePreviewer.render('image-preview-container');
+    if (document.getElementById('image-preview-container')) {
+        ImagePreviewer.render('image-preview-container');
+    }
 
     // --- Initialize Common Upload Component ---
     const presetSelect = document.getElementById('presetSelect');
@@ -266,6 +270,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const img = new Image();
         img.onload = () => {
             state.originalImage = img;
+    if (document.getElementById('image-upload-container')) {
+        ImageUploader.render('image-upload-container', (imageSrc) => {
+            if (state.cropper) state.cropper.destroy();
             
             // Show the workspace
             if (previewArea) previewArea.classList.remove('hidden');
@@ -273,17 +280,32 @@ document.addEventListener('DOMContentLoaded', () => {
             // Hide upload section to reduce scrolling
             const uploadSection = document.getElementById('upload-section');
             if (uploadSection) uploadSection.classList.add('hidden');
+            const img = new Image();
+            img.onload = () => {
+                state.originalImage = img;
+                
+                // Show the workspace
+                if (previewArea) previewArea.classList.remove('hidden');
+                
+                // Hide upload section to reduce scrolling
+                const uploadSection = document.getElementById('upload-section');
+                if (uploadSection) uploadSection.classList.add('hidden');
 
             // Set natural dimensions as defaults for manual inputs if empty (useful for compression tool)
             if (manualWidth && !manualWidth.value) manualWidth.value = img.naturalWidth;
             if (manualHeight && !manualHeight.value) manualHeight.value = img.naturalHeight;
+                // Set natural dimensions as defaults for manual inputs if empty (useful for compression tool)
+                if (manualWidth && !manualWidth.value) manualWidth.value = img.naturalWidth;
+                if (manualHeight && !manualHeight.value) manualHeight.value = img.naturalHeight;
 
             // Update Metadata Labels
             const sizeInKb = Math.round((imageSrc.length * 0.75) / 1024);
-            const mimeType = imageSrc.substring(imageSrc.indexOf(':') + 1, imageSrc.indexOf(';'));
+            const mimeTypeMatch = imageSrc.match(/^data:(.*?);/);
+            const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'image/jpeg';
             const format = mimeType.split('/')[1].toUpperCase();
             
             state.originalSizeKb = sizeInKb;
+            state.mimeType = mimeType;
             
             // Initialize Stats Display
             const originalDisplay = document.getElementById('original-size-display');
@@ -292,6 +314,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (compressedDisplay) compressedDisplay.innerText = '-- KB';
             const savedDisplay = document.getElementById('saved-percent-display');
             if (savedDisplay) savedDisplay.innerText = '--%';
+                // Update Metadata Labels
+                const sizeInKb = Math.round((imageSrc.length * 0.75) / 1024);
+                const mimeTypeMatch = imageSrc.match(/^data:(.*?);/);
+                const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'image/jpeg';
+                const format = mimeType.split('/')[1].toUpperCase();
+                
+                state.originalSizeKb = sizeInKb;
+                state.mimeType = mimeType;
+                
+                // Initialize Stats Display
+                const originalDisplay = document.getElementById('original-size-display');
+                if (originalDisplay) originalDisplay.innerText = sizeInKb + ' KB';
+                const compressedDisplay = document.getElementById('compressed-size-display');
+                if (compressedDisplay) compressedDisplay.innerText = '-- KB';
+                const savedDisplay = document.getElementById('saved-percent-display');
+                if (savedDisplay) savedDisplay.innerText = '--%';
 
             ImagePreviewer.updateMetadata({
                 width: img.naturalWidth,
@@ -302,12 +340,27 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Dispatch event for specialized tool pages (like 20KB compressor)
             window.dispatchEvent(new CustomEvent('imageUploaded', { detail: { size: sizeInKb } }));
+                ImagePreviewer.updateMetadata({
+                    width: img.naturalWidth,
+                    height: img.naturalHeight,
+                    size: sizeInKb,
+                    format: format
+                });
+                
+                // Dispatch event for specialized tool pages (like 20KB compressor)
+                window.dispatchEvent(new CustomEvent('imageUploaded', { detail: { size: sizeInKb } }));
 
             renderPreview(img);
             updateStatus("ફાઇલ અપલોડ થઈ ગઈ છે. હવે ડાઉનલોડ બટન પર ક્લિક કરો.");
         };
         img.src = imageSrc;
     });
+                renderPreview(img);
+                updateStatus("ફાઇલ અપલોડ થઈ ગઈ છે. હવે ડાઉનલોડ બટન પર ક્લિક કરો.");
+            };
+            img.src = imageSrc;
+        });
+    }
 
     // --- PDF Tools Drag & Drop ---
     const dropZone = document.getElementById('drop-zone');
@@ -315,6 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const isPdfMerge = !!document.getElementById('mergePdfBtn');
         const isJpgToPdf = !!document.getElementById('convertJpgBtn') && !isPdfMerge;
         const isPdfSplit = !!document.getElementById('splitPdfBtn');
+        const isPdfRotate = !!document.getElementById('rotatePdfActionBtn');
 
         if (isPdfSplit) {
             const splitInput = document.getElementById('splitPdfInput');
@@ -327,6 +381,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 splitInput.onchange = (e) => {
                     if (e.target.files[0]) handlePdfSplitFile(e.target.files[0]);
+                };
+            }
+        } else if (isPdfRotate) {
+            const rotateInput = document.getElementById('rotatePdfInput');
+            if (rotateInput) {
+                dropZone.onclick = () => rotateInput.click();
+                dropZone.ondrop = (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('bg-blue-50');
+                    if (e.dataTransfer.files[0]) handlePdfRotateFile(e.dataTransfer.files[0]);
+                };
+                rotateInput.onchange = (e) => {
+                    if (e.target.files[0]) handlePdfRotateFile(e.target.files[0]);
                 };
             }
         } else if (isPdfMerge && pdfMergeInput) {
@@ -799,6 +866,194 @@ document.getElementById('mergePdfBtn')?.addEventListener('click', async () => {
         }
     });
 
+    // --- PDF Rotate Specific Logic ---
+    let currentRotateFile = null;
+    let currentRotatePageCount = 0;
+    let rotateResultUrl = null;
+    let selectedRotationAngle = 90; // Default Right (+90)
+
+    const handlePdfRotateFile = async (file) => {
+        if (file.type !== 'application/pdf') return alert("માત્ર PDF ફાઇલ માન્ય છે.");
+        currentRotateFile = file;
+        
+        const { PDFDocument } = PDFLib;
+        const arrayBuffer = await file.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(arrayBuffer);
+        currentRotatePageCount = pdfDoc.getPageCount();
+
+        document.getElementById('upload-section').classList.add('hidden');
+        document.getElementById('file-info-section').classList.remove('hidden');
+        document.getElementById('rotate-workspace').classList.remove('hidden');
+        document.getElementById('rotate-file-name').innerText = file.name;
+        document.getElementById('rotate-page-count').innerText = currentRotatePageCount;
+        
+        // Reset and generate thumbnail
+        const thumbContainer = document.getElementById('rotate-file-name').closest('.flex').querySelector('.w-12.h-12');
+        if (thumbContainer) {
+            thumbContainer.innerHTML = `<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>`;
+            thumbContainer.classList.add('bg-red-50', 'text-red-500');
+            thumbContainer.classList.remove('bg-slate-200', 'overflow-hidden');
+        }
+
+        if (rotateResultUrl) {
+            URL.revokeObjectURL(rotateResultUrl);
+            rotateResultUrl = null;
+            document.getElementById('downloadRotateBtn').classList.add('hidden');
+        }
+        updateStatus("ફાઇલ તૈયાર છે. વિકલ્પો પસંદ કરો.", 'ready');
+
+        try {
+            const thumb = await getPdfThumbnail(file);
+            if (thumbContainer && thumb) {
+                thumbContainer.innerHTML = `<img src="${thumb}" class="w-full h-full object-cover">`;
+                thumbContainer.classList.remove('bg-red-50', 'text-red-500');
+                thumbContainer.classList.add('bg-slate-200', 'overflow-hidden');
+            }
+        } catch(e) { console.error('Thumb error', e); }
+    };
+
+    document.getElementById('change-rotate-pdf-btn')?.addEventListener('click', () => {
+        document.getElementById('rotatePdfInput')?.click();
+    });
+
+    document.querySelectorAll('input[name="rotateMode"]')?.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const rangeContainer = document.getElementById('rotate-range-input-container');
+            if (e.target.value === 'range') {
+                rangeContainer.classList.remove('hidden');
+            } else {
+                rangeContainer.classList.add('hidden');
+            }
+        });
+    });
+
+    document.querySelectorAll('.rotate-dir-btn')?.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.rotate-dir-btn').forEach(b => {
+                b.classList.remove('btn-primary', 'text-white', 'border-transparent');
+                b.classList.add('btn-outline', 'text-slate-600', 'border-slate-200');
+            });
+            const target = e.currentTarget;
+            target.classList.remove('btn-outline', 'text-slate-600', 'border-slate-200');
+            target.classList.add('btn-primary', 'text-white', 'border-transparent');
+            selectedRotationAngle = parseInt(target.dataset.angle);
+        });
+    });
+
+    document.getElementById('rotatePdfActionBtn')?.addEventListener('click', async () => {
+        if (!currentRotateFile || currentRotatePageCount === 0) return;
+        
+        const mode = document.querySelector('input[name="rotateMode"]:checked').value;
+        const dlBtn = document.getElementById('downloadRotateBtn');
+        dlBtn.classList.add('hidden');
+        
+        try {
+            let pageIndices = [];
+            if (mode === 'range') {
+                const rangeStr = document.getElementById('rotateRangeInput').value;
+                pageIndices = parseRangeString(rangeStr, currentRotatePageCount);
+                if (!pageIndices || pageIndices.length === 0) {
+                    return updateStatus("અમાન્ય પેજ રેન્જ! કૃપા કરીને 1 થી " + currentRotatePageCount + " ની વચ્ચે યોગ્ય રેન્જ દાખલ કરો.", 'error');
+                }
+            }
+
+            updateStatus("પ્રોસેસિંગ ચાલુ છે...", 'processing');
+            const pdfBytes = await rotatePdfPages(currentRotateFile, pageIndices, selectedRotationAngle);
+            
+            const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+            rotateResultUrl = URL.createObjectURL(blob);
+            
+            dlBtn.innerText = "Download Rotated PDF";
+            dlBtn.onclick = () => {
+                const a = document.createElement('a');
+                a.href = rotateResultUrl;
+                a.download = currentRotateFile.name.replace(/\.pdf$/i, '-rotated.pdf');
+                a.click();
+                
+                setTimeout(() => {
+                    URL.revokeObjectURL(rotateResultUrl);
+                    rotateResultUrl = null;
+                }, 1000);
+            };
+            
+            HistoryManager.save({ toolName: 'PDF Rotate', preset: mode === 'all' ? 'All Pages' : 'Custom Range', size: `${Math.round(blob.size / 1024)} KB` });
+            updateStatus("PDF સફળતાપૂર્વક ફેરવવામાં આવી છે!", 'success');
+            dlBtn.classList.remove('hidden');
+            
+        } catch (e) {
+            updateStatus("ભૂલ આવી: " + e.message, 'error');
+            console.error(e);
+        }
+    });
+
+    // --- Image Crop Specific Logic ---
+    const applyCropBtn = document.getElementById('applyCropBtn');
+    if (applyCropBtn) {
+        applyCropBtn.onclick = async () => {
+            if (!state.cropper || !state.originalImage) return;
+
+            updateStatus("ક્રોપ કરી રહ્યા છીએ...", 'processing');
+
+            const isPng = state.mimeType === 'image/png';
+            const format = isPng ? 'image/png' : 'image/jpeg';
+            const ext = isPng ? 'png' : 'jpg';
+
+            const canvas = state.cropper.getCroppedCanvas({
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high'
+            });
+
+            canvas.toBlob((blob) => {
+                if (!blob) {
+                    updateStatus("ભૂલ આવી: ઇમેજ ક્રોપ કરવામાં નિષ્ફળ", 'error');
+                    return;
+                }
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `cropped_image.${ext}`;
+                link.click();
+
+                HistoryManager.save({
+                    toolName: 'Image Crop',
+                    preset: 'Custom Crop',
+                    size: `${Math.round(blob.size / 1024)} KB`
+                });
+
+                updateStatus(`સફળતાપૂર્વક ક્રોપ થયું! સાઈઝ: ${Math.round(blob.size / 1024)} KB`, 'success');
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+            }, format, 1);
+        };
+    }
+
+    // Aspect Ratio Buttons
+    document.querySelectorAll('.aspect-btn').forEach(btn => {
+        btn.onclick = () => {
+            if (!state.cropper) return;
+            const ratio = parseFloat(btn.getAttribute('data-ratio'));
+            state.cropper.setAspectRatio(isNaN(ratio) ? NaN : ratio);
+            
+            document.querySelectorAll('.aspect-btn').forEach(b => {
+                b.classList.remove('btn-primary', 'text-white', 'border-transparent');
+                b.classList.add('btn-outline', 'text-slate-600', 'border-slate-200');
+            });
+            
+            btn.classList.remove('btn-outline', 'text-slate-600', 'border-slate-200');
+            btn.classList.add('btn-primary', 'text-white', 'border-transparent');
+        };
+    });
+
+    // Rotation Buttons
+    document.getElementById('rotateLeftBtn')?.addEventListener('click', () => {
+        if (state.cropper) state.cropper.rotate(-90);
+    });
+    document.getElementById('rotateRightBtn')?.addEventListener('click', () => {
+        if (state.cropper) state.cropper.rotate(90);
+    });
+    document.getElementById('resetCropBtn')?.addEventListener('click', () => {
+        if (state.cropper) state.cropper.reset();
+    });
+
     // --- Hook One-Click Buttons ---
     document.querySelectorAll('.quick-process-btn').forEach(btn => {
         btn.onclick = () => {
@@ -807,6 +1062,167 @@ document.getElementById('mergePdfBtn')?.addEventListener('click', async () => {
             runQuickProcess(presetKey, type);
         };
     });
+
+    // --- QR Generator Specific Logic ---
+    const qrCanvas = document.getElementById('qr-canvas');
+    if (qrCanvas && window.QRCode) {
+        let currentQrPayload = '';
+        const typeBtns = document.querySelectorAll('.qr-type-btn');
+        const formSections = document.querySelectorAll('.qr-form-section');
+        const qrSize = document.getElementById('qrSize');
+        const qrError = document.getElementById('qrError');
+        let debounceTimer;
+
+        const generateQR = () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const activeBtn = document.querySelector('.qr-type-btn.btn-primary');
+                if (!activeBtn) return;
+                
+                const activeType = activeBtn.dataset.type;
+                let payload = '';
+
+                let hasError = false;
+
+                // Construct Payload
+                if (activeType === 'text') {
+                    payload = document.getElementById('qr-text-input').value;
+                } else if (activeType === 'url') {
+                    let url = document.getElementById('qr-url-input').value;
+                    if (url && !url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+                    if (url && !/^https?:\/\/.+\..+/.test(url)) {
+                        updateStatus('અમાન્ય URL', 'error');
+                        hasError = true;
+                    } else {
+                        payload = url;
+                    }
+                } else if (activeType === 'phone') {
+                    const phone = document.getElementById('qr-phone-input').value;
+                    if (phone) payload = 'tel:' + phone;
+                } else if (activeType === 'sms') {
+                    const phone = document.getElementById('qr-sms-phone').value;
+                    const msg = document.getElementById('qr-sms-msg').value;
+                    if (phone) payload = `smsto:${phone}:${msg}`;
+                } else if (activeType === 'email') {
+                    const email = document.getElementById('qr-email-address').value;
+                    const sub = document.getElementById('qr-email-sub').value;
+                    const body = document.getElementById('qr-email-body').value;
+                    if (email) {
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(email)) {
+                            updateStatus('અમાન્ય ઈમેલ (Invalid Email)', 'error');
+                            hasError = true;
+                        } else {
+                            payload = `MATMSG:TO:${email};SUB:${sub};BODY:${body};;`;
+                        }
+                    }
+                } else if (activeType === 'upi') {
+                    const upiId = document.getElementById('qr-upi-id').value;
+                    const name = document.getElementById('qr-upi-name').value;
+                    const amount = document.getElementById('qr-upi-amount').value;
+                    if (upiId && upiId.includes('@')) {
+                        payload = `upi://pay?pa=${upiId}&pn=${name}&am=${amount}`;
+                    } else if (upiId) {
+                        updateStatus('અમાન્ય UPI ID (e.g., name@upi)', 'error');
+                        hasError = true;
+                    }
+                } else if (activeType === 'wifi') {
+                    const ssid = document.getElementById('qr-wifi-ssid').value;
+                    const pass = document.getElementById('qr-wifi-pass').value;
+                    const type = document.getElementById('qr-wifi-type').value;
+                    const hidden = document.getElementById('qr-wifi-hidden').checked;
+                    if (ssid) payload = `WIFI:S:${ssid};T:${type};P:${pass};H:${hidden};;`;
+                }
+
+                if (hasError) {
+                    currentQrPayload = '';
+                    const ctx = qrCanvas.getContext('2d');
+                    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+                    return;
+                }
+
+                currentQrPayload = payload.trim();
+
+                if (!currentQrPayload) {
+                    updateStatus('માહિતી દાખલ કરો', 'ready');
+                    const ctx = qrCanvas.getContext('2d');
+                    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+                    return;
+                }
+
+                updateStatus('QR કોડ બની રહ્યો છે...', 'processing');
+
+                const size = parseInt(qrSize.value);
+                const errorLevel = qrError.value;
+
+                window.QRCode.toCanvas(qrCanvas, currentQrPayload, {
+                    width: size,
+                    margin: 2,
+                    errorCorrectionLevel: errorLevel,
+                    color: { dark: '#0f172a', light: '#ffffff' }
+                }, function (error) {
+                    if (error) updateStatus('ભૂલ: ' + error.message, 'error');
+                    else updateStatus('QR કોડ તૈયાર છે!', 'success');
+                });
+            }, 250);
+        };
+
+        // Bind Type Selector
+        typeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                typeBtns.forEach(b => { b.classList.remove('btn-primary'); b.classList.add('btn-outline', 'text-slate-600'); });
+                const target = e.currentTarget;
+                target.classList.remove('btn-outline', 'text-slate-600');
+                target.classList.add('btn-primary');
+                
+                formSections.forEach(sec => sec.classList.add('hidden'));
+                document.getElementById(`form-${target.dataset.type}`).classList.remove('hidden');
+                generateQR();
+            });
+        });
+
+        // Bind Inputs
+        document.querySelectorAll('.qr-input').forEach(input => input.addEventListener('input', generateQR));
+        qrSize.addEventListener('change', generateQR);
+        qrError.addEventListener('change', generateQR);
+
+        // Download Actions
+        const dlAction = (type) => {
+            if (!currentQrPayload) return alert('કૃપા કરીને પહેલા માહિતી દાખલ કરો.');
+            if (type === 'png') {
+                const link = document.createElement('a');
+                link.download = `qrcode_${Date.now()}.png`;
+                link.href = qrCanvas.toDataURL('image/png');
+                link.click();
+                HistoryManager.save({ toolName: 'QR Generator', preset: 'PNG', size: `${qrSize.value}px` });
+            } else if (type === 'svg') {
+                const size = parseInt(qrSize.value);
+                const errorLevel = qrError.value;
+                window.QRCode.toString(currentQrPayload, {
+                    type: 'svg',
+                    width: size,
+                    margin: 2,
+                    errorCorrectionLevel: errorLevel,
+                    color: { dark: '#0f172a', light: '#ffffff' }
+                }, function (err, svgString) {
+                    if (err) return updateStatus('ભૂલ: ' + err.message, 'error');
+                    const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.download = `qrcode_${Date.now()}.svg`;
+                    link.href = url;
+                    link.click();
+                    setTimeout(() => URL.revokeObjectURL(url), 1000);
+                    HistoryManager.save({ toolName: 'QR Generator', preset: 'SVG', size: `${qrSize.value}px` });
+                });
+            }
+        };
+
+        document.getElementById('downloadQrPng')?.addEventListener('click', () => dlAction('png'));
+        document.getElementById('downloadQrSvg')?.addEventListener('click', () => dlAction('svg'));
+        
+        generateQR(); // Initial Empty Clear
+    }
 
     // Handle Change Photo Button across all tool pages
     document.addEventListener('click', (e) => {

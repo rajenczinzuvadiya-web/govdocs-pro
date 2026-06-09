@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator - GovDocs Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <meta name="description" content="Free online QR Code Generator. Create secure QR codes for URLs, WiFi, UPI Payments, and text instantly in your browser.">
+    <link rel="canonical" href="https://govdocs.pro/qr-generator.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Free Online QR Code Generator - GovDocs Pro">
+    <meta property="og:description" content="Instantly generate QR codes for URLs, UPI Payments, Emails, and WiFi securely in your browser.">
+
+    <link rel="stylesheet" href="global.css">
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <!-- Unified Header -->
+    <header id="main-header" class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white"></header>
+
+    <main class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto lg:max-w-6xl xl:max-w-7xl">
+            <div class="tool-header">
+                <h1 class="text-4xl md:text-5xl font-black mb-4 tracking-tight">QR Generator</h1>
+                <p class="text-slate-600 italic">URL, UPI, કે WiFi માટે QR કોડ બનાવો.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto lg:max-w-none lg:grid lg:grid-cols-[1.2fr,1fr] lg:gap-8 lg:items-start space-y-6 md:space-y-8 lg:space-y-0">
+                
+                <!-- Left Column (Input Workspace) -->
+                <div class="space-y-6 md:space-y-8">
+                    
+                    <!-- Step 1: Type Selection -->
+                    <section class="card" aria-label="Step 1: Select QR Type">
+                        <span class="section-title">Step 1: Select Content Type</span>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="qr-type-btn btn btn-primary !text-[11px] !py-2 !min-h-0 !w-auto !px-4" data-type="url">URL Link</button>
+                            <button class="qr-type-btn btn btn-outline text-slate-600 !text-[11px] !py-2 !min-h-0 !w-auto !px-4" data-type="text">Text</button>
+                            <button class="qr-type-btn btn btn-outline text-slate-600 !text-[11px] !py-2 !min-h-0 !w-auto !px-4" data-type="upi">UPI Payment</button>
+                            <button class="qr-type-btn btn btn-outline text-slate-600 !text-[11px] !py-2 !min-h-0 !w-auto !px-4" data-type="wifi">WiFi</button>
+                            <button class="qr-type-btn btn btn-outline text-slate-600 !text-[11px] !py-2 !min-h-0 !w-auto !px-4" data-type="phone">Phone</button>
+                            <button class="qr-type-btn btn btn-outline text-slate-600 !text-[11px] !py-2 !min-h-0 !w-auto !px-4" data-type="sms">SMS</button>
+                            <button class="qr-type-btn btn btn-outline text-slate-600 !text-[11px] !py-2 !min-h-0 !w-auto !px-4" data-type="email">Email</button>
+                        </div>
+                    </section>
+
+                    <!-- Step 2: Content Input -->
+                    <section class="card" aria-label="Step 2: Enter Content">
+                        <span class="section-title">Step 2: Enter Details</span>
+                        
+                        <!-- URL Form -->
+                        <div id="form-url" class="qr-form-section space-y-4">
+                            <div>
+                                <label class="input-label">Website URL</label>
+                                <input type="url" id="qr-url-input" class="qr-input input-field" placeholder="https://example.com">
+                            </div>
+                        </div>
+
+                        <!-- Text Form -->
+                        <div id="form-text" class="qr-form-section hidden space-y-4">
+                            <div>
+                                <label class="input-label">Text Content</label>
+                                <textarea id="qr-text-input" class="qr-input input-field h-32 py-3" placeholder="Enter any text here..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- UPI Form -->
+                        <div id="form-upi" class="qr-form-section hidden space-y-4">
+                            <div>
+                                <label class="input-label">UPI ID (VPA) <span class="text-red-500">*</span></label>
+                                <input type="text" id="qr-upi-id" class="qr-input input-field" placeholder="e.g. name@okhdfcbank">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="input-label">Payee Name</label>
+                                    <input type="text" id="qr-upi-name" class="qr-input input-field" placeholder="Business Name">
+                                </div>
+                                <div>
+                                    <label class="input-label">Amount (Optional)</label>
+                                    <input type="number" id="qr-upi-amount" class="qr-input input-field" placeholder="₹ 0.00">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- WiFi Form -->
+                        <div id="form-wifi" class="qr-form-section hidden space-y-4">
+                            <div>
+                                <label class="input-label">Network Name (SSID) <span class="text-red-500">*</span></label>
+                                <input type="text" id="qr-wifi-ssid" class="qr-input input-field" placeholder="My WiFi Network">
+                            </div>
+                            <div>
+                                <label class="input-label">Password</label>
+                                <input type="text" id="qr-wifi-pass" class="qr-input input-field" placeholder="WiFi Password">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="input-label">Encryption</label>
+                                    <select id="qr-wifi-type" class="qr-input input-field">
+                                        <option value="WPA">WPA/WPA2/WPA3</option>
+                                        <option value="WEP">WEP</option>
+                                        <option value="nopass">None</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center pt-6">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" id="qr-wifi-hidden" class="qr-input w-4 h-4 text-blue-600 rounded">
+                                        <span class="text-sm font-bold text-slate-700">Hidden Network</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phone Form -->
+                        <div id="form-phone" class="qr-form-section hidden space-y-4">
+                            <div>
+                                <label class="input-label">Phone Number</label>
+                                <input type="tel" id="qr-phone-input" class="qr-input input-field" placeholder="+91 9876543210">
+                            </div>
+                        </div>
+
+                        <!-- SMS Form -->
+                        <div id="form-sms" class="qr-form-section hidden space-y-4">
+                            <div>
+                                <label class="input-label">Phone Number</label>
+                                <input type="tel" id="qr-sms-phone" class="qr-input input-field" placeholder="+91 9876543210">
+                            </div>
+                            <div>
+                                <label class="input-label">Message</label>
+                                <textarea id="qr-sms-msg" class="qr-input input-field h-24 py-3" placeholder="Type your message..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Email Form -->
+                        <div id="form-email" class="qr-form-section hidden space-y-4">
+                            <div>
+                                <label class="input-label">Email Address</label>
+                                <input type="email" id="qr-email-address" class="qr-input input-field" placeholder="name@example.com">
+                            </div>
+                            <div>
+                                <label class="input-label">Subject</label>
+                                <input type="text" id="qr-email-sub" class="qr-input input-field" placeholder="Email Subject">
+                            </div>
+                            <div>
+                                <label class="input-label">Body Message</label>
+                                <textarea id="qr-email-body" class="qr-input input-field h-24 py-3" placeholder="Email content..."></textarea>
+                            </div>
+                        </div>
+
+                    </section>
+
+                    <!-- Step 3: Settings -->
+                    <section class="card" aria-label="Step 3: QR Settings">
+                        <span class="section-title">Step 3: Output Settings</span>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="input-label">Image Size</label>
+                                <select id="qrSize" class="input-field">
+                                    <option value="256">Small (256x256)</option>
+                                    <option value="512" selected>Medium (512x512)</option>
+                                    <option value="1024">Large (1024x1024)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="input-label">Error Correction</label>
+                                <select id="qrError" class="input-field">
+                                    <option value="L">Low (7%)</option>
+                                    <option value="M" selected>Medium (15%)</option>
+                                    <option value="Q">Quartile (25%)</option>
+                                    <option value="H">High (30%)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Right Column (Preview & Action) -->
+                <div class="space-y-6 md:space-y-8">
+                    
+                    <!-- Step 4: Preview -->
+                    <section class="card" aria-label="Step 4: Live Preview">
+                        <span class="section-title">Live Preview</span>
+                        <div class="bg-slate-100 rounded-2xl border-2 border-dashed border-slate-200 p-8 flex justify-center items-center min-h-[300px]">
+                            <canvas id="qr-canvas" class="max-w-full bg-white rounded shadow-sm border border-slate-200" style="width: 256px; height: 256px;"></canvas>
+                        </div>
+                    </section>
+
+                    <!-- Step 5: Download -->
+                    <section class="card" aria-label="Step 5: Download">
+                        <span class="section-title">Step 5: Download</span>
+                        
+                        <div class="flex flex-col gap-3">
+                            <button id="downloadQrPng" class="btn btn-primary font-bold uppercase text-xs tracking-widest">
+                                Download PNG
+                            </button>
+                            <button id="downloadQrSvg" class="btn btn-outline border-blue-600 text-blue-600 hover:bg-blue-50 font-bold uppercase text-xs tracking-widest">
+                                Download SVG
+                            </button>
+                        </div>
+
+                        <div id="qrStatusContainer" class="status-box status-ready mt-4">
+                            <span id="qrStatusMsg">માહિતી દાખલ કરો</span>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer" class="bg-[#0f172a] text-slate-400 py-8 md:py-10 border-t border-slate-800">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 mb-6 md:mb-10 text-center md:text-left">
+                <div class="flex flex-col items-center md:items-start space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 bg-blue-600 rounded flex items-center justify-center text-white font-black text-xs">G</div>
+                        <span class="text-lg font-black tracking-tight text-white">GovDocs<span class="text-blue-500">.pro</span></span>
+                    </div>
+                    <p class="text-sm leading-relaxed max-w-xs">ફોટો, PDF અને ડોક્યુમેન્ટ મેનેજમેન્ટ માટે સ્માર્ટ ટૂલ્સ.</p>
+                    <p class="text-[11px] font-medium text-slate-500">Made in Gujarat ❤️</p>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="text-white font-bold text-xs uppercase tracking-widest">Quick Links</h4>
+                    <ul class="text-sm space-y-2.5">
+                        <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="photo-resize.html" class="hover:text-white transition-colors">Photo Resize</a></li>
+                        <li><a href="jpg-to-pdf.html" class="hover:text-white transition-colors">JPG to PDF</a></li>
+                        <li><a href="pdf-merge.html" class="hover:text-white transition-colors">PDF Merge</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-slate-800 flex flex-col justify-center items-center gap-4 text-[11px] font-medium text-slate-500">
+                <p>© 2025 GovDocs Pro. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script type="module" src="navigator.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

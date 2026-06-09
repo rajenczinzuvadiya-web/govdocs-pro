@@ -14,8 +14,11 @@ const TOOLS = [
     { id: 'signature-resize', title: 'Signature Resize', desc: 'Resize & Transparent BG', gu: 'સહી રીસાઇઝ', cat: '✍️ Signature Tools', link: 'signature-resize.html', icon: 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z', key: 'sign, png, background, remove' },
     { id: 'jpg-to-pdf', title: 'JPG to PDF', desc: 'Convert images to PDF', gu: 'JPG થી PDF', cat: '📄 PDF Tools', link: 'jpg-to-pdf.html', icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h14a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', key: 'jpg pdf convert' },
     { id: 'pdf-merge', title: 'PDF Merge', desc: 'Combine multiple PDFs', gu: 'PDF મર્જ', cat: '📄 PDF Tools', link: 'pdf-merge.html', icon: 'M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', key: 'pdf merge combine' },
+    { id: 'image-crop', title: 'Image Crop', desc: 'Crop, Rotate, and Adjust', gu: 'ફોટો કાપો', cat: '📸 Photo Tools', link: 'image-crop.html', icon: 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z', key: 'crop image photo resize passport' },
     { id: 'ssc-preset', title: 'SSC Presets', desc: 'Standard Document Sizes', gu: 'SSC માપદંડ', cat: '📸 Photo Tools', link: 'photo-resize.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04', key: 'portal, recruitment' },
-    { id: 'pdf-split', title: 'PDF Split', desc: 'Extract or Separate Pages', gu: 'PDF અલગ કરો', cat: '📄 PDF Tools', link: 'pdf-split.html', icon: 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z', key: 'pdf split extract cut' }
+    { id: 'pdf-split', title: 'PDF Split', desc: 'Extract or Separate Pages', gu: 'PDF અલગ કરો', cat: '📄 PDF Tools', link: 'pdf-split.html', icon: 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z', key: 'pdf split extract cut' },
+    { id: 'pdf-rotate', title: 'PDF Rotate', desc: 'Rotate PDF pages', gu: 'PDF પેજ ફેરવો', cat: '📄 PDF Tools', link: 'pdf-rotate.html', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15', key: 'rotate turn pdf orientation page' },
+    { id: 'qr-generator', title: 'QR Generator', desc: 'Create Custom QR Codes', gu: 'QR કોડ બનાવો', cat: '🛠️ Utility Tools', link: 'qr-generator.html', icon: 'M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z', key: 'qr code barcode upi wifi link text generator' }
 ];
 
 export const Navigator = {
@@ -136,6 +139,7 @@ export const Navigator = {
             else if (category === 'signature') matchesCat = t.cat.includes('Signature');
             else if (category === 'passport') matchesCat = t.id.includes('passport') || (t.key && t.key.includes('passport'));
             else if (category === 'presets') matchesCat = t.id.includes('preset') || (t.key && t.key.includes('preset'));
+            else if (category === 'utility') matchesCat = t.cat.includes('Utility');
             
             return matchesText && matchesCat;
         });

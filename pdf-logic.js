@@ -78,3 +78,77 @@ export async function splitPdfToZip(file, progressCallback) {
     
     return await zip.generateAsync({ type: "blob" });
 }
+
+/**
+ * PDF પેજને ફેરવવા માટે (Rotate Pages)
+ * Preserves full quality without rasterization
+ */
+export async function rotatePdfPages(file, pageIndices, angleDelta) {
+    const { PDFDocument, degrees } = PDFLib;
+    const arrayBuffer = await file.arrayBuffer();
+    const pdfDoc = await PDFDocument.load(arrayBuffer);
+    
+    const pages = pdfDoc.getPages();
+    if (pages.length === 0) throw new Error("Empty PDF document");
+    
+    const targetIndices = pageIndices && pageIndices.length > 0 ? pageIndices : pages.map((_, i) => i);
+    
+    for (const index of targetIndices) {
+        if (index >= 0 && index < pages.length) {
+            const page = pages[index];
+            const currentAngle = page.getRotation().angle || 0;
+            const newAngle = (currentAngle + angleDelta + 360) % 360;
+            page.setRotation(degrees(newAngle));
+        } else {
+            throw new Error(`Invalid page range: Page ${index + 1} does not exist`);
+        }
+    }
+    
+    return await pdfDoc.save();
+}
+
+let pdfJsLoadingPromise = null;
+
+/**
+ * PDF માંથી પ્રથમ પેજનું થમ્બનેલ જનરેટ કરવા
+ */
+export async function getPdfThumbnail(file) {
+    if (!window.pdfjsLib) {
+        if (!pdfJsLoadingPromise) {
+            pdfJsLoadingPromise = new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+                script.onload = () => {
+                    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                    resolve();
+                };
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+        await pdfJsLoadingPromise;
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+    const pdf = await loadingTask.promise;
+    
+    try {
+        const page = await pdf.getPage(1);
+        
+        // Force lightweight scale for mobile memory optimization
+        const viewport = page.getViewport({ scale: 1.0 });
+        const scale = Math.min(150 / viewport.width, 150 / viewport.height);
+        const scaledViewport = page.getViewport({ scale });
+
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = scaledViewport.width;
+        canvas.height = scaledViewport.height;
+
+        await page.render({ canvasContext: context, viewport: scaledViewport }).promise;
+        return canvas.toDataURL('image/jpeg', 0.8);
+    } finally {
+        await loadingTask.destroy();
+    }
+}
