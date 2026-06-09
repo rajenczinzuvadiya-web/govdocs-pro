@@ -5,6 +5,7 @@
 import { HistoryManager } from './history-manager.js';
 import { Header } from './header.js';
 import { Footer } from './footer.js';
+import { LanguageManager } from './language-manager.js';
 
 const TOOLS = [
     { id: 'photo-resize', title: 'Photo Resize', desc: 'Adjust Height/Width', gu: 'ફોટો રીસાઇઝ', cat: '📸 Photo Tools', link: 'photo-resize.html', icon: 'M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5', key: 'resize image photo size' },
@@ -17,20 +18,20 @@ const TOOLS = [
     { id: 'image-crop', title: 'Image Crop', desc: 'Crop, Rotate, and Adjust', gu: 'ફોટો કાપો', cat: '📸 Photo Tools', link: 'image-crop.html', icon: 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z', key: 'crop image photo resize passport' },
     { id: 'ssc-preset', title: 'SSC Presets', desc: 'Standard Document Sizes', gu: 'SSC માપદંડ', cat: '📸 Photo Tools', link: 'photo-resize.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04', key: 'portal, recruitment' },
     { id: 'pdf-split', title: 'PDF Split', desc: 'Extract or Separate Pages', gu: 'PDF અલગ કરો', cat: '📄 PDF Tools', link: 'pdf-split.html', icon: 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z', key: 'pdf split extract cut' },
-    { id: 'pdf-rotate', title: 'PDF Rotate', desc: 'Rotate PDF pages', gu: 'PDF પેજ ફેરવો', cat: '📄 PDF Tools', link: 'pdf-rotate.html', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15', key: 'rotate turn pdf orientation page' },
-    { id: 'qr-generator', title: 'QR Generator', desc: 'Create Custom QR Codes', gu: 'QR કોડ બનાવો', cat: '🛠️ Utility Tools', link: 'qr-generator.html', icon: 'M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z', key: 'qr code barcode upi wifi link text generator' }
+    { id: 'pdf-rotate', title: 'PDF Rotate', desc: 'Rotate PDF pages', gu: 'PDF પેજ ફેરવો', cat: '📄 PDF Tools', link: 'pdf-rotate.html', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15', key: 'rotate turn pdf orientation page' }
 ];
 
 export const Navigator = {
     currentTextFilter: '',
     currentCategory: 'all',
 
-    init() {
+    async init() {
         Header.render();
         Footer.render();
+        await LanguageManager.init();
         this.injectHeaderSearch();
         this.injectSidebar();
-        this.renderHistory();
+        this.renderHistory(); // Render history after sidebar is injected
         this.bindEvents();
     },
 
@@ -86,6 +87,19 @@ export const Navigator = {
         header.insertAdjacentHTML('beforeend', mobileSearchFieldHtml);
     },
 
+    injectLangSwitcherMobile() {
+        const sidebar = document.getElementById('nav-sidebar');
+        if (!sidebar) return;
+        const langSwitcherHtml = `
+            <div class="p-4 border-t border-slate-100">
+                <h3 class="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] mb-3 px-2">Language</h3>
+                <button class="lang-option w-full text-left p-3 rounded-lg text-sm font-bold hover:bg-slate-100 transition-colors" data-lang-code="en">English</button>
+                <button class="lang-option w-full text-left p-3 rounded-lg text-sm font-bold hover:bg-slate-100 transition-colors" data-lang-code="gu">ગુજરાતી</button>
+                <button class="lang-option w-full text-left p-3 rounded-lg text-sm font-bold hover:bg-slate-100 transition-colors" data-lang-code="hi">हिन्दी</button>
+            </div>`;
+        sidebar.insertAdjacentHTML('beforeend', langSwitcherHtml);
+    },
+
     injectSidebar() {
         const sidebarHtml = `
             <div id="nav-overlay" class="fixed inset-0 bg-slate-900/50 z-[60] hidden backdrop-blur-sm transition-opacity"></div>
@@ -121,6 +135,7 @@ export const Navigator = {
         `;
         document.body.insertAdjacentHTML('beforeend', sidebarHtml);
         this.renderTools();
+        this.injectLangSwitcherMobile();
     },
 
     renderTools(filter = this.currentTextFilter, category = this.currentCategory) {
@@ -139,7 +154,6 @@ export const Navigator = {
             else if (category === 'signature') matchesCat = t.cat.includes('Signature');
             else if (category === 'passport') matchesCat = t.id.includes('passport') || (t.key && t.key.includes('passport'));
             else if (category === 'presets') matchesCat = t.id.includes('preset') || (t.key && t.key.includes('preset'));
-            else if (category === 'utility') matchesCat = t.cat.includes('Utility');
             
             return matchesText && matchesCat;
         });
@@ -232,6 +246,10 @@ export const Navigator = {
         const mBtn = document.getElementById('header-search-icon-mobile');
         const mField = document.getElementById('header-search-field-mobile');
 
+        const langBtn = document.getElementById('lang-switcher-btn');
+        const langDropdown = document.getElementById('lang-dropdown');
+        const langOptions = document.querySelectorAll('.lang-option');
+
         const open = () => {
             overlay.classList.remove('hidden');
             sidebar.classList.remove('-translate-x-full');
@@ -280,6 +298,10 @@ export const Navigator = {
             if (mField && mBtn && !mField.contains(e.target) && !mBtn.contains(e.target)) {
                 mField.classList.add('hidden');
                 if (mResults) mResults.classList.add('hidden');
+            }
+            // Close lang dropdown
+            if (langBtn && langDropdown && !langBtn.contains(e.target) && !langDropdown.contains(e.target)) {
+                langDropdown.classList.add('hidden');
             }
         });
 
@@ -345,6 +367,23 @@ export const Navigator = {
                 close();
                 syncSearch('');
             }
+        });
+
+        // Language Switcher Logic
+        if (langBtn && langDropdown) {
+            langBtn.addEventListener('click', () => {
+                langDropdown.classList.toggle('hidden');
+            });
+        }
+
+        langOptions.forEach(option => {
+            option.addEventListener('click', async (e) => {
+                const langCode = e.currentTarget.dataset.langCode;
+                await LanguageManager.setLanguage(langCode);
+                document.getElementById('current-lang-text').textContent = langCode.toUpperCase();
+                langDropdown?.classList.add('hidden');
+                close(); // Close sidebar if open
+            });
         });
     }
 };

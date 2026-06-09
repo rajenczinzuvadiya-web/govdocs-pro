@@ -17,8 +17,8 @@ const state = {
 };
 
 const updateStatus = (msg, type = 'ready') => {
-    const statusContainer = document.getElementById('statusContainer') || document.getElementById('pdfStatusContainer') || document.getElementById('splitStatusContainer') || document.getElementById('rotateStatusContainer') || document.getElementById('qrStatusContainer');
-    const statusMsg = document.getElementById('statusMsg') || document.getElementById('pdfStatus') || document.getElementById('splitStatusMsg') || document.getElementById('rotateStatusMsg') || document.getElementById('qrStatusMsg');
+    const statusContainer = document.getElementById('statusContainer') || document.getElementById('pdfStatusContainer') || document.getElementById('splitStatusContainer') || document.getElementById('rotateStatusContainer');
+    const statusMsg = document.getElementById('statusMsg') || document.getElementById('pdfStatus') || document.getElementById('splitStatusMsg') || document.getElementById('rotateStatusMsg');
     if (statusMsg) statusMsg.innerText = msg;
     
     if (statusContainer) {
@@ -87,7 +87,6 @@ async function runQuickProcess(presetKey, type) {
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- Initialize Common Preview Component ---
-    ImagePreviewer.render('image-preview-container');
     if (document.getElementById('image-preview-container')) {
         ImagePreviewer.render('image-preview-container');
     }
@@ -264,22 +263,10 @@ document.addEventListener('DOMContentLoaded', () => {
         presetSelect.setAttribute('data-tool-type', toolType);
     }
 
-    ImageUploader.render('image-upload-container', (imageSrc) => {
-        if (state.cropper) state.cropper.destroy();
-        
-        const img = new Image();
-        img.onload = () => {
-            state.originalImage = img;
     if (document.getElementById('image-upload-container')) {
         ImageUploader.render('image-upload-container', (imageSrc) => {
             if (state.cropper) state.cropper.destroy();
             
-            // Show the workspace
-            if (previewArea) previewArea.classList.remove('hidden');
-            
-            // Hide upload section to reduce scrolling
-            const uploadSection = document.getElementById('upload-section');
-            if (uploadSection) uploadSection.classList.add('hidden');
             const img = new Image();
             img.onload = () => {
                 state.originalImage = img;
@@ -291,29 +278,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const uploadSection = document.getElementById('upload-section');
                 if (uploadSection) uploadSection.classList.add('hidden');
 
-            // Set natural dimensions as defaults for manual inputs if empty (useful for compression tool)
-            if (manualWidth && !manualWidth.value) manualWidth.value = img.naturalWidth;
-            if (manualHeight && !manualHeight.value) manualHeight.value = img.naturalHeight;
                 // Set natural dimensions as defaults for manual inputs if empty (useful for compression tool)
                 if (manualWidth && !manualWidth.value) manualWidth.value = img.naturalWidth;
                 if (manualHeight && !manualHeight.value) manualHeight.value = img.naturalHeight;
 
-            // Update Metadata Labels
-            const sizeInKb = Math.round((imageSrc.length * 0.75) / 1024);
-            const mimeTypeMatch = imageSrc.match(/^data:(.*?);/);
-            const mimeType = mimeTypeMatch ? mimeTypeMatch[1] : 'image/jpeg';
-            const format = mimeType.split('/')[1].toUpperCase();
-            
-            state.originalSizeKb = sizeInKb;
-            state.mimeType = mimeType;
-            
-            // Initialize Stats Display
-            const originalDisplay = document.getElementById('original-size-display');
-            if (originalDisplay) originalDisplay.innerText = sizeInKb + ' KB';
-            const compressedDisplay = document.getElementById('compressed-size-display');
-            if (compressedDisplay) compressedDisplay.innerText = '-- KB';
-            const savedDisplay = document.getElementById('saved-percent-display');
-            if (savedDisplay) savedDisplay.innerText = '--%';
                 // Update Metadata Labels
                 const sizeInKb = Math.round((imageSrc.length * 0.75) / 1024);
                 const mimeTypeMatch = imageSrc.match(/^data:(.*?);/);
@@ -331,15 +299,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const savedDisplay = document.getElementById('saved-percent-display');
                 if (savedDisplay) savedDisplay.innerText = '--%';
 
-            ImagePreviewer.updateMetadata({
-                width: img.naturalWidth,
-                height: img.naturalHeight,
-                size: sizeInKb,
-                format: format
-            });
-            
-            // Dispatch event for specialized tool pages (like 20KB compressor)
-            window.dispatchEvent(new CustomEvent('imageUploaded', { detail: { size: sizeInKb } }));
                 ImagePreviewer.updateMetadata({
                     width: img.naturalWidth,
                     height: img.naturalHeight,
@@ -350,11 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Dispatch event for specialized tool pages (like 20KB compressor)
                 window.dispatchEvent(new CustomEvent('imageUploaded', { detail: { size: sizeInKb } }));
 
-            renderPreview(img);
-            updateStatus("ફાઇલ અપલોડ થઈ ગઈ છે. હવે ડાઉનલોડ બટન પર ક્લિક કરો.");
-        };
-        img.src = imageSrc;
-    });
                 renderPreview(img);
                 updateStatus("ફાઇલ અપલોડ થઈ ગઈ છે. હવે ડાઉનલોડ બટન પર ક્લિક કરો.");
             };
@@ -1062,167 +1016,6 @@ document.getElementById('mergePdfBtn')?.addEventListener('click', async () => {
             runQuickProcess(presetKey, type);
         };
     });
-
-    // --- QR Generator Specific Logic ---
-    const qrCanvas = document.getElementById('qr-canvas');
-    if (qrCanvas && window.QRCode) {
-        let currentQrPayload = '';
-        const typeBtns = document.querySelectorAll('.qr-type-btn');
-        const formSections = document.querySelectorAll('.qr-form-section');
-        const qrSize = document.getElementById('qrSize');
-        const qrError = document.getElementById('qrError');
-        let debounceTimer;
-
-        const generateQR = () => {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                const activeBtn = document.querySelector('.qr-type-btn.btn-primary');
-                if (!activeBtn) return;
-                
-                const activeType = activeBtn.dataset.type;
-                let payload = '';
-
-                let hasError = false;
-
-                // Construct Payload
-                if (activeType === 'text') {
-                    payload = document.getElementById('qr-text-input').value;
-                } else if (activeType === 'url') {
-                    let url = document.getElementById('qr-url-input').value;
-                    if (url && !url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
-                    if (url && !/^https?:\/\/.+\..+/.test(url)) {
-                        updateStatus('અમાન્ય URL', 'error');
-                        hasError = true;
-                    } else {
-                        payload = url;
-                    }
-                } else if (activeType === 'phone') {
-                    const phone = document.getElementById('qr-phone-input').value;
-                    if (phone) payload = 'tel:' + phone;
-                } else if (activeType === 'sms') {
-                    const phone = document.getElementById('qr-sms-phone').value;
-                    const msg = document.getElementById('qr-sms-msg').value;
-                    if (phone) payload = `smsto:${phone}:${msg}`;
-                } else if (activeType === 'email') {
-                    const email = document.getElementById('qr-email-address').value;
-                    const sub = document.getElementById('qr-email-sub').value;
-                    const body = document.getElementById('qr-email-body').value;
-                    if (email) {
-                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        if (!emailRegex.test(email)) {
-                            updateStatus('અમાન્ય ઈમેલ (Invalid Email)', 'error');
-                            hasError = true;
-                        } else {
-                            payload = `MATMSG:TO:${email};SUB:${sub};BODY:${body};;`;
-                        }
-                    }
-                } else if (activeType === 'upi') {
-                    const upiId = document.getElementById('qr-upi-id').value;
-                    const name = document.getElementById('qr-upi-name').value;
-                    const amount = document.getElementById('qr-upi-amount').value;
-                    if (upiId && upiId.includes('@')) {
-                        payload = `upi://pay?pa=${upiId}&pn=${name}&am=${amount}`;
-                    } else if (upiId) {
-                        updateStatus('અમાન્ય UPI ID (e.g., name@upi)', 'error');
-                        hasError = true;
-                    }
-                } else if (activeType === 'wifi') {
-                    const ssid = document.getElementById('qr-wifi-ssid').value;
-                    const pass = document.getElementById('qr-wifi-pass').value;
-                    const type = document.getElementById('qr-wifi-type').value;
-                    const hidden = document.getElementById('qr-wifi-hidden').checked;
-                    if (ssid) payload = `WIFI:S:${ssid};T:${type};P:${pass};H:${hidden};;`;
-                }
-
-                if (hasError) {
-                    currentQrPayload = '';
-                    const ctx = qrCanvas.getContext('2d');
-                    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
-                    return;
-                }
-
-                currentQrPayload = payload.trim();
-
-                if (!currentQrPayload) {
-                    updateStatus('માહિતી દાખલ કરો', 'ready');
-                    const ctx = qrCanvas.getContext('2d');
-                    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
-                    return;
-                }
-
-                updateStatus('QR કોડ બની રહ્યો છે...', 'processing');
-
-                const size = parseInt(qrSize.value);
-                const errorLevel = qrError.value;
-
-                window.QRCode.toCanvas(qrCanvas, currentQrPayload, {
-                    width: size,
-                    margin: 2,
-                    errorCorrectionLevel: errorLevel,
-                    color: { dark: '#0f172a', light: '#ffffff' }
-                }, function (error) {
-                    if (error) updateStatus('ભૂલ: ' + error.message, 'error');
-                    else updateStatus('QR કોડ તૈયાર છે!', 'success');
-                });
-            }, 250);
-        };
-
-        // Bind Type Selector
-        typeBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                typeBtns.forEach(b => { b.classList.remove('btn-primary'); b.classList.add('btn-outline', 'text-slate-600'); });
-                const target = e.currentTarget;
-                target.classList.remove('btn-outline', 'text-slate-600');
-                target.classList.add('btn-primary');
-                
-                formSections.forEach(sec => sec.classList.add('hidden'));
-                document.getElementById(`form-${target.dataset.type}`).classList.remove('hidden');
-                generateQR();
-            });
-        });
-
-        // Bind Inputs
-        document.querySelectorAll('.qr-input').forEach(input => input.addEventListener('input', generateQR));
-        qrSize.addEventListener('change', generateQR);
-        qrError.addEventListener('change', generateQR);
-
-        // Download Actions
-        const dlAction = (type) => {
-            if (!currentQrPayload) return alert('કૃપા કરીને પહેલા માહિતી દાખલ કરો.');
-            if (type === 'png') {
-                const link = document.createElement('a');
-                link.download = `qrcode_${Date.now()}.png`;
-                link.href = qrCanvas.toDataURL('image/png');
-                link.click();
-                HistoryManager.save({ toolName: 'QR Generator', preset: 'PNG', size: `${qrSize.value}px` });
-            } else if (type === 'svg') {
-                const size = parseInt(qrSize.value);
-                const errorLevel = qrError.value;
-                window.QRCode.toString(currentQrPayload, {
-                    type: 'svg',
-                    width: size,
-                    margin: 2,
-                    errorCorrectionLevel: errorLevel,
-                    color: { dark: '#0f172a', light: '#ffffff' }
-                }, function (err, svgString) {
-                    if (err) return updateStatus('ભૂલ: ' + err.message, 'error');
-                    const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.download = `qrcode_${Date.now()}.svg`;
-                    link.href = url;
-                    link.click();
-                    setTimeout(() => URL.revokeObjectURL(url), 1000);
-                    HistoryManager.save({ toolName: 'QR Generator', preset: 'SVG', size: `${qrSize.value}px` });
-                });
-            }
-        };
-
-        document.getElementById('downloadQrPng')?.addEventListener('click', () => dlAction('png'));
-        document.getElementById('downloadQrSvg')?.addEventListener('click', () => dlAction('svg'));
-        
-        generateQR(); // Initial Empty Clear
-    }
 
     // Handle Change Photo Button across all tool pages
     document.addEventListener('click', (e) => {
