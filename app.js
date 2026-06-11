@@ -125,13 +125,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="text-sm font-bold text-slate-700 truncate max-w-[200px]">${file.name}</div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button class="pdf-move-up p-2 text-slate-400 hover:text-blue-600 ${index === 0 ? 'invisible' : ''}" data-index="${index}">
+                    <button class="pdf-move-up p-2 text-slate-400 hover:text-blue-600 ${index === 0 ? 'invisible' : ''}" data-index="${index}" aria-label="Move PDF Up">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
                     </button>
-                    <button class="pdf-move-down p-2 text-slate-400 hover:text-blue-600 ${index === selectedPdfFiles.length - 1 ? 'invisible' : ''}" data-index="${index}">
+                    <button class="pdf-move-down p-2 text-slate-400 hover:text-blue-600 ${index === selectedPdfFiles.length - 1 ? 'invisible' : ''}" data-index="${index}" aria-label="Move PDF Down">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                     </button>
-                    <button class="pdf-remove p-2 text-slate-400 hover:text-red-600" data-index="${index}">
+                    <button class="pdf-remove p-2 text-slate-400 hover:text-red-600" data-index="${index}" aria-label="Remove PDF">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                     </button>
                 </div>
@@ -194,13 +194,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="text-sm font-bold text-slate-700 truncate max-w-[150px]">${item.file.name}</div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button class="move-up-btn p-2 text-slate-400 hover:text-blue-600 ${index === 0 ? 'invisible' : ''}" data-index="${index}">
+                    <button class="move-up-btn p-2 text-slate-400 hover:text-blue-600 ${index === 0 ? 'invisible' : ''}" data-index="${index}" aria-label="Move Image Up">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
                     </button>
-                    <button class="move-down-btn p-2 text-slate-400 hover:text-blue-600 ${index === selectedJpgFiles.length - 1 ? 'invisible' : ''}" data-index="${index}">
+                    <button class="move-down-btn p-2 text-slate-400 hover:text-blue-600 ${index === selectedJpgFiles.length - 1 ? 'invisible' : ''}" data-index="${index}" aria-label="Move Image Down">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                     </button>
-                    <button class="remove-btn p-2 text-slate-400 hover:text-red-600" data-index="${index}">
+                    <button class="remove-btn p-2 text-slate-400 hover:text-red-600" data-index="${index}" aria-label="Remove Image">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                     </button>
                 </div>
@@ -786,6 +786,10 @@ document.getElementById('mergePdfBtn')?.addEventListener('click', async () => {
                     a.href = splitResultUrl;
                     a.download = currentSplitFile.name.replace('.pdf', '_split.pdf');
                     a.click();
+                    setTimeout(() => {
+                        URL.revokeObjectURL(splitResultUrl);
+                        splitResultUrl = null;
+                    }, 1000);
                 };
                 
                 HistoryManager.save({ toolName: 'PDF Split', preset: 'Custom Range', size: `${Math.round(blob.size / 1024)} KB` });
@@ -806,6 +810,10 @@ document.getElementById('mergePdfBtn')?.addEventListener('click', async () => {
                     a.href = splitResultUrl;
                     a.download = currentSplitFile.name.replace('.pdf', '_pages.zip');
                     a.click();
+                    setTimeout(() => {
+                        URL.revokeObjectURL(splitResultUrl);
+                        splitResultUrl = null;
+                    }, 1000);
                 };
                 
                 HistoryManager.save({ toolName: 'PDF Split', preset: 'Extract All', size: `${Math.round(zipBlob.size / 1024)} KB` });

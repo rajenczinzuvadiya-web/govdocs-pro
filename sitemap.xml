@@ -7,4 +7,14 @@
    <url><loc>https://govdocs.pro/passport-photo.html</loc><priority>0.8</priority></url>
    <url><loc>https://govdocs.pro/pdf-merge.html</loc><priority>0.7</priority></url>
    <url><loc>https://govdocs.pro/jpg-to-pdf.html</loc><priority>0.7</priority></url>
+   <url><loc>https://govdocs.pro/pdf-split.html</loc><priority>0.7</priority></url>
+   <url><loc>https://govdocs.pro/pdf-rotate.html</loc><priority>0.7</priority></url>
+   <url><loc>https://govdocs.pro/pdf-compress.html</loc><priority>0.7</priority></url>
+   <url><loc>https://govdocs.pro/image-crop.html</loc><priority>0.7</priority></url>
+   <url><loc>https://govdocs.pro/image-converter.html</loc><priority>0.7</priority></url>
+   <url><loc>https://govdocs.pro/document-print-studio.html</loc><priority>0.7</priority></url>
+   <url><loc>https://govdocs.pro/20kb-photo.html</loc><priority>0.6</priority></url>
+   <url><loc>https://govdocs.pro/contact.html</loc><priority>0.5</priority></url>
+   <url><loc>https://govdocs.pro/privacy-policy.html</loc><priority>0.5</priority></url>
+   <url><loc>https://govdocs.pro/terms.html</loc><priority>0.5</priority></url>
 </urlset>

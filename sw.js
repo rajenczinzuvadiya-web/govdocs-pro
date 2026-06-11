@@ -14,7 +14,22 @@ const ASSETS = [
     'sitemap.xml',
     'manifest.json',
     'assets/icon-192.png',
-    'https://cdn.tailwindcss.com',
+    'photo-resize.html',
+    'photo-compress.html',
+    'signature-resize.html',
+    'passport-photo.html',
+    'pdf-merge.html',
+    'jpg-to-pdf.html',
+    'pdf-split.html',
+    'pdf-rotate.html',
+    'pdf-compress.html',
+    'image-crop.html',
+    'image-converter.html',
+    'document-print-studio.html',
+    '20kb-photo.html',
+    'privacy-policy.html',
+    'terms.html',
+    'contact.html',
     'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css',
     'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js',
     'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js'
@@ -24,7 +39,11 @@ const ASSETS = [
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(ASSETS);
+            return Promise.all(
+                ASSETS.map(url => cache.add(url).catch(err => {
+                    console.warn(`[SW] Failed to cache asset: ${url}`, err);
+                }))
+            );
         })
     );
 });

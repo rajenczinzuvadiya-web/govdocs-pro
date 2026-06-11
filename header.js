@@ -19,7 +19,7 @@ export const Header = {
                     <button class="nav-trigger hover:text-blue-600 transition-colors" data-lang="nav_tools">Tools</button>
                     <a href="contact.html" class="hover:text-blue-600 transition-colors" data-lang="nav_contact">Contact</a>
                     <div class="relative" id="lang-switcher-desktop">
-                        <button id="lang-switcher-btn" class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
+                        <button id="lang-switcher-btn" aria-haspopup="true" aria-expanded="false" aria-controls="lang-dropdown" class="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m4 13-4-4-4 4M19 17v-2a4 4 0 00-4-4H9M19 17h-4a4 4 0 00-4 4v2m0-14a4 4 0 00-4-4H5" /></svg>
                             <span id="current-lang-text">GU</span>
                         </button>

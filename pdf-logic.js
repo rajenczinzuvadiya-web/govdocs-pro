@@ -152,3 +152,76 @@ export async function getPdfThumbnail(file) {
         await loadingTask.destroy();
     }
 }
+
+/**
+ * PDF સાઈઝ ઘટાડવા માટેનું ફંક્શન (PDF Compression)
+ * Warns and prevents crashes on unsupported documents
+ */
+export async function compressPdf(file, level, progressCallback) {
+    if (!window.pdfjsLib) {
+        if (!pdfJsLoadingPromise) {
+            pdfJsLoadingPromise = new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+                script.onload = () => {
+                    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                    resolve();
+                };
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+        await pdfJsLoadingPromise;
+    }
+
+    const { PDFDocument } = PDFLib;
+    let scale = 1.5;
+    let quality = 0.8;
+    
+    if (level === 'medium') { scale = 1.2; quality = 0.6; }
+    if (level === 'high') { scale = 1.0; quality = 0.4; }
+
+    const arrayBuffer = await file.arrayBuffer();
+    let loadingTask;
+    try {
+        loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+    } catch (e) {
+        throw new Error("અમાન્ય અથવા કરપ્ટ PDF ફાઇલ.");
+    }
+
+    let pdf;
+    try {
+        pdf = await loadingTask.promise;
+    } catch (e) {
+        throw new Error("PDF લોડ કરવામાં નિષ્ફળ. ફાઇલ સપોર્ટેડ નથી અથવા પાસવર્ડ પ્રોટેક્ટેડ છે.");
+    }
+
+    const numPages = pdf.numPages;
+    const newPdf = await PDFDocument.create();
+
+    for (let i = 1; i <= numPages; i++) {
+        if (progressCallback) progressCallback(i, numPages);
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale });
+
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        await page.render({ canvasContext: context, viewport }).promise;
+
+        const imgDataUrl = canvas.toDataURL('image/jpeg', quality);
+        const jpgImage = await newPdf.embedJpg(imgDataUrl);
+
+        const newPage = newPdf.addPage([viewport.width, viewport.height]);
+        newPage.drawImage(jpgImage, {
+            x: 0, y: 0,
+            width: viewport.width,
+            height: viewport.height
+        });
+    }
+
+    await loadingTask.destroy();
+    return await newPdf.save();
+}

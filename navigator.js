@@ -18,7 +18,10 @@ const TOOLS = [
     { id: 'image-crop', title: 'Image Crop', desc: 'Crop, Rotate, and Adjust', gu: 'ફોટો કાપો', cat: '📸 Photo Tools', link: 'image-crop.html', icon: 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z', key: 'crop image photo resize passport' },
     { id: 'ssc-preset', title: 'SSC Presets', desc: 'Standard Document Sizes', gu: 'SSC માપદંડ', cat: '📸 Photo Tools', link: 'photo-resize.html', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04', key: 'portal, recruitment' },
     { id: 'pdf-split', title: 'PDF Split', desc: 'Extract or Separate Pages', gu: 'PDF અલગ કરો', cat: '📄 PDF Tools', link: 'pdf-split.html', icon: 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z', key: 'pdf split extract cut' },
-    { id: 'pdf-rotate', title: 'PDF Rotate', desc: 'Rotate PDF pages', gu: 'PDF પેજ ફેરવો', cat: '📄 PDF Tools', link: 'pdf-rotate.html', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15', key: 'rotate turn pdf orientation page' }
+    { id: 'pdf-rotate', title: 'PDF Rotate', desc: 'Rotate PDF pages', gu: 'PDF પેજ ફેરવો', cat: '📄 PDF Tools', link: 'pdf-rotate.html', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15', key: 'rotate turn pdf orientation page' },
+    { id: 'pdf-compress', title: 'PDF Compress', desc: 'Reduce PDF file size', gu: 'PDF સાઈઝ ઘટાડો', cat: '📄 PDF Tools', link: 'pdf-compress.html', icon: 'M19 14l-7 7m0 0l-7-7m7 7V3', key: 'compress pdf reduce size' },
+    { id: 'print-studio', title: 'Document Print Studio', desc: 'Layout & Print ID Cards', gu: 'પ્રિન્ટ સ્ટુડિયો', cat: '📄 PDF Tools', link: 'document-print-studio.html', icon: 'M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z', key: 'aadhaar print, id card print, document print, front back print, election card print, pan card print, passport photo print' },
+    { id: 'image-converter', title: 'Image Converter', desc: 'Convert to JPG, PNG, WEBP', gu: 'ઈમેજ કન્વર્ટર', cat: '📸 Photo Tools', link: 'image-converter.html', icon: 'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4', key: 'convert image format jpg png webp' }
 ];
 
 export const Navigator = {
@@ -372,7 +375,8 @@ export const Navigator = {
         // Language Switcher Logic
         if (langBtn && langDropdown) {
             langBtn.addEventListener('click', () => {
-                langDropdown.classList.toggle('hidden');
+                const isHidden = langDropdown.classList.toggle('hidden');
+                langBtn.setAttribute('aria-expanded', !isHidden);
             });
         }
 
@@ -382,6 +386,7 @@ export const Navigator = {
                 await LanguageManager.setLanguage(langCode);
                 document.getElementById('current-lang-text').textContent = langCode.toUpperCase();
                 langDropdown?.classList.add('hidden');
+                if (langBtn) langBtn.setAttribute('aria-expanded', 'false');
                 close(); // Close sidebar if open
             });
         });
@@ -389,4 +394,11 @@ export const Navigator = {
 };
 
 // Initialize if on a tool page or landing page
-document.addEventListener('DOMContentLoaded', () => Navigator.init());
+document.addEventListener('DOMContentLoaded', () => {
+    Navigator.init();
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('ServiceWorker registration successful with scope:', reg.scope))
+            .catch(err => console.error('ServiceWorker registration failed:', err));
+    }
+});

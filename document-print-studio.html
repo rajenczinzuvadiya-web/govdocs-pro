@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Print Studio - GovDocs Pro</title>
+    <meta name="description" content="Layout and print ID cards, photos, and documents on an A4 page.">
+    <link rel="canonical" href="https://govdocs.pro/document-print-studio.html" />
+    <meta property="og:title" content="Document Print Studio - GovDocs Pro">
+    <meta property="og:description" content="Layout and print ID cards, photos, and documents on an A4 page.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="global.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <style>
+        @page { size: A4; margin: 0; }
+        .a4-container { transform-origin: top left; }
+        .slot-wrapper {
+            position: absolute;
+            background: rgba(241, 245, 249, 0.5);
+            border: 1px dashed #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        .custom-mode-active .slot-wrapper { border: 2px solid #3b82f6; cursor: move; }
+        .slot-wrapper:hover { border-color: #3b82f6; }
+        .slot-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            pointer-events: none;
+        }
+        .slot-resize-handle {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            background-color: #3b82f6;
+            cursor: se-resize;
+            border-top-left-radius: 100%;
+        }
+        .custom-mode-active .slot-wrapper:hover .slot-resize-handle { display: block; }
+        .slot-actions {
+            display: block;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .passport-option-label:has(input:checked) { background-color: #eff6ff; border-color: #3b82f6; color: #2563eb; }
+        .passport-option-label input { display: none; }
+        body { background-color: #f8fafc; }
+        .soft-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(241, 245, 249, 0.8);
+        }
+        .quick-action-btn {
+            padding: 12px 16px;
+            border: 1px solid transparent;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            background-color: #f1f5f9;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .quick-action-btn:hover {
+            background-color: #eff6ff;
+            color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(37, 99, 235, 0.1);
+        }
+        #statusContainer {
+            border-radius: 20px !important;
+            border: 1px solid rgba(255,255,255,0.8) !important;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04) !important;
+            padding: 16px 24px !important;
+            transition: all 0.3s ease;
+        }
+        .modern-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
+        .slot-wrapper:hover .smart-action-btn { opacity: 1; }
+        .smart-action-btn {
+            opacity: 0;
+            transition: opacity 0.2s;
+            padding: 4px 8px;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .slot-actions {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .slot-wrapper:hover .slot-actions { opacity: 1; }
+        
+        @media print {
+            body { background: white !important; }
+            header, footer, #control-panel, #statusContainer, .page-header { display: none !important; }
+            #workspace-wrapper { padding: 0 !important; border: none !important; background: transparent !important; }
+            #workspace-container {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .slot-wrapper { border: none !important; background: transparent !important; }
+            .slot-actions, .slot-resize-handle, .slot-badge { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col">
+    <header id="main-header" class="bg-white border-b border-slate-200 sticky top-0 z-50 transition-all duration-300"></header>
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="page-header mb-8">
+            <h1 class="text-3xl md:text-4xl font-black tracking-tight text-slate-900 mb-3">Document Print Studio</h1>
+            <p class="text-slate-500 font-medium">Layout and print ID cards, photos, and documents on an A4 page.</p>
+        </div>
+
+        <div id="statusContainer" class="status-ready mb-8 px-4 py-3 rounded-xl border bg-slate-100 border-slate-200 text-slate-700">
+            <p id="statusMsg" class="font-bold text-sm">પ્રિન્ટ સ્ટુડિયો તૈયાર છે. ટેમ્પલેટ પસંદ કરો અથવા ફોટા અપલોડ કરો.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Sidebar Controls -->
+            <div id="control-panel" class="space-y-8 lg:col-span-1">
+                <div class="soft-card">
+                    <h2 class="text-[11px] font-black uppercase text-slate-400 tracking-widest mb-5">Operator Quick Actions</h2>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="quick-aadhaar" class="quick-action-btn">🪪 Aadhaar</button>
+                        <button id="quick-voter" class="quick-action-btn">🗳️ Voter ID</button>
+                        <button id="quick-dl" class="quick-action-btn">🚗 Driving Licence</button>
+                        <button id="quick-passport" class="quick-action-btn">🖼️ Passport Sheet</button>
+                        <button id="quick-pan" class="quick-action-btn">💳 PAN Card</button>
+                        <button id="quick-doc" class="quick-action-btn">📄 Document Scan</button>
+                    </div>
+                </div>
+
+                <div class="soft-card">
+                    <h2 class="text-[11px] font-black uppercase text-slate-400 tracking-widest mb-5">1. Select Layout</h2>
+                    <select id="templateSelect" class="w-full p-4 bg-slate-50/70 border border-slate-200 rounded-[16px] text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all modern-select">
+                        <option value="aadhaar">Aadhaar Card (Front + Back)</option>
+                        <option value="pan">PAN Card</option>
+                        <option value="election">Election/Voter ID</option>
+                        <option value="ration">Ration Card</option>
+                        <option value="passport">Passport Photos (A4 Sheet)</option>
+                        <option value="doc-scan">Full Document Scan (A4)</option>
+                        <option value="custom">Custom Layout</option>
+                    </select>
+                </div>
+
+                <div class="soft-card">
+                    <h2 class="text-[11px] font-black uppercase text-slate-400 tracking-widest mb-5">2. Upload Photos</h2>
+                    <div id="upload-zone" class="border-2 border-dashed border-slate-200 bg-slate-50/50 rounded-[20px] p-8 text-center cursor-pointer hover:bg-blue-50 hover:border-blue-400 transition-colors">
+                        <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
+                        <svg class="w-8 h-8 text-blue-500 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                        <p class="hidden md:block text-sm font-bold text-slate-700">Click or Drag & Drop</p>
+                        <p class="md:hidden text-sm font-bold text-slate-700">Tap to Upload</p>
+                        <p class="text-xs text-slate-400 mt-1">JPG, PNG, WEBP</p>
+                    </div>
+                    
+                    <button id="swapImagesBtn" class="w-full mt-4 hidden p-3 bg-blue-50 border border-transparent text-blue-700 font-black text-xs rounded-[14px] hover:bg-blue-100 hover:shadow-sm transition-all flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path></svg> Swap Front & Back
+                    </button>
+
+                    <div id="galleryContainer" class="mt-4 hidden">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 id="galleryTitle" class="text-xs font-bold text-slate-500">Uploaded Images</h3>
+                            <button id="clearGalleryBtn" class="text-[10px] font-bold text-red-500 hover:underline">Clear All</button>
+                        </div>
+                        <div id="galleryList" class="grid grid-cols-3 gap-2"></div>
+                    </div>
+                </div>
+
+                <div class="soft-card">
+                    <h2 class="text-[11px] font-black uppercase text-slate-400 tracking-widest mb-5">3. Export & Print</h2>
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <label class="text-sm font-bold text-slate-700">Custom Mode</label>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="customModeToggle" class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all after:shadow-sm peer-checked:bg-blue-500"></div>
+                        </label>
+                    </div>
+                    <p class="text-[10px] text-slate-500 mb-4 leading-relaxed">Turn on Custom Mode to drag, resize, or freely position images on the page.</p>
+                    
+                    <button id="addSlotBtn" class="w-full mb-5 hidden p-3 border-2 border-dashed border-blue-200 bg-blue-50/30 text-blue-600 font-bold text-sm rounded-[16px] hover:bg-blue-50 transition-colors">
+                        + Add Image Slot
+                    </button>
+
+                    <div class="space-y-4">
+                        <button id="printBtn" class="w-full flex items-center justify-center gap-2 bg-blue-600 text-white font-black py-3.5 rounded-[16px] hover:bg-blue-700 transition-all shadow-[0_8px_20px_rgb(37,99,235,0.25)] hover:shadow-[0_10px_25px_rgb(37,99,235,0.35)] hover:-translate-y-0.5">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
+                            Print Directly
+                        </button>
+                        <button id="exportPdfBtn" class="w-full flex items-center justify-center gap-2 bg-slate-50 border border-transparent text-slate-700 font-bold py-3.5 rounded-[16px] hover:bg-white hover:shadow-md hover:border-slate-200 transition-all">
+                            <svg class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                            Download PDF
+                        </button>
+                        <button id="exportJpgBtn" class="w-full flex items-center justify-center gap-2 bg-slate-50 border border-transparent text-slate-700 font-bold py-3.5 rounded-[16px] hover:bg-white hover:shadow-md hover:border-slate-200 transition-all">
+                            <svg class="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            Download JPG
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workspace: A4 Canvas -->
+            <div id="workspace-wrapper" class="lg:col-span-3 flex justify-center bg-slate-100/50 rounded-[32px] p-6 lg:p-10 overflow-x-hidden border border-slate-200/60 shadow-[inset_0_4px_20px_rgb(0,0,0,0.03)]">
+                <div id="workspace-container" class="relative bg-white shadow-[0_10px_40px_rgb(0,0,0,0.08)] a4-container rounded-sm" style="width: 794px; height: 1123px;">
+                    <div id="slots-layer" class="absolute inset-0"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Editor Modal -->
+    <div id="editorModal" class="fixed inset-0 bg-slate-900/80 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-[24px] max-w-2xl w-full max-h-[90vh] flex flex-col shadow-[0_20px_60px_rgb(0,0,0,0.15)]">
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center">
+                <h3 class="text-lg font-black text-slate-900">Edit Document</h3>
+                <button id="closeEditorBtn" class="text-slate-400 hover:text-slate-700">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div class="p-4 flex-grow overflow-y-auto">
+                <div class="w-full bg-slate-100 rounded-xl overflow-hidden h-64 md:h-80 mb-4 flex items-center justify-center">
+                    <img id="cropperImage" src="" class="max-w-full max-h-full">
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-black uppercase text-slate-400 tracking-wider mb-2">Brightness</label>
+                        <input type="range" id="brightnessInput" min="0" max="200" value="100" class="w-full accent-blue-600">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black uppercase text-slate-400 tracking-wider mb-2">Contrast</label>
+                        <input type="range" id="contrastInput" min="0" max="200" value="100" class="w-full accent-blue-600">
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-slate-100">
+                    <div class="flex items-center justify-between">
+                        <label class="block text-[10px] font-black uppercase text-slate-400 tracking-wider">Enhancements</label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="bwCheckbox" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                            <span class="text-xs font-bold text-slate-600">Black & White</span>
+                        </label>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
+                        <button id="autoEnhanceBtn" class="py-2 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors text-xs">Auto Enhance</button>
+                        <button id="highContrastBtn" class="py-2 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors text-xs">High Contrast</button>
+                        <button id="removeShadowsBtn" class="py-2 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors text-xs">Remove Shadows</button>
+                        <button id="whiteBgBtn" class="py-2 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors text-xs">White BG</button>
+                        <button id="autoCropMagicBtn" class="py-2 bg-blue-50 text-blue-700 font-bold rounded-xl hover:bg-blue-100 transition-colors text-xs md:col-span-2">✨ Auto Crop</button>
+                    </div>
+                </div>
+                
+                <div class="flex gap-2 mt-4">
+                    <button id="rotateLeftBtn" class="flex-1 py-2 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>
+                        Left
+                    </button>
+                    <button id="rotateRightBtn" class="flex-1 py-2 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6" /></svg>
+                        Right
+                    </button>
+                    <button id="resetCropBtn" class="flex-1 py-2 bg-red-50 text-red-600 font-bold rounded-xl hover:bg-red-100 transition-colors">Reset</button>
+                </div>
+            </div>
+            <div class="p-5 border-t border-slate-100 flex gap-4">
+                <button id="cancelEditorBtn" class="flex-1 py-3.5 text-slate-600 font-bold hover:bg-slate-50 rounded-[16px] transition-all">Cancel</button>
+                <button id="saveEditorBtn" class="flex-1 py-3.5 bg-blue-600 text-white font-black rounded-[16px] hover:bg-blue-700 shadow-[0_8px_20px_rgb(37,99,235,0.25)] hover:shadow-[0_10px_25px_rgb(37,99,235,0.35)] transition-all">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Selector Modal -->
+    <div id="galleryModal" class="fixed inset-0 bg-slate-900/80 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-[24px] max-w-md w-full flex flex-col shadow-[0_20px_60px_rgb(0,0,0,0.15)]">
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center">
+                <h3 class="text-lg font-black text-slate-900">Select Image</h3>
+                <button id="closeGalleryModalBtn" class="text-slate-400 hover:text-slate-700">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div class="p-4 flex-grow overflow-y-auto max-h-96">
+                <div id="galleryModalList" class="grid grid-cols-2 gap-3"></div>
+                <div id="galleryModalEmpty" class="text-center py-8 text-slate-400 hidden">
+                    <p class="text-sm font-bold mb-2">No uploaded images yet.</p>
+                    <button id="galleryModalUploadBtn" class="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg font-bold text-sm">Upload Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="footer" class="bg-slate-900 py-12 mt-auto"></footer>
+
+    <script type="module" src="navigator.js"></script>
+    <script type="module" src="print-studio.js"></script>
+</body>
+</html>
