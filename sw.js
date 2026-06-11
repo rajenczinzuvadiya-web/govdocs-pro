@@ -14,6 +14,7 @@ const ASSETS = [
     'sitemap.xml',
     'manifest.json',
     'assets/icon-192.png',
+    'assets/icon-512.png',
     'photo-resize.html',
     'photo-compress.html',
     'signature-resize.html',
