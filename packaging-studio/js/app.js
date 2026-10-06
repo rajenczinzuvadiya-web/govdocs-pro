@@ -6,11 +6,11 @@ import { setTheme, editToken, resetToken, resolveColor, extractBase } from './th
 import * as M from './model.js';
 import * as store from './store.js';
 import { renderProduct, baseCanvas } from './render.js';
-import { drawBackground, exportLetterpad, itemGeom, nameWidth, templateWarnings, TEXT_MUTED } from './letterpad.js';
+import { createEditor } from './editor.js';
 import { saveFile, canvasBlob, storeImageFile, storeRawFile, hasTransparency, exportProjectFile, importProjectFile, projectFileName } from './files.js';
 import { runChecks } from './checks.js';
 
-const S = { project: null, projects: [], tab: 'product', sel: 'shampoo', lpSel: null, original: false, pick: false, checks: null, installEvt: null };
+const S = { project: null, projects: [], tab: 'product', sel: 'shampoo', original: false, pick: false, checks: null, installEvt: null };
 const V = $('#view');
 const curProd = () => S.project.products.find(p => p.id === S.sel);
 const curPkg = () => M.getPkg(S.project, curProd().packagingId);
@@ -54,7 +54,7 @@ function render() {
   applyAccent();
   $('#projName').value = S.project.name;
   document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === S.tab));
-  ({ theme: renderTheme, product: renderProductTab, letterpad: renderLetterpad, project: renderProject, checks: renderChecks })[S.tab]();
+  ({ theme: renderTheme, product: renderProductTab, letterpad: () => editor.render(), project: renderProject, checks: renderChecks })[S.tab]();
 }
 function rng(label, key, val, min, max, step, fmt) {
   return `<div class="range"><span>${esc(label)}</span><input type="range" min="${min}" max="${max}" step="${step}" value="${+val}" data-rg="${key}" aria-label="${esc(label)}"><output>${esc(fmt(+val))}</output></div>`;
@@ -63,6 +63,7 @@ const pct = v => Math.round(v * 100) + '%';
 const FMT = { la: pct, ar: pct, 'rc.tol': v => Math.round(v) + '°', 'rc.neutral': pct, 'adj.h': v => Math.round(v) + '°', 'adj.s': v => Math.round(v), 'adj.l': v => Math.round(v), 'lp.w': pct };
 const fmtFor = k => FMT[k] || FMT[k.split('.')[0]] || (v => v);
 const dot = (c, extra = '') => `<span class="dot" style="background:${safeHex(c)}${extra}"></span>`;
+const editor = createEditor({ S, V, save, toast, curTemplate, rng, pct, render: () => render() });
 
 /* ================= Theme tab ================= */
 const SAMPLES = [['Pink apple', '#d9467a'], ['Orange', '#f0862a'], ['Mango', '#f3b31c'], ['Strawberry', '#d42a3c'], ['Green leaf', '#4f9a3a']];
@@ -133,10 +134,10 @@ function renderProductTab() {
 
   const others = p.products.filter(x => x.id !== prod.id);
   const actSec = `<h2>Product actions</h2><div class="row"><select id="copySel" aria-label="Copy to product" style="width:auto;flex:1;min-width:150px">${others.map(x => `<option value="${esc(x.id)}">${esc(x.typeLabel)}</option>`).join('')}</select><button class="btn" data-act="copyTo">Copy label and colour style</button></div>
-    <div class="row" style="margin-top:8px"><button class="btn ghost danger" data-act="resetProd">Reset ${esc(prod.typeLabel)}</button></div>
+    <div class="row" style="margin-top:8px"><button class="btn ghost danger" data-act="resetProd">Reset ${esc(prod.typeLabel)}</button>${prod.custom ? `<button class="btn ghost danger" data-act="delProduct">Delete ${esc(prod.typeLabel)}</button>` : ''}</div>
     <h3>Revision history</h3>${prod.history.length ? `<ul class="list">${prod.history.slice().reverse().slice(0, 8).map((h, ri) => { const o = JSON.parse(h), i = prod.history.length - 1 - ri; return `<li><span class="small">${esc(M.getPkg(p, o.packagingId)?.name || 'No packaging')} · ${esc(M.getLabel(p, o.labelId)?.name || '')} · ${esc(p.theme.palette[o.colorIndex]?.name || '')} · ${esc(o.text?.name || '')}</span><button class="btn" data-act="hist" data-i="${i}">Restore</button></li>`; }).join('')}</ul>` : '<p class="muted small">Changes will appear here.</p>'}`;
 
-  V.innerHTML = `<div class="chips" style="margin-bottom:12px">${prodChips}</div><div class="editor"><div class="sticky"><section class="card">${preview}</section></div><div>
+  V.innerHTML = `<div class="chips" style="margin-bottom:12px">${prodChips}<button class="chip" data-act="addProduct">+ Add product</button></div><div class="editor"><div class="sticky"><section class="card">${preview}</section></div><div>
     <section class="card">${pkgSec}</section><section class="card">${colSec}</section><section class="card">${labSec}</section><section class="card">${txtSec}</section><section class="card">${outSec}</section><section class="card">${actSec}</section></div></div>`;
   const det = $('#pkgDetails'); if (det) det.addEventListener('toggle', () => { S.openPkg = det.open; });
   updatePreview();
@@ -148,65 +149,6 @@ async function updatePreview() {
   if (tok !== pvTok) return;
   if (!c) { cv.replaceWith(Object.assign(document.createElement('p'), { className: 'note', textContent: 'The packaging image could not be loaded on this device. Upload it again.' })); return; }
   cv.width = c.width; cv.height = c.height; cv.getContext('2d').drawImage(c, 0, 0);
-}
-
-/* ================= Letterpad tab ================= */
-const lpImgs = new Map();
-function renderLetterpad() {
-  const p = S.project, lp = p.letterpad, sel = p.products.find(x => x.id === S.lpSel), tpl = curTemplate();
-  const A = M.activeArea(p);
-  const tplChips = `<button class="chip" data-act="tpl" data-id="" aria-pressed="${!tpl}">Built-in header</button>` + p.letterpadTemplates.map(t => `<button class="chip" data-act="tpl" data-id="${esc(t.id)}" aria-pressed="${tpl && tpl.id === t.id}">${esc(t.name)}</button>`).join('');
-  const warn = tpl ? templateWarnings(tpl) : [];
-  const areaCtl = tpl ? `<h3>Product area</h3><p class="muted small">Set where products may sit, so they never cover the letterpad's header or footer. The dashed box on the preview shows it.</p>
-    ${rng('Top', 'ar.top', A.y, 0, .9, .005, pct)}${rng('Bottom', 'ar.bottom', A.y + A.h, .1, 1, .005, pct)}${rng('Left', 'ar.left', A.x, 0, .9, .005, pct)}${rng('Right', 'ar.right', A.x + A.w, .1, 1, .005, pct)}
-    <div class="grid2" style="margin-top:6px"><div class="field"><label for="tplName">Letterpad name</label><input id="tplName" type="text" data-tp="name" value="${esc(tpl.name)}"></div></div>
-    ${warn.map(w => `<p class="note">${esc(w)}</p>`).join('')}
-    <div class="row"><button class="btn ghost danger" data-act="tplRm">Remove this letterpad</button></div>` : '<p class="muted small" style="margin-top:8px">The built-in header uses the company name, tagline, logo and footer below, coloured from the theme.</p>';
-
-  V.innerHTML = `<div class="editor"><div class="sticky"><section class="card"><div class="lp-wrap"><div class="lp" id="lp"><canvas class="bg" id="lpBg"></canvas><div class="lp-area" id="lpArea"></div>${p.products.map(x => `<div class="lp-item${x.id === S.lpSel ? ' sel' : ''}" data-lp="${esc(x.id)}">${x.packagingId ? `<img alt="${esc(x.text.name)}"${lpImgs.get(x.id) ? ` src="${esc(lpImgs.get(x.id).url)}"` : ''}>` : `<div class="slot"><i style="background:${safeHex(resolveColor(p, x))}"></i><span>No packaging</span></div>`}<div class="nm">${esc(x.text.name)}</div><div class="ds">${esc(x.text.description)}</div></div>`).join('')}</div></div>
-    <p class="muted small" style="margin-top:8px">Tap a product to select it, then drag to move. Products stay separate while editing and are flattened only on export.</p>
-    ${sel ? `<div style="margin-top:6px"><b class="small">${esc(sel.typeLabel)}</b>${rng('Size', 'lp.w', sel.placement.w, .05, .5, .005, pct)}<div class="row"><button class="btn" data-act="lpCenter">Centre horizontally</button><button class="btn" data-act="lpEdit">Edit product</button></div></div>` : ''}</section></div>
-    <div><section class="card"><h2>Letterpad design</h2><p class="muted small">Use the company's own letterpad. You can swap it any time; products keep their arrangement inside the product area.</p>
-      <div class="chips">${tplChips}</div><div class="row" style="margin-top:8px"><label class="btn primary">Upload company letterpad<input type="file" accept="image/*" class="hidden-input" data-up="tpl"></label></div>${areaCtl}</section>
-    <section class="card"><h2>Company</h2><p class="muted small">Used on labels, and on the built-in header.</p><div class="field"><label for="coName">Company name</label><input id="coName" type="text" data-co="name" value="${esc(p.company.name)}"></div><div class="field"><label for="coTag">Tagline</label><input id="coTag" type="text" data-co="tagline" value="${esc(p.company.tagline)}"></div><div class="field"><label for="coAddr">Footer (address, phone, email)</label><input id="coAddr" type="text" data-co="address" value="${esc(p.company.address)}"></div>
-    <div class="row"><label class="btn">${p.company.logoId ? 'Replace logo' : 'Upload logo'}<input type="file" accept="image/*" class="hidden-input" data-up="logo"></label>${p.company.logoId ? '<button class="btn ghost danger" data-act="rmLogo">Remove logo</button>' : ''}</div></section>
-    <section class="card"><h2>Layout</h2>${tpl ? '' : `<div class="lbl">Header colour</div><div class="toks" style="margin:6px 0 12px">${p.theme.palette.map((k, i) => `<button class="tk" data-act="lpHead" data-i="${i}" aria-pressed="${i === lp.headerToken}" aria-label="${esc(k.name)}" style="background:${safeHex(k.hex)}"></button>`).join('')}</div>`}
-    <label class="check"><input type="checkbox" data-lpo="watermark" ${lp.watermark ? 'checked' : ''}> Faint reference image watermark</label><label class="check"><input type="checkbox" data-lpo="showReference" ${lp.showReference ? 'checked' : ''}> Show reference image${tpl ? ' in the product area corner' : ' in header'}</label><label class="check"><input type="checkbox" data-lpo="hideEmpty" ${lp.hideEmpty ? 'checked' : ''}> Leave out products without packaging when exporting</label>
-    <div class="row" style="margin-top:10px"><button class="btn" data-act="lpGrid">Reset to grid</button></div></section>
-    <section class="card"><h2>Export A4</h2><div class="row"><button class="btn primary" data-act="lpPng">Save PNG (300 dpi)</button><button class="btn" data-act="lpPdf">Save PDF</button></div><p class="muted small" style="margin-top:8px">Letterpad exports are presentation files, not print-production artwork.</p></section></div></div>`;
-  layoutLP(); loadLPImages();
-}
-async function loadLPImages() {
-  const p = S.project;
-  for (const x of p.products) {
-    if (!x.packagingId) continue;
-    const c = await renderProduct(p, x); if (!c) continue;
-    const blob = await canvasBlob(c), old = lpImgs.get(x.id);
-    if (old) URL.revokeObjectURL(old.url);
-    lpImgs.set(x.id, { url: URL.createObjectURL(blob), ar: c.height / c.width });
-    const im = document.querySelector(`[data-lp="${CSS.escape(x.id)}"] img`); if (im) im.src = lpImgs.get(x.id).url;
-  }
-  layoutLP();
-}
-const itemAR = x => (x.packagingId ? lpImgs.get(x.id)?.ar || 2 : 1.25);
-function layoutLP() {
-  const lp = $('#lp'); if (!lp) return;
-  const p = S.project, W = lp.clientWidth, H = W * M.A4_RATIO;
-  lp.style.height = H + 'px';
-  const bg = $('#lpBg'), dpr = Math.min(2, window.devicePixelRatio || 1);
-  bg.width = Math.round(W * dpr); bg.height = Math.round(H * dpr);
-  const t = curTemplate();
-  drawBackground(bg.getContext('2d'), bg.width, bg.height, p, { template: t && store.readyImage(t.assetId), ref: store.readyImage(p.theme.imageId), logo: store.readyImage(p.company.logoId) });
-  const A = M.activeArea(p), ar = $('#lpArea');
-  Object.assign(ar.style, { left: A.x * W + 'px', top: A.y * H + 'px', width: A.w * W + 'px', height: A.h * H + 'px' });
-  p.products.forEach(x => {
-    const el = lp.querySelector(`[data-lp="${CSS.escape(x.id)}"]`); if (!el) return;
-    const g = itemGeom(p, x, W, H, itemAR(x)), tw = nameWidth(g.iw, W);
-    el.style.width = g.iw + 'px'; el.style.left = g.cx - g.iw / 2 + 'px'; el.style.top = g.cy - g.ih / 2 + 'px';
-    const sl = el.querySelector('.slot'); if (sl) { sl.style.height = g.ih + 'px'; sl.style.fontSize = W * .011 + 'px'; }
-    el.querySelector('.nm').style.cssText = `font-size:${W * .017}px;margin-top:${W * .008}px;width:${tw}px;margin-left:${(g.iw - tw) / 2}px`;
-    el.querySelector('.ds').style.cssText = `font-size:${W * .012}px;width:${tw}px;margin-left:${(g.iw - tw) / 2}px;color:${TEXT_MUTED}`;
-  });
 }
 
 /* ================= Project tab ================= */
@@ -234,7 +176,7 @@ function renderChecks() {
 /* ================= events ================= */
 document.querySelector('.tabs').addEventListener('click', e => {
   const b = e.target.closest('.tab'); if (!b) return;
-  commitEdit(false); S.tab = b.dataset.tab; S.pick = false; render(); window.scrollTo({ top: 0 });
+  commitEdit(false); if (S.tab === 'letterpad') editor.leave(); S.tab = b.dataset.tab; S.pick = false; render(); window.scrollTo({ top: 0 });
 });
 $('#projName').addEventListener('change', e => { S.project.name = e.target.value.trim() || 'Untitled project'; save(); });
 $('#installBtn').addEventListener('click', async () => { if (!S.installEvt) return; S.installEvt.prompt(); await S.installEvt.userChoice.catch(() => null); S.installEvt = null; $('#installBtn').hidden = true; });
@@ -249,14 +191,13 @@ function setArea(t, side, v) {
 
 V.addEventListener('input', e => {
   const el = e.target, p = S.project;
-  if (el.dataset.rg) {
+  if (el.dataset.rg && !el.dataset.rg.startsWith('el.')) {
     const k = el.dataset.rg, v = +el.value, out = el.parentNode.querySelector('output');
     out.textContent = fmtFor(k)(v);
     if (k.startsWith('la.')) { const pkg = curPkg(); beginEdit(pkg); pkg.labelArea[k.slice(3)] = v; updatePreview(); }
     else if (k.startsWith('rc.')) { const pkg = curPkg(); beginEdit(pkg); pkg.recolor[k.slice(3)] = v; updatePreview(); }
     else if (k.startsWith('adj.')) { const prod = curProd(); beginEdit(prod); prod.adjust[k.slice(4)] = v; updatePreview(); }
-    else if (k === 'lp.w') { const it = p.products.find(x => x.id === S.lpSel); beginEdit(it); it.placement.w = v; layoutLP(); }
-    else if (k.startsWith('ar.')) { setArea(curTemplate(), k.slice(3), v); layoutLP(); }
+    else if (k.startsWith('ar.')) { setArea(curTemplate(), k.slice(3), v); editor.layout(); }
     return;
   }
   if (el.dataset.tx) { const prod = curProd(); beginEdit(prod); prod.text[el.dataset.tx] = el.value; updatePreview(); return; }
@@ -268,7 +209,7 @@ V.addEventListener('change', async e => {
   if (el.dataset.rg || el.dataset.tx) {
     commitEdit();
     if (el.dataset.rg && /^(adj|la|rc)\./.test(el.dataset.rg)) renderProductTab();
-    if (el.dataset.rg && el.dataset.rg.startsWith('ar.')) renderLetterpad();
+    if (el.dataset.rg && el.dataset.rg.startsWith('ar.')) editor.render();
     return;
   }
   if (el.dataset.tok) { save(); renderTheme(); applyAccent(); return; }
@@ -280,9 +221,9 @@ V.addEventListener('change', async e => {
   }
   if (el.dataset.lb) { const lab = M.getLabel(p, curProd().labelId); lab[el.dataset.lb] = el.checked; save(); updatePreview(); return; }
   if (el.dataset.sp) { curPkg().spec[el.dataset.sp] = el.value; save(); renderProductTab(); return; }
-  if (el.dataset.co) { p.company[el.dataset.co] = el.value; save(); layoutLP(); return; }
-  if (el.dataset.tp) { curTemplate().name = el.value.trim() || 'Letterpad'; save(); renderLetterpad(); return; }
-  if (el.dataset.lpo) { p.letterpad[el.dataset.lpo] = el.checked; save(); layoutLP(); return; }
+  if (el.dataset.co) { p.company[el.dataset.co] = el.value; save(); editor.layout(); return; }
+  if (el.dataset.tp) { curTemplate().name = el.value.trim() || 'Letterpad'; save(); editor.render(); return; }
+  if (el.dataset.lpo) { p.letterpad[el.dataset.lpo] = el.checked; save(); editor.layout(); return; }
   if (el.id === 'libAdd' && el.value) { M.switchPackaging(curProd(), el.value); save(); renderProductTab(); return; }
   if (el.dataset.up) {
     const f = el.files && el.files[0];
@@ -323,13 +264,14 @@ async function handleUpload(kind, f) {
     const sp = curPkg().spec; sp.dielineId = await storeRawFile(f); sp.dielineName = f.name.slice(0, 80);
     save(); renderProductTab(); toast('Dieline attached'); return;
   }
-  if (kind === 'logo') { const { id } = await storeImageFile(f, { max: 1000 }); p.company.logoId = id; await primeAll(); save(); renderLetterpad(); return; }
+  if (kind === 'logo') { const { id } = await storeImageFile(f, { max: 1000 }); p.company.logoId = id; await primeAll(); save(); editor.render(); return; }
+  if (kind === 'lpImg') { const { id, w, h } = await storeImageFile(f, { max: 2400 }); editor.addImage(id, w, h); return; }
   if (kind === 'tpl') {
     const { id: assetId, w, h } = await storeImageFile(f); // full resolution: this is the print background
     const t = { id: uid('lpt'), name: fileBase(f.name) || 'Letterpad', assetId, w, h, area: { ...M.TEMPLATE_AREA } };
     p.letterpadTemplates.push(t); M.setLetterpadTemplate(p, t.id); p.letterpad.watermark = false;
-    await primeAll(); save(); renderLetterpad();
-    toast('Letterpad added. Adjust the product area so products stay clear of the header and footer.');
+    await primeAll(); save(); editor.render();
+    toast('Letterpad added. Set the header and footer guide so you can see the free area.');
     return;
   }
   if (kind === 'proj') {
@@ -366,27 +308,18 @@ V.addEventListener('click', async e => {
     case 'sample': { const [h, s, l] = hexToHsl(b.dataset.hex); setTheme(p, { h, s, l, label: b.textContent.trim() }); save(); render(); break; }
     case 'regen': { if (!p.theme.imageId) break; const im = await store.assetImage(p.theme.imageId), bb = extractBase(im); setTheme(p, { h: bb.h, s: bb.s, l: bb.l, imageId: p.theme.imageId }); save(); render(); break; }
     case 'tokReset': resetToken(p, +b.dataset.i); save(); render(); break;
-    case 'tpl': M.setLetterpadTemplate(p, b.dataset.id || null); await primeAll(); save(); renderLetterpad(); break;
-    case 'tplRm': { const t = curTemplate(); if (!t || !confirm('Remove “' + t.name + '” from this project? Saved versions that use it keep their copy.')) break; p.letterpadTemplates = p.letterpadTemplates.filter(x => x.id !== t.id); M.setLetterpadTemplate(p, null); save(); renderLetterpad(); break; }
-    case 'lpHead': p.letterpad.headerToken = +b.dataset.i; save(); renderLetterpad(); break;
-    case 'lpGrid': p.products.forEach((x, i) => (x.placement = M.gridPos(i))); save(); renderLetterpad(); break;
-    case 'lpCenter': { const it = p.products.find(x => x.id === S.lpSel); M.pushHistory(it); it.placement.x = .5; save(); layoutLP(); break; }
-    case 'lpEdit': S.sel = S.lpSel; S.tab = 'product'; render(); break;
-    case 'rmLogo': p.company.logoId = null; save(); renderLetterpad(); break;
-    case 'lpPng': { toast('Preparing A4 image…'); const c = await exportLetterpad(p, M.PRINT_WIDTH); const r = await saveFile(slug(p.name) + '-letterpad-a4.png', await canvasBlob(c)); if (r === 'downloaded') toast('Letterpad PNG saved'); break; }
-    case 'lpPdf': {
-      if (!window.jspdf) { toast('PDF tool did not load'); break; }
-      toast('Preparing PDF…');
-      const c = await exportLetterpad(p, M.PRINT_WIDTH), d = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', compress: true });
-      d.addImage(c.toDataURL('image/jpeg', .93), 'JPEG', 0, 0, 210, 297);
-      const r = await saveFile(slug(p.name) + '-letterpad-a4.pdf', d.output('blob')); if (r === 'downloaded') toast('Letterpad PDF saved'); break;
-    }
+    case 'tpl': M.setLetterpadTemplate(p, b.dataset.id || null); await primeAll(); save(); editor.render(); break;
+    case 'tplRm': { const t = curTemplate(); if (!t || !confirm('Remove “' + t.name + '” from this project? Saved versions that use it keep their copy.')) break; p.letterpadTemplates = p.letterpadTemplates.filter(x => x.id !== t.id); M.setLetterpadTemplate(p, null); save(); editor.render(); break; }
+    case 'lpHead': p.letterpad.headerToken = +b.dataset.i; save(); editor.render(); break;
+    case 'rmLogo': p.company.logoId = null; save(); editor.render(); break;
+    case 'addProduct': { const n = prompt('Name of the new product (for example: Hair oil, Lip balm)'); if (!n || !n.trim()) break; const x = M.addCustomProduct(p, n.trim().slice(0, 40)); S.sel = x.id; save(); renderProductTab(); toast(x.typeLabel + ' added. Add it to the letterpad from the Letterpad tab.'); break; }
+    case 'delProduct': if (prod.custom && confirm('Delete ' + prod.typeLabel + '? It is also removed from the letterpad pages. Saved versions keep it.')) { M.deleteCustomProduct(p, prod.id); S.sel = 'shampoo'; save(); renderProductTab(); } break;
     case 'saveVer': { const n = $('#verName').value.trim() || 'V' + (p.versions.length + 1); p.versions.push({ id: uid('v'), name: n.slice(0, 80), date: Date.now(), final: false, data: M.projectSnapshot(p) }); save(); renderProject(); toast('Saved ' + n); break; }
     case 'verRestore': {
       const v = p.versions.find(x => x.id === b.dataset.id); if (!v) break;
       p.versions.push({ id: uid('v'), name: 'Backup before restoring ' + v.name, date: Date.now(), final: false, data: M.projectSnapshot(p) });
       const d = M.normalizeProject(JSON.parse(v.data)); d.id = p.id; d.name = p.name; d.versions = p.versions;
-      S.project = d; await primeAll(); save(); render(); toast('Restored ' + v.name); break;
+      S.project = d; editor.reset(); await primeAll(); save(); render(); toast('Restored ' + v.name); break;
     }
     case 'verFinal': { const v = p.versions.find(x => x.id === b.dataset.id); if (v) { v.final = !v.final; save(); renderProject(); } break; }
     case 'verDel': if (confirm('Delete this version?')) { p.versions = p.versions.filter(x => x.id !== b.dataset.id); save(); renderProject(); } break;
@@ -421,30 +354,12 @@ V.addEventListener('click', async e => {
   M.pushHistory(pkg); pkg.recolor.source = rgbToHex(d[0], d[1], d[2]); S.pick = false; save(); renderProductTab();
 });
 
-/* letterpad drag (positions are stored relative to the product area) */
-let drag = null;
-V.addEventListener('pointerdown', e => {
-  const it = e.target.closest('.lp-item'); if (!it) return;
-  const prod = S.project.products.find(x => x.id === it.dataset.lp), lp = $('#lp');
-  if (S.lpSel !== prod.id) { S.lpSel = prod.id; renderLetterpad(); return; }
-  const A = M.activeArea(S.project);
-  drag = { prod, sx: e.clientX, sy: e.clientY, ox: prod.placement.x, oy: prod.placement.y, W: lp.clientWidth * A.w, H: lp.clientHeight * A.h, moved: false, snap: JSON.stringify(M.snap(prod)) };
-  it.setPointerCapture(e.pointerId);
-});
-V.addEventListener('pointermove', e => {
-  if (!drag) return;
-  const dx = (e.clientX - drag.sx) / drag.W, dy = (e.clientY - drag.sy) / drag.H;
-  if (Math.abs(dx) + Math.abs(dy) > .004) drag.moved = true;
-  drag.prod.placement.x = clamp(drag.ox + dx, -.05, 1.05); drag.prod.placement.y = clamp(drag.oy + dy, -.05, 1.05);
-  layoutLP();
-});
-V.addEventListener('pointerup', () => { if (!drag) return; if (drag.moved) { M.pushHistory(drag.prod, drag.snap); save(); } drag = null; });
-window.addEventListener('resize', () => { if (S.tab === 'letterpad') layoutLP(); });
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { commitEdit(false); flushSave().catch(() => {}); } });
+window.addEventListener('resize', () => { if (S.tab === 'letterpad') editor.layout(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { commitEdit(false); if (S.tab === 'letterpad') editor.leave(); flushSave().catch(() => {}); } });
 
 /* ================= start ================= */
 async function openProject(p) {
-  S.project = p; S.checks = null; S.lpSel = null; S.sel = 'shampoo'; lpImgs.clear();
+  S.project = p; S.checks = null; S.sel = 'shampoo'; editor.reset();
   await primeAll(); await store.saveProject(p); S.projects = await store.listProjects(); render();
 }
 (async () => {

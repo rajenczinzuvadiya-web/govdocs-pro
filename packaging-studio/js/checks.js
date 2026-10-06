@@ -3,7 +3,7 @@
 import { clone } from './util.js';
 import { rgbToHsl } from './color.js';
 import { setTheme, resolveColor, editToken } from './theme.js';
-import { snap, switchPackaging, setLabel, setText, undo, getPkg, normalizeProject, setLetterpadTemplate, activeArea } from './model.js';
+import { snap, switchPackaging, setLabel, setText, undo, getPkg, normalizeProject, setLetterpadTemplate, activeArea, addCustomProduct, deleteCustomProduct, addEl, productElement, textElement } from './model.js';
 import { kvSet, kvGet, kvDel } from './store.js';
 import { renderProduct, baseCanvas } from './render.js';
 import { exportProjectFile, importProjectFile } from './files.js';
@@ -38,12 +38,12 @@ export async function runChecks(project) {
     setText(pr, 'name', 'Test name');
     return (strip(pr, 'text') === b && resolveColor(p, pr) === c0 && pr.text.name === 'Test name') || 'Something else changed';
   });
-  await t('5. Change theme → all 10 products update', () => {
+  await t('5. Change theme → every product updates', () => {
     const p = P(), b = p.products.map(x => resolveColor(p, x)), f = p.products.map(x => strip(x));
     newTheme(p);
     const changed = p.products.map(x => resolveColor(p, x)).filter((c, i) => c !== b[i]).length;
     const intact = p.products.every((x, i) => strip(x) === f[i]);
-    return (changed === 10 && intact) || `${changed}/10 changed, other data intact: ${intact}`;
+    return (changed === p.products.length && intact) || `${changed}/${p.products.length} changed, other data intact: ${intact}`;
   });
   await t('6. Undo packaging change', () => {
     const p = P(), pr = sh(p), o = pr.packagingId, full = strip(pr), nx = pr.alternatives.find(i => i !== o);
@@ -74,16 +74,15 @@ export async function runChecks(project) {
     }
     return (diff > 100 && greyMoved === 0) || `changed px ${diff}, greys moved ${greyMoved}/${greys}`;
   });
-  await t('9. Change letterpad → product layout and data stay', () => {
-    const p = P(), f = p.products.map(x => strip(x));
+  await t('9. Change letterpad → page contents and products stay', () => {
+    const p = P(), f = p.products.map(x => strip(x)), pagesBefore = JSON.stringify(p.letterpad.pages);
     p.letterpadTemplates.push({ id: 'lpt-check', name: 'Check', assetId: 'a-check0000', w: 2480, h: 3508, area: { x: .1, y: .25, w: .8, h: .5 } });
     setLetterpadTemplate(p, null);
     const a0 = JSON.stringify(activeArea(p));
     setLetterpadTemplate(p, 'lpt-check');
-    const same = p.products.every((x, i) => strip(x) === f[i]);
     const moved = JSON.stringify(activeArea(p)) !== a0;
-    setLetterpadTemplate(p, null);
-    return (same && moved && p.products.every((x, i) => strip(x) === f[i])) || 'Products changed when the letterpad changed';
+    const same = p.products.every((x, i) => strip(x) === f[i]) && JSON.stringify(p.letterpad.pages) === pagesBefore;
+    return (same && moved) || 'Something changed when the letterpad changed';
   });
   await t('10. Hand-edited colour survives a new reference', () => {
     const p = P();
@@ -105,6 +104,24 @@ export async function runChecks(project) {
     const n = normalizeProject(JSON.parse(JSON.stringify(p)));
     const hexOk = n.theme.palette.every(k => /^#[0-9a-f]{6}$/.test(k.hex)) && /^#[0-9a-f]{6}$/.test(n.packaging[0].recolor.source);
     return (hexOk && n.theme.imageId === null) || 'Unsafe values got through';
+  });
+  await t('13. Change packaging → letterpad layout stays', () => {
+    const p = P(), pr = sh(p), pagesBefore = JSON.stringify(p.letterpad.pages);
+    const nx = pr.alternatives.find(i => i !== pr.packagingId);
+    if (!nx) return 'Needs 2 packaging models';
+    switchPackaging(pr, nx);
+    return JSON.stringify(p.letterpad.pages) === pagesBefore || 'Letterpad changed';
+  });
+  await t('14. Extra products, placed anywhere and more than once', () => {
+    const p = P(), x = addCustomProduct(p, 'Check product'), pg = p.letterpad.pages[0];
+    addEl(pg, productElement(x.id, .05, .05, .1)); addEl(pg, productElement(x.id, .8, .85, .2));
+    addEl(pg, textElement({ text: 'ગુજરાતી લખાણ', x: .1, y: .5 }));
+    const n = normalizeProject(JSON.parse(JSON.stringify(p)));
+    const onPage = n.letterpad.pages[0].elements.filter(e => e.productId === x.id).length;
+    const txt = n.letterpad.pages[0].elements.some(e => e.type === 'text' && e.text === 'ગુજરાતી લખાણ');
+    deleteCustomProduct(n, x.id);
+    const gone = !n.letterpad.pages[0].elements.some(e => e.productId === x.id) && n.products.length === p.products.length - 1;
+    return (n.products.length >= 11 && onPage === 2 && txt && gone) || `products ${n.products.length}, placed ${onPage}, text kept ${txt}, removed cleanly ${gone}`;
   });
   return res;
 }

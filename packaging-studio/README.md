@@ -1,7 +1,10 @@
 # Packaging Studio
 
-A web app (PWA) for building 10 coordinated product mockups from one reference image and
-arranging them on a company's A4 letterpad. It works on phone, tablet and computer, can be
+A web app (PWA) for building coordinated product mockups (the 10 standard types plus any
+extra products) from one reference image, and laying them out on a company's A4 letterpad.
+The letterpad works like a blank Word page: products, text boxes and images go anywhere,
+can be moved, resized, restacked and duplicated, text (including Gujarati) is typed straight
+onto the page, and a project can have several pages. It works on phone, tablet and computer, can be
 installed from the browser, and works offline. Everything is stored on the device.
 
 ## What stays independently changeable
@@ -13,8 +16,8 @@ installed from the browser, and works offline. Everything is stored on the devic
 | Label / artwork | `project.labels[]`, chosen per product | only the label |
 | Colour | product → token index + manual adjustment | only that product's colour |
 | Text | `product.text` | only the text |
-| Letterpad | `project.letterpadTemplates[]` + product area | only the background; layout is kept |
-| Placement | `product.placement`, relative to the product area | only the position |
+| Letterpad | `project.letterpadTemplates[]` + guide area | only the background; pages are kept |
+| Page content | `letterpad.pages[].elements[]` (product / text / image, page coordinates) | only that element |
 
 Images, dielines and letterpads are stored once in an asset store (IndexedDB) and referenced
 by id, so versions and project files never duplicate them.
@@ -28,7 +31,8 @@ js/theme.js               reference image → 10 tokens; hand edits kept as offs
 js/model.js               data model, pure operations, undo, normalisation of loaded files
 js/store.js               IndexedDB: projects + asset store
 js/render.js              packaging → recolour → label pipeline
-js/letterpad.js           A4 page, product area, export
+js/letterpad.js           A4 page background, text layout, page export
+js/editor.js              letterpad page editor (select, drag, resize, type, pages, undo/redo)
 js/files.js               download/share, project files, Phase 1 (pkg.html) migration
 js/checks.js              in-app architecture checks (Checks tab)
 js/app.js                 UI

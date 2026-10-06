@@ -1,10 +1,10 @@
 /* Offline support for Packaging Studio. Scope: this folder only, so it never touches the
    rest of the site. Bump VERSION whenever an app file changes. */
-const VERSION = 'ps-v1';
+const VERSION = 'ps-v2';
 const SHELL = [
   './', 'index.html', 'app.css', 'manifest.webmanifest',
   'js/app.js', 'js/util.js', 'js/color.js', 'js/theme.js', 'js/model.js', 'js/store.js',
-  'js/render.js', 'js/letterpad.js', 'js/files.js', 'js/checks.js',
+  'js/render.js', 'js/letterpad.js', 'js/files.js', 'js/checks.js', 'js/editor.js',
   'vendor/jspdf.umd.min.js', 'icons/icon-192.png', 'icons/icon-512.png',
 ];
 self.addEventListener('install', e => {

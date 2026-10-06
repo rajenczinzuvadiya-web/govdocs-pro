@@ -106,3 +106,37 @@ label.btn{position:relative;overflow:hidden}
 .editor>*{min-width:0}
 .pv{overflow:hidden}
 @media(max-width:520px){.top{flex-wrap:wrap}.sub{font-size:12px}#saveState{order:3;width:100%;padding-left:46px}}
+/* ---- Letterpad page editor ---- */
+@media(min-width:880px){.editor.lp-editor{grid-template-columns:minmax(0,1fr) 360px}.lp-editor .sticky{position:static}}
+.lp-tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.lp-tools select,.inspector select{width:auto;min-height:40px}
+.lp-tools .sp{flex:1}
+.btn.icon{min-width:40px;padding:8px 10px}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.pages{margin-bottom:8px}
+.danger-chip{color:var(--bad)}
+.lp-scroll{overflow:auto;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.18);max-height:82vh;-webkit-overflow-scrolling:touch;background:#fff}
+.lp-scroll .lp{touch-action:pan-x pan-y;min-width:100%}
+.el{position:absolute;touch-action:none;cursor:move}
+.el.sel{outline:1.5px dashed var(--accent);outline-offset:2px}
+.el img{display:block;width:100%;pointer-events:none}
+.el .cap{display:block;pointer-events:none}
+.el .slot{pointer-events:none}
+.el-text .tx{white-space:pre;min-height:1em;outline:none}
+.el-text.editing{cursor:text}
+.el-text.editing .tx{white-space:pre-wrap;overflow-wrap:anywhere;cursor:text;user-select:text;-webkit-user-select:text;background:rgba(255,255,255,.55)}
+.el-text.empty .tx{min-height:1.2em;background:rgba(46,138,150,.10)}
+.hdl{display:none;position:absolute;width:18px;height:18px;right:-10px;bottom:-10px;background:var(--accent);border:2px solid #fff;border-radius:50%;cursor:nwse-resize;touch-action:none;z-index:2;box-shadow:0 0 0 1px rgba(0,0,0,.25)}
+.hdl[data-h=e]{top:50%;bottom:auto;margin-top:-9px;cursor:ew-resize}
+.el.sel .hdl{display:block}
+.el.editing .hdl{display:none}
+@media (pointer:coarse){.hdl{width:28px;height:28px;right:-15px;bottom:-15px}.hdl[data-h=e]{margin-top:-14px}}
+.guide-v{position:absolute;top:0;bottom:0;width:0;border-left:1px solid #e0457b;z-index:9000;pointer-events:none}
+.guide-h{position:absolute;left:0;right:0;height:0;border-top:1px solid #e0457b;z-index:9000;pointer-events:none}
+.guide-v[hidden],.guide-h[hidden]{display:none}
+.lp-area{z-index:0}
+.inspector{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.inspector textarea{min-height:80px}
+.inspector label input[type=number]{min-height:34px;padding:4px 6px}
+.tk.sm{width:28px;height:28px}
+.lp-scroll{position:relative;z-index:0;isolation:isolate}

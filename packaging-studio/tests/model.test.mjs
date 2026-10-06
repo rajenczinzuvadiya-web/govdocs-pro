@@ -61,14 +61,70 @@ test('packaging model settings have their own undo', () => {
   assert.equal(JSON.stringify(M.snap(k)), s0);
 });
 
-test('changing letterpad template keeps product placements', () => {
-  const p = M.defaultProject(), f = p.products.map(x => JSON.stringify(x.placement));
+test('changing letterpad template keeps every page element', () => {
+  const p = M.defaultProject(), before = JSON.stringify(p.letterpad.pages);
   p.letterpadTemplates.push({ id: 'lpt-a', name: 'A', assetId: 'a-0123456789', w: 2480, h: 3508, area: { x: .05, y: .2, w: .9, h: .55 } });
   M.setLetterpadTemplate(p, 'lpt-a');
   assert.deepEqual(M.activeArea(p), { x: .05, y: .2, w: .9, h: .55 });
-  assert.deepEqual(p.products.map(x => JSON.stringify(x.placement)), f);
+  assert.equal(JSON.stringify(p.letterpad.pages), before);
   M.setLetterpadTemplate(p, 'missing');
   assert.equal(p.letterpad.templateId, null);
+});
+
+test('default project has one page with all 10 products in a grid inside the guide area', () => {
+  const p = M.defaultProject(), els = p.letterpad.pages[0].elements, A = M.BUILTIN_AREA;
+  assert.equal(els.length, 10);
+  assert.deepEqual(els.map(e => e.productId), p.products.map(x => x.id));
+  els.forEach(e => { assert.ok(e.x >= A.x && e.x + e.w <= A.x + A.w + 1e-9); assert.ok(e.y >= A.y && e.y < A.y + A.h); });
+});
+
+test('elements: add anywhere, duplicate, restack, remove', () => {
+  const p = M.defaultProject(), pg = p.letterpad.pages[0];
+  const t = M.addEl(pg, M.textElement({ text: 'નમસ્તે', x: -.1, y: 1.1 }));
+  const d = M.duplicateEl(pg, t.id);
+  assert.notEqual(d.id, t.id); assert.equal(d.text, 'નમસ્તે');
+  M.restack(pg, d.id, 'back'); assert.equal(pg.elements[0].id, d.id);
+  M.restack(pg, d.id, 'front'); assert.equal(pg.elements.at(-1).id, d.id);
+  M.removeEl(pg, t.id); assert.equal(M.findEl(pg, t.id), null);
+  const n = M.normalizeProject(JSON.parse(JSON.stringify(p)));
+  const kept = M.findEl(n.letterpad.pages[0], d.id);
+  assert.equal(kept.text, 'નમસ્તે'); assert.equal(kept.y, d.y);
+});
+
+test('more than 10 products; custom ones can be deleted, standard ones cannot', () => {
+  const p = M.defaultProject();
+  const a = M.addCustomProduct(p, 'Hair oil'), b = M.addCustomProduct(p, 'Lip balm');
+  M.addEl(p.letterpad.pages[0], M.productElement(a.id, .1, .1, .1));
+  M.addEl(p.letterpad.pages[0], M.productElement(a.id, .6, .6, .2));
+  let n = M.normalizeProject(JSON.parse(JSON.stringify(p)));
+  assert.equal(n.products.length, 12);
+  assert.equal(n.letterpad.pages[0].elements.filter(e => e.productId === a.id).length, 2);
+  assert.ok(M.deleteCustomProduct(n, a.id));
+  assert.equal(n.letterpad.pages[0].elements.filter(e => e.productId === a.id).length, 0);
+  assert.equal(M.deleteCustomProduct(n, 'soap'), false);
+  assert.ok(n.products.some(x => x.id === b.id));
+});
+
+test('older projects (product placement, no pages) become one page of elements', () => {
+  const p = JSON.parse(JSON.stringify(M.defaultProject()));
+  delete p.letterpad.pages;
+  p.products.forEach((x, i) => (x.placement = { x: .1 + (i % 5) * .2, y: i < 5 ? .27 : .73, w: .15 }));
+  const n = M.normalizeProject(p), els = n.letterpad.pages[0].elements;
+  assert.equal(els.length, 10);
+  const soap = els.find(e => e.productId === 'soap'), A = M.BUILTIN_AREA;
+  assert.ok(Math.abs(soap.x + soap.w / 2 - (A.x + .1 * A.w)) < 1e-9);
+  assert.ok(Math.abs(soap.w - .15 * A.w) < 1e-9);
+});
+
+test('hostile elements are dropped or cleaned', () => {
+  const p = JSON.parse(JSON.stringify(M.defaultProject()));
+  p.letterpad.pages[0].elements.push(
+    { type: 'text', text: 'x', color: 'red;}</style>', font: 'evil', size: 99999, align: 'javascript' },
+    { type: 'image', assetId: 'http://x' }, { type: 'product', productId: 'nope' }, { type: 'script' });
+  const els = M.normalizeProject(p).letterpad.pages[0].elements;
+  assert.equal(els.length, 11);
+  const t = els.at(-1);
+  assert.equal(t.color, '#1f2328'); assert.equal(t.font, 'sans'); assert.equal(t.size, 200); assert.equal(t.align, 'left');
 });
 
 test('normalizeProject is idempotent and survives JSON round trip', () => {

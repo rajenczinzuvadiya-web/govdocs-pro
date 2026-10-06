@@ -1,7 +1,7 @@
 /* Getting files in and out: uploads, downloads/share, project files (with their images
    bundled), and migration of Phase 1 (pkg.html, schema 1) project files. */
 import { uid, slug } from './util.js';
-import { SCHEMA, normalizeProject, assetIds, gridPos, BUILTIN_AREA } from './model.js';
+import { SCHEMA, normalizeProject, assetIds, BUILTIN_AREA } from './model.js';
 import { putAsset, getAsset, loadImg } from './store.js';
 
 export const FORMAT = 'packaging-studio';
@@ -107,14 +107,15 @@ export async function migrateV1(d) {
   }
   for (const l of d.labels || []) if (l.kind === 'image') { l.assetId = await inline(l.src); delete l.src; }
   /* Phase 1 placed products relative to the whole page; convert to the product area. */
+  /* normalizeProject then turns these into page elements. */
   const A = BUILTIN_AREA;
-  (d.products || []).forEach((x, i) => {
+  (d.products || []).forEach(x => {
     const pl = x.placement;
-    x.placement = pl ? { x: (pl.x - A.x) / A.w, y: (pl.y - A.y) / A.h, w: pl.w / A.w } : gridPos(i);
+    if (pl) x.placement = { x: (pl.x - A.x) / A.w, y: (pl.y - A.y) / A.h, w: pl.w / A.w };
     x.history = [];
   });
   d.letterpadTemplates = [];
-  d.letterpad = { ...(d.letterpad || {}), templateId: null };
+  d.letterpad = { ...(d.letterpad || {}), templateId: null, pages: [] };
   const versions = [];
   for (const v of d.versions || []) {
     try { versions.push({ ...v, data: JSON.stringify(normalizeProject(await migrateV1(JSON.parse(v.data)))) }); } catch (e) { /* drop unreadable version */ }
