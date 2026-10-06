@@ -45,6 +45,15 @@ const ok = (cond, msg) => { console.log((cond ? 'PASS ' : 'FAIL ') + msg); if (!
   ok(withLabel < .15 && noLabel > .3, `"No label" shows the packaging itself (centre saturation ${withLabel.toFixed(2)} → ${noLabel.toFixed(2)})`);
   await page.click('[data-act=lab][data-id=lbl-classic]');
 
+  // printer colour code + colour spec sheet
+  await page.fill('#pcCode', 'Pantone 213 C'); await page.press('#pcCode', 'Tab');
+  {
+    const [d] = await Promise.all([page.waitForEvent('download', { timeout: 90000 }), page.click('[data-act=specPdf]')]);
+    const f = path.join(outDir, d.suggestedFilename()); await d.saveAs(f);
+    const pdfText = fs.readFileSync(f).toString('latin1');
+    ok(pdfText.startsWith('%PDF') && (pdfText.match(/\/Type \/Page\b/g) || []).length === 2, 'colour spec sheet PDF: theme page + product page');
+  }
+
   // extra product
   page.once('dialog', d => d.accept('Hair Oil'));
   await page.click('[data-act=addProduct]');

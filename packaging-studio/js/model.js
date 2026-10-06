@@ -53,7 +53,7 @@ function placementToElement(x, A) {
 export const emptyText = label => Object.fromEntries(TEXT_KEYS.map(k => [k, k === 'name' ? label : '']));
 export function newProduct(i) {
   const [type, label] = TYPES[i];
-  return { id: type, slot: i, type, typeLabel: label, custom: false, packagingId: null, alternatives: [], labelId: 'lbl-classic', colorIndex: DEFAULT_TOKEN[i], adjust: { h: 0, s: 0, l: 0 }, text: emptyText(label), stage: 'mockup', history: [] };
+  return { id: type, slot: i, type, typeLabel: label, custom: false, packagingId: null, alternatives: [], labelId: 'lbl-classic', colorIndex: DEFAULT_TOKEN[i], adjust: { h: 0, s: 0, l: 0 }, text: emptyText(label), printColor: '', stage: 'mockup', history: [] };
 }
 /* Products beyond the 10 standard types. */
 export function newCustomProduct(label, slot) {
@@ -243,6 +243,7 @@ function normProduct(x, i, pkgIds, labelIds) {
     colorIndex: Math.round(clamp(num(x.colorIndex, d.colorIndex), 0, 9)),
     adjust: { h: clamp(num(x.adjust && x.adjust.h), -30, 30), s: clamp(num(x.adjust && x.adjust.s), -40, 40), l: clamp(num(x.adjust && x.adjust.l), -30, 30) },
     text: Object.fromEntries(TEXT_KEYS.map(k => [k, str(t[k], d.text[k])])),
+    printColor: str(x.printColor).slice(0, 120),
     stage: ['mockup', 'print', 'mfg'].includes(x.stage) ? x.stage : 'mockup',
     history: Array.isArray(x.history) ? x.history.filter(h => typeof h === 'string') : [],
   };

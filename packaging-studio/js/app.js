@@ -9,6 +9,7 @@ import { renderProduct, baseCanvas } from './render.js';
 import { createEditor } from './editor.js';
 import { saveFile, canvasBlob, storeImageFile, storeRawFile, hasTransparency, exportProjectFile, importProjectFile, projectFileName } from './files.js';
 import { runChecks } from './checks.js';
+import { buildSpecSheet, fmtRgb, fmtCmyk } from './specsheet.js';
 
 const S = { project: null, projects: [], tab: 'product', sel: 'shampoo', original: false, pick: false, checks: null, installEvt: null };
 const V = $('#view');
@@ -77,6 +78,7 @@ async function renderTheme() {
   <div class="row" style="margin-top:10px"><label class="btn primary">Upload reference image<input type="file" accept="image/*" data-up="ref" class="hidden-input"></label>${t.imageId ? '<button class="btn" data-act="regen">Re-analyse</button>' : ''}</div></div></div>
   <h3>No image yet? Try a starting colour</h3><div class="chips">${SAMPLES.map(([n, h]) => `<button class="chip" data-act="sample" data-hex="${h}">${dot(h)}${esc(n)}</button>`).join('')}</div></section>
   <section class="card"><h2>Colour tokens</h2><p class="muted small">Products point to a token, never to a fixed colour. Tap a token to fine-tune it. Your edit is kept as a shift, so it still applies when the reference image changes.</p>
+  <div class="row" style="margin-bottom:10px"><button class="btn" data-act="specPdf">Colour spec sheet (PDF)</button><span class="muted small">HEX, RGB and approximate CMYK for every token and product, with space for the printer's code.</span></div>
   <div class="palette">${t.palette.map((k, i) => `<div class="tok"><label class="tok-in"><input type="color" value="${safeHex(k.hex)}" data-tok="${i}" aria-label="Edit ${esc(k.name)}"><span class="sw" style="background:${safeHex(k.hex)}"></span><b>${esc(k.name)}${k.offset ? ' · edited' : ''}</b><span>${safeHex(k.hex)}</span><span>${esc(usedBy(i))}</span></label>${k.offset ? `<button class="btn ghost small-btn" data-act="tokReset" data-i="${i}">Reset</button>` : ''}</div>`).join('')}</div></section>`;
 }
 
@@ -108,9 +110,13 @@ function renderProductTab() {
 
   const colSec = `<h2>Colour</h2><p class="muted small">Token from the theme. When the reference changes, this product updates by itself.</p>
     <div class="toks">${p.theme.palette.map((k, i) => `<button class="tk" data-act="tok" data-i="${i}" aria-pressed="${i === prod.colorIndex}" title="${esc(k.name)}" aria-label="${esc(k.name)}" style="background:${safeHex(k.hex)}"></button>`).join('')}</div>
-    <div class="row small" style="margin:8px 0">${dot(color)}${esc(p.theme.palette[prod.colorIndex].name)} → ${safeHex(color)}</div>
+    <div class="row small" style="margin:8px 0">${dot(color)}${esc(p.theme.palette[prod.colorIndex].name)} → <b>${safeHex(color).toUpperCase()}</b></div>
+    <p class="muted small" style="margin:-4px 0 8px">${esc(fmtRgb(color))} · ${esc(fmtCmyk(color))} (approximate)</p>
     ${rng('Hue shift', 'adj.h', prod.adjust.h, -30, 30, 1, FMT['adj.h'])}${rng('Saturation', 'adj.s', prod.adjust.s, -40, 40, 1, FMT['adj.s'])}${rng('Lightness', 'adj.l', prod.adjust.l, -30, 30, 1, FMT['adj.l'])}
-    <button class="btn ghost" data-act="resetAdj">Reset manual adjustment</button>`;
+    <button class="btn ghost" data-act="resetAdj">Reset manual adjustment</button>
+    <h3>For the printer</h3><div class="field"><label for="pcCode">Printer colour code (Pantone or CMYK agreed with the printer)</label><input id="pcCode" type="text" data-pc="1" placeholder="e.g. Pantone 213 C" value="${esc(prod.printColor)}"></div>
+    <p class="muted small">Screen colours are not print colours. Write the code here once the printer has matched a physical proof.</p>
+    <button class="btn" data-act="specPdf">Colour spec sheet (PDF, all products)</button>`;
 
   const labSec = `<h2>Label / artwork</h2><p class="muted small">Separate from the packaging. The same label moves onto any packaging model.</p>
     <div class="chips">${p.labels.map(l => `<button class="chip" data-act="lab" data-id="${esc(l.id)}" aria-pressed="${l.id === prod.labelId}">${esc(l.name)}</button>`).join('')}</div>
@@ -222,6 +228,7 @@ V.addEventListener('change', async e => {
   }
   if (el.dataset.lb) { const lab = M.getLabel(p, curProd().labelId); lab[el.dataset.lb] = el.checked; save(); updatePreview(); return; }
   if (el.dataset.sp) { curPkg().spec[el.dataset.sp] = el.value; save(); renderProductTab(); return; }
+  if (el.dataset.pc) { const prod = curProd(); M.pushHistory(prod); prod.printColor = el.value.trim().slice(0, 120); save(); return; }
   if (el.dataset.co) { p.company[el.dataset.co] = el.value; save(); editor.layout(); return; }
   if (el.dataset.tp) { curTemplate().name = el.value.trim() || 'Letterpad'; save(); editor.render(); return; }
   if (el.dataset.lpo) { p.letterpad[el.dataset.lpo] = el.checked; save(); editor.layout(); return; }
@@ -335,6 +342,13 @@ V.addEventListener('click', async e => {
       for (const x of S.projects) { const d = await store.loadProject(x.id); if (d) M.assetIds(d, keep); }
       M.assetIds(S.project, keep);
       const n = await store.collectGarbage(keep); toast(n ? `Removed ${n} unused file${n > 1 ? 's' : ''}` : 'Nothing to clean up'); break;
+    }
+    case 'specPdf': {
+      if (!window.jspdf) { toast('PDF tool did not load'); break; }
+      toast('Preparing colour spec sheet…');
+      const pages = await buildSpecSheet(p), d = new window.jspdf.jsPDF({ unit: 'mm', format: 'a4', compress: true });
+      pages.forEach((c, i) => { if (i) d.addPage('a4'); d.addImage(c.toDataURL('image/jpeg', .92), 'JPEG', 0, 0, 210, 297); });
+      const r = await saveFile(slug(p.name) + '-colour-spec.pdf', d.output('blob')); if (r === 'downloaded') toast('Colour spec sheet saved'); break;
     }
     case 'runChecks': b.disabled = true; b.textContent = 'Running…'; S.checks = await runChecks(S.project); renderChecks(); break;
   }
