@@ -162,3 +162,14 @@ test('assetIds finds ids in the project and in saved versions', () => {
   p.theme.imageId = null;
   assert.deepEqual([...M.assetIds(p)].sort(), ['a-logo0000', 'a-ref00000']);
 });
+
+test('"No label" option exists, also in projects saved before it was added', () => {
+  const old = JSON.parse(JSON.stringify(M.defaultProject()));
+  old.labels = old.labels.filter(l => l.id !== 'lbl-none');
+  old.labels.push({ id: 'lbl-art', name: 'Art', kind: 'image', assetId: 'a-art000000' });
+  const n = M.normalizeProject(old);
+  assert.deepEqual(n.labels.map(l => l.id), ['lbl-classic', 'lbl-band', 'lbl-minimal', 'lbl-none', 'lbl-art']);
+  const pr = n.products.find(x => x.type === 'shampoo'), pk = pr.packagingId, c0 = resolveColor(n, pr);
+  M.setLabel(pr, 'lbl-none');
+  assert.equal(pr.packagingId, pk); assert.equal(resolveColor(n, pr), c0);
+});

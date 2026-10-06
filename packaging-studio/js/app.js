@@ -71,6 +71,7 @@ async function renderTheme() {
   const p = S.project, t = p.theme;
   const usedBy = i => p.products.filter(x => x.colorIndex === i).map(x => x.typeLabel).join(', ') || 'Not used';
   const refUrl = t.imageId ? await store.assetURL(t.imageId).catch(() => null) : null;
+  if (S.tab !== 'theme') return; // the user moved to another tab while the image loaded
   V.innerHTML = `<section class="card"><h2>Main reference image</h2><p class="muted small">Upload the image the company gave you. Its colour family becomes 10 coordinated tokens, and every product follows its token automatically.</p>
   <div class="ref">${refUrl ? `<img src="${esc(refUrl)}" alt="Reference image">` : '<div class="ph">No image yet</div>'}<div><div class="theme-name">${esc(t.label)}</div><div class="muted small">Base hue ${Math.round(t.base.h)}° · saturation ${Math.round(t.base.s * 100)}% · lightness ${Math.round(t.base.l * 100)}%</div>
   <div class="row" style="margin-top:10px"><label class="btn primary">Upload reference image<input type="file" accept="image/*" data-up="ref" class="hidden-input"></label>${t.imageId ? '<button class="btn" data-act="regen">Re-analyse</button>' : ''}</div></div></div>
@@ -250,7 +251,7 @@ async function handleUpload(kind, f) {
     const b = extractBase(img), id = uid('pkg');
     p.packaging.push({ id, name: fileBase(f.name) || 'Packaging', kind: 'Custom', source: 'upload', builtin: null, assetId, labelArea: { x: .25, y: .38, w: .5, h: .36 }, recolor: { enabled: !b.neutral, source: hslToHex(b.h, b.s, b.l), tol: 28, neutral: .14 }, spec: M.newSpec(), history: [] });
     M.switchPackaging(prod, id); S.openPkg = true; save(); renderProductTab();
-    toast(hasTransparency(img) ? 'Packaging added. Set its material and label area under settings.' : 'Added. Tip: a transparent PNG places cleaner on the letterpad.');
+    toast((hasTransparency(img) ? 'Packaging added.' : 'Added. Tip: a transparent PNG places cleaner on the letterpad.') + (prod.labelId === 'lbl-none' ? '' : ' If the photo already has its printed label, choose “No label (photo as is)” under Label.'));
     return;
   }
   if (kind === 'lab') {

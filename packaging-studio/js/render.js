@@ -120,6 +120,7 @@ async function optImage(id) { try { return id ? await assetImage(id) : null; } c
 
 export async function drawLabel(x, p, prod, pkg, lab, color, c) {
   const a = pkg.labelArea, L = { x: a.x * c.width, y: a.y * c.height, w: a.w * c.width, h: a.h * c.height }, t = prod.text, u = L.w / 100, cx = L.x + L.w / 2;
+  if (lab.layout === 'none') return;
   if (lab.kind === 'image') {
     const i = await optImage(lab.assetId);
     if (i) { const r = Math.min(L.w / i.naturalWidth, L.h / i.naturalHeight), w = i.naturalWidth * r, h = i.naturalHeight * r; x.drawImage(i, cx - w / 2, L.y + (L.h - h) / 2, w, h); }

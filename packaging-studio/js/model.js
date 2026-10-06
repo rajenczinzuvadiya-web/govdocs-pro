@@ -67,6 +67,8 @@ export const BUILTIN_LABELS = [
   { id: 'lbl-classic', name: 'Classic panel', kind: 'template', layout: 'classic' },
   { id: 'lbl-band', name: 'Colour band', kind: 'template', layout: 'band' },
   { id: 'lbl-minimal', name: 'Minimal', kind: 'template', layout: 'minimal' },
+  /* For finished product photos whose label is already printed: only the colour follows the theme. */
+  { id: 'lbl-none', name: 'No label (photo as is)', kind: 'template', layout: 'none' },
 ];
 
 export function defaultProject(name = 'Master packaging project') {
@@ -227,7 +229,7 @@ function normPkg(k) {
 }
 function normLabel(l) {
   if (l.kind === 'image') return { id: id(l.id, uid('lbl')), name: str(l.name, 'Artwork'), kind: 'image', assetId: assetRef(l.assetId), showName: !!l.showName, showFooter: !!l.showFooter };
-  return { id: id(l.id, uid('lbl')), name: str(l.name, 'Label'), kind: 'template', layout: ['classic', 'band', 'minimal'].includes(l.layout) ? l.layout : 'classic' };
+  return { id: id(l.id, uid('lbl')), name: str(l.name, 'Label'), kind: 'template', layout: ['classic', 'band', 'minimal', 'none'].includes(l.layout) ? l.layout : 'classic' };
 }
 function normProduct(x, i, pkgIds, labelIds) {
   const d = x.custom ? newCustomProduct(str(x.typeLabel, 'Product').slice(0, 40), i) : newProduct(i);
@@ -280,7 +282,7 @@ export function normalizeProject(d) {
   });
   if (Array.isArray(d.packaging)) p.packaging = d.packaging.filter(k => k && typeof k === 'object').map(normPkg);
   const labels = (Array.isArray(d.labels) ? d.labels : []).filter(l => l && typeof l === 'object').map(normLabel);
-  BUILTIN_LABELS.forEach(b => { if (!labels.some(l => l.id === b.id)) labels.unshift(clone(b)); });
+  BUILTIN_LABELS.forEach((b, i) => { if (!labels.some(l => l.id === b.id)) labels.splice(i, 0, clone(b)); });
   p.labels = labels;
   const pkgIds = new Set(p.packaging.map(k => k.id)), labelIds = new Set(p.labels.map(l => l.id));
   const std = TYPES.map(([type], i) => normProduct(d.products.find(x => x && x.type === type && !x.custom) || {}, i, pkgIds, labelIds));

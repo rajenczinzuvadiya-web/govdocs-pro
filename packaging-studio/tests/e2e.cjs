@@ -36,6 +36,15 @@ const ok = (cond, msg) => { console.log((cond ? 'PASS ' : 'FAIL ') + msg); if (!
   await page.click('[data-act=undo]');
   ok(await page.getAttribute('[data-act=pkg][data-id=ph-bottle-a]', 'aria-pressed') === 'true', 'undo brings bottle A back');
 
+  // "No label": a finished product photo keeps its own printed label, only the colour follows the theme
+  const mid = () => page.evaluate(() => { const c = document.querySelector('#pv'); const d = c.getContext('2d').getImageData(c.width / 2, Math.round(c.height * .6), 1, 1).data; const mx = Math.max(d[0], d[1], d[2]), mn = Math.min(d[0], d[1], d[2]); return mx ? (mx - mn) / mx : 0; });
+  await page.waitForTimeout(300);
+  const withLabel = await mid();
+  await page.click('[data-act=lab][data-id=lbl-none]'); await page.waitForTimeout(400);
+  const noLabel = await mid();
+  ok(withLabel < .15 && noLabel > .3, `"No label" shows the packaging itself (centre saturation ${withLabel.toFixed(2)} → ${noLabel.toFixed(2)})`);
+  await page.click('[data-act=lab][data-id=lbl-classic]');
+
   // extra product
   page.once('dialog', d => d.accept('Hair Oil'));
   await page.click('[data-act=addProduct]');

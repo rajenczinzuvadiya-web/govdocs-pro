@@ -1,6 +1,6 @@
 /* Offline support for Packaging Studio. Scope: this folder only, so it never touches the
    rest of the site. Bump VERSION whenever an app file changes. */
-const VERSION = 'ps-v2';
+const VERSION = 'ps-v3';
 const SHELL = [
   './', 'index.html', 'app.css', 'manifest.webmanifest',
   'js/app.js', 'js/util.js', 'js/color.js', 'js/theme.js', 'js/model.js', 'js/store.js',
