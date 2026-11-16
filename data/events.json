@@ -49,7 +49,7 @@
         },
         {
           "title": "",
-          "itemId": "vahli-dikri",
+          "itemId": "vhali-dikri",
           "type": "scheme",
           "note": "દીકરી હોય તો"
         },
@@ -61,13 +61,13 @@
         },
         {
           "title": "",
-          "itemId": "pmmvy",
+          "itemId": "pm-matru-vandana",
           "type": "scheme",
           "note": "માતા માટે"
         },
         {
           "title": "આયુષ્માન કાર્ડમાં બાળકનું નામ",
-          "itemId": "ayushman",
+          "itemId": "ayushman-pmjay-ma",
           "type": "scheme",
           "note": ""
         }
@@ -98,13 +98,13 @@
         },
         {
           "title": "",
-          "itemId": "ayushman",
+          "itemId": "ayushman-pmjay-ma",
           "type": "doc",
           "note": ""
         },
         {
           "title": "",
-          "itemId": "pmmvy",
+          "itemId": "pm-matru-vandana",
           "type": "scheme",
           "note": ""
         },
@@ -412,7 +412,7 @@
         },
         {
           "title": "",
-          "itemId": "nfbs",
+          "itemId": "rashtriya-kutumb-sahay",
           "type": "scheme",
           "note": "કુટુંબના કમાનાર સભ્યનું અવસાન થાય તો"
         },
@@ -485,13 +485,13 @@
         },
         {
           "title": "",
-          "itemId": "ganga-swarupa",
+          "itemId": "ganga-swarupa-sahay",
           "type": "scheme",
           "note": "દર મહિને સહાય"
         },
         {
           "title": "",
-          "itemId": "nfbs",
+          "itemId": "rashtriya-kutumb-sahay",
           "type": "scheme",
           "note": "પતિ કુટુંબના કમાનાર હોય તો"
         },
@@ -552,7 +552,7 @@
         },
         {
           "title": "",
-          "itemId": "ayushman",
+          "itemId": "ayushman-pmjay-ma",
           "type": "scheme",
           "note": "70 વર્ષ ઉપરના દરેક વડીલને આયુષ્માન વય વંદના કાર્ડ"
         }
@@ -571,7 +571,7 @@
       "items": [
         {
           "title": "",
-          "itemId": "udid",
+          "itemId": "udid-card",
           "type": "doc",
           "note": "સિવિલ હોસ્પિટલના તબીબી બોર્ડમાંથી"
         },
@@ -589,13 +589,13 @@
         },
         {
           "title": "",
-          "itemId": "sant-surdas",
+          "itemId": "sant-surdas-divyang-sahay",
           "type": "scheme",
           "note": ""
         },
         {
           "title": "",
-          "itemId": "ayushman",
+          "itemId": "ayushman-pmjay-ma",
           "type": "scheme",
           "note": ""
         }
@@ -650,7 +650,7 @@
         },
         {
           "title": "",
-          "itemId": "ikhedut",
+          "itemId": "ikhedut-yojana",
           "type": "scheme",
           "note": ""
         },
@@ -676,7 +676,7 @@
       "items": [
         {
           "title": "",
-          "itemId": "e-shram",
+          "itemId": "e-shram-card",
           "type": "doc",
           "note": ""
         },
@@ -706,7 +706,7 @@
         },
         {
           "title": "",
-          "itemId": "ayushman",
+          "itemId": "ayushman-pmjay-ma",
           "type": "scheme",
           "note": ""
         },
@@ -730,7 +730,7 @@
         },
         {
           "title": "",
-          "itemId": "ujjwala",
+          "itemId": "pm-ujjwala",
           "type": "scheme",
           "note": ""
         }
@@ -756,7 +756,7 @@
         },
         {
           "title": "",
-          "itemId": "udyam",
+          "itemId": "udyam-registration",
           "type": "doc",
           "note": ""
         },
@@ -853,7 +853,7 @@
         },
         {
           "title": "",
-          "itemId": "pmay-g",
+          "itemId": "pm-awas-gramin",
           "type": "scheme",
           "note": ""
         },
@@ -865,13 +865,13 @@
         },
         {
           "title": "",
-          "itemId": "surya-ghar",
+          "itemId": "pm-surya-ghar",
           "type": "scheme",
           "note": ""
         },
         {
           "title": "",
-          "itemId": "ujjwala",
+          "itemId": "pm-ujjwala",
           "type": "scheme",
           "note": ""
         }
