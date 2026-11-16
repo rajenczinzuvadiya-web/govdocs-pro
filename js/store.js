@@ -26,6 +26,7 @@ export const store = {
   setProfile: (p) => write('profile', p),
 
   getSaved: () => read('saved', []),
+  setSaved: (ids) => write('saved', ids),
   isSaved: (id) => read('saved', []).includes(id),
   toggleSaved(id) {
     const saved = read('saved', []);

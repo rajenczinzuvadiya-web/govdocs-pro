@@ -7,6 +7,9 @@ import * as voice from './speak.js';
 const state = {
   schemes: [],
   updates: [],
+  docs: [],
+  docGroups: [],
+  events: [],
   helplines: [],
   profile: store.getProfile(),
   seen: new Set(store.getSeen() || []),
@@ -32,7 +35,8 @@ function toast(msg) {
 }
 
 const todayISO = () => new Date().toISOString().slice(0, 10);
-const findScheme = (id) => state.schemes.find((s) => s.id === id);
+const findScheme = (id) => state.schemes.find((s) => s.id === id) || state.docs.find((s) => s.id === id);
+const isDoc = (s) => s.kind === 'doc';
 const visible = (list) => list.filter((s) => !isExpired(s));
 
 function appUrl() {
@@ -43,18 +47,25 @@ function appUrl() {
 
 async function loadData() {
   try {
-    const [s, u] = await Promise.all([
-      fetch('data/schemes.json', { cache: 'no-cache' }).then((r) => r.json()),
-      fetch('data/updates.json', { cache: 'no-cache' }).then((r) => r.json()),
+    const get = (f) => fetch('data/' + f, { cache: 'no-cache' }).then((r) => r.json());
+    const [s, u, d, ev] = await Promise.all([
+      get('schemes.json'),
+      get('updates.json'),
+      get('documents.json').catch(() => ({})),
+      get('events.json').catch(() => ({})),
     ]);
     state.schemes = s.schemes || [];
     state.updates = u.updates || [];
+    state.docs = d.documents || [];
+    state.docGroups = d.groups || [];
+    state.events = ev.events || [];
+    migrateRenamed(s.renamed || {});
     state.dataUpdatedOn = s.updatedOn || null;
     state.error = false;
     // પહેલી વાર એપ ખોલી હોય તો બધું "જોયેલું" ગણવું; પછી ઉમેરાય તે જ "નવું" દેખાય
     if (store.getSeen() === null) {
       // વર્ઝન 0.1 વાપરનારને ત્યારનાં કાર્ડ જ "જોયેલાં" ગણવાં, એટલે નવાં ઉમેરાયેલાં "નવું" દેખાય
-      const ids = state.profile ? V01_IDS : state.schemes.map((x) => x.id);
+      const ids = state.profile ? V01_IDS : allItems().map((x) => x.id);
       state.seen = new Set(ids);
       store.setSeen([...state.seen]);
     }
@@ -76,6 +87,15 @@ const V01_IDS = [
   'sant-surdas', 'pm-svanidhi', 'udyam',
 ];
 
+// બદલાયેલાં id (જૂનું કાર્ડ નવા વધુ વિગતવાળા કાર્ડથી બદલાયું) — સેવ કરેલું સાચવી રાખવું
+function migrateRenamed(map) {
+  const saved = store.getSaved();
+  if (saved.some((id) => map[id])) {
+    store.setSaved([...new Set(saved.map((id) => map[id] || id))]);
+  }
+}
+
+const allItems = () => [...state.schemes, ...state.docs];
 const isNew = (s) => !state.seen.has(s.id);
 
 function markSeen(id) {
@@ -93,10 +113,15 @@ function categoryTags(ids) {
     .join('');
 }
 
+function docGroupTag(id) {
+  const g = state.docGroups.find((x) => x.id === id);
+  return g ? `<span class="tag tag-doc">${g.icon} ${esc(g.label)}</span>` : '';
+}
+
 function badges(s) {
   const d = deadlineText(s);
   let out = isNew(s) ? `<span class="badge badge-new">🆕 નવું</span>` : '';
-  out += `<span class="badge badge-${d.tone}">${esc(d.text)}</span>`;
+  if (!isDoc(s)) out += `<span class="badge badge-${d.tone}">${esc(d.text)}</span>`;
   if (!s.verified) out += `<span class="badge badge-draft">ચકાસણી બાકી</span>`;
   if (store.isSaved(s.id)) out += `<span class="badge badge-saved">⭐ સેવ</span>`;
   return out;
@@ -105,7 +130,7 @@ function badges(s) {
 function schemeCard(s) {
   return `
     <a class="card" href="#/scheme/${encodeURIComponent(s.id)}">
-      <div class="tags">${categoryTags(s.categories)}</div>
+      <div class="tags">${isDoc(s) ? docGroupTag(s.group) : categoryTags(s.categories)}</div>
       <h3>${esc(s.title)}</h3>
       <p>${esc(s.summary)}</p>
       <div class="badges">${badges(s)}</div>
@@ -226,9 +251,36 @@ function viewHome() {
       <a class="quick-btn" href="#/help"><span aria-hidden="true">📞</span>જરૂરી ફોન નંબર</a>
       <a class="quick-btn" href="${shareAppLink()}" target="_blank" rel="noopener"><span aria-hidden="true">📲</span>એપ ગ્રુપમાં મોકલો</a>
     </div>
+    ${todayStrip()}
+    ${myEventsRow(p)}
+    <h2 class="list-title">📋 તમારા માટેની યોજના</h2>
     ${list(mine, 'તમારા વર્ગ માટે હજુ કાર્ડ નથી. જલ્દી ઉમેરાશે. ત્યાં સુધી <a href="#/all">બધી યોજના</a> જુઓ.')}
     <p class="muted small center"><a class="link" href="#/about">આ એપ વિશે અને જરૂરી સૂચના</a></p>
     <p class="muted small center">${versionLine()}</p>`;
+}
+
+function todayStrip() {
+  const latest = [...state.updates].sort((a, b) => (a.date < b.date ? 1 : -1))[0];
+  if (!latest) return '';
+  return `
+    <a class="today-strip ${latest.type === 'chetavani' ? 'warn' : ''}" href="#/today">
+      <span class="today-label">📰 આજનું</span>
+      <span class="today-title">${esc(latest.title)}</span>
+      <span class="today-more">બધું જુઓ →</span>
+    </a>`;
+}
+
+function myEventsRow(p) {
+  const cats = p.categories || [];
+  const mine = state.events.filter((e) => e.categories.some((c) => cats.includes(c)));
+  if (!mine.length) return '';
+  return `
+    <section class="events-row">
+      <h2 class="list-title">🧭 તમારા જીવનના પ્રસંગ</h2>
+      <div class="chips">${mine
+        .map((e) => `<a class="chip" href="#/event/${encodeURIComponent(e.id)}">${e.icon} ${esc(e.title)}</a>`)
+        .join('')}</div>
+    </section>`;
 }
 
 function shareAppLink() {
@@ -268,35 +320,130 @@ function viewHelp() {
     <p class="note">⚠️ ફ્રોડથી સાવધાન: કોઈ સરકારી અધિકારી ફોન પર OTP, PIN કે પૈસા માંગતા નથી.</p>`;
 }
 
-let allFilter = { q: '', cat: '' };
+const filters = { all: { q: '', cat: '' }, docs: { q: '', cat: '' } };
 
-function filteredAll() {
-  const q = allFilter.q.trim().toLowerCase();
-  return visible(state.schemes).filter((s) => {
-    if (allFilter.cat && !s.categories.includes(allFilter.cat)) return false;
-    if (!q) return true;
-    const catLabels = s.categories.map((c) => (CATEGORY_BY_ID[c] ? CATEGORY_BY_ID[c].label : ''));
-    return [s.title, s.summary, s.benefit, s.howToApply, ...(s.documents || []), ...catLabels]
-      .join(' ')
-      .toLowerCase()
-      .includes(q);
+function searchText(s) {
+  const catLabels = (s.categories || []).map((c) => (CATEGORY_BY_ID[c] ? CATEGORY_BY_ID[c].label : ''));
+  const group = state.docGroups.find((g) => g.id === s.group);
+  return [s.title, s.summary, s.benefit, s.howToApply, s.words, ...(s.documents || []), ...catLabels, group && group.label]
+    .join(' ')
+    .toLowerCase();
+}
+
+function filtered(scope) {
+  const f = filters[scope];
+  const q = f.q.trim().toLowerCase();
+  const items = scope === 'docs' ? state.docs : visible(state.schemes);
+  return items.filter((s) => {
+    if (f.cat && !(scope === 'docs' ? s.group === f.cat : s.categories.includes(f.cat))) return false;
+    return !q || searchText(s).includes(q);
   });
 }
 
-function viewAll() {
-  const chips = [{ id: '', icon: '📋', label: 'બધી' }, ...CATEGORIES]
+function refreshList(scope) {
+  const el = document.getElementById(scope + '-list');
+  if (el) el.innerHTML = list(filtered(scope), 'કંઈ મળ્યું નહીં.');
+}
+
+function filterPage(scope, title, placeholder, chipItems, intro) {
+  const f = filters[scope];
+  const chips = chipItems
     .map(
       (c) =>
-        `<button type="button" class="chip ${allFilter.cat === c.id ? 'active' : ''}" data-action="filter" data-cat="${c.id}">${c.icon} ${esc(c.label)}</button>`
+        `<button type="button" class="chip ${f.cat === c.id ? 'active' : ''}" data-action="filter" data-scope="${scope}" data-cat="${c.id}">${c.icon} ${esc(c.label)}</button>`
     )
     .join('');
   return `
     <section class="page-head">
-      <h1>બધી યોજના</h1>
-      <input id="search" class="search" type="search" placeholder="🔍 યોજના કે ડોક્યુમેન્ટ શોધો…" value="${esc(allFilter.q)}" aria-label="શોધો">
+      <h1>${title}</h1>
+      ${intro ? `<p class="muted">${intro}</p>` : ''}
+      <input class="search" data-scope="${scope}" type="search" placeholder="${placeholder}" value="${esc(f.q)}" aria-label="શોધો">
       <div class="chips">${chips}</div>
     </section>
-    <div id="all-list">${list(filteredAll(), 'કંઈ મળ્યું નહીં.')}</div>`;
+    <div id="${scope}-list">${list(filtered(scope), 'કંઈ મળ્યું નહીં.')}</div>`;
+}
+
+function viewDocs() {
+  return filterPage(
+    'docs',
+    '🪪 દસ્તાવેજ ગાઈડ',
+    '🔍 દાખલો કે કાર્ડ શોધો… (જેમ કે આવક, આધાર)',
+    [{ id: '', icon: '📋', label: 'બધા' }, ...state.docGroups],
+    'કયો દાખલો કે કાર્ડ ક્યાંથી, કયા પુરાવાથી અને કેટલા દિવસમાં નીકળે.'
+  );
+}
+
+function viewEvents() {
+  const cats = (state.profile && state.profile.categories) || [];
+  const sorted = [...state.events].sort(
+    (a, b) => Number(b.categories.some((c) => cats.includes(c))) - Number(a.categories.some((c) => cats.includes(c)))
+  );
+  return `
+    <section class="page-head">
+      <h1>🧭 જીવનના પ્રસંગ</h1>
+      <p class="muted">પ્રસંગ પસંદ કરો: શું કઢાવવું અને કઈ સહાય મળી શકે તેનું લિસ્ટ મળશે.</p>
+    </section>
+    <div class="event-grid">${sorted
+      .map(
+        (e) => `
+      <a class="event-card" href="#/event/${encodeURIComponent(e.id)}">
+        <span class="event-icon" aria-hidden="true">${e.icon}</span>
+        <span class="event-title">${esc(e.title)}</span>
+        <span class="event-count">${e.items.length} કામ</span>
+      </a>`
+      )
+      .join('')}</div>`;
+}
+
+function eventItemTitle(it) {
+  const linked = it.itemId ? findScheme(it.itemId) : null;
+  return it.title || (linked ? linked.title : '');
+}
+
+function viewEvent(id) {
+  const e = state.events.find((x) => x.id === id);
+  if (!e) return `<div class="empty">આ પ્રસંગ મળ્યો નહીં. <a href="#/events">બધા પ્રસંગ</a></div>`;
+  const key = 'event:' + e.id;
+  const ready = store.getDocs(key);
+  const row = (it, i) => {
+    const linked = it.itemId ? findScheme(it.itemId) : null;
+    const done = ready.includes(i);
+    return `
+      <li class="event-item ${done ? 'done' : ''}">
+        <button type="button" class="doc-tick" data-action="event-tick" data-id="${esc(key)}" data-i="${i}" aria-pressed="${done}" aria-label="થઈ ગયું">
+          <span class="doc-box" aria-hidden="true"></span>
+        </button>
+        <div class="event-item-body">
+          <span class="tag ${it.type === 'scheme' ? '' : 'tag-doc'}">${it.type === 'scheme' ? '🎁 સહાય / યોજના' : '📄 દસ્તાવેજ / કામ'}</span>
+          ${linked ? `<a class="event-item-title" href="#/scheme/${encodeURIComponent(linked.id)}">${esc(eventItemTitle(it))} →</a>` : `<strong class="event-item-title">${esc(eventItemTitle(it))}</strong>`}
+          ${it.note ? `<span class="muted small">${esc(it.note)}</span>` : ''}
+        </div>
+      </li>`;
+  };
+  const docs = e.items.map((it, i) => [it, i]).filter(([it]) => it.type !== 'scheme');
+  const helps = e.items.map((it, i) => [it, i]).filter(([it]) => it.type === 'scheme');
+  return `
+    <a class="back" href="#/events" data-action="back">← પાછા</a>
+    <article class="detail">
+      <h1>${e.icon} ${esc(e.title)}</h1>
+      <p class="lead">${esc(e.summary)}</p>
+      <p class="muted small" id="event-progress">${eventProgress(e, ready)}</p>
+      ${docs.length ? `<section><h2>📄 કરવાનાં કામ / દસ્તાવેજ</h2><ul class="event-list">${docs.map(([it, i]) => row(it, i)).join('')}</ul></section>` : ''}
+      ${helps.length ? `<section><h2>🎁 મળી શકે એવી સહાય</h2><ul class="event-list">${helps.map(([it, i]) => row(it, i)).join('')}</ul></section>` : ''}
+      <p class="note">દરેક કામ પર ટેપ કરો એટલે તેની પૂરી વિગત, પુરાવા અને પગલાં દેખાશે. થઈ જાય એટલે ☐ પર ✓ કરો.</p>
+    </article>`;
+}
+
+function eventProgress(e, ready) {
+  const n = ready.filter((i) => i < e.items.length).length;
+  return n === e.items.length ? '✅ બધું થઈ ગયું!' : `${n} / ${e.items.length} થઈ ગયું`;
+}
+
+function viewAll() {
+  return filterPage('all', '📋 બધી યોજના', '🔍 યોજના શોધો… (જેમ કે પેન્શન, લોન)', [
+    { id: '', icon: '📋', label: 'બધી' },
+    ...CATEGORIES,
+  ]);
 }
 
 function viewToday() {
@@ -334,32 +481,47 @@ function viewSaved() {
     ${list(saved, 'હજુ કંઈ સેવ નથી કર્યું. યોજના ખોલીને ⭐ સેવ કરો દબાવો.')}`;
 }
 
+// યોજના અને દસ્તાવેજમાં શબ્દો જુદા (KruPa ગાઈડ મુજબ)
+const KIND_TEXT = {
+  scheme: { benefit: '✅ શું મળશે', who: '👥 કોણ લાયક', steps: '📝 અરજીનાં પગલાં', where: '📍 ક્યાં અરજી કરવી', link: 'સત્તાવાર વેબસાઇટ ખોલો ↗' },
+  doc: { benefit: '✅ ક્યાં કામ આવે', who: '👥 કોણ કઢાવી શકે', steps: '📝 કઢાવવાનાં પગલાં', where: '📍 ક્યાંથી કઢાવવું', link: 'અરજીની વેબસાઇટ ખોલો ↗' },
+};
+const kindText = (s) => KIND_TEXT[isDoc(s) ? 'doc' : 'scheme'];
+
+// બોલતી વખતે ⚠️ નિશાન ન વાંચે
+const forSpeech = (t) => String(t || '').replace(/⚠️\s*ચકાસો/g, '').replace(/⚠️/g, '');
+
 function speechText(s) {
-  const d = s.lastDate ? `છેલ્લી તારીખ ${formatDate(s.lastDate)}.` : 'આ ચાલુ યોજના છે.';
-  return [
+  const k = kindText(s);
+  const plain = (t) => t.replace(/^[^઀-૿A-Za-z0-9]+\s*/u, '');
+  const parts = [
     s.title + '.',
     s.summary,
-    'શું મળશે. ' + s.benefit,
-    'કોણ લાયક. ' + s.eligibility.join(' '),
-    'કયા ડોક્યુમેન્ટ જોઈએ. ' + s.documents.join(', ') + '.',
-    'ક્યાં અરજી કરવી. ' + s.howToApply,
-    d,
-  ].join('\n');
+    plain(k.benefit) + '. ' + s.benefit,
+    plain(k.who) + '. ' + s.eligibility.join(' '),
+    s.fee ? 'ફી. ' + s.fee + '.' : '',
+    s.days ? 'કેટલા દિવસ. ' + s.days + '.' : '',
+    'કયા પુરાવા જોઈએ. ' + s.documents.join(', ') + '.',
+    s.howToApply ? plain(k.where) + '. ' + s.howToApply : '',
+    s.steps && s.steps.length ? plain(k.steps) + '. ' + s.steps.map((t, i) => `પગલું ${i + 1}. ${t}`).join(' ') : '',
+    isDoc(s) ? '' : s.lastDate ? `છેલ્લી તારીખ ${formatDate(s.lastDate)}.` : 'આ ચાલુ યોજના છે.',
+  ];
+  return forSpeech(parts.filter(Boolean).join('\n'));
 }
 
 function shareText(s) {
-  const d = s.lastDate ? `છેલ્લી તારીખ: ${formatDate(s.lastDate)}` : 'ચાલુ યોજના';
-  return [
+  const k = kindText(s);
+  const lines = [
     `*${s.title}*`,
     s.summary,
     '',
-    `✅ શું મળશે: ${s.benefit}`,
-    `📄 ડોક્યુમેન્ટ: ${s.documents.join(', ')}`,
-    `📅 ${d}`,
-    `🔗 સત્તાવાર લિંક: ${s.officialLink}`,
-    '',
-    `આવી માહિતી ગુજરાતીમાં મેળવવા એપ: ${appUrl()}`,
-  ].join('\n');
+    `${k.benefit}: ${s.benefit}`,
+    `📄 પુરાવા: ${s.documents.join(', ')}`,
+  ];
+  if (s.fee) lines.push(`💰 ફી: ${s.fee}`);
+  if (!isDoc(s)) lines.push(`📅 ${s.lastDate ? 'છેલ્લી તારીખ: ' + formatDate(s.lastDate) : 'ચાલુ યોજના'}`);
+  lines.push(`🔗 ${s.officialLink}`, '', `પૂરાં પગલાં અને આવી માહિતી ગુજરાતીમાં: ${appUrl()}#/scheme/${encodeURIComponent(s.id)}`);
+  return lines.join('\n');
 }
 
 function docChecklist(s) {
@@ -379,21 +541,46 @@ function docChecklist(s) {
 
 function docProgress(s, ready) {
   const n = ready.filter((i) => i < s.documents.length).length;
-  if (n === s.documents.length) return '✅ બધા ડોક્યુમેન્ટ તૈયાર છે!';
+  if (n === s.documents.length) return '✅ બધા પુરાવા તૈયાર છે!';
   return `તૈયાર હોય તેના પર ટેપ કરો: ${n} / ${s.documents.length} તૈયાર`;
+}
+
+function facts(s) {
+  const rows = [
+    ['💰 ફી', s.fee],
+    ['⏱️ કેટલા દિવસ', s.days],
+    ['📆 માન્યતા', s.validity],
+  ].filter(([, v]) => v);
+  if (!rows.length) return '';
+  return `<dl class="facts">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>`;
+}
+
+const bullets = (arr) => `<ul>${arr.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`;
+
+// કયા પ્રસંગમાં આ કામ આવે છે
+function relatedEvents(s) {
+  const evs = state.events.filter((e) => e.items.some((it) => it.itemId === s.id));
+  if (!evs.length) return '';
+  return `<section><h2>🧭 આ કયા પ્રસંગમાં કામ આવે</h2><div class="chips chips-wrap">${evs
+    .map((e) => `<a class="chip" href="#/event/${encodeURIComponent(e.id)}">${e.icon} ${esc(e.title)}</a>`)
+    .join('')}</div></section>`;
 }
 
 function viewScheme(id) {
   const s = findScheme(id);
-  if (!s) return `<div class="empty">આ યોજના મળી નહીં. <a href="#/">પાછા જાઓ</a></div>`;
+  if (!s) return `<div class="empty">આ માહિતી મળી નહીં. <a href="#/">પાછા જાઓ</a></div>`;
+  const k = kindText(s);
   const saved = store.isSaved(s.id);
   const wa = 'https://wa.me/?text=' + encodeURIComponent(shareText(s));
   const badgeHtml = badges(s);
   markSeen(s.id);
+  const sources = (s.sources && s.sources.length ? s.sources : [{ label: s.source, url: s.officialLink }])
+    .map((x) => `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.label)}</a>`)
+    .join(' · ');
   return `
-    <a class="back" href="#/" data-action="back">← પાછા</a>
+    <a class="back" href="${isDoc(s) ? '#/docs' : '#/'}" data-action="back">← પાછા</a>
     <article class="detail">
-      <div class="tags">${categoryTags(s.categories)}</div>
+      <div class="tags">${isDoc(s) ? docGroupTag(s.group) : categoryTags(s.categories)}</div>
       <h1>${esc(s.title)}</h1>
       <p class="lead">${esc(s.summary)}</p>
       <div class="badges">${badgeHtml}</div>
@@ -404,21 +591,28 @@ function viewScheme(id) {
         <a class="btn btn-wa btn-big" href="${wa}" target="_blank" rel="noopener">WhatsApp પર શેર</a>
       </div>
 
-      ${!s.verified ? `<div class="banner banner-draft">⚠️ આ કાર્ડની માહિતી હજુ ચકાસવાની બાકી છે. અરજી કરતાં પહેલાં સત્તાવાર લિંક જરૂર જુઓ.</div>` : ''}
+      ${!s.verified ? `<div class="banner banner-draft">⚠️ આ માહિતી હજુ ચકાસવાની બાકી છે. ⚠️ નિશાનવાળી વાત ખાસ ચકાસો. અરજી કરતાં પહેલાં સત્તાવાર વેબસાઇટ કે કચેરીમાં ખાતરી કરો.</div>` : ''}
 
-      <section><h2>✅ શું મળશે</h2><p>${esc(s.benefit)}</p></section>
-      <section><h2>👥 કોણ લાયક</h2><ul>${s.eligibility.map((e) => `<li>${esc(e)}</li>`).join('')}</ul></section>
+      <section><h2>${k.benefit}</h2><p>${esc(s.benefit)}</p></section>
+      <section><h2>${k.who}</h2>${bullets(s.eligibility)}</section>
+      ${facts(s)}
       <section>
-        <h2>📄 કયા ડોક્યુમેન્ટ જોઈએ</h2>
+        <h2>📄 કયા પુરાવા જોઈએ</h2>
         ${docChecklist(s)}
       </section>
-      <section><h2>📍 ક્યાં અરજી કરવી</h2><p>${esc(s.howToApply)}</p></section>
-      <section><h2>📅 છેલ્લી તારીખ</h2><p>${s.lastDate ? esc(formatDate(s.lastDate)) : 'ચાલુ યોજના (કોઈ નક્કી છેલ્લી તારીખ નથી)'}</p></section>
+      ${s.howToApply ? `<section><h2>${k.where}</h2><p>${esc(s.howToApply)}</p></section>` : ''}
+      ${s.steps && s.steps.length ? `<section><h2>${k.steps}</h2><ol class="steps">${s.steps.map((t) => `<li>${esc(t)}</li>`).join('')}</ol></section>` : ''}
+      ${s.mistakes && s.mistakes.length ? `<section class="box-warn"><h2>🚫 આ ભૂલો ન કરો</h2>${bullets(s.mistakes)}</section>` : ''}
+      ${s.after && s.after.length ? `<section><h2>📬 અરજી પછી</h2>${bullets(s.after)}</section>` : ''}
+      ${isDoc(s) ? '' : `<section><h2>📅 છેલ્લી તારીખ</h2><p>${s.lastDate ? esc(formatDate(s.lastDate)) : 'ચાલુ યોજના (કોઈ નક્કી છેલ્લી તારીખ નથી)'}</p></section>`}
+      ${relatedEvents(s)}
 
-      <a class="btn btn-big btn-block" href="${esc(s.officialLink)}" target="_blank" rel="noopener">સત્તાવાર વેબસાઇટ ખોલો ↗</a>
+      <a class="btn btn-big btn-block" href="${esc(s.officialLink)}" target="_blank" rel="noopener">${k.link}</a>
+
+      <div class="operator-help">🧑‍💻 ફોર્મ ભરવામાં મદદ જોઈએ? નજીકના <strong>KruPa Digital Hub</strong> ઓપરેટર કે CSC સેન્ટરની મદદ લો.</div>
 
       <footer class="source">
-        <p>સ્રોત: ${esc(s.source)} · છેલ્લે અપડેટ: ${esc(formatDate(s.updatedOn))}</p>
+        <p>સ્રોત: ${sources} · છેલ્લે અપડેટ: ${esc(formatDate(s.updatedOn))}</p>
         <p>ખાતરી માટે કચેરીમાં પૂછો. આ ખાનગી માહિતી એપ છે, સરકાર સાથે જોડાયેલી નથી.</p>
         <p><strong>અમે ક્યારેય પૈસા, OTP કે આધાર નંબર માંગતા નથી.</strong></p>
       </footer>
@@ -480,6 +674,9 @@ function viewAbout() {
           <li><strong>અમે ક્યારેય પૈસા, OTP કે આધાર નંબર માંગતા નથી.</strong> કોઈ આ એપના નામે માંગે તો તે ફ્રોડ છે. ફ્રોડ થાય તો 1930 પર ફોન કરો.</li>
         </ul>
       </section>
+      <section><h2>🤝 KruPa Digital Hub</h2>
+        <p>યોજના ગાઈડ, દસ્તાવેજ ગાઈડ અને પ્રસંગની માહિતી KruPa Digital Hub ની ગાઈડ પરથી લીધી છે. ફોર્મ ભરવામાં મદદ માટે નજીકના KruPa ઓપરેટર કે CSC સેન્ટરનો સંપર્ક કરો.</p>
+      </section>
       <a class="btn btn-big btn-block" href="#/help">📞 જરૂરી ફોન નંબર</a>
       <section><h2>🔒 તમારી માહિતી</h2>
         <p>લોગિન નથી. પ્રોફાઇલ અને સેવ કરેલી યોજનાઓ ફક્ત તમારા ફોનમાં રહે છે; અમારા સર્વર પર જતી નથી. <a class="link" href="privacy.html">પ્રાઇવસી પોલિસી</a></p>
@@ -519,12 +716,17 @@ function render() {
       profile: viewProfile,
       about: viewAbout,
       help: viewHelp,
+      docs: viewDocs,
+      events: viewEvents,
+      event: () => viewEvent(arg),
     }[name]?.() ?? viewHome();
   }
   $view.innerHTML = html;
+  const item = name === 'scheme' ? findScheme(arg) : null;
+  const tab = { event: 'events', today: 'home', help: 'home', scheme: item && isDoc(item) ? 'docs' : 'all' }[name] || name;
   document.querySelectorAll('.nav a').forEach((a) => {
-    a.classList.toggle('active', a.dataset.route === name);
-    a.setAttribute('aria-current', a.dataset.route === name ? 'page' : 'false');
+    a.classList.toggle('active', a.dataset.route === tab);
+    a.setAttribute('aria-current', a.dataset.route === tab ? 'page' : 'false');
   });
   window.scrollTo(0, 0);
 }
@@ -566,9 +768,10 @@ $view.addEventListener('submit', (e) => {
 });
 
 $view.addEventListener('input', (e) => {
-  if (e.target.id === 'search') {
-    allFilter.q = e.target.value;
-    document.getElementById('all-list').innerHTML = list(filteredAll(), 'કંઈ મળ્યું નહીં.');
+  const scope = e.target.dataset && e.target.dataset.scope;
+  if (scope && filters[scope]) {
+    filters[scope].q = e.target.value;
+    refreshList(scope);
   }
 });
 
@@ -624,9 +827,21 @@ $view.addEventListener('click', async (e) => {
   }
 
   if (action === 'filter') {
-    allFilter.cat = el.dataset.cat;
-    document.querySelectorAll('.chip').forEach((c) => c.classList.toggle('active', c === el));
-    document.getElementById('all-list').innerHTML = list(filteredAll(), 'કંઈ મળ્યું નહીં.');
+    const scope = el.dataset.scope;
+    filters[scope].cat = el.dataset.cat;
+    document.querySelectorAll(`.chip[data-scope="${scope}"]`).forEach((c) => c.classList.toggle('active', c === el));
+    refreshList(scope);
+  }
+
+  if (action === 'event-tick') {
+    const i = Number(el.dataset.i);
+    const ready = store.toggleDoc(id, i);
+    const done = ready.includes(i);
+    el.setAttribute('aria-pressed', String(done));
+    el.closest('.event-item').classList.toggle('done', done);
+    const ev = state.events.find((x) => 'event:' + x.id === id);
+    const prog = document.getElementById('event-progress');
+    if (ev && prog) prog.textContent = eventProgress(ev, ready);
   }
 
   if (action === 'reset') {
