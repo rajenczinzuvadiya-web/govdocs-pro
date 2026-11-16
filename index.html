@@ -1,83 +1,34 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="gu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GovDocs Pro - Documents & Photo Tools</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <meta name="description" content="Resize photos, compress, create PDFs, and manage your documents easily — all in one place.">
-    <link rel="canonical" href="https://govdocs.pro/index.html" />
-    <meta property="og:title" content="GovDocs Pro - Documents & Photo Tools">
-    <meta property="og:description" content="Resize photos, compress, create PDFs, and manage your documents easily — all in one place.">
-    <link rel="icon" type="image/png" href="assets/icon-192.png">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2563eb">
-    <link rel="stylesheet" href="global.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ગામની જાણકારી</title>
+  <meta name="description" content="ગામના દરેક માણસ માટે સરકારી યોજના, સહાય, ભરતી અને જરૂરી માહિતી, સરળ ગુજરાતીમાં અને બોલીને.">
+  <meta name="theme-color" content="#14663a">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/app.css">
 </head>
-<body class="bg-slate-50 text-slate-900">
-    <noscript>
-        <div class="bg-red-50 border-b border-red-200 p-4 text-center text-red-700 font-bold text-sm">
-            Javascript is required to use GovDocs Pro. Please enable Javascript in your browser settings.
-        </div>
-    </noscript>
-    <header id="main-header" class="glass sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
-        <!-- Injected by header.js -->
-    </header>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#/"><img src="icons/icon-192.png" alt="" width="32" height="32"><span data-app-name>ગામની જાણકારી</span></a>
+    <a class="profile-btn" href="#/profile" aria-label="મારી પ્રોફાઇલ">👤</a>
+  </header>
 
-    <main class="container mx-auto px-4 pt-8 pb-4 md:pt-12 md:pb-8">
-        <!-- Hero Section -->
-        <section id="hero" class="max-w-4xl mx-auto text-center mb-6">
-            <p class="text-[10px] md:text-xs font-black uppercase text-slate-400 tracking-[0.3em] mb-6">
-                Photo • PDF • Document Tools
-            </p>
-            
-            <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-[1.1]">
-                <span class="text-blue-600" data-lang="hero_title_highlight">ડોક્યુમેન્ટ્સ અને ફોટા</span><br>
-                <span data-lang="hero_title_main">એક જ મિનિટમાં તૈયાર કરો</span>
-            </h1>
+  <main id="view" class="wrap" tabindex="-1"></main>
 
-            <p class="text-slate-600 text-lg md:text-xl max-w-2xl mx-auto mb-6 leading-relaxed" data-lang="hero_desc">
-                ફોટા રિસાઇઝ કરો, કોમ્પ્રેસ કરો, PDF બનાવો અને તમારા ડોક્યુમેન્ટ્સને સરળતાથી મેનેજ કરો — એક જ જગ્યાએ.
-            </p>
+  <nav class="nav" aria-label="મુખ્ય મેનુ">
+    <a href="#/" data-route="home"><span aria-hidden="true">🏠</span>મારા માટે</a>
+    <a href="#/all" data-route="all"><span aria-hidden="true">📋</span>બધી યોજના</a>
+    <a href="#/today" data-route="today"><span aria-hidden="true">📰</span>આજનું</a>
+    <a href="#/saved" data-route="saved"><span aria-hidden="true">⭐</span>સેવ કરેલ</a>
+  </nav>
 
-            <!-- Feature Line -->
-            <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest">
-                <span>Resize</span>
-                <span class="text-slate-200">/</span>
-                <span>Compress</span>
-                <span class="text-slate-200">/</span>
-                <span>Convert</span>
-                <span class="text-slate-200">/</span>
-                <span>Create</span>
-            </div>
-        </section>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-        <!-- Category Filter Pills -->
-        <div class="max-w-4xl mx-auto mb-8 md:mb-10 px-4 md:px-0">
-            <div class="flex overflow-x-auto md:justify-center gap-2.5 pb-2 hide-scrollbar snap-x">
-                <button class="filter-pill active snap-center whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-blue-600 text-white border border-transparent shadow-md shadow-blue-200" data-filter="all" data-lang="nav_all">All</button>
-                <button class="filter-pill snap-center whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:border-blue-200 hover:text-blue-600" data-filter="photo" data-lang="nav_photo_tools">Photo Tools</button>
-                <button class="filter-pill snap-center whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:border-blue-200 hover:text-blue-600" data-filter="pdf" data-lang="nav_pdf_tools">PDF Tools</button>
-                <button class="filter-pill snap-center whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:border-blue-200 hover:text-blue-600" data-filter="signature" data-lang="nav_signature_tools">Signature Tools</button>
-                <button class="filter-pill snap-center whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:border-blue-200 hover:text-blue-600" data-filter="passport" data-lang="nav_passport_tools">Passport Tools</button>
-                <button class="filter-pill snap-center whitespace-nowrap px-5 py-2.5 rounded-full text-sm font-bold transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:border-blue-200 hover:text-blue-600" data-filter="presets" data-lang="nav_presets">Presets</button>
-            </div>
-        </div>
-
-        <!-- Tool Directory / Cards Section -->
-        <section id="directory" class="max-w-6xl mx-auto">
-            <div id="tools-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-                <!-- Tool cards will be rendered here by navigator.js or a separate script -->
-            </div>
-            <div id="no-results" class="hidden text-center py-12 text-slate-400 text-sm">No tools found</div>
-        </section>
-    </main>
-
-    <footer id="footer" class="bg-[#0f172a] text-slate-400 py-10 md:py-12 border-t border-slate-800">
-        <!-- Injected by footer.js -->
-    </footer>
-
-    <script type="module" src="navigator.js"></script>
+  <noscript><p class="wrap">આ એપ ચલાવવા JavaScript ચાલુ કરો.</p></noscript>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>

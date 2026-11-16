@@ -1,0 +1,234 @@
+/* મોટા અક્ષર, ઓછા બટન, સરળ ગુજરાતી. ફોન માટે બનાવેલું. */
+
+:root {
+  --bg: #f6f5f0;
+  --surface: #ffffff;
+  --text: #1c1f1d;
+  --muted: #5b625e;
+  --line: #dedbd2;
+  --primary: #14663a;
+  --primary-ink: #ffffff;
+  --primary-soft: #e3f1e8;
+  --accent: #c25e00;
+  --urgent-bg: #fde8e6;
+  --urgent-ink: #a8231a;
+  --soon-bg: #fff3dc;
+  --soon-ink: #8a4b00;
+  --ok-bg: #e3f1e8;
+  --ok-ink: #14663a;
+  --draft-bg: #fff6cc;
+  --draft-ink: #6b5400;
+  --info-bg: #e6eefb;
+  --info-ink: #1f4f9c;
+  --wa: #1f8f4e;
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 2px 8px rgba(0, 0, 0, .04);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121513;
+    --surface: #1c201d;
+    --text: #eef1ee;
+    --muted: #a6aea9;
+    --line: #2f3531;
+    --primary: #4cc27c;
+    --primary-ink: #0d1a12;
+    --primary-soft: #1d3326;
+    --accent: #f0a050;
+    --urgent-bg: #3a1c19;
+    --urgent-ink: #ffaaa1;
+    --soon-bg: #382a14;
+    --soon-ink: #f7c56f;
+    --ok-bg: #1d3326;
+    --ok-ink: #8fdcaa;
+    --draft-bg: #36300f;
+    --draft-ink: #f2dc78;
+    --info-bg: #1a2740;
+    --info-ink: #a9c4f5;
+    --wa: #3ab86c;
+    --shadow: none;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121513; --surface: #1c201d; --text: #eef1ee; --muted: #a6aea9; --line: #2f3531;
+  --primary: #4cc27c; --primary-ink: #0d1a12; --primary-soft: #1d3326; --accent: #f0a050;
+  --urgent-bg: #3a1c19; --urgent-ink: #ffaaa1; --soon-bg: #382a14; --soon-ink: #f7c56f;
+  --ok-bg: #1d3326; --ok-ink: #8fdcaa; --draft-bg: #36300f; --draft-ink: #f2dc78;
+  --info-bg: #1a2740; --info-ink: #a9c4f5; --wa: #3ab86c; --shadow: none; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Sans Gujarati", "Shruti", "Hind Vadodara", system-ui, sans-serif;
+  font-size: 19px;
+  line-height: 1.6;
+  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+}
+
+a { color: inherit; }
+h1, h2, h3 { line-height: 1.3; margin: 0; }
+h1 { font-size: 1.55rem; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1.1rem; }
+p { margin: 0; }
+ul { margin: 0; padding-left: 1.2em; }
+
+.wrap { max-width: 640px; margin: 0 auto; padding: 16px; outline: none; }
+.muted { color: var(--muted); }
+.small { font-size: .85rem; }
+.center { text-align: center; margin-top: 24px; }
+.link { color: var(--primary); font-weight: 600; }
+.stack > * + * { margin-top: 16px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ઉપરની પટ્ટી */
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; padding-top: calc(10px + env(safe-area-inset-top));
+  background: var(--primary); color: var(--primary-ink);
+}
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 1.15rem; }
+.brand img { border-radius: 8px; }
+.profile-btn {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255, 255, 255, .18); text-decoration: none; font-size: 1.3rem;
+}
+
+/* નીચેનું મેનુ */
+.nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.nav a {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 2px 10px; text-decoration: none; font-size: .78rem; color: var(--muted); min-height: 64px;
+}
+.nav a span { font-size: 1.4rem; line-height: 1.2; }
+.nav a.active { color: var(--primary); font-weight: 700; }
+
+/* હેડિંગ વિભાગ */
+.page-head { margin: 8px 0 16px; }
+.page-head > * + * { margin-top: 8px; }
+.hero { margin: 8px 0 20px; }
+.hero > * + * { margin-top: 10px; }
+.lead { font-size: 1.08rem; }
+
+/* કાર્ડ */
+.cards { display: grid; gap: 12px; }
+.card {
+  display: block; text-decoration: none; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow);
+}
+.card > * + * { margin-top: 8px; }
+a.card:active { transform: scale(.99); }
+.card p { color: var(--muted); }
+.card-warn { border-left: 5px solid var(--accent); }
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.tag {
+  font-size: .8rem; padding: 2px 10px; border-radius: 999px;
+  background: var(--primary-soft); color: var(--ok-ink);
+}
+.badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { font-size: .82rem; font-weight: 600; padding: 3px 10px; border-radius: 8px; }
+.badge-ok { background: var(--ok-bg); color: var(--ok-ink); }
+.badge-soon { background: var(--soon-bg); color: var(--soon-ink); }
+.badge-urgent { background: var(--urgent-bg); color: var(--urgent-ink); }
+.badge-over { background: var(--line); color: var(--muted); }
+.badge-draft { background: var(--draft-bg); color: var(--draft-ink); }
+.badge-saved { background: var(--soon-bg); color: var(--soon-ink); }
+
+/* બેનર */
+.banner { display: block; border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; text-decoration: none; }
+.banner ul { margin-top: 6px; }
+.banner a { font-weight: 600; }
+.banner-urgent { background: var(--urgent-bg); color: var(--urgent-ink); }
+.banner-info { background: var(--info-bg); color: var(--info-ink); font-weight: 600; }
+.banner-draft { background: var(--draft-bg); color: var(--draft-ink); }
+
+/* બટન */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 48px; padding: 10px 16px; border-radius: 12px;
+  border: 1.5px solid var(--line); background: var(--surface); color: var(--text);
+  font: inherit; font-weight: 600; text-decoration: none; cursor: pointer;
+}
+.btn-primary { background: var(--primary); border-color: var(--primary); color: var(--primary-ink); }
+.btn-wa { background: var(--wa); border-color: var(--wa); color: #fff; }
+.btn-big { min-height: 56px; font-size: 1.05rem; }
+.btn-block { width: 100%; }
+.btn-ghost { background: transparent; color: var(--urgent-ink); border-color: transparent; width: 100%; }
+form .btn-primary { width: 100%; }
+
+/* વિગત */
+.back { display: inline-block; padding: 8px 0; margin-bottom: 4px; text-decoration: none; color: var(--primary); font-weight: 600; }
+.detail > * + * { margin-top: 18px; }
+.detail section > * + * { margin-top: 6px; }
+.detail li + li { margin-top: 4px; }
+.actions { display: grid; gap: 10px; }
+.checklist { list-style: none; padding: 0; }
+.checklist li { padding-left: 1.6em; position: relative; }
+.checklist li::before { content: "☐"; position: absolute; left: 0; color: var(--primary); }
+.source { border-top: 1px solid var(--line); padding-top: 14px; color: var(--muted); font-size: .88rem; }
+.source > * + * { margin-top: 6px; }
+
+/* ફોર્મ */
+fieldset { border: 0; padding: 0; margin: 0; }
+legend { font-weight: 700; margin-bottom: 10px; padding: 0; }
+.field { display: grid; gap: 6px; font-weight: 600; }
+.field input, .field select, .search {
+  font: inherit; font-weight: 400; width: 100%; min-height: 52px; padding: 10px 12px;
+  border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); color: var(--text);
+}
+.note { background: var(--primary-soft); color: var(--ok-ink); padding: 12px 14px; border-radius: 12px; font-size: .92rem; }
+
+.choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.choice { position: relative; display: block; cursor: pointer; }
+.choice input { position: absolute; opacity: 0; inset: 0; }
+.choice-body {
+  display: flex; flex-direction: column; gap: 2px; height: 100%;
+  padding: 12px; border-radius: var(--radius); border: 2px solid var(--line); background: var(--surface);
+}
+.choice-icon { font-size: 1.7rem; line-height: 1.2; }
+.choice-label { font-weight: 700; line-height: 1.3; }
+.choice-hint { font-size: .78rem; color: var(--muted); line-height: 1.35; }
+.choice input:checked + .choice-body { border-color: var(--primary); background: var(--primary-soft); }
+.choice input:focus-visible + .choice-body { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin: 0 -16px; padding-left: 16px; padding-right: 16px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; font: inherit; font-size: .9rem; min-height: 42px; padding: 6px 14px;
+  border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer;
+}
+.chip.active { background: var(--primary); border-color: var(--primary); color: var(--primary-ink); font-weight: 700; }
+
+.empty { text-align: center; color: var(--muted); padding: 40px 16px; }
+.empty a { color: var(--primary); font-weight: 600; }
+
+.toast {
+  position: fixed; left: 16px; right: 16px; bottom: calc(84px + env(safe-area-inset-bottom)); z-index: 20;
+  max-width: 560px; margin: 0 auto; padding: 12px 16px; border-radius: 12px;
+  background: var(--text); color: var(--bg); font-size: .95rem; text-align: center;
+  opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .2s, transform .2s;
+}
+.toast.show { opacity: 1; transform: none; }
+
+@media (max-width: 360px) {
+  .choice-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast { transition: none; }
+}

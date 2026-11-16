@@ -1,0 +1,27 @@
+{
+  "updatedOn": "2026-11-16",
+  "updates": [
+    {
+      "id": "cyber-1930",
+      "date": "2026-11-16",
+      "type": "chetavani",
+      "title": "ફ્રોડથી સાવધાન: કોઈ યોજના માટે OTP કે પૈસા ન આપો",
+      "summary": "સરકારી યોજનાના નામે ફોન કરીને OTP, આધાર નંબર કે પૈસા માંગે તો તે ફ્રોડ છે. ફ્રોડ થાય તો તરત 1930 પર ફોન કરો અથવા cybercrime.gov.in પર ફરિયાદ કરો.",
+      "categories": ["samanya"],
+      "link": "https://cybercrime.gov.in",
+      "source": "cybercrime.gov.in",
+      "verified": false
+    },
+    {
+      "id": "welcome",
+      "date": "2026-11-16",
+      "type": "jankari",
+      "title": "એપ કેવી રીતે વાપરવી",
+      "summary": "'મારા માટે' માં તમારી પ્રોફાઇલ પ્રમાણે યોજનાઓ દેખાય છે. કાર્ડ ખોલીને 🔊 દબાવો એટલે ગુજરાતીમાં સાંભળવા મળશે. ⭐ દબાવીને સેવ કરો એટલે છેલ્લી તારીખ પહેલાં યાદ કરાવીશું.",
+      "categories": ["samanya"],
+      "link": null,
+      "source": null,
+      "verified": true
+    }
+  ]
+}
