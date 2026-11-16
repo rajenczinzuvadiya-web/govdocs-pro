@@ -10,3 +10,5 @@
 - યુઝરના લિમિટની બચત: એક scripted Playwright ચેક (PASS / FAIL), screenshot ફક્ત ભૂલ હોય કે યુઝરને બતાવવો હોય ત્યારે.
 - ડેટા: `data/*.json`, ચકાસણી `node scripts/check-data.mjs`. ફક્ત સત્તાવાર પેજ પરથી ચકાસ્યા પછી `verified: true`.
 - `main` માં merge = GitHub Pages પર લાઇવ. કોડ બદલાય ત્યારે `js/config.js` નું `version` અને `sw.js` નું `VERSION` વધારવું.
+- નવી યોજના / "આજનું" પોસ્ટ ઉમેરવી: ફક્ત `data/` ની જરૂરી ફાઇલ બદલવી (આખી JSON ન વાંચવી; `node -e` થી જરૂરી કાર્ડ શોધવું), `node scripts/check-data.mjs`, પછી commit. ફક્ત ડેટા બદલાય ત્યારે version વધારવાની જરૂર નથી.
+- Play Store: `store/` (લખાણ, ફોટા, અપલોડની રીત). દેખાવ બદલાય ત્યારે `node scripts/store-images.mjs` થી ફોટા ફરી બનાવવા.

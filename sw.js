@@ -1,6 +1,6 @@
 // ઑફલાઇન: એપ ફોનમાં સેવ રહે, અને છેલ્લી ડાઉનલોડ થયેલી માહિતી નેટ વગર પણ દેખાય.
 // કોડ બદલો ત્યારે VERSION વધારવું, એટલે યુઝર્સના ફોનમાં નવું વર્ઝન આવે.
-const VERSION = 'v3';
+const VERSION = 'v4';
 const SHELL = `shell-${VERSION}`;
 const DATA = 'data';
 
@@ -23,6 +23,7 @@ const SHELL_FILES = [
   'fonts/hind-vadodara-latin-700-normal.woff2',
   'manifest.json',
   'privacy.html',
+  'terms.html',
   'icons/icon-192.png',
   'icons/icon-512.png',
   'icons/icon-maskable-512.png',
@@ -47,16 +48,23 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;
 
-  // યોજનાનો ડેટા: પહેલાં નેટ (તાજી માહિતી), નેટ ન હોય તો સેવ કરેલો
+  // યોજનાનો ડેટા: પહેલાં નેટ (તાજી માહિતી). નેટ ધીમું હોય તો 4 સેકન્ડ પછી ફોનમાં સેવ કરેલો બતાવવો,
+  // અને નવો ડેટા પાછળથી સેવ થતો રહે (આવતી વખતે દેખાય).
   if (url.pathname.includes('/data/')) {
+    const network = fetch(req).then((res) => {
+      if (res.ok) {
+        const copy = res.clone();
+        caches.open(DATA).then((c) => c.put(req, copy));
+      }
+      return res;
+    });
+    event.waitUntil(network.catch(() => {}));
     event.respondWith(
-      fetch(req)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(DATA).then((c) => c.put(req, copy));
-          return res;
-        })
-        .catch(() => caches.match(req, { ignoreSearch: true }))
+      caches.match(req, { ignoreSearch: true }).then((cached) => {
+        if (!cached) return network;
+        const slow = new Promise((resolve) => setTimeout(() => resolve(cached), 4000));
+        return Promise.race([network.catch(() => cached), slow]);
+      })
     );
     return;
   }

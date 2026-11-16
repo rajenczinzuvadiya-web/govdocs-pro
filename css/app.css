@@ -108,7 +108,7 @@ button { font: inherit; color: inherit; }
 .nav .nav-brand, .nav .nav-foot { display: none; }
 .nav a {
   display: flex; flex-direction: column; align-items: center; gap: .1rem; min-width: 0;
-  padding: .25rem .1rem; text-decoration: none; color: var(--muted); font-size: .75rem; font-weight: 600; line-height: 1.2;
+  padding: .25rem .1rem; text-decoration: none; color: var(--muted); font-size: .8rem; font-weight: 600; line-height: 1.2;
 }
 .nav a .pill { display: grid; place-items: center; width: 100%; max-width: 3rem; height: 1.9rem; border-radius: 999px; }
 .nav a span:last-child { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -188,7 +188,7 @@ button { font: inherit; color: inherit; }
   font-weight: 600; font-size: .875rem; text-decoration: none; cursor: pointer;
 }
 .chip:hover { border-color: var(--primary); color: var(--primary); }
-.chip .count { font-size: .75rem; color: var(--muted); font-weight: 600; }
+.chip .count { font-size: .875rem; color: var(--muted); font-weight: 600; }
 .chip.active { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
 .chip.active .count { color: var(--on-primary); opacity: .8; }
 
@@ -234,10 +234,10 @@ button { font: inherit; color: inherit; }
 .item .chev { color: var(--muted); flex: none; }
 .corner {
   position: absolute; top: 0; right: 0; padding: .05rem .55rem; border-radius: 0 .9rem 0 .6rem;
-  font-size: .72rem; font-weight: 700; display: inline-flex; align-items: center; gap: .25rem;
+  font-size: .8rem; font-weight: 700; display: inline-flex; align-items: center; gap: .25rem;
 }
 .corner-new { background: var(--ok-soft); color: var(--ok); }
-.pill-tag { display: inline-flex; align-items: center; gap: .25rem; padding: .05rem .5rem; border-radius: 999px; font-size: .75rem; font-weight: 700; }
+.pill-tag { display: inline-flex; align-items: center; gap: .25rem; padding: .05rem .5rem; border-radius: 999px; font-size: .875rem; font-weight: 700; }
 .pt-urgent { background: var(--danger-soft); color: var(--danger); }
 .pt-soon { background: var(--warn-soft); color: var(--warn); }
 .pt-saved { background: var(--primary-soft); color: var(--primary); }
@@ -266,7 +266,7 @@ button { font: inherit; color: inherit; }
 .home-search h2 { display: flex; align-items: center; gap: .5rem; font-size: 1rem; font-weight: 700; margin-bottom: .75rem; }
 .home-search h2 .ic { color: var(--primary); }
 .my-cats { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .9rem; }
-.my-cats .chip { min-height: 2.25rem; padding: 0 .6rem 0 .3rem; }
+.my-cats .chip { min-height: 2.75rem; padding: 0 .6rem 0 .3rem; }
 .today-strip {
   display: flex; align-items: center; gap: .75rem; margin-top: 1rem; padding: .75rem 1rem; text-decoration: none;
   border-radius: .9rem; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--primary);
@@ -275,7 +275,7 @@ button { font: inherit; color: inherit; }
 .today-strip > .ic { color: var(--primary); }
 .today-strip.warn > .ic { color: var(--kesari); }
 .today-strip div { flex: 1; min-width: 0; }
-.today-strip b { display: block; font-size: .75rem; color: var(--muted); }
+.today-strip b { display: block; font-size: .875rem; color: var(--muted); }
 .today-strip span { font-weight: 600; line-height: 1.35; }
 .event-strip { margin-top: 1rem; padding: 1rem; border-radius: 1rem; border: 1px solid var(--primary-ring); background: var(--primary-soft); }
 .event-strip h2 { font-size: 1rem; font-weight: 700; }
@@ -294,20 +294,20 @@ button { font: inherit; color: inherit; }
 .event-card:hover { border-color: var(--primary-ring); box-shadow: var(--shadow-md); }
 .event-card .emo { font-size: 1.9rem; line-height: 1.2; }
 .event-card b { line-height: 1.3; }
-.event-card .muted { margin-top: auto; font-size: .8rem; }
+.event-card .muted { margin-top: auto; font-size: .875rem; }
 .event-card .corner { background: var(--warn-soft); color: var(--warn); }
 
 /* ---------- વિગતનું પેજ (KruPa ગાઈડ જેવું) ---------- */
 .crumb { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: .875rem; color: var(--muted); }
-.crumb a { color: var(--primary); font-weight: 600; text-decoration: none; }
-.crumb .back-btn { width: 2.25rem; height: 2.25rem; }
+.crumb a { color: var(--primary); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; min-height: 2.75rem; }
+.crumb .back-btn { width: 2.75rem; height: 2.75rem; }
 .detail-head { display: flex; gap: .9rem; align-items: flex-start; margin-top: .75rem; }
 .detail-head h1 { font-size: 1.5rem; font-weight: 800; line-height: 1.3; overflow-wrap: anywhere; }
 .detail-head .lead { margin-top: .35rem; color: var(--muted); font-size: 1.02rem; line-height: 1.55; }
 @media (min-width: 640px) { .detail-head h1 { font-size: 1.85rem; } }
 .related { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .9rem; }
 .related > span { font-size: .875rem; font-weight: 600; color: var(--muted); }
-.related .chip { min-height: 2.25rem; }
+.related .chip { min-height: 2.75rem; }
 .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
 .actions .btn { flex: 1 1 calc(50% - .5rem); }
 @media (min-width: 640px) { .actions .btn { flex: 0 0 auto; } }
@@ -317,7 +317,7 @@ button { font: inherit; color: inherit; }
 .fact .sq { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: .6rem; background: var(--primary-soft); color: var(--primary); flex: none; }
 .fact.good { background: var(--ok-soft); border-color: rgba(27, 122, 75, .25); }
 .fact.good .sq { background: var(--surface); color: var(--ok); }
-.fact .k { font-size: .75rem; font-weight: 700; color: var(--muted); }
+.fact .k { font-size: .875rem; font-weight: 700; color: var(--muted); }
 .fact .v { margin-top: .1rem; font-size: .95rem; line-height: 1.55; overflow-wrap: anywhere; }
 .fact > div { min-width: 0; }
 .facts-small { display: grid; gap: .5rem; margin-top: .75rem; }
@@ -369,8 +369,8 @@ button { font: inherit; color: inherit; }
 .ev-tick { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; flex: none; border: 0; background: none; cursor: pointer; padding: 0; }
 .ev-body { display: grid; gap: .1rem; padding: .5rem 0; min-width: 0; flex: 1; }
 .ev-body a, .ev-body b { font-weight: 700; line-height: 1.4; text-decoration: none; overflow-wrap: anywhere; }
-.ev-body a { color: var(--primary); display: inline-flex; align-items: center; gap: .25rem; }
-.ev-body .muted { font-size: .85rem; }
+.ev-body a { color: var(--primary); display: inline-flex; align-items: center; gap: .25rem; min-height: 2.75rem; }
+.ev-body .muted { font-size: .9rem; }
 
 /* ---------- ફોર્મ ---------- */
 fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
@@ -391,7 +391,7 @@ legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 .choice-body { display: flex; align-items: center; gap: .7rem; height: 100%; padding: .75rem; border-radius: .9rem; border: 2px solid var(--line); background: var(--surface); }
 .choice-body > span:not(.tile) { min-width: 0; flex: 1; }
 .choice-body b { display: block; line-height: 1.3; font-size: .95rem; }
-.choice-body small { display: block; color: var(--muted); font-size: .75rem; line-height: 1.35; margin-top: .1rem; }
+.choice-body small { display: block; color: var(--muted); font-size: .875rem; line-height: 1.35; margin-top: .1rem; }
 .choice input:checked + .choice-body { border-color: var(--primary); background: var(--primary-soft); }
 .choice input:checked + .choice-body::after { content: "✓"; align-self: flex-start; color: var(--primary); font-weight: 800; }
 .choice input:focus-visible + .choice-body { outline: 3px solid var(--kesari); outline-offset: 2px; }
@@ -442,7 +442,7 @@ legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 
 /* ---------- ફૂટર (એક પાતળી લીટી, KruPa #174) ---------- */
 .foot { display: flex; flex-wrap: wrap; gap: .25rem 1rem; justify-content: center; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: .8rem; color: var(--muted); text-align: center; }
-.foot a { color: var(--muted); }
+.foot a { color: var(--muted); display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 .25rem; }
 
 .empty { padding: 2.5rem 1rem; border: 1px dashed var(--line); border-radius: 1rem; text-align: center; color: var(--muted); }
 .empty a, .empty button { color: var(--primary); font-weight: 700; }
@@ -458,7 +458,7 @@ legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 
 @media (max-width: 380px) {
   .wordmark { font-size: 1rem; }
-  .nav a { font-size: .68rem; }
+  .nav a { font-size: .75rem; }
   .choice-grid { grid-template-columns: 1fr; }
   .event-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -467,3 +467,51 @@ legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 }
 
 .ic.filled path { fill: currentColor; }
+
+/* ---------- સ્વાગત (પહેલી વાર) ---------- */
+.welcome { max-width: 60rem; margin: 0 auto; }
+.welcome-hero { text-align: center; padding: 1rem 0 .5rem; }
+.welcome-hero img { border-radius: 1rem; box-shadow: var(--shadow-md); }
+.welcome-hero .greet { margin-top: .75rem; }
+.welcome-hero h1 { font-size: 1.5rem; font-weight: 800; line-height: 1.3; color: var(--primary); }
+.welcome-hero .lead { margin: .5rem auto 0; max-width: 34rem; color: var(--muted); font-size: 1.05rem; }
+.steps { display: flex; align-items: center; gap: .4rem; margin: 1.25rem 0 1rem; }
+.steps span { flex: 1; max-width: 4rem; height: .4rem; border-radius: 999px; background: var(--line); }
+.steps span.on { background: var(--primary); }
+.steps b { margin-left: auto; font-size: .9rem; color: var(--muted); }
+.feature-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem; }
+@media (min-width: 720px) { .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.feature-grid li { display: flex; align-items: center; gap: .8rem; padding: .85rem 1rem; border-radius: 1rem; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
+.feature-grid b { display: block; line-height: 1.3; }
+.feature-grid small { display: block; color: var(--muted); font-size: .9rem; line-height: 1.4; }
+.btn-lg { min-height: 3.25rem; font-size: 1.1rem; font-weight: 700; }
+.row-split { display: flex; justify-content: space-between; align-items: center; gap: .75rem; }
+.row-split .btn-primary { flex: 1; max-width: 22rem; }
+.h2 { display: flex; align-items: center; gap: .5rem; font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+.size-pick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+.size-pick button { display: grid; justify-items: center; gap: .2rem; min-height: 5.5rem; padding: .5rem; border-radius: .9rem; border: 2px solid var(--line); background: var(--surface); color: var(--ink); font-family: inherit; font-weight: 800; cursor: pointer; line-height: 1.1; }
+.size-pick button span { font-size: .9rem; font-weight: 600; color: var(--muted); }
+.size-pick button:first-child { font-size: 1.4rem !important; }
+.size-pick button:nth-child(2) { font-size: 1.75rem !important; }
+.size-pick button:nth-child(3) { font-size: 2.1rem !important; }
+.size-pick button[aria-pressed="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+.center { text-align: center; }
+
+/* ---------- હોમનાં મોટાં બટન ---------- */
+.quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; margin-top: 1rem; }
+@media (min-width: 1024px) { .quick { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.quick a { display: grid; justify-items: center; align-content: start; gap: .35rem; min-width: 0; padding: .85rem .4rem; border-radius: 1rem; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); text-decoration: none; text-align: center; }
+.quick a:hover { border-color: var(--primary-ring); box-shadow: var(--shadow-md); }
+.quick b { line-height: 1.25; font-size: .95rem; overflow-wrap: anywhere; }
+.quick small { color: var(--muted); font-size: .8rem; line-height: 1.3; }
+@media (max-width: 380px) { .quick small { display: none; } }
+
+/* ---------- કેવી રીતે વાપરવી ---------- */
+.guide-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem; }
+@media (min-width: 1024px) { .guide-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.guide-list li { display: flex; gap: .75rem; padding: .85rem 1rem; border-radius: 1rem; border: 1px solid var(--line); background: var(--surface); }
+.guide-list .num { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; flex: none; border-radius: 999px; background: var(--primary); color: var(--on-primary); font-weight: 800; }
+.guide-list b { display: flex; align-items: center; gap: .4rem; color: var(--primary); }
+.guide-list p { margin: .2rem 0 0; color: var(--muted); line-height: 1.5; }
+.plain-steps { margin: 0; padding-left: 1.3rem; display: grid; gap: .35rem; line-height: 1.5; }
+.menu-list.card { padding: .5rem; }
