@@ -2,6 +2,18 @@
   "updatedOn": "2026-11-16",
   "updates": [
     {
+      "id": "v050-navu-naam",
+      "date": "2026-11-16",
+      "type": "jankari",
+      "title": "એપનું નવું નામ: જાણકાર",
+      "summary": "\"ગામની જાણકારી\" એપનું નામ હવે \"જાણકાર\" છે. એપ, માહિતી અને તમારું સેવ કરેલું બધું એમ જ છે. નવો વાદળી આઇકન આવ્યો છે. આ KruPa Digital Hub ની એપ છે; ફોર્મ ભરવામાં મદદ માટે નજીકના KruPa ઓપરેટરનો સંપર્ક કરો.",
+      "categories": [
+        "samanya"
+      ],
+      "link": null,
+      "source": "જાણકાર"
+    },
+    {
       "id": "v040-swagat",
       "date": "2026-11-16",
       "type": "jankari",
@@ -11,7 +23,7 @@
         "samanya"
       ],
       "link": null,
-      "source": "ગામની જાણકારી"
+      "source": "જાણકાર"
     },
     {
       "id": "v030-krupa-guide",

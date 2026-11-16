@@ -259,7 +259,7 @@ function viewWelcome() {
         <img src="icons/icon-192.png" alt="" width="72" height="72">
         <p class="greet">નમસ્તે 🙏</p>
         <h1>${esc(APP.name)} માં સ્વાગત છે</h1>
-        <p class="lead">${esc(APP.tagline)}</p>
+        <p class="lead">${esc(APP.about)}</p>
       </div>
       ${welcomeSteps(1)}
       <ul class="feature-grid">${FEATURES.map(([ic, tone, t, d]) => `<li>${lineTile(ic, tone)}<span><b>${t}</b><small>${d}</small></span></li>`).join('')}</ul>
@@ -354,7 +354,6 @@ function viewHome() {
   const latest = [...state.updates].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))[0];
   return `
     <p class="greet">નમસ્તે 🙏</p>
-    <p class="muted">${esc(APP.tagline)}</p>
     ${state.installPrompt ? `<button class="note note-info mt btn-block" style="border:0;cursor:pointer;text-align:left" data-action="install">${icon('plus')}<span><strong>એપ ફોનમાં ઇન્સ્ટોલ કરો</strong> — હોમ સ્ક્રીન પરથી સીધી ખુલશે.</span></button>` : ''}
     ${reminderNote()}
     <section class="card home-search">
@@ -750,7 +749,7 @@ function viewAbout() {
           <li><strong>અમે ક્યારેય પૈસા, OTP કે આધાર નંબર માંગતા નથી.</strong> કોઈ આ એપના નામે માંગે તો તે ફ્રોડ છે — 1930 પર ફોન કરો.</li>
         </ul></div></div>
       <div class="card"><h2 class="section-title" style="margin-top:0">${icon('users')}KruPa Digital Hub</h2>
-        <p>યોજના ગાઈડ, દસ્તાવેજ ગાઈડ અને પ્રસંગની માહિતી KruPa Digital Hub ની ગાઈડ પરથી લીધી છે. ફોર્મ ભરવામાં મદદ માટે નજીકના KruPa ઓપરેટર કે CSC સેન્ટરનો સંપર્ક કરો.</p></div>
+        <p>${esc(APP.name)} એ KruPa Digital Hub ની એપ છે. યોજના ગાઈડ, દસ્તાવેજ ગાઈડ અને પ્રસંગની માહિતી KruPa Digital Hub ની ગાઈડ પરથી લીધી છે. ફોર્મ ભરવામાં મદદ માટે નજીકના KruPa ઓપરેટર કે CSC સેન્ટરનો સંપર્ક કરો.</p></div>
       <div class="card"><h2 class="section-title" style="margin-top:0">${icon('lock')}તમારી માહિતી</h2>
         <p>લોગિન નથી. પ્રોફાઇલ, સેવ કરેલું અને ✓ ચેકલિસ્ટ ફક્ત આ ફોનમાં રહે છે; અમારા સર્વર પર જતું નથી. <a href="privacy.html">પ્રાઇવસી પોલિસી</a></p></div>
       <div class="card"><h2 class="section-title" style="margin-top:0">${icon('book')}માહિતી ક્યાંથી આવે છે</h2>
@@ -896,7 +895,19 @@ function menuHtml() {
       <a href="#/about" data-close="1">${icon('info')}એપ વિશે</a>
       <a href="privacy.html">${icon('lock')}પ્રાઇવસી પોલિસી</a>
       <a href="terms.html">${icon('forms')}નિયમો અને શરતો</a>
+      ${operatorLinks()}
     </div>`;
+}
+
+// ઓપરેટર માટેની KruPa એપ: ગ્રામજનોને નહીં, એટલે મેનુમાં છેલ્લે અને નાનો ભાગ
+function operatorLinks() {
+  const k = APP.krupa || {};
+  if (!k.digitalHub && !k.docHub) return '';
+  return `
+      <div class="menu-sep"></div>
+      <p class="menu-label">ઓપરેટર માટે</p>
+      ${k.digitalHub ? `<a href="${esc(k.digitalHub)}" target="_blank" rel="noopener">${icon('forms')}<span>KruPa Digital Hub<small>VCE: ફોર્મ ભરો અને પ્રિન્ટ</small></span></a>` : ''}
+      ${k.docHub ? `<a href="${esc(k.docHub)}" target="_blank" rel="noopener">${icon('copy')}<span>KruPa Doc Hub<small>ઝેરોક્ષ દુકાન: ફોટો પરથી A4</small></span></a>` : ''}`;
 }
 
 function appConfirm(msg, okLabel, danger = false) {
@@ -914,7 +925,7 @@ function appConfirm(msg, okLabel, danger = false) {
 let confirmResolve = null;
 
 function shareAppLink() {
-  const text = [`*${APP.name}*`, 'સરકારી યોજના, દાખલા, સહાય અને જરૂરી માહિતી — સરળ ગુજરાતીમાં અને બોલીને.', '', `મફત એપ: ${appUrl()}`].join('\n');
+  const text = [`*${APP.name}*`, APP.about, 'ગુજરાતીમાં વાંચીને સંભળાવે પણ છે.', '', `મફત એપ: ${appUrl()}`].join('\n');
   return 'https://wa.me/?text=' + encodeURIComponent(text);
 }
 

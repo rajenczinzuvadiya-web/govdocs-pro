@@ -515,3 +515,8 @@ legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 .guide-list p { margin: .2rem 0 0; color: var(--muted); line-height: 1.5; }
 .plain-steps { margin: 0; padding-left: 1.3rem; display: grid; gap: .35rem; line-height: 1.5; }
 .menu-list.card { padding: .5rem; }
+
+/* મેનુમાં "ઓપરેટર માટે" */
+.menu-label { margin: .25rem .75rem 0; font-size: .875rem; font-weight: 700; color: var(--muted); }
+.menu-list a > span { display: grid; line-height: 1.3; }
+.menu-list a small { font-size: .875rem; font-weight: 400; color: var(--muted); }

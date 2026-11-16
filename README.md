@@ -1,10 +1,11 @@
-# ગામની જાણકારી
+# જાણકાર
 
-ગામના દરેક માણસને તેના માટે કઈ યોજના, સહાય, નોકરી અને માહિતી છે તે સરળ ગુજરાતીમાં, બોલીને અને સામેથી જણાવતી એપ.
+ગામના દરેક માણસને તેના માટે કઈ યોજના, સહાય અને દાખલાની માહિતી છે તે સરળ ગુજરાતીમાં, વાંચીને સંભળાવીને જણાવતી એપ. KruPa Digital Hub ની એપ.
 
-> "તમને કઈ યોજના અને સહાય મળી શકે, અને કેવી રીતે — સરળ ગુજરાતીમાં, સાંભળીને પણ."
-
-"ગામની જાણકારી" હાલનું કામચલાઉ નામ છે. નામ નક્કી થાય ત્યારે આ ત્રણ જગ્યાએ બદલવું: `js/config.js`, `manifest.json` અને `index.html` નું `<title>`.
+- નામ: **જાણકાર** (ટેગલાઇન નથી). Play Store માં: "જાણકાર: યોજના, સહાય, દાખલા"; ભરતી વિભાગ બને પછી "ભરતી" ઉમેરવું.
+- સરનામું: `https://jankar.krupadigitalhub.in` (સેટિંગની રીત `store/README.md` માં).
+- KruPa ની ત્રણ એપ: **જાણકાર** (ગ્રામજનો, Play Store), **KruPa Digital Hub** (VCE, વેબ), **KruPa Doc Hub** (ઝેરોક્ષ દુકાન, વેબ). જાણકારના મેનુમાં "ઓપરેટર માટે" બંનેની લિંક છે (`js/config.js` → `krupa`).
+- નામ બદલાય તો: `js/config.js`, `manifest.json`, `index.html`, `icons/icon.svg`, `store/listing.md`, `scripts/store-images.mjs`.
 
 ## પહેલા વર્ઝનમાં શું છે
 
@@ -127,11 +128,12 @@ node scripts/check-data.mjs
 
 ## લોન્ચ પહેલાંનું ચેકલિસ્ટ
 
-- [ ] એપનું નામ નક્કી કરવું. નામમાં "Gov" કે "સરકારી" જેવો શબ્દ ન રાખવો, અને Play Store પર એ નામની બીજી એપ નથી તે ચકાસવું.
+- [x] એપનું નામ: જાણકાર (16/11/26).
+- [ ] `jankar.krupadigitalhub.in` ચાલુ કરવું (`store/README.md` પગલું 1).
 - [ ] `data/schemes.json` ના દરેક કાર્ડ સત્તાવાર પેજ પરથી ચકાસીને `verified: true` કરવા.
 - [ ] `js/config.js` માં સંપર્ક ઈમેલ અને વોટ્સએપ નંબર ભરવા (privacy, સંપર્ક પેજ અને "ભૂલ જણાવો" માં આપોઆપ આવશે).
 - [ ] એપને https વેબસાઇટ પર મૂકવી (GitHub Pages / Netlify / Cloudflare Pages, મફત).
-- [ ] PWABuilder થી Android એપ બનાવવી (`store/README.md`). `assetlinks.json` ડોમેનના મૂળમાં જોઈએ (`rajenczinzuvadiya-web.github.io/.well-known/`), એટલે `rajenczinzuvadiya-web.github.io` નામની અલગ રિપોમાં મૂકવી પડશે.
+- [ ] PWABuilder થી Android એપ બનાવવી (`store/README.md`), અને તેની `assetlinks.json` આ રિપોમાં `.well-known/` માં મૂકવી.
 - [ ] Play Console: Data Safety ફોર્મ ("ડેટા ફોનમાં જ રહે છે"), અને વર્ણનમાં "આ ખાનગી માહિતી એપ છે, સરકાર સાથે જોડાયેલી નથી".
 - [ ] 12+ ટેસ્ટર સાથે 14 દિવસનો ક્લોઝ્ડ ટેસ્ટ.
 

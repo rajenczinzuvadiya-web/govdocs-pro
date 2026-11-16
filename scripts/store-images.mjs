@@ -33,7 +33,7 @@ for (const [name, route] of shots) {
   await p.screenshot({ path: `${OUT}screenshots/${name}.png` });
 }
 
-// Feature graphic: વાદળી પટ્ટો + આઇકન + નામ + એક લીટી
+// Feature graphic: વાદળી પટ્ટો + આઇકન + નામ + વિષય. ભરતી વિભાગ બને ત્યારે "ભરતી" ઉમેરવું.
 const fg = await (await b.newContext({ viewport: { width: 1024, height: 500 } })).newPage();
 await fg.goto(U, { waitUntil: 'networkidle' });
 await fg.evaluate(() => {
@@ -42,8 +42,9 @@ await fg.evaluate(() => {
       background:linear-gradient(135deg,#1e2f6b,#2c4596);color:#fff;font-family:'Hind Vadodara',sans-serif">
       <img src="icons/icon-512.png" style="width:220px;height:220px;border-radius:44px;box-shadow:0 18px 40px rgba(0,0,0,.3)">
       <div>
-        <div style="font-size:78px;font-weight:700;line-height:1.1">ગામની <span style="color:#f4b56a">જાણકારી</span></div>
-        <div style="margin-top:22px;font-size:34px;line-height:1.4;opacity:.92">યોજના, દાખલા અને સહાય<br>સરળ ગુજરાતીમાં, સાંભળીને પણ</div>
+        <div style="font-size:96px;font-weight:700;line-height:1.1">જાણકાર</div>
+        <div style="margin-top:22px;font-size:38px;line-height:1.4;color:#f4b56a;font-weight:600">યોજના · સહાય · દાખલા</div>
+        <div style="margin-top:14px;font-size:26px;opacity:.75">KruPa Digital Hub</div>
       </div>
     </div>`;
 });

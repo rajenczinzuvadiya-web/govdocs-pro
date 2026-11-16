@@ -1,14 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- જાણકાર: વાદળી પાછળ સફેદ વાતનો ફુગ્ગો, અંદર "જા", ખૂણે કેસરી ✓ (ચકાસેલી માહિતી). font: Hind Vadodara 700 -->
   <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2c4596"/><stop offset="1" stop-color="#1e2f6b"/></linearGradient></defs>
   <rect id="bg" width="512" height="512" rx="112" fill="url(#g)"/>
   <g id="art">
-    <circle cx="352" cy="138" r="46" fill="#f4a236"/>
-    <path d="M96 258 L222 148 L348 258 Z" fill="#f4a236"/>
-    <rect x="128" y="256" width="188" height="122" fill="#fbf6ea"/>
-    <rect x="196" y="298" width="48" height="80" rx="6" fill="#1e2f6b"/>
-    <rect x="80" y="372" width="352" height="26" rx="13" fill="#fbf6ea"/>
-    <circle cx="362" cy="300" r="58" fill="#fbf6ea" stroke="#1e2f6b" stroke-width="10"/>
-    <circle cx="362" cy="272" r="10" fill="#1e2f6b"/>
-    <rect x="352" y="292" width="20" height="46" rx="7" fill="#1e2f6b"/>
+    <path d="M136 96h240a56 56 0 0 1 56 56v168a56 56 0 0 1-56 56H236l-84 64v-64h-16a56 56 0 0 1-56-56V152a56 56 0 0 1 56-56z" fill="#ffffff"/>
+    <text x="256" y="300" text-anchor="middle" font-family="Hind Vadodara" font-weight="700" font-size="200" fill="#1e2f6b">જા</text>
+    <circle cx="404" cy="372" r="58" fill="#f4a236" stroke="#1e2f6b" stroke-width="12"/>
+    <path d="M378 372l18 18 34-36" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>
