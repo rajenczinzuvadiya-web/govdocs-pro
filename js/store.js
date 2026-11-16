@@ -60,6 +60,16 @@ export const store = {
     return ['auto', 'light', 'dark'].includes(t) ? t : 'auto';
   },
   setTheme: (t) => write('theme', t),
+  // દેખાવ slider નો આછો / કાળો ભાગ: '' | 'soft' | 'softer' | 'black'
+  getShade: () => {
+    const v = read('shade', '');
+    return ['soft', 'softer', 'black'].includes(v) ? v : '';
+  },
+  setShade: (v) => write('shade', v),
+
+  // "આજનું" માં જોયેલી પોસ્ટ (ઘંટડી પરનો નંબર). null = પહેલી વાર.
+  getSeenUpdates: () => read('seenUpdates', null),
+  setSeenUpdates: (ids) => write('seenUpdates', ids),
 
   clearAll() {
     ['profile', 'saved', 'notified', 'seen', 'docs'].forEach((k) => {

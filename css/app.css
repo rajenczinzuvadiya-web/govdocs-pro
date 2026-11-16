@@ -52,11 +52,27 @@
   color-scheme: dark;
 }
 
+/* દેખાવ slider (KruPa #246): 0 સફેદ, 1-2 આછો રાખોડી, 3 ડાર્ક, 4 કાળો. લખાણના રંગ એ જ રહે. */
+:root[data-shade="soft"] { --bg: #e2e6ee; --surface: #fbfcfe; --line: #c6cddc; }
+:root[data-shade="softer"] { --bg: #d5dae3; --surface: #f3f5f8; --line: #b9c1d0; }
+:root[data-theme="dark"][data-shade="black"] {
+  --bg: #0b0c0f; --surface: #1f2229; --line: #3b404a; --muted: #a9aeb8; --on-primary: #0b0c0f;
+  --sidebar: #181b21; --sidebar-2: #23272f;
+}
+
 /* ઝૂમ − / + (દરેક rem સાથે મોટું-નાનું થાય) */
 html[data-zoom="80"] { font-size: 80%; }
 html[data-zoom="90"] { font-size: 90%; }
 html[data-zoom="110"] { font-size: 110%; }
 html[data-zoom="120"] { font-size: 120%; }
+/* KruPa (2026-11-04): કમ્પ્યુટર પર દરેક પગથિયું ⅛ નાનું, "100 %" = 14 px, એક સ્ક્રીનમાં વધુ દેખાય. ફોન એમ જ. */
+@media screen and (pointer: fine) and (min-width: 1024px) {
+  html { font-size: 87.5%; }
+  html[data-zoom="80"] { font-size: 70%; }
+  html[data-zoom="90"] { font-size: 78.75%; }
+  html[data-zoom="110"] { font-size: 96.25%; }
+  html[data-zoom="120"] { font-size: 105%; }
+}
 
 /* ---------- પાયો ---------- */
 * { box-sizing: border-box; }
@@ -65,75 +81,219 @@ body {
   margin: 0; background: var(--bg); color: var(--ink);
   font-family: "Hind Vadodara", "Noto Sans Gujarati", "Shruti", system-ui, sans-serif;
   font-size: 1rem; line-height: 1.6;
-  padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
 }
 a { color: inherit; }
 h1, h2, h3, p { margin: 0; }
 ul, ol { margin: 0; }
 button { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
 .ic { width: 1.25rem; height: 1.25rem; flex: none; }
 .ic-sm { width: 1rem; height: 1rem; flex: none; }
+.ic-xs { width: .75rem; height: .75rem; flex: none; }
 .muted { color: var(--muted); }
 .small { font-size: .875rem; }
 :focus-visible { outline: 3px solid var(--kesari); outline-offset: 2px; }
 
-.wrap { width: 100%; max-width: 72rem; margin: 0 auto; padding: 1.25rem 1rem 2rem; outline: none; }
-@media (min-width: 1024px) { .wrap { max-width: none; padding: 1.75rem 2rem 2rem; } }
-
-/* ---------- ઉપરની પટ્ટી ---------- */
-.topbar {
-  position: sticky; top: 0; z-index: 20;
-  display: flex; align-items: center; justify-content: space-between; gap: .75rem;
-  min-height: 3.5rem; padding: .5rem 1rem; padding-top: calc(.5rem + env(safe-area-inset-top));
-  background: var(--surface); border-bottom: 1px solid var(--line);
-}
-.brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; min-width: 0; }
-.brand img { width: 2rem; height: 2rem; border-radius: .5rem; flex: none; }
-.wordmark { font-weight: 700; font-size: 1.15rem; line-height: 1.1; white-space: nowrap; }
-.wordmark .w1 { color: var(--primary); }
-.wordmark .w2 { color: var(--kesari); }
-.menu-btn {
-  display: inline-flex; align-items: center; gap: .25rem; min-height: 2.5rem; padding: 0 .75rem;
-  border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer;
-}
-.menu-btn:hover { border-color: var(--primary); color: var(--primary); }
-
-/* ---------- નીચેનાં ટેબ (ફોન) / બાજુનું મેનુ (કમ્પ્યુટર) ---------- */
-.nav {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
-  display: grid; grid-template-columns: repeat(5, 1fr);
-  background: var(--surface); border-top: 1px solid var(--line);
-  padding: .25rem .25rem calc(.25rem + env(safe-area-inset-bottom));
-}
-.nav .nav-brand, .nav .nav-foot { display: none; }
-.nav a {
-  display: flex; flex-direction: column; align-items: center; gap: .1rem; min-width: 0;
-  padding: .25rem .1rem; text-decoration: none; color: var(--muted); font-size: .8rem; font-weight: 600; line-height: 1.2;
-}
-.nav a .pill { display: grid; place-items: center; width: 100%; max-width: 3rem; height: 1.9rem; border-radius: 999px; }
-.nav a span:last-child { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.nav a.active { color: var(--primary); }
-.nav a.active .pill { background: var(--primary); color: var(--on-primary); }
-
+/* ---------- ખોખું: બાજુનું મેનુ (કમ્પ્યુટર) + ઉપરની પટ્ટી + પેજ + ફૂટર ---------- */
+.shell { display: flex; min-height: 100vh; min-height: 100dvh; }
+.main-col { display: flex; flex-direction: column; flex: 1; min-width: 0; padding-bottom: calc(4rem + env(safe-area-inset-bottom)); }
+.wrap { flex: 1; width: 100%; max-width: 72rem; margin: 0 auto; padding: 1.25rem 1rem 2rem; outline: none; }
+@media (min-width: 640px) { .wrap { padding: 1.5rem 1.5rem 2.5rem; } }
 @media (min-width: 1024px) {
-  body { padding-bottom: 0; padding-left: 16rem; }
-  .topbar .brand { visibility: hidden; }
-  .nav {
-    top: 0; right: auto; width: 16rem; display: flex; flex-direction: column; gap: .25rem;
-    padding: 0 .75rem 1rem; border: 0;
-    background: linear-gradient(180deg, var(--sidebar), var(--sidebar-2)); color: #fff;
-  }
-  .nav .nav-brand { display: flex; flex-direction: row; align-items: center; gap: .6rem; min-height: 3.5rem; padding: .5rem .25rem; margin-bottom: .75rem; border-bottom: 1px solid rgba(255,255,255,.12); }
-  .nav-brand img { width: 2.25rem; height: 2.25rem; border-radius: .5rem; }
-  .nav-brand .wordmark { font-size: 1.2rem; }
-  .nav-brand .wordmark .w1 { color: #fff; }
-  .nav-brand .wordmark .w2 { color: #f4b56a; }
-  .nav a[data-route] { flex-direction: row; gap: .75rem; padding: .6rem .75rem; border-radius: .75rem; font-size: .95rem; color: rgba(255,255,255,.82); }
-  .nav a .pill { width: auto; max-width: none; height: auto; background: none !important; color: inherit !important; }
-  .nav a[data-route]:hover { background: rgba(255,255,255,.08); color: #fff; }
-  .nav a[data-route].active { background: rgba(255,255,255,.14); color: #fff; }
-  .nav-foot { display: block; margin-top: auto; padding: .75rem; font-size: .8rem; color: rgba(255,255,255,.6); }
+  .main-col { padding-bottom: 0; }
+  .wrap { max-width: none; padding: 1.75rem 2rem 2.5rem; }
 }
+
+.wordmark { font-weight: 700; font-size: 1.15rem; line-height: 1.1; white-space: nowrap; color: var(--primary); }
+
+/* બાજુનું મેનુ: ઘેરો વાદળી, લોગોની હાર ઉપરની પટ્ટી જેટલી ઊંચી (KruPa #97) */
+.side { display: none; }
+@media (min-width: 1024px) {
+  .side {
+    display: flex; flex-direction: column; flex: none; width: 16rem;
+    position: sticky; top: 0; height: 100vh; height: 100dvh; overflow-y: auto; overscroll-behavior: contain;
+    background: var(--sidebar); color: #fff; scrollbar-width: none;
+  }
+  .side::-webkit-scrollbar { display: none; }
+}
+.side-brand { display: flex; align-items: center; gap: .65rem; height: 65px; flex: none; padding: 0 1rem; border-bottom: 1px solid rgba(255,255,255,.1); text-decoration: none; }
+.side-brand img { width: 2rem; height: 2rem; border-radius: .5rem; }
+.side-brand .wordmark { color: #fff; font-size: 1.35rem; }
+.side-brand:hover { opacity: .9; }
+.side-nav { display: flex; flex-direction: column; gap: .25rem; padding: 1rem; }
+.side-nav .group { margin: .75rem .75rem .15rem; font-size: .75rem; font-weight: 600; letter-spacing: .02em; color: rgba(255,255,255,.45); }
+.nl {
+  display: flex; align-items: center; gap: .75rem; min-height: 2.5rem; padding: .5rem .75rem; border-radius: .5rem;
+  color: rgba(255,255,255,.72); text-decoration: none; font-size: .875rem; font-weight: 500;
+  transition: background-color .2s, color .2s, transform .2s;
+}
+.nl .ic { width: 1.125rem; height: 1.125rem; }
+.nl:hover { background: rgba(255,255,255,.1); color: #fff; transform: translateX(2px); }
+.nl.active { background: rgba(255,255,255,.14); color: #fff; font-weight: 600; }
+.nl .ext { margin-left: auto; width: .875rem; height: .875rem; opacity: .6; }
+.nl small { display: block; font-size: .75rem; color: rgba(255,255,255,.5); font-weight: 400; line-height: 1.3; }
+.nl > span { min-width: 0; }
+
+/* ઉપરની પટ્ટી */
+.topbar {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: center; gap: .5rem;
+  min-height: 4rem; padding: .5rem .75rem; padding-top: calc(.5rem + env(safe-area-inset-top));
+  background: color-mix(in srgb, var(--surface) 95%, transparent); border-bottom: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+@media (min-width: 380px) { .topbar { gap: .75rem; padding-left: 1rem; padding-right: 1rem; } }
+.brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; min-width: 0; flex: none; }
+.brand img { width: 2rem; height: 2rem; border-radius: .5rem; flex: none; }
+.top-search { position: relative; display: none; min-width: 0; flex: 1; }
+.top-right { display: flex; align-items: center; gap: .5rem; flex: none; }
+.top-btn {
+  position: relative; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; flex: none;
+  border: 0; border-radius: .5rem; background: none; color: var(--muted); cursor: pointer; text-decoration: none;
+}
+.top-btn:hover { background: var(--bg); color: var(--ink); }
+.search-open { margin-left: auto; }
+.search-close { display: none; }
+.badge {
+  position: absolute; top: .2rem; right: .2rem; min-width: 1.05rem; height: 1.05rem; padding: 0 .25rem;
+  border-radius: 999px; background: var(--danger); color: #fff; font-size: .65rem; font-weight: 700; line-height: 1.05rem; text-align: center;
+}
+.top-zoom { display: none; }
+/* ફોન: 🔍 દબાવો એટલે આખી પટ્ટીમાં શોધ */
+.topbar.searching .brand, .topbar.searching .search-open, .topbar.searching .top-right { display: none; }
+.topbar.searching .top-search { display: block; }
+.topbar.searching .search-close { display: grid; }
+@media (min-width: 768px) {
+  .top-search { display: block; max-width: 36rem; margin-left: auto; }
+  .search-open, .topbar.searching .search-close { display: none; }
+  .topbar.searching .brand, .topbar.searching .top-right { display: flex; }
+}
+@media (min-width: 1024px) {
+  .topbar { height: 65px; min-height: 0; padding: 0 1.5rem; gap: 1rem; }
+  .topbar .brand { display: none !important; }
+  .top-search { margin: 0 auto; max-width: 36rem; }
+  .top-zoom { display: inline-flex; }
+  .top-right { margin-left: 0; }
+}
+@media (max-width: 339px) { .topbar .wordmark { display: none; } }
+
+/* આખી એપમાં શોધ (KruPa GlobalSearch: ભરેલું ખાનું, વચ્ચે, Ctrl K) */
+.gsearch { position: relative; display: block; }
+.gsearch .ic { position: absolute; left: .75rem; top: 50%; transform: translateY(-50%); width: 1.1rem; height: 1.1rem; color: var(--muted); pointer-events: none; }
+.gsearch input {
+  width: 100%; height: 2.5rem; padding: 0 4.25rem 0 2.4rem; border-radius: .5rem;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink); font: inherit; font-size: .9rem; outline: none;
+}
+.gsearch input:focus { border-color: var(--primary); background: var(--surface); }
+.gsearch input::-webkit-search-cancel-button { display: none; }
+.gsearch kbd {
+  position: absolute; right: .55rem; top: 50%; transform: translateY(-50%); display: none;
+  padding: .05rem .4rem; border-radius: .25rem; border: 1px solid var(--line); background: var(--surface);
+  font: 600 .65rem system-ui, sans-serif; color: var(--muted);
+}
+@media (min-width: 1024px) and (pointer: fine) { .gsearch kbd { display: block; } }
+.gresults {
+  position: absolute; left: 0; right: 0; top: calc(100% + .25rem); z-index: 40; max-height: 70vh; overflow-y: auto; overscroll-behavior: contain;
+  padding: .25rem 0; border-radius: .6rem; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow-md);
+}
+.gresults a { display: flex; align-items: center; gap: .65rem; min-height: 3rem; padding: .4rem .75rem; text-decoration: none; }
+.gresults a:hover, .gresults a.on { background: var(--primary-soft); }
+.gresults a > span:not(.tile) { display: grid; min-width: 0; line-height: 1.3; }
+.gresults b { font-size: .9rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gresults small { font-size: .78rem; color: var(--muted); }
+.gresults p { padding: .75rem; font-size: .875rem; color: var(--muted); }
+.gresults .all { justify-content: center; min-height: 2.5rem; border-top: 1px solid var(--line); font-size: .85rem; font-weight: 700; color: var(--primary); }
+
+/* 👤 ▾ (KruPa ProfileMenu: ગોળ બટન, નીચે ખૂલતું મેનુ) */
+.pm { position: relative; flex: none; }
+.pm-btn {
+  display: flex; align-items: center; gap: .1rem; height: 2.5rem; padding: 0 .5rem; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--primary-ring); background: var(--primary-soft); color: var(--primary);
+}
+.pm-btn:hover, .pm-btn[aria-expanded="true"] { background: rgba(30, 47, 107, .18); }
+.pm-panel {
+  position: absolute; right: 0; top: 3rem; z-index: 50; width: 18rem; max-width: calc(100vw - 2rem);
+  padding: .4rem; border-radius: .75rem; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow-md);
+  animation: pop .14s ease-out;
+}
+.pm-head { padding: .4rem .75rem .6rem; border-bottom: 1px solid var(--line); margin-bottom: .25rem; }
+.pm-head b { display: block; font-size: .95rem; }
+.pm-head small { display: block; font-size: .8rem; color: var(--muted); line-height: 1.4; }
+.pm-panel .menu-list { margin-top: 0; }
+.pm-panel .menu-list a, .pm-panel .menu-list button.mi { min-height: 2.6rem; font-size: .9rem; }
+.only-phone { }
+@media (min-width: 1024px) { .only-phone { display: none !important; } }
+.shade { display: grid; gap: .3rem; padding: .25rem .75rem .5rem; }
+.shade-top { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: .9rem; }
+.shade-top small { color: var(--muted); font-weight: 600; font-size: .8rem; }
+.shade input { width: 100%; accent-color: var(--primary); }
+.shade-ends { display: flex; justify-content: space-between; font-size: .75rem; color: var(--muted); }
+
+/* ફોનનાં નીચેનાં ટેબ (KruPa: 4 ટેબ + વધુ) */
+.tabs {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+  border-top: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 95%, transparent);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  box-shadow: 0 -4px 16px rgba(0,0,0,.06); padding-bottom: env(safe-area-inset-bottom);
+}
+.tabs-in { display: flex; align-items: stretch; height: 4rem; max-width: 32rem; margin: 0 auto; }
+.tab {
+  display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: .15rem; min-width: 0;
+  padding: 0 .1rem; border: 0; background: none; cursor: pointer; text-decoration: none;
+  color: var(--muted); font-size: .75rem; font-weight: 600; line-height: 1.2;
+}
+.tab .pill { display: grid; place-items: center; width: 100%; max-width: 3rem; height: 1.75rem; border-radius: 999px; transition: background-color .2s; }
+.tab > span:last-child { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tab.active { color: var(--primary); }
+.tab.active .pill { background: var(--primary-soft); }
+@media (min-width: 1024px) { .tabs { display: none; } }
+
+/* "વધુ": જમણેથી ખૂલતું વાદળી મેનુ (KruPa drawer) */
+.drawer { position: fixed; inset: 0; z-index: 55; }
+.drawer-bg { position: absolute; inset: 0; background: rgba(0,0,0,.4); border: 0; width: 100%; cursor: pointer; }
+.drawer aside {
+  position: relative; display: flex; flex-direction: column; margin-left: auto; height: 100%; width: 18rem; max-width: 85vw;
+  overflow-y: auto; overscroll-behavior: contain; background: var(--sidebar); color: #fff; box-shadow: -8px 0 24px rgba(0,0,0,.25);
+  animation: slidein .18s ease-out;
+}
+@keyframes slidein { from { transform: translateX(100%); } to { transform: none; } }
+.drawer-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: 1rem; border-bottom: 1px solid rgba(255,255,255,.1); }
+.drawer-head .side-brand { height: auto; padding: 0 0 0 .25rem; border: 0; }
+.drawer-head button { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border: 0; border-radius: .5rem; background: none; color: rgba(255,255,255,.8); cursor: pointer; }
+.drawer-head button:hover { background: rgba(255,255,255,.1); color: #fff; }
+.drawer .side-nav { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
+
+/* ફૂટર: એક પાતળી લીટી, દરેક પેજ (KruPa #174) — ફોન પર ફક્ત © */
+.foot {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .25rem 1rem;
+  min-height: 3.5rem; padding: .5rem 1rem; border-top: 1px solid var(--line); background: var(--surface);
+  font-size: .8rem; color: var(--muted);
+}
+.foot nav { display: none; flex-wrap: wrap; align-items: center; gap: 0 .35rem; }
+.foot nav a { display: inline-flex; align-items: center; min-height: 2.25rem; padding: 0 .2rem; color: var(--muted); text-decoration: none; }
+.foot nav a:hover { color: var(--primary); text-decoration: underline; }
+.foot nav i { font-style: normal; opacity: .5; }
+@media (min-width: 640px) { .foot nav { display: flex; } .foot { padding: .5rem 1.5rem; } }
+@media (min-width: 1024px) { .foot { padding: .25rem 6rem .25rem 2rem; } }
+
+/* 💬 સંપર્ક (જમણે નીચે) અને ⬆ ઉપર (ડાબે નીચે), KruPa ContactFab / ScrollTopButton */
+.fab, .totop {
+  position: fixed; z-index: 35; display: grid; place-items: center; border-radius: 999px; cursor: pointer; text-decoration: none;
+  bottom: calc(5rem + env(safe-area-inset-bottom));
+}
+.fab { right: 1rem; width: 3rem; height: 3rem; border: 0; background: var(--sidebar); color: #fff; box-shadow: 0 6px 18px rgba(22,32,61,.3); }
+.fab:hover { filter: brightness(1.15); }
+.totop { left: 1rem; width: 2.75rem; height: 2.75rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-md); }
+.totop:hover { color: var(--primary); border-color: var(--primary); }
+@media (min-width: 1024px) {
+  .fab { right: 1.5rem; bottom: 1.25rem; width: 2.9rem; height: 2.9rem; }
+  .totop { left: calc(16rem + 1.25rem); bottom: 1.25rem; }
+}
+
+/* સ્વાગત વખતે એપનું ખોખું છુપાવવું (KruPa લોગિન પેજ જેવું) */
+body.bare .side, body.bare .topbar, body.bare .tabs, body.bare .fab, body.bare .totop { display: none !important; }
+body.bare .main-col { padding-bottom: 0; }
+body.bare .wrap { max-width: none; padding: 0; }
 
 /* ---------- પેજનું મથાળું ---------- */
 .page-head { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; }
@@ -260,28 +420,139 @@ button { font: inherit; color: inherit; }
 .stack > * + * { margin-top: 1rem; }
 .mt { margin-top: 1rem; }
 
-/* ---------- હોમ ---------- */
+/* ---------- હોમ (KruPa #220/#221: સ્વાગત કાર્ડ, શોધ કાર્ડ, ટીપ, ત્રણ ખાનાં) ---------- */
 .greet { font-size: 1.5rem; font-weight: 700; line-height: 1.3; color: var(--greet); }
-.home-search { margin-top: 1rem; }
-.home-search h2 { display: flex; align-items: center; gap: .5rem; font-size: 1rem; font-weight: 700; margin-bottom: .75rem; }
-.home-search h2 .ic { color: var(--primary); }
-.my-cats { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .9rem; }
-.my-cats .chip { min-height: 2.75rem; padding: 0 .6rem 0 .3rem; }
-.today-strip {
-  display: flex; align-items: center; gap: .75rem; margin-top: 1rem; padding: .75rem 1rem; text-decoration: none;
-  border-radius: .9rem; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--primary);
+.wcard {
+  position: relative; display: grid; grid-template-columns: 1fr; overflow: hidden;
+  border-radius: 1rem; border: 1px solid #dfe6f5; background: #fff; color: #1e2f6b; box-shadow: var(--shadow);
 }
-.today-strip.warn { border-left-color: var(--kesari); }
-.today-strip > .ic { color: var(--primary); }
-.today-strip.warn > .ic { color: var(--kesari); }
-.today-strip div { flex: 1; min-width: 0; }
-.today-strip b { display: block; font-size: .875rem; color: var(--muted); }
-.today-strip span { font-weight: 600; line-height: 1.35; }
-.event-strip { margin-top: 1rem; padding: 1rem; border-radius: 1rem; border: 1px solid var(--primary-ring); background: var(--primary-soft); }
-.event-strip h2 { font-size: 1rem; font-weight: 700; }
-.event-strip h2 a { display: inline-flex; align-items: center; gap: .5rem; min-height: 2.75rem; margin: -.5rem 0; text-decoration: none; }
-.event-strip h2 a:hover { color: var(--primary); }
-.event-strip .chips { margin-top: .5rem; }
+:root[data-theme="dark"] .wcard { background: #dfe6f4; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wcard { background: #dfe6f4; } }
+.wcard-text { display: flex; flex-direction: column; min-width: 0; padding: .25rem 1rem 1rem; }
+.wcard h1 { font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -.01em; }
+.wcard h1 .g { color: #c2650f; }
+.wbadges { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin-top: .6rem; }
+.wb {
+  display: inline-flex; align-items: center; gap: .35rem; min-height: 2rem; padding: 0 .7rem 0 .3rem; border-radius: 999px;
+  border: 1px solid #c9d3ea; background: #eef2fb; color: #1e2f6b; font-size: .8rem; font-weight: 600; text-decoration: none;
+}
+.wb.dark { background: #1e2f6b; border-color: #1e2f6b; color: #fff; padding: 0 .75rem; }
+.wb.edit { padding: 0 .7rem; background: transparent; }
+.wb.edit:hover { border-color: #1e2f6b; }
+.wcard-line { margin-top: .6rem; font-size: .85rem; line-height: 1.5; color: #3b4a7d; }
+.wcard-art { position: relative; order: -1; height: 6.5rem; background: url(../icons/welcome-art.webp) 22% 50% / cover no-repeat #1e3f9c; }
+.wcard-art::after { content: ""; position: absolute; inset: auto 0 0 0; height: 2.5rem; background: linear-gradient(to top, #fff, transparent); }
+:root[data-theme="dark"] .wcard-art::after { background: linear-gradient(to top, #dfe6f4, transparent); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wcard-art::after { background: linear-gradient(to top, #dfe6f4, transparent); } }
+@media (min-width: 640px) {
+  .wcard { grid-template-columns: minmax(0, 1fr) minmax(0, 44%); }
+  .wcard-text { justify-content: center; padding: 1.75rem 2rem; }
+  .wcard h1 { font-size: 2rem; }
+  .wbadges { margin-top: 1rem; gap: .5rem; }
+  .wb { font-size: .875rem; }
+  .wcard-art { order: 0; height: auto; min-height: 11rem; }
+  .wcard-art::after { inset: 0 auto 0 0; width: 4rem; height: auto; background: linear-gradient(to right, #fff, transparent); }
+  :root[data-theme="dark"] .wcard-art::after { background: linear-gradient(to right, #dfe6f4, transparent); }
+}
+@media (min-width: 640px) and (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .wcard-art::after { background: linear-gradient(to right, #dfe6f4, transparent); } }
+
+.scard { margin-top: 1.5rem; padding: 1.25rem 1rem; border-radius: 1rem; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
+.scard-in { max-width: 42rem; margin: 0 auto; }
+.scard h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: .75rem; }
+.search-big { position: relative; display: block; }
+.search-big .ic { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+.search-big input {
+  width: 100%; min-height: 3.25rem; padding: .5rem 1rem .5rem 3rem; border-radius: .75rem;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-size: 1.02rem; outline: none;
+}
+.search-big input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+.mchips { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .5rem; margin-top: .85rem; }
+.mchip {
+  display: inline-flex; align-items: center; gap: .35rem; min-height: 2.25rem; padding: 0 .85rem; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: .85rem; font-weight: 600; text-decoration: none;
+}
+.mchip:hover { border-color: var(--primary); color: var(--primary); }
+.mchip .count { color: var(--muted); font-weight: 600; }
+.mlink { display: inline-flex; align-items: center; gap: .25rem; min-height: 2.25rem; padding: 0 .4rem; font-size: .85rem; font-weight: 700; color: var(--primary); text-decoration: none; }
+.mlink:hover { text-decoration: underline; }
+@media (min-width: 640px) { .scard { padding: 1.5rem 2rem; } }
+
+.tip {
+  display: flex; align-items: flex-start; gap: .5rem; margin-top: 1rem; padding: .6rem 1rem; border-radius: .75rem;
+  border: 1px solid rgba(217, 119, 28, .3); background: rgba(217, 119, 28, .08); color: var(--ink);
+  font-size: .9rem; line-height: 1.5; text-decoration: none;
+}
+.tip .ic { color: var(--kesari); margin-top: .1rem; }
+.tip b { color: var(--ink); }
+.tip .go { font-weight: 700; color: var(--primary); white-space: nowrap; }
+.wcard-line a { color: #1e2f6b; font-weight: 700; }
+.tip.warn { border-color: rgba(184, 65, 47, .35); background: var(--danger-soft); }
+.tip.warn .ic { color: var(--danger); }
+.tip:hover .go { text-decoration: underline; }
+
+.home-grid { display: grid; gap: 1.5rem; margin-top: 1.75rem; align-items: start; }
+@media (min-width: 1024px) { .home-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1280px) { .home-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.box-title { display: flex; align-items: center; gap: .4rem; margin-bottom: .6rem; font-size: .95rem; font-weight: 700; color: var(--ink); }
+.box-title .ic { width: 1.05rem; height: 1.05rem; color: var(--muted); }
+.box-title .count { font-size: .8rem; font-weight: 600; color: var(--muted); }
+.rbox { border-radius: .9rem; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+.rtabs { display: flex; gap: .25rem; padding: .4rem; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+.rtabs::-webkit-scrollbar { display: none; }
+.rtabs button {
+  display: inline-flex; align-items: center; gap: .35rem; flex: none; min-height: 2.25rem; padding: 0 .75rem; border: 0; border-radius: .5rem;
+  background: none; color: var(--muted); font-size: .82rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.rtabs button:hover { color: var(--primary); }
+.rtabs button[aria-pressed="true"] { background: var(--sidebar); color: #fff; }
+.rlist { list-style: none; margin: 0; padding: 0; }
+.rlist li + li { border-top: 1px solid var(--line); }
+.ri { display: flex; align-items: center; gap: .75rem; min-height: 3.5rem; padding: .55rem .9rem; text-decoration: none; }
+.ri:hover { background: var(--primary-soft); }
+.ri .tile { width: 2.25rem; height: 2.25rem; border-radius: .6rem; }
+.ri .tile svg { width: 1.05rem; height: 1.05rem; }
+.ri .emo { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; flex: none; border-radius: .6rem; background: var(--primary-soft); font-size: 1.2rem; }
+.ri > span:not(.tile):not(.emo):not(.tag) { display: grid; flex: 1; min-width: 0; line-height: 1.35; }
+.ri b { font-size: .9rem; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ri small { font-size: .78rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ri .chev { color: var(--muted); }
+.ri:hover b { color: var(--primary); }
+.ri .tag { flex: none; padding: .05rem .45rem; border-radius: 999px; font-size: .72rem; font-weight: 700; background: var(--ok-soft); color: var(--ok); }
+.ri .tag.soon { background: var(--warn-soft); color: var(--warn); }
+.ri .tag.urgent { background: var(--danger-soft); color: var(--danger); }
+.rmore { display: flex; align-items: center; justify-content: center; gap: .3rem; width: 100%; min-height: 2.75rem; border: 0; border-top: 1px solid var(--line); background: none; color: var(--primary); font-size: .85rem; font-weight: 700; text-decoration: none; cursor: pointer; }
+.rmore:hover { background: var(--primary-soft); }
+.rempty { padding: 1.25rem 1rem; text-align: center; font-size: .875rem; color: var(--muted); }
+.rempty a { color: var(--primary); font-weight: 700; }
+
+/* ---------- યાદીની ઉપર: શોધ + "કોના માટે" + ગણતરી એક જ હારમાં (KruPa #146) ---------- */
+.fbar { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: 1rem; }
+.fbar .search-box { flex: 1 1 15rem; max-width: 26rem; }
+.fbar .search { min-height: 2.75rem; }
+.fcount { margin-left: auto; font-size: .82rem; font-weight: 600; color: var(--muted); }
+.dd { position: relative; }
+.dd-btn {
+  display: inline-flex; align-items: center; gap: .35rem; min-height: 2.75rem; padding: 0 .85rem; border-radius: .6rem; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: .9rem; box-shadow: var(--shadow);
+}
+.dd-btn span { color: var(--muted); }
+.dd-btn b { font-weight: 700; max-width: 12rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dd-btn:hover, .dd.open .dd-btn { border-color: var(--primary); }
+.dd-list {
+  position: absolute; left: 0; top: calc(100% + .25rem); z-index: 25; display: none; min-width: 16rem; max-width: calc(100vw - 2rem);
+  max-height: 60vh; overflow-y: auto; overscroll-behavior: contain; padding: .25rem; border-radius: .6rem;
+  border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow-md);
+}
+.dd.open .dd-list { display: block; animation: pop .12s ease-out; }
+.dd-list button {
+  display: flex; align-items: center; gap: .6rem; width: 100%; min-height: 2.6rem; padding: .35rem .6rem; border: 0; border-radius: .45rem;
+  background: none; text-align: left; cursor: pointer; font-size: .9rem;
+}
+.dd-list button:hover { background: var(--primary-soft); }
+.dd-list button .tick { width: 1rem; color: var(--primary); font-weight: 800; flex: none; }
+.dd-list button .n { margin-left: auto; color: var(--muted); font-size: .8rem; font-weight: 600; }
+.dd-list button[aria-selected="true"] { font-weight: 700; color: var(--primary); }
+@media (max-width: 479px) { .fbar .search-box { max-width: none; flex-basis: 100%; } .fcount { margin-left: auto; } }
 
 /* ---------- પ્રસંગ ---------- */
 .event-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
@@ -440,25 +711,21 @@ legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 .seg button { min-height: 2.25rem; padding: 0 .55rem; border: 0; border-radius: .45rem; background: none; cursor: pointer; font-weight: 600; font-size: .85rem; display: inline-flex; align-items: center; gap: .3rem; }
 .seg button[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); }
 
-/* ---------- ફૂટર (એક પાતળી લીટી, KruPa #174) ---------- */
-.foot { display: flex; flex-wrap: wrap; gap: .25rem 1rem; justify-content: center; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: .8rem; color: var(--muted); text-align: center; }
-.foot a { color: var(--muted); display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 .25rem; }
 
 .empty { padding: 2.5rem 1rem; border: 1px dashed var(--line); border-radius: 1rem; text-align: center; color: var(--muted); }
 .empty a, .empty button { color: var(--primary); font-weight: 700; }
 
 .toast {
-  position: fixed; left: 1rem; right: 1rem; bottom: calc(5rem + env(safe-area-inset-bottom)); z-index: 60;
+  position: fixed; left: 1rem; right: 1rem; bottom: calc(5.25rem + env(safe-area-inset-bottom)); z-index: 60;
   max-width: 30rem; margin: 0 auto; padding: .75rem 1rem; border-radius: .75rem;
   background: var(--ink); color: var(--bg); font-size: .9rem; text-align: center;
   opacity: 0; transform: translateY(.5rem); pointer-events: none; transition: opacity .2s, transform .2s;
 }
 .toast.show { opacity: 1; transform: none; }
-@media (min-width: 1024px) { .toast { bottom: 1.5rem; left: 17rem; } }
+@media (min-width: 1024px) { .toast { bottom: 1.5rem; left: 16rem; } }
 
 @media (max-width: 380px) {
   .wordmark { font-size: 1rem; }
-  .nav a { font-size: .75rem; }
   .choice-grid { grid-template-columns: 1fr; }
   .event-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -468,18 +735,49 @@ legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 
 .ic.filled path { fill: currentColor; }
 
-/* ---------- સ્વાગત (પહેલી વાર) ---------- */
-.welcome { max-width: 60rem; margin: 0 auto; }
-.welcome-hero { text-align: center; padding: 1rem 0 .5rem; }
-.welcome-hero img { border-radius: 1rem; box-shadow: var(--shadow-md); }
-.welcome-hero .greet { margin-top: .75rem; }
-.welcome-hero h1 { font-size: 1.5rem; font-weight: 800; line-height: 1.3; color: var(--primary); }
-.welcome-hero .lead { margin: .5rem auto 0; max-width: 34rem; color: var(--muted); font-size: 1.05rem; }
-.steps { display: flex; align-items: center; gap: .4rem; margin: 1.25rem 0 1rem; }
+/* ---------- સ્વાગત (પહેલી વાર): KruPa લોગિન પેજ જેવું — ડાબે વાદળી ભાગ, જમણે પગલાં ---------- */
+.wl { display: grid; grid-template-columns: 1fr; }
+.wl-brand {
+  position: relative; overflow: hidden; color: #fff;
+  background: radial-gradient(60rem 30rem at 85% 20%, rgba(108, 184, 255, .22), transparent 60%),
+              linear-gradient(160deg, var(--sidebar), var(--sidebar-2));
+  padding: 1.25rem 1rem 1.5rem;
+}
+.wl-logo { display: flex; align-items: center; gap: .75rem; }
+.wl-logo img { width: 3rem; height: 3rem; border-radius: .8rem; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+.wl-logo b { font-size: 1.75rem; font-weight: 700; line-height: 1.1; }
+.wl-brand .about { margin-top: .6rem; font-size: 1rem; color: rgba(255,255,255,.85); line-height: 1.5; }
+.wl-words { display: none; }
+.wl-feats { display: none; }
+.wl-main { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 1.25rem 1rem 2rem; }
+.wl-in { width: 100%; max-width: 40rem; margin: 0 auto; }
+.wl-in h1 { font-size: 1.5rem; font-weight: 800; line-height: 1.3; color: var(--primary); }
+.wl-in .lead { margin-top: .4rem; color: var(--muted); font-size: 1rem; }
+@media (min-width: 1024px) {
+  .wl { grid-template-columns: 52% 1fr; min-height: calc(100dvh - 3.5rem); }
+  .wl-brand { display: flex; flex-direction: column; justify-content: center; padding: 3rem 3.5rem; }
+  .wl-brand > div { max-width: 42rem; }
+  .wl-logo img { width: 4.5rem; height: 4.5rem; border-radius: 1.1rem; }
+  .wl-logo b { font-size: 3rem; }
+  .wl-brand .about { font-size: 1.15rem; margin-top: 1rem; }
+  .wl-words { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.25rem; }
+  .wl-words span { padding: .2rem .8rem; border-radius: 999px; background: rgba(255, 194, 26, .16); color: #ffc21a; font-weight: 700; font-size: .95rem; }
+  .wl-feats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin-top: 2rem; list-style: none; padding: 0; }
+  .wl-feats li {
+    display: flex; align-items: center; gap: .8rem; padding: .9rem 1rem; border-radius: 1rem;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+  }
+  .wl-feats b { display: block; line-height: 1.3; }
+  .wl-feats small { display: block; color: rgba(255,255,255,.72); font-size: .85rem; line-height: 1.4; }
+  .wl-main { padding: 3rem 3.5rem; overflow-y: auto; }
+  .wl-in h1 { font-size: 2rem; }
+  .phone-only { display: none !important; }
+}
+.steps { display: flex; align-items: center; gap: .4rem; margin: 0 0 1.25rem; }
 .steps span { flex: 1; max-width: 4rem; height: .4rem; border-radius: 999px; background: var(--line); }
 .steps span.on { background: var(--primary); }
 .steps b { margin-left: auto; font-size: .9rem; color: var(--muted); }
-.feature-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem; }
+.feature-grid { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: .6rem; }
 @media (min-width: 720px) { .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .feature-grid li { display: flex; align-items: center; gap: .8rem; padding: .85rem 1rem; border-radius: 1rem; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
 .feature-grid b { display: block; line-height: 1.3; }
@@ -488,23 +786,25 @@ legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 .row-split { display: flex; justify-content: space-between; align-items: center; gap: .75rem; }
 .row-split .btn-primary { flex: 1; max-width: 22rem; }
 .h2 { display: flex; align-items: center; gap: .5rem; font-size: 1.1rem; font-weight: 700; color: var(--primary); }
-.size-pick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+.size-pick, .look-pick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
 .size-pick button { display: grid; justify-items: center; gap: .2rem; min-height: 5.5rem; padding: .5rem; border-radius: .9rem; border: 2px solid var(--line); background: var(--surface); color: var(--ink); font-family: inherit; font-weight: 800; cursor: pointer; line-height: 1.1; }
 .size-pick button span { font-size: .9rem; font-weight: 600; color: var(--muted); }
 .size-pick button:first-child { font-size: 1.4rem !important; }
 .size-pick button:nth-child(2) { font-size: 1.75rem !important; }
 .size-pick button:nth-child(3) { font-size: 2.1rem !important; }
-.size-pick button[aria-pressed="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+.size-pick button[aria-pressed="true"], .look-pick button[aria-pressed="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+.look-pick button { position: relative; display: grid; justify-items: center; gap: .4rem; padding: .75rem .5rem .6rem; border-radius: .9rem; border: 2px solid var(--line); background: var(--surface); color: var(--ink); font-weight: 600; font-size: .9rem; cursor: pointer; }
+.look-pick i { display: grid; gap: .2rem; width: 3rem; padding: .35rem; border-radius: .4rem; border: 1px solid #cdd4e4; }
+.look-pick i::before, .look-pick i::after { content: ""; display: block; height: .3rem; border-radius: 99px; }
+.look-pick i::before { width: 65%; background: #1e2f6b; }
+.look-pick i::after { width: 90%; background: #cdd4e4; }
+.look-pick .l0 i { background: #fff; }
+.look-pick .l2 i { background: #e2e6ee; }
+.look-pick .l3 i { background: #18233f; border-color: #34426f; }
+.look-pick .l3 i::before { background: #6c86e0; }
+.look-pick .l3 i::after { background: #34426f; }
+.look-pick button[aria-pressed="true"]::after { content: "✓"; position: absolute; top: .3rem; right: .45rem; font-weight: 800; color: var(--primary); }
 .center { text-align: center; }
-
-/* ---------- હોમનાં મોટાં બટન ---------- */
-.quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; margin-top: 1rem; }
-@media (min-width: 1024px) { .quick { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
-.quick a { display: grid; justify-items: center; align-content: start; gap: .35rem; min-width: 0; padding: .85rem .4rem; border-radius: 1rem; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); text-decoration: none; text-align: center; }
-.quick a:hover { border-color: var(--primary-ring); box-shadow: var(--shadow-md); }
-.quick b { line-height: 1.25; font-size: .95rem; overflow-wrap: anywhere; }
-.quick small { color: var(--muted); font-size: .8rem; line-height: 1.3; }
-@media (max-width: 380px) { .quick small { display: none; } }
 
 /* ---------- કેવી રીતે વાપરવી ---------- */
 .guide-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem; }
@@ -520,3 +820,11 @@ legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 .menu-label { margin: .25rem .75rem 0; font-size: .875rem; font-weight: 700; color: var(--muted); }
 .menu-list a > span { display: grid; line-height: 1.3; }
 .menu-list a small { font-size: .875rem; font-weight: 400; color: var(--muted); }
+
+.flip { transform: rotate(180deg); }
+.gresults .tile.sm { width: 2rem; height: 2rem; border-radius: .5rem; }
+.gresults .tile.sm svg { width: .95rem; height: .95rem; }
+@media (min-width: 1024px) { .wl-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1440px) { .wl-choices { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+fieldset.card > legend { float: left; width: 100%; margin-bottom: .75rem; }
+fieldset.card > legend + * { clear: both; }

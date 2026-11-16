@@ -168,16 +168,22 @@ function draftNote(items) {
   return `<p class="note note-warn mt">${icon('alert')}<span>આ માહિતીની સત્તાવાર સાઇટ પરથી ચકાસણી હજુ બાકી છે. અરજી હંમેશાં સત્તાવાર સાઇટ પર જ કરો.</span></p>`;
 }
 
+// પેજનો ફૂટર હવે ખોખામાં એક જ વાર (KruPa #174: એક પાતળી લીટી). જૂની views હજુ footer() બોલાવે છે.
 function footer() {
-  return `
-    <footer class="foot">
-      <span>© ${new Date().getFullYear()} ${esc(APP.name)} · ખાનગી એપ — કોઈ સરકારી વિભાગની સત્તાવાર એપ નથી.</span>
-      <a href="#/about">એપ વિશે</a>
-      <a href="#/guide">કેવી રીતે વાપરવી</a>
-      <a href="privacy.html">પ્રાઇવસી</a>
-      <a href="terms.html">નિયમો</a>
-      <span>વર્ઝન ${esc(APP.version)}${state.dataUpdatedOn ? ` · માહિતી ${esc(formatDate(state.dataUpdatedOn))}` : ''}</span>
-    </footer>`;
+  return '';
+}
+
+function renderFooter() {
+  const links = [
+    ['#/about', 'એપ વિશે'],
+    ['#/guide', 'કેવી રીતે વાપરવી'],
+    ['privacy.html', 'પ્રાઇવસી'],
+    ['terms.html', 'નિયમો'],
+    ['#/contact', 'સંપર્ક'],
+  ];
+  document.getElementById('foot').innerHTML = `
+    <span>© ${new Date().getFullYear()} ${esc(APP.name)} · ખાનગી એપ, સરકારી નથી.</span>
+    <nav aria-label="માહિતી">${links.map(([h, t], i) => `${i ? '<i>•</i>' : ''}<a href="${h}">${t}</a>`).join('')}</nav>`;
 }
 
 // ---------- છેલ્લી તારીખની યાદ ----------
@@ -252,61 +258,76 @@ function welcomeSteps(step) {
   return `<div class="steps" aria-label="પગલું ${step} / ${WELCOME_STEPS}">${Array.from({ length: WELCOME_STEPS }, (_, i) => `<span class="${i < step ? 'on' : ''}"></span>`).join('')}<b>પગલું ${step} / ${WELCOME_STEPS}</b></div>`;
 }
 
+// રંગીન tile પર સફેદ ભરેલા આઇકન (KruPa #135)
 const FEATURES = [
-  ['book', 'indigo', 'યોજના ગાઈડ', 'કોને મળે, કેટલો લાભ, કયા પુરાવા'],
-  ['folder', 'sky', 'દસ્તાવેજ ગાઈડ', 'આવક, જાતિ, આધાર જેવા દાખલા કેમ કઢાવવા'],
+  ['book', 'indigo', 'યોજના ગાઇડ', 'કોને મળે, કેટલો લાભ, કયા પુરાવા'],
+  ['idcard', 'sky', 'દસ્તાવેજ ગાઇડ', 'આવક, જાતિ, આધાર જેવા દાખલા કેમ કઢાવવા'],
   ['calendar', 'pink', 'જીવનના પ્રસંગ', 'જન્મ, લગ્ન, ઘડપણમાં શું કરવું તેનું લિસ્ટ'],
-  ['speaker', 'green', 'સાંભળો અને મોકલો', 'એપ વાંચીને સંભળાવે, વોટ્સએપ પર મોકલો'],
+  ['mobile', 'green', 'સાંભળો અને મોકલો', 'એપ વાંચીને સંભળાવે, વોટ્સએપ પર મોકલો'],
+];
+const featureItems = () => FEATURES.map(([ic, tone, t, d]) => `<li>${tile(ic, tone)}<span><b>${t}</b><small>${d}</small></span></li>`).join('');
+
+// દેખાવ: 0 લાઇટ, 2 વચ્ચેનો (આછો રાખોડી), 3 ડાર્ક — KruPa ની પહેલી ગોઠવણી જેવું
+const LOOKS = [
+  [0, 'લાઇટ'],
+  [2, 'વચ્ચેનો'],
+  [3, 'ડાર્ક'],
 ];
 
-function viewWelcome() {
-  const step = state.welcomeStep;
+function welcomeBrand() {
+  return `
+    <section class="wl-brand">
+      <div>
+        <div class="wl-logo"><img src="icons/icon-192.png" alt="" width="72" height="72"><b>${esc(APP.name)}</b></div>
+        <p class="about">${esc(APP.about)}</p>
+        <div class="wl-words" aria-hidden="true"><span>સરળ</span><span>ગુજરાતી</span><span>મફત</span></div>
+        <ul class="wl-feats">${featureItems()}</ul>
+      </div>
+    </section>`;
+}
+
+function welcomeBody(step) {
   if (step === 1)
     return `
-    <section class="welcome">
-      <div class="welcome-hero">
-        <img src="icons/icon-192.png" alt="" width="72" height="72">
-        <p class="greet">નમસ્તે 🙏</p>
-        <h1>${esc(APP.name)} માં સ્વાગત છે</h1>
-        <p class="lead">${esc(APP.about)}</p>
-      </div>
       ${welcomeSteps(1)}
-      <ul class="feature-grid">${FEATURES.map(([ic, tone, t, d]) => `<li>${lineTile(ic, tone)}<span><b>${t}</b><small>${d}</small></span></li>`).join('')}</ul>
+      <p class="greet">નમસ્તે 🙏</p>
+      <h1>${esc(APP.name)} માં સ્વાગત છે</h1>
+      <p class="lead">બે નાનાં પગલાં: તમે કોણ છો તે પસંદ કરો, પછી અક્ષર અને દેખાવ. એટલે તમારા માટેની યોજના પહેલાં દેખાશે.</p>
+      <ul class="feature-grid phone-only">${featureItems()}</ul>
       <p class="note note-info mt">${icon('lock')}<span>લોગિન નથી. માહિતી ફક્ત આ ફોનમાં રહે છે. આ ખાનગી માહિતી એપ છે, સરકારી નથી.</span></p>
-      <button class="btn btn-primary btn-block btn-lg mt" type="button" data-action="welcome-next">શરૂ કરો ${icon('chev')}</button>
-    </section>
-    ${footer()}`;
+      <button class="btn btn-primary btn-block btn-lg mt" type="button" data-action="welcome-next">શરૂ કરો ${icon('chev')}</button>`;
   if (step === 2) {
     const w = state.welcomeDraft;
     const opt = (list, val) => list.map((d) => `<option ${d === val ? 'selected' : ''}>${esc(d)}</option>`).join('');
     return `
-    <section class="welcome">
       ${welcomeSteps(2)}
       <form id="onboard" class="stack">
         <fieldset class="card">
           <legend>તમે કોણ છો? એક કે વધુ પસંદ કરો</legend>
-          <div class="choice-grid">${categoryChoices(w.categories)}</div>
+          <div class="choice-grid wl-choices">${categoryChoices(w.categories)}</div>
         </fieldset>
         <div class="card form-grid">
-          <label class="field">ઉંમર (વર્ષ) — વૈકલ્પિક<input name="age" type="number" inputmode="numeric" min="0" max="120" value="${esc(w.age)}"></label>
-          <label class="field">જિલ્લો — વૈકલ્પિક<select name="district"><option value="">— પસંદ કરો —</option>${opt(DISTRICTS, w.district)}</select></label>
+          <label class="field">ઉંમર (વર્ષ), વૈકલ્પિક<input name="age" type="number" inputmode="numeric" min="0" max="120" value="${esc(w.age)}"></label>
+          <label class="field">જિલ્લો, વૈકલ્પિક<select name="district"><option value="">— પસંદ કરો —</option>${opt(DISTRICTS, w.district)}</select></label>
         </div>
         <div class="row-split">
-          <button class="btn" type="button" data-action="welcome-back">${icon('arrow')}પાછા</button>
+          <button class="btn" type="button" data-action="welcome-back">${icon('arrow', 'ic flip')}પાછા</button>
           <button class="btn btn-primary btn-lg" type="submit">આગળ ${icon('chev')}</button>
         </div>
-      </form>
-    </section>
-    ${footer()}`;
+      </form>`;
   }
   const z = store.getZoom();
+  const lv = lookLevel();
   return `
-    <section class="welcome">
       ${welcomeSteps(3)}
       <div class="card stack">
         <h2 class="h2">${icon('eye')}અક્ષર કેટલા મોટા જોઈએ?</h2>
         <div class="size-pick">${TEXT_SIZES.map(([v, label]) => `<button type="button" data-action="text-size" data-size="${v}" aria-pressed="${z === v}">અ<span>${label}</span></button>`).join('')}</div>
-        <p class="muted">પછી ગમે ત્યારે ઉપર જમણી બાજુના મેનુમાંથી બદલી શકાશે.</p>
+      </div>
+      <div class="card stack mt">
+        <h2 class="h2">${icon('sun')}દેખાવ</h2>
+        <div class="look-pick">${LOOKS.map(([v, label]) => `<button type="button" class="l${v}" data-action="look" data-level="${v}" aria-pressed="${lv === v}"><i></i>${label}</button>`).join('')}</div>
+        <p class="muted small">પછી ગમે ત્યારે ઉપર જમણી બાજુના ${icon('user', 'ic-sm')} મેનુમાંથી બદલી શકાશે.</p>
       </div>
       <div class="card stack mt">
         <h2 class="h2">${icon('speaker')}અવાજ ચકાસો</h2>
@@ -314,31 +335,24 @@ function viewWelcome() {
         <button class="btn" type="button" data-action="voice-test">${icon('speaker')}<span>સાંભળો</span></button>
       </div>
       <div class="row-split mt">
-        <button class="btn" type="button" data-action="welcome-back">${icon('arrow')}પાછા</button>
+        <button class="btn" type="button" data-action="welcome-back">${icon('arrow', 'ic flip')}પાછા</button>
         <button class="btn btn-primary btn-lg" type="button" data-action="welcome-done">${icon('published')}પૂરું, એપ ખોલો</button>
-      </div>
-    </section>
-    ${footer()}`;
+      </div>`;
 }
 
-// ---------- હોમનાં મોટાં બટન ----------
-
-function quickTiles() {
-  const savedN = store.getSaved().length;
-  const items = [
-    ['#/all', 'book', 'indigo', 'યોજના', `${visible(state.schemes).length} ગાઈડ`],
-    ['#/docs', 'folder', 'sky', 'દસ્તાવેજ', `${state.docs.length} દાખલા/કાર્ડ`],
-    ['#/events', 'calendar', 'pink', 'જીવનના પ્રસંગ', `${state.events.length} પ્રસંગ`],
-    ['#/help', 'phone', 'green', 'ફોન નંબર', 'ટેપ કરો, ફોન લાગે'],
-    ['#/today', 'bell', 'amber', 'આજનું', 'નવી માહિતી, ચેતવણી'],
-    ['#/saved', 'star', 'orange', 'સેવ કરેલ', savedN ? `${savedN} સેવ` : 'હજુ કંઈ નથી'],
-  ];
-  return `<nav class="quick" aria-label="ઝડપી મેનુ">${items.map(([href, ic, tone, t, d]) => `<a href="${href}">${lineTile(ic, tone)}<b>${t}</b><small>${d}</small></a>`).join('')}</nav>`;
+function viewWelcome() {
+  return `
+    <div class="wl">
+      ${welcomeBrand()}
+      <section class="wl-main"><div class="wl-in">${welcomeBody(state.welcomeStep)}</div></section>
+    </div>`;
 }
 
-// ---------- હોમ ----------
+// ---------- હોમ (KruPa Digital Hub ના હોમ જેવું) ----------
 
 let homeQuery = '';
+let homeTab = 'mine';
+let homeMore = false;
 
 function homeResults() {
   const q = homeQuery.trim().toLowerCase();
@@ -349,49 +363,145 @@ function homeResults() {
     ${itemList(hits, 'કંઈ મળ્યું નહીં. બીજો શબ્દ લખી જુઓ, જેમ કે "પેન્શન" કે "aavak".')}`;
 }
 
+function greeting() {
+  const h = new Date().getHours();
+  if (h < 12) return 'શુભ સવાર';
+  if (h < 17) return 'શુભ બપોર';
+  return 'શુભ સાંજ';
+}
+
+// એક હાર: tile + નામ + નાની લીટી + › (KruPa ના હોમની યાદી જેવું)
+function rowItem(s) {
+  let tag = '';
+  if (!isDoc(s)) {
+    const d = deadlineText(s);
+    if (d.tone === 'urgent' || d.tone === 'soon') tag = `<span class="tag ${d.tone}">${esc(d.text)}</span>`;
+  }
+  if (!tag && isNew(s)) tag = '<span class="tag">નવું</span>';
+  const sub = isDoc(s) ? (groupOf(s.group) || {}).label || 'દસ્તાવેજ' : s.summary;
+  return `<li><a class="ri" href="${itemHref(s)}">${itemTile(s, state.profile)}<span><b>${esc(s.title)}</b><small>${esc(sub)}</small></span>${tag}${icon('chev', 'ic-sm chev')}</a></li>`;
+}
+
+function homeTabItems(p) {
+  const mine = sortForProfile(visible(state.schemes).filter((s) => matches(s, p)), p);
+  if (homeTab === 'new') return mine.filter(isNew);
+  if (homeTab === 'saved') return store.getSaved().map(findItem).filter(Boolean);
+  return mine.sort((a, b) => Number(isNew(b)) - Number(isNew(a)));
+}
+
+function homeMineBox(p) {
+  const mine = sortForProfile(visible(state.schemes).filter((s) => matches(s, p)), p);
+  const fresh = mine.filter(isNew).length;
+  const savedN = store.getSaved().length;
+  const tabs = [
+    ['mine', 'user', `તમારા માટે ${mine.length}`],
+    ['new', 'sparkle', `નવી ${fresh}`],
+    ['saved', 'star', `સેવ ${savedN}`],
+  ];
+  const items = homeTabItems(p);
+  const LIMIT = 8;
+  const shown = homeMore ? items : items.slice(0, LIMIT);
+  const empty = {
+    mine: 'તમારા વર્ગ માટે હજુ યોજના નથી. <a href="#/all">બધી યોજના જુઓ</a>',
+    new: 'છેલ્લી મુલાકાત પછી કોઈ નવી યોજના નથી.',
+    saved: 'હજુ કંઈ સેવ નથી. યોજના ખોલીને "સેવ કરો" દબાવો.',
+  }[homeTab];
+  return `
+    <section id="home-mine">
+      <h2 class="box-title">${icon('book')}તમારા માટેની યોજના</h2>
+      <div class="rbox">
+        <div class="rtabs" role="group" aria-label="યાદી પસંદ કરો">${tabs.map(([id, ic, label]) => `<button type="button" data-action="home-tab" data-tab="${id}" aria-pressed="${homeTab === id}">${icon(ic, 'ic-sm')}${label}</button>`).join('')}</div>
+        ${shown.length ? `<ul class="rlist">${shown.map(rowItem).join('')}</ul>` : `<p class="rempty">${empty}</p>`}
+        ${items.length > LIMIT && !homeMore ? `<button type="button" class="rmore" data-action="home-more">${icon('chevdown', 'ic-sm')}વધુ ${items.length - LIMIT} બતાવો</button>` : ''}
+      </div>
+    </section>`;
+}
+
+function homeEventsBox(p) {
+  const isMine = (e) => e.categories.some((c) => p.categories.includes(c));
+  const evs = [...state.events].sort((a, b) => Number(isMine(b)) - Number(isMine(a))).slice(0, 6);
+  return `
+    <section>
+      <h2 class="box-title">${icon('calendar')}જીવનના પ્રસંગ</h2>
+      <div class="rbox">
+        <ul class="rlist">${evs
+          .map((e) => {
+            const n = store.getDocs('event:' + e.id).filter((i) => i < e.items.length).length;
+            return `<li><a class="ri" href="#/event/${e.id}"><span class="emo" aria-hidden="true">${e.icon}</span><span><b>${esc(e.title)}</b><small>${n ? `${n} / ${e.items.length} થઈ ગયું` : `${e.items.length} કામ`}</small></span>${isMine(e) ? '<span class="tag">તમારા માટે</span>' : ''}${icon('chev', 'ic-sm chev')}</a></li>`;
+          })
+          .join('')}</ul>
+        <a class="rmore" href="#/events">બધા ${state.events.length} પ્રસંગ ${icon('arrow', 'ic-sm')}</a>
+      </div>
+    </section>`;
+}
+
+function homeDocsBox() {
+  const docs = state.docs.slice(0, 6);
+  return `
+    <section>
+      <h2 class="box-title">${icon('folder')}દસ્તાવેજ ગાઇડ</h2>
+      <div class="rbox">
+        <ul class="rlist">${docs.map(rowItem).join('')}</ul>
+        <a class="rmore" href="#/docs">બધા ${state.docs.length} દસ્તાવેજ ${icon('arrow', 'ic-sm')}</a>
+      </div>
+      <h2 class="box-title" style="margin-top:1.5rem">${icon('phone')}જરૂરી ફોન નંબર</h2>
+      <div class="rbox">
+        <ul class="rlist">${state.helplines
+          .slice(0, 3)
+          .map((h) => `<li><a class="ri" href="tel:${esc(h.number)}">${tile('phone', h.tone || 'green')}<span><b>${esc(h.display || h.number)}</b><small>${esc(h.title)}</small></span>${icon('chev', 'ic-sm chev')}</a></li>`)
+          .join('')}</ul>
+        <a class="rmore" href="#/help">બધા નંબર ${icon('arrow', 'ic-sm')}</a>
+      </div>
+    </section>`;
+}
+
 function viewHome() {
   const p = state.profile;
   if (state.welcomeStep || !p || !p.categories || !p.categories.length) {
     if (!state.welcomeStep) state.welcomeStep = 1;
     return viewWelcome();
   }
-  const mine = sortForProfile(visible(state.schemes).filter((s) => matches(s, p)), p).sort(
-    (a, b) => Number(isNew(b)) - Number(isNew(a))
-  );
-  const fresh = mine.filter(isNew).length;
-  const myEvents = state.events.filter((e) => e.categories.some((c) => p.categories.includes(c)));
   const latest = [...state.updates].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))[0];
+  const count = (c) => visible(state.schemes).filter((s) => s.categories.includes(c)).length;
+  const place = [p.age ? `${esc(p.age)} વર્ષ` : '', p.district ? esc(p.district) : ''].filter(Boolean).join(' · ');
   return `
-    <p class="greet">નમસ્તે 🙏</p>
-    ${state.installPrompt ? `<button class="note note-info mt btn-block" style="border:0;cursor:pointer;text-align:left" data-action="install">${icon('plus')}<span><strong>એપ ફોનમાં ઇન્સ્ટોલ કરો</strong> — હોમ સ્ક્રીન પરથી સીધી ખુલશે.</span></button>` : ''}
-    ${reminderNote()}
-    <section class="card home-search">
-      <h2>${icon('search')}શું જાણવું છે?</h2>
-      <label class="search-box">${icon('search')}
-        <input class="search" id="home-search" type="search" placeholder="યોજના કે દાખલો શોધો… (જેમ કે પેન્શન, આવક)" value="${esc(homeQuery)}" aria-label="શોધો">
-      </label>
-      <div class="my-cats">${p.categories
-        .map((c) => `<a class="chip" href="#/all?c=${c}">${catTile(c, 'sm')}${esc(CATEGORY_BY_ID[c].label)}</a>`)
-        .join('')}<a class="chip" href="#/profile">${icon('fill', 'ic-sm')}બદલો</a></div>
+    ${state.installPrompt ? `<button class="note note-info btn-block" style="border:0;cursor:pointer;text-align:left;margin-bottom:1rem" data-action="install">${icon('plus')}<span><strong>એપ ફોનમાં ઇન્સ્ટોલ કરો</strong>: હોમ સ્ક્રીન પરથી સીધી ખૂલશે.</span></button>` : ''}
+    <section class="wcard">
+      <div class="wcard-text">
+        <h1><span class="g">${greeting()}</span> 🙏</h1>
+        <div class="wbadges">
+          ${p.categories.map((c) => `<a class="wb" href="#/all?c=${c}">${catTile(c, 'sm')}${esc(CATEGORY_BY_ID[c].label)}</a>`).join('')}
+          <a class="wb edit" href="#/profile">${icon('fill', 'ic-sm')}બદલો</a>
+        </div>
+        <p class="wcard-line">${place ? `${place} · તમારા માટેની યોજના, દાખલા અને પ્રસંગ, સરળ ગુજરાતીમાં.` : `<a href="#/profile">ઉંમર અને જિલ્લો ઉમેરો →</a> એટલે વધુ સાચી યોજના દેખાશે.`}</p>
+      </div>
+      <div class="wcard-art" aria-hidden="true"></div>
     </section>
-    <div id="home-results">${homeResults()}</div>
-    ${quickTiles()}
+    ${reminderNote()}
+    <section class="scard">
+      <div class="scard-in">
+        <h2>શું જાણવું છે?</h2>
+        <label class="search-big">${icon('search')}
+          <input id="home-search" type="search" placeholder="યોજના કે દાખલો શોધો… (જેમ કે પેન્શન, આવક)" value="${esc(homeQuery)}" aria-label="શોધો">
+        </label>
+        <div class="mchips">
+          ${p.categories.map((c) => `<a class="mchip" href="#/all?c=${c}">${esc(CATEGORY_BY_ID[c].label)} <span class="count">${count(c)}</span></a>`).join('')}
+          <a class="mchip" href="#/docs">દસ્તાવેજ <span class="count">${state.docs.length}</span></a>
+          <a class="mlink" href="#/all">બધી યોજના ${icon('arrow', 'ic-sm')}</a>
+        </div>
+      </div>
+    </section>
     ${latest ? `
-      <a class="today-strip ${latest.type === 'chetavani' ? 'warn' : ''}" href="#/today">
-        ${icon(latest.type === 'chetavani' ? 'alert' : 'bell')}
-        <div><b>આજનું</b><span>${esc(latest.title)}</span></div>
-        ${icon('chev', 'ic chev')}
+      <a class="tip ${latest.type === 'chetavani' ? 'warn' : ''}" href="#/today">${icon(latest.type === 'chetavani' ? 'alert' : 'bulb')}
+        <span><b>${latest.type === 'chetavani' ? 'ચેતવણી' : 'આજનું'}:</b> ${esc(latest.title)} <span class="go">જુઓ →</span></span>
       </a>` : ''}
-    ${myEvents.length ? `
-      <section class="event-strip">
-        <h2><a href="#/events">${icon('calendar')}તમારા જીવનના પ્રસંગ ${icon('chev', 'ic-sm')}</a></h2>
-        <div class="chips">${myEvents.map((e) => `<a class="chip" href="#/event/${e.id}"><span aria-hidden="true">${e.icon}</span>${esc(e.title)}</a>`).join('')}</div>
-      </section>` : ''}
-    <h2 class="section-title">${icon('book')}તમારા માટેની યોજના <span class="count">${mine.length}${fresh ? ` · ${fresh} નવી` : ''}</span></h2>
-    ${!p.age && !p.district ? `<a class="note note-info" href="#/profile" style="text-decoration:none;margin-bottom:.75rem">${icon('user')}<span>ઉંમર અને જિલ્લો ઉમેરો, એટલે વધુ સાચી યોજના દેખાશે.</span></a>` : ''}
-    ${itemList(mine, 'તમારા વર્ગ માટે હજુ યોજના નથી. <a href="#/all">બધી યોજના જુઓ</a>')}
-    ${draftNote(mine)}
-    ${footer()}`;
+    <div id="home-results">${homeResults()}</div>
+    <div class="home-grid">
+      ${homeMineBox(p)}
+      ${homeEventsBox(p)}
+      ${homeDocsBox()}
+    </div>
+    ${draftNote(visible(state.schemes).filter((s) => matches(s, p)))}`;
 }
 
 // ---------- યાદી: યોજના અને દસ્તાવેજ ----------
@@ -419,43 +529,59 @@ function filtered(scope) {
 function refreshList(scope) {
   const el = document.getElementById(scope + '-list');
   if (el) el.innerHTML = listBody(scope);
+  const n = document.getElementById(scope + '-count');
+  if (n) n.textContent = countLabel(scope);
 }
 
 function listBody(scope) {
   const items = filtered(scope);
-  return `<p class="progress" style="margin-bottom:.75rem">${items.length} ${scope === 'docs' ? 'દસ્તાવેજ' : 'યોજના'}</p>
-    ${itemList(items, `કંઈ મળ્યું નહીં. <button type="button" class="btn-link" data-action="clear-filter" data-scope="${scope}" style="border:0;background:none;cursor:pointer;font:inherit">બધું બતાવો</button>`)}`;
+  return itemList(items, `કંઈ મળ્યું નહીં. <button type="button" class="btn-link" data-action="clear-filter" data-scope="${scope}" style="border:0;background:none;cursor:pointer;font:inherit">બધું બતાવો</button>`);
 }
 
-function listPage(scope, title, sub, ic, placeholder, chips) {
+const countLabel = (scope) => `કુલ ${filtered(scope).length} ${scope === 'docs' ? 'દસ્તાવેજ' : 'યોજના'}`;
+
+// "કોના માટે: બધા ▾" — એપનું પોતાનું નાનું લિસ્ટ, ✓ પસંદ કરેલા પર (KruPa BoxSelect #352)
+function filterSelect(scope, label, chips, counts) {
+  const f = filters[scope];
+  const current = chips.find((c) => c.id === f.cat);
+  const opts = [{ id: '', label: 'બધા' }, ...chips];
+  return `
+    <div class="dd" data-dd="${scope}">
+      <button type="button" class="dd-btn" data-action="dd-toggle" aria-haspopup="listbox" aria-expanded="false"><span>${label}:</span><b>${esc(current ? current.label : 'બધા')}</b>${icon('chevdown', 'ic-sm')}</button>
+      <div class="dd-list" role="listbox" aria-label="${label}">${opts
+        .map(
+          (c) =>
+            `<button type="button" role="option" data-action="filter" data-scope="${scope}" data-cat="${c.id}" aria-selected="${f.cat === c.id}"><span class="tick">${f.cat === c.id ? '✓' : ''}</span>${esc(c.label)}<span class="n">${c.id ? counts(c.id) : ''}</span></button>`
+        )
+        .join('')}</div>
+    </div>`;
+}
+
+function listPage(scope, title, sub, ic, placeholder, chips, label) {
   const f = filters[scope];
   const counts = (id) => (scope === 'docs' ? state.docs.filter((s) => s.group === id) : visible(state.schemes).filter((s) => s.categories.includes(id))).length;
   return `
-    ${pageHead(title, sub, ic)}
-    <label class="search-box">${icon('search')}
-      <input class="search" data-scope="${scope}" type="search" placeholder="${placeholder}" value="${esc(f.q)}" aria-label="શોધો">
-    </label>
-    <div class="chips">
-      <button type="button" class="chip ${f.cat === '' ? 'active' : ''}" data-action="filter" data-scope="${scope}" data-cat="">બધું</button>
-      ${chips
-        .map(
-          (c) =>
-            `<button type="button" class="chip ${f.cat === c.id ? 'active' : ''}" data-action="filter" data-scope="${scope}" data-cat="${c.id}">${esc(c.label)} <span class="count">${counts(c.id)}</span></button>`
-        )
-        .join('')}
+    ${pageHead(title, sub, ic, '#/')}
+    <div class="fbar">
+      <label class="search-box">${icon('search')}
+        <input class="search" data-scope="${scope}" type="search" placeholder="${placeholder}" value="${esc(f.q)}" aria-label="શોધો">
+      </label>
+      ${filterSelect(scope, label, chips, counts)}
+      <span class="fcount" id="${scope}-count">${countLabel(scope)}</span>
     </div>
-    <div id="${scope}-list" class="mt">${listBody(scope)}</div>
-    ${draftNote(scope === 'docs' ? state.docs : state.schemes)}
-    ${footer()}`;
+    <div id="${scope}-list">${listBody(scope)}</div>
+    ${draftNote(scope === 'docs' ? state.docs : state.schemes)}`;
 }
 
 function viewAll(params) {
   if (params.get('c') !== null) filters.all.cat = params.get('c');
-  return listPage('all', 'યોજના ગાઈડ', 'કોને મળે, કેટલો લાભ, કયા પુરાવા અને અરજી કેવી રીતે કરવી.', 'book', 'યોજના શોધો… (જેમ કે પેન્શન, લોન)', CATEGORIES);
+  if (params.get('q') !== null) filters.all.q = params.get('q');
+  return listPage('all', 'યોજના ગાઇડ', 'કોને મળે, કેટલો લાભ, કયા પુરાવા અને અરજી કેવી રીતે કરવી.', 'book', 'યોજના શોધો… (જેમ કે પેન્શન, લોન)', CATEGORIES, 'કોના માટે');
 }
 
-function viewDocs() {
-  return listPage('docs', 'દસ્તાવેજ ગાઈડ', 'કયો દાખલો કે કાર્ડ ક્યાંથી, કયા પુરાવાથી અને કેટલા દિવસમાં નીકળે.', 'folder', 'દાખલો કે કાર્ડ શોધો… (જેમ કે આવક, આધાર)', state.docGroups);
+function viewDocs(params) {
+  if (params && params.get('q') !== null) filters.docs.q = params.get('q');
+  return listPage('docs', 'દસ્તાવેજ ગાઇડ', 'કયો દાખલો કે કાર્ડ ક્યાંથી, કયા પુરાવાથી અને કેટલા દિવસમાં નીકળે.', 'folder', 'દાખલો કે કાર્ડ શોધો… (જેમ કે આવક, આધાર)', state.docGroups, 'વિભાગ');
 }
 
 // ---------- પ્રસંગ ----------
@@ -845,23 +971,133 @@ function viewGuide() {
     ${footer()}`;
 }
 
-// ---------- પ્રોફાઇલ મેનુ, ઝૂમ, થીમ, પુષ્ટિ (વચ્ચે ખૂલતા પૉપઅપ) ----------
+// ---------- ખોખું: બાજુનું મેનુ, નીચેનાં ટેબ, "વધુ", 👤 મેનુ, ઝૂમ, દેખાવ, શોધ (KruPa Digital Hub જેવું) ----------
 
-const ZOOMS = [80, 90, 100, 110, 120];
-const THEMES = [
-  ['auto', 'ઓટો', 'refresh'],
-  ['light', 'લાઈટ', 'sun'],
-  ['dark', 'ડાર્ક', 'moon'],
+const NAV = [
+  { route: 'home', href: '#/', ic: 'home', label: 'હોમ' },
+  { route: 'all', href: '#/all', ic: 'book', label: 'યોજના ગાઇડ', short: 'યોજના' },
+  { route: 'docs', href: '#/docs', ic: 'folder', label: 'દસ્તાવેજ ગાઇડ', short: 'દસ્તાવેજ' },
+  { route: 'events', href: '#/events', ic: 'calendar', label: 'જીવનના પ્રસંગ', short: 'પ્રસંગ' },
+  { route: 'saved', href: '#/saved', ic: 'star', label: 'સેવ કરેલ' },
+  { route: 'today', href: '#/today', ic: 'bell', label: 'આજનું' },
+  { route: 'help', href: '#/help', ic: 'phone', label: 'જરૂરી ફોન નંબર' },
+  { group: 'મદદ' },
+  { route: 'guide', href: '#/guide', ic: 'help', label: 'કેવી રીતે વાપરવી' },
+  { route: 'contact', href: '#/contact', ic: 'message', label: 'સંપર્ક અને સૂચન' },
+  { route: 'about', href: '#/about', ic: 'info', label: 'એપ વિશે' },
 ];
+const TAB_ROUTES = ['home', 'all', 'docs', 'events'];
+
+function navLinks() {
+  const k = APP.krupa || {};
+  const op = [
+    k.digitalHub && `<a class="nl" href="${esc(k.digitalHub)}" target="_blank" rel="noopener">${icon('forms')}<span>KruPa Digital Hub<small>VCE: ફોર્મ ભરો અને પ્રિન્ટ</small></span>${icon('external', 'ext')}</a>`,
+    k.docHub && `<a class="nl" href="${esc(k.docHub)}" target="_blank" rel="noopener">${icon('copy')}<span>KruPa Doc Hub<small>ઝેરોક્ષ દુકાન: ફોટો પરથી A4</small></span>${icon('external', 'ext')}</a>`,
+  ].filter(Boolean);
+  return (
+    NAV.map((n) => (n.group ? `<p class="group">${n.group}</p>` : `<a class="nl" href="${n.href}" data-route="${n.route}">${icon(n.ic)}<span>${n.label}</span></a>`)).join('') +
+    (op.length ? `<p class="group">ઓપરેટર માટે</p>${op.join('')}` : '')
+  );
+}
+
+function renderChrome() {
+  document.getElementById('side-nav').innerHTML = navLinks();
+  document.getElementById('tabs').innerHTML = `<div class="tabs-in">${NAV.filter((n) => TAB_ROUTES.includes(n.route))
+    .map((n) => `<a class="tab" href="${n.href}" data-route="${n.route}"><span class="pill">${icon(n.ic)}</span><span>${n.short || n.label}</span></a>`)
+    .join('')}<button type="button" class="tab" id="more-btn" data-route="more" aria-haspopup="dialog"><span class="pill">${icon('menu')}</span><span>વધુ</span></button></div>`;
+  renderFooter();
+  renderTopZoom();
+}
+
+function setActiveNav(tab) {
+  const inTabs = TAB_ROUTES.includes(tab);
+  document.querySelectorAll('[data-route]').forEach((a) => {
+    const on = a.dataset.route === tab || (a.dataset.route === 'more' && !inTabs && tab !== 'scheme');
+    a.classList.toggle('active', on);
+    if (on && a.tagName === 'A') a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
+  });
+}
+
+const $drawer = document.getElementById('drawer');
+function openDrawer() {
+  $drawer.innerHTML = `
+    <div class="drawer" role="dialog" aria-modal="true" aria-label="મેનુ">
+      <button class="drawer-bg" type="button" data-drawer-close aria-label="બંધ કરો"></button>
+      <aside>
+        <div class="drawer-head"><a class="side-brand" href="#/"><img src="icons/icon-192.png" alt="" width="32" height="32"><span class="wordmark">${esc(APP.name)}</span></a>
+          <button type="button" data-drawer-close aria-label="બંધ કરો">${icon('close')}</button></div>
+        <nav class="side-nav">${navLinks()}</nav>
+      </aside>
+    </div>`;
+  setActiveNav(currentTab());
+  const c = $drawer.querySelector('aside button');
+  if (c) c.focus();
+}
+const closeDrawer = () => ($drawer.innerHTML = '');
+$drawer.addEventListener('click', (e) => {
+  if (e.target.closest('[data-drawer-close]') || e.target.closest('a')) closeDrawer();
+});
+document.getElementById('tabs').addEventListener('click', (e) => {
+  if (e.target.closest('#more-btn')) openDrawer();
+});
+
+// ઝૂમ − 100% + (કમ્પ્યુટર: ઉપરની પટ્ટીમાં, ફોન: 👤 મેનુમાં)
+const ZOOMS = [80, 90, 100, 110, 120];
+function zoomStepper() {
+  const z = store.getZoom();
+  return `<span class="stepper">
+      <button type="button" data-zoom="-1" aria-label="નાનું" ${z <= ZOOMS[0] ? 'disabled' : ''}>${icon('minus', 'ic-sm')}</button>
+      <span>${z}%</span>
+      <button type="button" data-zoom="1" aria-label="મોટું" ${z >= ZOOMS[ZOOMS.length - 1] ? 'disabled' : ''}>${icon('plus', 'ic-sm')}</button>
+    </span>`;
+}
+function renderTopZoom() {
+  document.getElementById('top-zoom').innerHTML = zoomStepper();
+}
+function stepZoom(d) {
+  const i = ZOOMS.indexOf(store.getZoom()) + d;
+  if (ZOOMS[i]) store.setZoom(ZOOMS[i]);
+  applyLook();
+  renderTopZoom();
+  if (pmOpen()) renderPm();
+}
+document.getElementById('top-zoom').addEventListener('click', (e) => {
+  const z = e.target.closest('[data-zoom]');
+  if (z) stepZoom(Number(z.dataset.zoom));
+});
+
+// દેખાવ: 0 લાઇટ · 1 આછો · 2 વચ્ચેનો · 3 ડાર્ક · 4 કાળો (KruPa #246)
+const SHADE_NAMES = ['લાઇટ', 'આછો', 'વચ્ચેનો', 'ડાર્ક', 'કાળો'];
+function systemDark() {
+  return matchMedia('(prefers-color-scheme: dark)').matches;
+}
+function lookLevel() {
+  const t = store.getTheme();
+  const dark = t === 'dark' || (t === 'auto' && systemDark());
+  const sh = store.getShade();
+  if (dark) return sh === 'black' ? 4 : 3;
+  return sh === 'softer' ? 2 : sh === 'soft' ? 1 : 0;
+}
+function setLookLevel(l) {
+  store.setTheme(l >= 3 ? 'dark' : 'light');
+  store.setShade(['', 'soft', 'softer', '', 'black'][l] || '');
+  applyLook();
+}
 
 function applyLook() {
   const z = store.getZoom();
-  if (z === 100) delete document.documentElement.dataset.zoom;
-  else document.documentElement.dataset.zoom = String(z);
+  const root = document.documentElement;
+  if (z === 100) delete root.dataset.zoom;
+  else root.dataset.zoom = String(z);
   const t = store.getTheme();
-  if (t === 'auto') delete document.documentElement.dataset.theme;
-  else document.documentElement.dataset.theme = t;
-  const dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+  if (t === 'auto') delete root.dataset.theme;
+  else root.dataset.theme = t;
+  const dark = t === 'dark' || (t === 'auto' && systemDark());
+  const sh = store.getShade();
+  const shade = dark ? (sh === 'black' ? 'black' : '') : sh === 'soft' || sh === 'softer' ? sh : '';
+  if (shade) root.dataset.shade = shade;
+  else delete root.dataset.shade;
   document.querySelector('meta[name=theme-color]').setAttribute('content', dark ? '#0a0f1c' : '#ffffff');
 }
 
@@ -877,46 +1113,158 @@ function closeModal() {
   if (lastFocus && lastFocus.focus) lastFocus.focus();
 }
 
-function menuHtml() {
-  const z = store.getZoom();
-  const t = store.getTheme();
+// 👤 ▾ મેનુ: ઉપર જમણે નીચે ખૂલે (KruPa ProfileMenu). પેજની લિંક બાજુના મેનુમાં છે.
+const $pm = document.getElementById('pm-panel');
+const $pmBtn = document.getElementById('menu-btn');
+const pmOpen = () => !$pm.hidden;
+function pmHtml() {
+  const p = state.profile;
+  const cats = p && p.categories ? p.categories.map((c) => (CATEGORY_BY_ID[c] ? CATEGORY_BY_ID[c].label : '')).filter(Boolean).join(', ') : '';
+  const lv = lookLevel();
   return `
-    <div class="dialog-head"><h2>મેનુ</h2><button class="icon-btn" data-close="1" aria-label="બંધ કરો">${icon('close')}</button></div>
+    <div class="pm-head"><b>મારી પ્રોફાઇલ</b><small>${cats ? esc(cats) : 'હજુ પસંદ નથી કર્યું'}</small></div>
     <div class="menu-list">
-      <a href="#/profile" data-close="1">${icon('user')}મારી પ્રોફાઇલ</a>
-      <a href="#/help" data-close="1">${icon('phone')}જરૂરી ફોન નંબર</a>
-      <a href="#/today" data-close="1">${icon('bell')}આજનું</a>
-      <a href="${shareAppLink()}" target="_blank" rel="noopener" data-close="1">${icon('share')}એપ વોટ્સએપ ગ્રુપમાં મોકલો</a>
+      <a href="#/profile">${icon('user')}પ્રોફાઇલ બદલો</a>
+      <a href="#/saved">${icon('star')}સેવ કરેલ</a>
+      <a href="${shareAppLink()}" target="_blank" rel="noopener">${icon('share')}એપ વોટ્સએપ પર મોકલો</a>
       <div class="menu-sep"></div>
-      <div class="menu-setting">ઝૂમ
-        <span class="stepper">
-          <button type="button" data-zoom="-1" aria-label="નાનું" ${z <= ZOOMS[0] ? 'disabled' : ''}>${icon('minus')}</button>
-          <span>${z}%</span>
-          <button type="button" data-zoom="1" aria-label="મોટું" ${z >= ZOOMS[ZOOMS.length - 1] ? 'disabled' : ''}>${icon('plus')}</button>
-        </span>
-      </div>
-      <div class="menu-setting">દેખાવ
-        <span class="seg">${THEMES.map(([id, label, ic]) => `<button type="button" data-theme-set="${id}" aria-pressed="${t === id}">${icon(ic, 'ic-sm')}${label}</button>`).join('')}</span>
-      </div>
-      <div class="menu-sep"></div>
-      <a href="#/guide" data-close="1">${icon('help')}એપ કેવી રીતે વાપરવી</a>
-      <a href="#/contact" data-close="1">${icon('message')}સંપર્ક અને સૂચન</a>
-      <a href="#/about" data-close="1">${icon('info')}એપ વિશે</a>
-      <a href="privacy.html">${icon('lock')}પ્રાઇવસી પોલિસી</a>
-      <a href="terms.html">${icon('forms')}નિયમો અને શરતો</a>
-      ${operatorLinks()}
+      <div class="menu-setting only-phone">ઝૂમ ${zoomStepper()}</div>
+      <label class="shade"><span class="shade-top">દેખાવ <small>${SHADE_NAMES[lv]}</small></span>
+        <input type="range" min="0" max="4" step="1" value="${lv}" data-shade-range aria-label="દેખાવ: લાઇટથી કાળો">
+        <span class="shade-ends"><span>લાઇટ</span><span>કાળો</span></span>
+      </label>
     </div>`;
 }
+function renderPm() {
+  $pm.innerHTML = pmHtml();
+}
+function openPm() {
+  renderPm();
+  $pm.hidden = false;
+  $pmBtn.setAttribute('aria-expanded', 'true');
+}
+function closePm() {
+  if (!pmOpen()) return;
+  $pm.hidden = true;
+  $pmBtn.setAttribute('aria-expanded', 'false');
+}
+$pmBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (pmOpen()) closePm();
+  else openPm();
+});
+$pm.addEventListener('click', (e) => {
+  const z = e.target.closest('[data-zoom]');
+  if (z) {
+    e.stopPropagation();
+    stepZoom(Number(z.dataset.zoom));
+    return;
+  }
+  if (e.target.closest('a')) closePm();
+});
+$pm.addEventListener('input', (e) => {
+  if (!e.target.matches('[data-shade-range]')) return;
+  setLookLevel(Number(e.target.value));
+  $pm.querySelector('.shade-top small').textContent = SHADE_NAMES[Number(e.target.value)];
+});
 
-// ઓપરેટર માટેની KruPa એપ: ગ્રામજનોને નહીં, એટલે મેનુમાં છેલ્લે અને નાનો ભાગ
-function operatorLinks() {
-  const k = APP.krupa || {};
-  if (!k.digitalHub && !k.docHub) return '';
-  return `
-      <div class="menu-sep"></div>
-      <p class="menu-label">ઓપરેટર માટે</p>
-      ${k.digitalHub ? `<a href="${esc(k.digitalHub)}" target="_blank" rel="noopener">${icon('forms')}<span>KruPa Digital Hub<small>VCE: ફોર્મ ભરો અને પ્રિન્ટ</small></span></a>` : ''}
-      ${k.docHub ? `<a href="${esc(k.docHub)}" target="_blank" rel="noopener">${icon('copy')}<span>KruPa Doc Hub<small>ઝેરોક્ષ દુકાન: ફોટો પરથી A4</small></span></a>` : ''}`;
+// આખી એપમાં શોધ (ઉપરની પટ્ટી): યોજના, દસ્તાવેજ, પ્રસંગ
+const $topbar = document.querySelector('.topbar');
+const $gs = document.getElementById('gsearch');
+const $gr = document.getElementById('gresults');
+let gsHits = [];
+let gsOn = -1;
+function gsearchHits(q) {
+  const events = state.events
+    .filter((e) => [e.title, e.summary].join(' ').toLowerCase().includes(q))
+    .map((e) => ({ href: `#/event/${e.id}`, html: `<span class="emo" aria-hidden="true" style="font-size:1.2rem">${e.icon}</span><span><b>${esc(e.title)}</b><small>જીવનનો પ્રસંગ</small></span>` }));
+  const items = [...visible(state.schemes), ...state.docs]
+    .filter((s) => searchText(s).includes(q))
+    .map((s) => ({ href: itemHref(s), html: `${itemTile(s, state.profile).replace('class="tile', 'class="tile sm')}<span><b>${esc(s.title)}</b><small>${isDoc(s) ? 'દસ્તાવેજ' : 'યોજના'}</small></span>` }));
+  return [...items, ...events];
+}
+function renderGs() {
+  const q = $gs.value.trim().toLowerCase();
+  if (!q) {
+    $gr.hidden = true;
+    return;
+  }
+  const all = gsearchHits(q);
+  gsHits = all.slice(0, 8);
+  gsOn = gsHits.length ? 0 : -1;
+  $gr.innerHTML = gsHits.length
+    ? gsHits.map((h, i) => `<a href="${h.href}" class="${i === gsOn ? 'on' : ''}">${h.html}</a>`).join('') +
+      (all.length > gsHits.length ? `<a class="all" href="#/all?q=${encodeURIComponent($gs.value.trim())}">બધાં ${all.length} પરિણામ જુઓ</a>` : '')
+    : `<p>કંઈ મળ્યું નહીં. બીજો શબ્દ લખી જુઓ, જેમ કે "પેન્શન" કે "aavak".</p>`;
+  $gr.hidden = false;
+}
+function closeGs(clear) {
+  $gr.hidden = true;
+  if (clear) $gs.value = '';
+  $topbar.classList.remove('searching');
+}
+$gs.addEventListener('input', renderGs);
+$gs.addEventListener('focus', () => $gs.value && renderGs());
+$gs.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeGs(true);
+    $gs.blur();
+  } else if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && gsHits.length) {
+    e.preventDefault();
+    gsOn = (gsOn + (e.key === 'ArrowDown' ? 1 : -1) + gsHits.length) % gsHits.length;
+    $gr.querySelectorAll('a').forEach((a, i) => a.classList.toggle('on', i === gsOn));
+  } else if (e.key === 'Enter' && gsHits[gsOn]) {
+    e.preventDefault();
+    location.hash = gsHits[gsOn].href;
+    closeGs(true);
+    $gs.blur();
+  }
+});
+$gr.addEventListener('click', (e) => {
+  if (e.target.closest('a')) closeGs(true);
+});
+document.getElementById('search-open').addEventListener('click', () => {
+  $topbar.classList.add('searching');
+  $gs.focus();
+});
+document.getElementById('search-close').addEventListener('click', () => closeGs(true));
+document.addEventListener('keydown', (e) => {
+  const typing = /^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName || '');
+  if (((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') || (e.key === '/' && !typing)) {
+    if (document.body.classList.contains('bare')) return;
+    e.preventDefault();
+    if (getComputedStyle(document.getElementById('top-search')).display === 'none') $topbar.classList.add('searching');
+    $gs.focus();
+    $gs.select();
+  }
+});
+
+// બહાર ક્લિક = ખુલ્લાં મેનુ / લિસ્ટ બંધ
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.pm')) closePm();
+  if (!e.target.closest('.top-search') && !e.target.closest('#search-open')) $gr.hidden = true;
+  if (!e.target.closest('.dd')) document.querySelectorAll('.dd.open').forEach(closeDd);
+});
+
+// 🔔 આજનું: નહીં જોયેલી પોસ્ટનો નંબર
+function renderBell() {
+  const seen = store.getSeenUpdates();
+  const n = seen ? state.updates.filter((u) => !seen.includes(u.id)).length : state.updates.length;
+  const b = document.getElementById('bell-badge');
+  b.textContent = n > 9 ? '9+' : String(n);
+  b.hidden = !n;
+  document.getElementById('bell').setAttribute('aria-label', n ? `આજનું: ${n} નવું` : 'આજનું');
+}
+
+// ⬆ ઉપર જાઓ (1.2 સ્ક્રીન નીચે ગયા પછી)
+const $totop = document.getElementById('totop');
+window.addEventListener('scroll', () => ($totop.hidden = window.scrollY < innerHeight * 1.2), { passive: true });
+$totop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
+
+function closeDd(dd) {
+  dd.classList.remove('open');
+  const b = dd.querySelector('.dd-btn');
+  if (b) b.setAttribute('aria-expanded', 'false');
 }
 
 function appConfirm(msg, okLabel, danger = false) {
@@ -939,21 +1287,6 @@ function shareAppLink() {
 }
 
 $modal.addEventListener('click', (e) => {
-  const z = e.target.closest('[data-zoom]');
-  if (z) {
-    const i = ZOOMS.indexOf(store.getZoom()) + Number(z.dataset.zoom);
-    if (ZOOMS[i]) store.setZoom(ZOOMS[i]);
-    applyLook();
-    $modal.querySelector('.dialog').innerHTML = menuHtml();
-    return;
-  }
-  const th = e.target.closest('[data-theme-set]');
-  if (th) {
-    store.setTheme(th.dataset.themeSet);
-    applyLook();
-    $modal.querySelector('.dialog').innerHTML = menuHtml();
-    return;
-  }
   const c = e.target.closest('[data-confirm]');
   if (c) {
     const r = confirmResolve;
@@ -972,15 +1305,21 @@ $modal.addEventListener('click', (e) => {
   }
 });
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && $modal.innerHTML) {
+  if (e.key !== 'Escape') return;
+  if ($modal.innerHTML) {
     if (confirmResolve) {
       confirmResolve(false);
       confirmResolve = null;
     }
     closeModal();
   }
+  if ($drawer.innerHTML) closeDrawer();
+  if (pmOpen()) {
+    closePm();
+    $pmBtn.focus();
+  }
+  document.querySelectorAll('.dd.open').forEach(closeDd);
 });
-document.getElementById('menu-btn').addEventListener('click', () => openModal(menuHtml()));
 
 // ---------- રૂટિંગ ----------
 
@@ -988,6 +1327,15 @@ function currentRoute() {
   const [path, query = ''] = location.hash.replace(/^#\/?/, '').split('?');
   const parts = path.split('/');
   return { name: parts[0] || 'home', arg: decodeURIComponent(parts[1] || ''), params: new URLSearchParams(query) };
+}
+
+const VIEW_NAMES = ['home', 'all', 'docs', 'events', 'event', 'scheme', 'saved', 'today', 'help', 'profile', 'about', 'guide', 'contact'];
+const views_known = (n) => VIEW_NAMES.includes(n);
+
+function currentTab() {
+  const { name, arg } = currentRoute();
+  const item = name === 'scheme' ? findItem(arg) : null;
+  return { event: 'events', scheme: item && isDoc(item) ? 'docs' : 'all' }[name] || (views_known(name) ? name : 'home');
 }
 
 function render() {
@@ -1001,7 +1349,7 @@ function render() {
     const views = {
       home: viewHome,
       all: () => viewAll(params),
-      docs: viewDocs,
+      docs: () => viewDocs(params),
       events: viewEvents,
       event: () => viewEvent(arg),
       scheme: () => viewItem(arg),
@@ -1016,14 +1364,10 @@ function render() {
     html = (views[name] || viewHome)();
   }
   $view.innerHTML = html;
-  const item = name === 'scheme' ? findItem(arg) : null;
-  const tab = { event: 'events', scheme: item && isDoc(item) ? 'docs' : 'all' }[name] || name;
-  document.querySelectorAll('.nav a[data-route]').forEach((a) => {
-    const on = a.dataset.route === tab;
-    a.classList.toggle('active', on);
-    if (on) a.setAttribute('aria-current', 'page');
-    else a.removeAttribute('aria-current');
-  });
+  document.body.classList.toggle('bare', Boolean(state.welcomeStep) && (name === 'home' || !views_known(name)));
+  setActiveNav(currentTab());
+  if (name === 'today' && state.loaded) store.setSeenUpdates(state.updates.map((u) => u.id));
+  renderBell();
   window.scrollTo(0, 0);
 }
 
@@ -1167,8 +1511,46 @@ $view.addEventListener('click', async (e) => {
   if (action === 'filter') {
     const scope = el.dataset.scope;
     filters[scope].cat = el.dataset.cat;
-    document.querySelectorAll(`.chip[data-scope="${scope}"]`).forEach((c) => c.classList.toggle('active', c === el));
+    const dd = el.closest('.dd');
+    if (dd) {
+      dd.querySelectorAll('[role=option]').forEach((o) => {
+        const on = o === el;
+        o.setAttribute('aria-selected', String(on));
+        o.querySelector('.tick').textContent = on ? '✓' : '';
+      });
+      dd.querySelector('.dd-btn b').textContent = el.dataset.cat ? el.childNodes[1].textContent : 'બધા';
+      closeDd(dd);
+      dd.querySelector('.dd-btn').focus();
+    }
     refreshList(scope);
+  }
+
+  if (action === 'dd-toggle') {
+    const dd = el.closest('.dd');
+    const open = !dd.classList.contains('open');
+    document.querySelectorAll('.dd.open').forEach(closeDd);
+    if (open) {
+      dd.classList.add('open');
+      el.setAttribute('aria-expanded', 'true');
+      const sel = dd.querySelector('[aria-selected=true]');
+      if (sel) sel.focus();
+    }
+  }
+
+  if (action === 'home-tab') {
+    homeTab = el.dataset.tab;
+    homeMore = false;
+    const box = document.getElementById('home-mine');
+    if (box) box.outerHTML = homeMineBox(state.profile);
+  }
+  if (action === 'home-more') {
+    homeMore = true;
+    const box = document.getElementById('home-mine');
+    if (box) box.outerHTML = homeMineBox(state.profile);
+  }
+  if (action === 'look') {
+    setLookLevel(Number(el.dataset.level));
+    render();
   }
 
   if (action === 'clear-filter') {
@@ -1212,6 +1594,9 @@ $view.addEventListener('click', async (e) => {
 window.addEventListener('hashchange', () => {
   inAppNavigations++;
   closeModal();
+  closeDrawer();
+  closePm();
+  closeGs(false);
   render();
 });
 
@@ -1224,11 +1609,15 @@ window.addEventListener('appinstalled', () => {
   state.installPrompt = null;
   toast('એપ ઇન્સ્ટોલ થઈ ગઈ ✓');
 });
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyLook);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  applyLook();
+  if (pmOpen()) renderPm();
+});
 
 // ---------- શરૂઆત ----------
 
 applyLook();
+renderChrome();
 document.querySelectorAll('path[data-i]').forEach((p) => p.setAttribute('d', linePath(p.dataset.i)));
 document.title = APP.name;
 render();
