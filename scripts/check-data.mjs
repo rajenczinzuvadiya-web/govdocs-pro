@@ -1,4 +1,4 @@
-// યોજના, દસ્તાવેજ અને પ્રસંગનો ડેટા સાચા ફોર્મેટમાં છે કે નહીં તે ચકાસે.
+// યોજના, દસ્તાવેજ, પ્રસંગ અને ભરતીનો ડેટા સાચા ફોર્મેટમાં છે કે નહીં તે ચકાસે.
 // ચલાવો: node scripts/check-data.mjs
 import { readFileSync } from 'node:fs';
 import { CATEGORIES } from '../js/options.js';
@@ -58,9 +58,28 @@ for (const e of events) {
   });
 }
 
+// ભરતી (data/jobs.json)
+const JOB_TYPES = ['bharti', 'callletter', 'answerkey', 'result'];
+const { orgs, jobs } = read('jobs.json');
+const orgIds = new Set(orgs.map((o) => o.id));
+for (const j of jobs) {
+  const at = `ભરતી "${j.id || '?'}"`;
+  for (const f of ['id', 'title', 'source', 'updatedOn', 'date']) if (!j[f] || typeof j[f] !== 'string') errors.push(`${at}: "${f}" ખૂટે છે`);
+  if (!JOB_TYPES.includes(j.type)) errors.push(`${at}: અજાણ્યો પ્રકાર "${j.type}"`);
+  if (!orgIds.has(j.org)) errors.push(`${at}: અજાણી સંસ્થા "${j.org}"`);
+  if (!j.notification && !j.applyLink) errors.push(`${at}: સત્તાવાર જાહેરાત કે અરજીની લિંક જોઈએ`);
+  [j.notification, j.applyLink].forEach((u) => u && !u.startsWith('https://') && errors.push(`${at}: લિંક https:// થી શરૂ થવી જોઈએ (${u})`));
+  for (const f of ['date', 'startDate', 'lastDate', 'updatedOn']) if (j[f] != null && !isDate(j[f])) errors.push(`${at}: ${f} YYYY-MM-DD હોવી જોઈએ`);
+  if (j.posts != null && !(Number.isInteger(j.posts) && j.posts > 0)) errors.push(`${at}: posts આંકડો કે null હોવો જોઈએ`);
+  if (ids.has(j.id)) errors.push(`${at}: id બે વાર છે`);
+  ids.add(j.id);
+  if (typeof j.verified !== 'boolean') errors.push(`${at}: verified true/false હોવું જોઈએ`);
+  else if (!j.verified) unverified++;
+}
+
 errors.forEach((e) => console.log('❌', e));
 console.log(
-  `\nયોજના ${schemes.length}, દસ્તાવેજ ${documents.length}, પ્રસંગ ${events.length} · ` +
+  `\nયોજના ${schemes.length}, દસ્તાવેજ ${documents.length}, પ્રસંગ ${events.length}, ભરતી ${jobs.length} · ` +
     `${errors.length} ભૂલ · ${unverified} કાર્ડની ચકાસણી બાકી`
 );
 process.exit(errors.length ? 1 : 0);
