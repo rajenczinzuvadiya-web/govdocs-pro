@@ -77,7 +77,7 @@ https://www.india.gov.in
 
 | Play Console માં | ફાઇલ |
 |---|---|
-| App icon (512 x 512) | `icons/icon-512.png` |
+| App icon (512 x 512) | `store/play-icon-512.png` (આખો ચોરસ; ખૂણા Play Store જાતે ગોળ કરે) |
 | Feature graphic (1024 x 500) | `store/feature-graphic.png` |
 | Phone screenshots (2 થી 8) | `store/screenshots/` ના 6 ફોટા |
 
