@@ -163,11 +163,6 @@ function itemList(items, empty) {
   return `<ul class="list">${items.map((s) => itemCard(s)).join('')}</ul>`;
 }
 
-function draftNote(items) {
-  if (!items.some((s) => !s.verified)) return '';
-  return `<p class="note note-warn mt">${icon('alert')}<span>આ માહિતીની સત્તાવાર સાઇટ પરથી ચકાસણી હજુ બાકી છે. અરજી હંમેશાં સત્તાવાર સાઇટ પર જ કરો.</span></p>`;
-}
-
 // પેજનો ફૂટર હવે ખોખામાં એક જ વાર (KruPa #174: એક પાતળી લીટી). જૂની views હજુ footer() બોલાવે છે.
 function footer() {
   return '';
@@ -176,7 +171,6 @@ function footer() {
 function renderFooter() {
   const links = [
     ['#/about', 'એપ વિશે'],
-    ['#/guide', 'કેવી રીતે વાપરવી'],
     ['privacy.html', 'પ્રાઇવસી'],
     ['terms.html', 'નિયમો'],
     ['#/contact', 'સંપર્ક'],
@@ -363,13 +357,6 @@ function homeResults() {
     ${itemList(hits, 'કંઈ મળ્યું નહીં. બીજો શબ્દ લખી જુઓ, જેમ કે "પેન્શન" કે "aavak".')}`;
 }
 
-function greeting() {
-  const h = new Date().getHours();
-  if (h < 12) return 'શુભ સવાર';
-  if (h < 17) return 'શુભ બપોર';
-  return 'શુભ સાંજ';
-}
-
 // એક હાર: tile + નામ + નાની લીટી + › (KruPa ના હોમની યાદી જેવું)
 function rowItem(s) {
   let tag = '';
@@ -463,20 +450,8 @@ function viewHome() {
   }
   const latest = [...state.updates].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))[0];
   const count = (c) => visible(state.schemes).filter((s) => s.categories.includes(c)).length;
-  const place = [p.age ? `${esc(p.age)} વર્ષ` : '', p.district ? esc(p.district) : ''].filter(Boolean).join(' · ');
   return `
     ${state.installPrompt ? `<button class="note note-info btn-block" style="border:0;cursor:pointer;text-align:left;margin-bottom:1rem" data-action="install">${icon('plus')}<span><strong>એપ ફોનમાં ઇન્સ્ટોલ કરો</strong>: હોમ સ્ક્રીન પરથી સીધી ખૂલશે.</span></button>` : ''}
-    <section class="wcard">
-      <div class="wcard-text">
-        <h1><span class="g">${greeting()}</span> 🙏</h1>
-        <div class="wbadges">
-          ${p.categories.map((c) => `<a class="wb" href="#/all?c=${c}">${catTile(c, 'sm')}${esc(CATEGORY_BY_ID[c].label)}</a>`).join('')}
-          <a class="wb edit" href="#/profile">${icon('fill', 'ic-sm')}બદલો</a>
-        </div>
-        <p class="wcard-line">${place ? `${place} · તમારા માટેની યોજના, દાખલા અને પ્રસંગ, સરળ ગુજરાતીમાં.` : `<a href="#/profile">ઉંમર અને જિલ્લો ઉમેરો →</a> એટલે વધુ સાચી યોજના દેખાશે.`}</p>
-      </div>
-      <div class="wcard-art" aria-hidden="true"></div>
-    </section>
     ${reminderNote()}
     <section class="scard">
       <div class="scard-in">
@@ -500,8 +475,7 @@ function viewHome() {
       ${homeMineBox(p)}
       ${homeEventsBox(p)}
       ${homeDocsBox()}
-    </div>
-    ${draftNote(visible(state.schemes).filter((s) => matches(s, p)))}`;
+    </div>`;
 }
 
 // ---------- યાદી: યોજના અને દસ્તાવેજ ----------
@@ -569,8 +543,7 @@ function listPage(scope, title, sub, ic, placeholder, chips, label) {
       ${filterSelect(scope, label, chips, counts)}
       <span class="fcount" id="${scope}-count">${countLabel(scope)}</span>
     </div>
-    <div id="${scope}-list">${listBody(scope)}</div>
-    ${draftNote(scope === 'docs' ? state.docs : state.schemes)}`;
+    <div id="${scope}-list">${listBody(scope)}</div>`;
 }
 
 function viewAll(params) {
@@ -643,14 +616,11 @@ function viewEvent(id) {
       <div><h1>${esc(e.title)}</h1><p class="lead">${esc(e.summary)}</p></div>
     </div>
     <p class="progress mt" id="event-progress">${eventProgress(e, ready)}</p>
-    <div class="parts" style="margin-top:1rem">
+    <div class="parts one" style="margin-top:1rem">
       <div class="parts-main">
         ${docs.length ? `<section class="part"><h2><span class="sq">${icon('forms')}</span>કરવાનાં કામ / દસ્તાવેજ</h2><ul class="ev-list">${docs.map(row).join('')}</ul></section>` : ''}
         ${helps.length ? `<section class="part"><h2><span class="sq">${icon('gift')}</span>મળી શકે એવી સહાય</h2><ul class="ev-list">${helps.map(row).join('')}</ul></section>` : ''}
       </div>
-      <aside class="parts-side">
-        <div class="note note-info">${icon('info')}<span>કામ પર ટેપ કરો એટલે પુરાવા અને પગલાં દેખાશે. થઈ જાય એટલે ☐ પર ✓ કરો — આ ફોનમાં યાદ રહેશે.</span></div>
-      </aside>
     </div>
     ${footer()}`;
 }
@@ -748,7 +718,6 @@ function viewItem(id) {
       <button class="btn" data-action="save" data-id="${esc(s.id)}" aria-pressed="${saved}">${icon('star', saved ? 'ic filled' : 'ic')}<span>${saved ? 'સેવ થયેલ' : 'સેવ કરો'}</span></button>
       <a class="btn btn-ok" href="${wa}" target="_blank" rel="noopener">${icon('share')}વોટ્સએપ પર મોકલો</a>
     </div>
-    ${!s.verified ? `<p class="note note-warn mt">${icon('alert')}<span>આ માહિતીની ચકાસણી હજુ બાકી છે${/⚠️/.test(JSON.stringify(s)) ? ' — ⚠️ વાળી વાત ખાસ ચકાસો' : ''}. અરજી પહેલાં સત્તાવાર સાઇટ કે કચેરીમાં ખાતરી કરો.</span></p>` : ''}
     <div class="facts-main">
       <div class="fact">${'<span class="sq">' + icon('users') + '</span>'}<div><div class="k">${k.who}</div><div class="v">${s.eligibility.map(esc).join('<br>')}</div></div></div>
       <div class="fact good"><span class="sq">${icon('gift')}</span><div><div class="k">${k.benefit}</div><div class="v">${esc(s.benefit)}</div></div></div>
@@ -763,22 +732,14 @@ function viewItem(id) {
         ${s.after && s.after.length ? part('અરજી પછી', 'hourglass', dots(s.after)) : ''}
       </div>
       <aside class="parts-side">
-        <div class="card side-box">
-          <h3>${icon('help')}ફોર્મ ભરવામાં મદદ</h3>
-          <p class="small muted">નજીકના <strong>KruPa Digital Hub</strong> ઓપરેટર કે CSC સેન્ટરની મદદ લો.</p>
-        </div>
         ${reportLink(s) ? `<div class="card side-box">
           <h3>${icon('alert')}માહિતીમાં ભૂલ છે?</h3>
           <p class="small muted">ફી, તારીખ કે નિયમ બદલાયા હોય તો જણાવો, અમે ચકાસીને સુધારીશું.</p>
           <a class="btn" href="${reportLink(s)}" target="_blank" rel="noopener">${icon('message')}ભૂલ જણાવો</a>
         </div>` : ''}
         <div class="card side-box">
-          <h3>${icon('shield')}ધ્યાન રાખો</h3>
-          <p class="small muted">અમે ક્યારેય પૈસા, OTP કે આધાર નંબર માંગતા નથી. અરજી હંમેશાં સત્તાવાર સાઇટ પર જ કરો.</p>
-        </div>
-        <div class="card side-box">
           <h3>${icon('book')}સ્રોત</h3>
-          <div class="sources">${sources}<span>છેલ્લે અપડેટ: ${esc(formatDate(s.updatedOn))}</span></div>
+          <div class="sources">${sources}<span>છેલ્લે અપડેટ: ${esc(formatDate(s.updatedOn))}</span>${s.verified ? '' : '<span>ચકાસણી બાકી: અરજી પહેલાં સત્તાવાર સાઇટ પર ખાતરી કરો.</span>'}</div>
         </div>
       </aside>
     </div>
@@ -836,7 +797,6 @@ function viewHelp() {
         )
         .join('') || '<div class="empty">નંબર લોડ ન થયા.</div>'
     }</div>
-    <p class="note note-warn mt">${icon('shield')}<span>કોઈ સરકારી અધિકારી ફોન પર OTP, PIN કે પૈસા માંગતા નથી. ફ્રોડ થાય તો તરત 1930 પર ફોન કરો.</span></p>
     ${footer()}`;
 }
 
@@ -865,7 +825,6 @@ function viewProfile() {
         <label class="field">વ્યવસાય<select name="occupation"><option value="">— પસંદ કરો —</option>${opt(OCCUPATIONS, p.occupation)}</select></label>
         <label class="field">કુટુંબની વાર્ષિક આવક<select name="income"><option value="">— પસંદ કરો —</option>${opt(INCOME, p.income)}</select></label>
       </div>
-      <p class="note note-ok">${icon('lock')}<span>અમે આધાર નંબર, બેંક વિગત કે ફોન નંબર ક્યારેય નથી માંગતા.</span></p>
       <button class="btn btn-primary btn-block" type="submit">${icon('published')}સેવ કરો</button>
       ${state.profile ? `<button class="btn btn-ghost btn-block" type="button" data-action="reset">${icon('trash')}મારી બધી માહિતી ફોનમાંથી કાઢી નાખો</button>` : ''}
     </form>
@@ -876,22 +835,13 @@ function viewAbout() {
   return `
     ${pageHead(`${esc(APP.name)} વિશે`, '', 'info', '#/')}
     <div class="stack">
-      <div class="card"><p>ગામના દરેક માણસને તેના માટે કઈ યોજના, સહાય, દાખલા અને માહિતી છે તે સરળ ગુજરાતીમાં, બોલીને અને સામેથી જણાવતી એપ.</p></div>
+      <div class="card"><p>યોજના, સહાય અને દાખલાની માહિતી સરળ ગુજરાતીમાં આપતી એપ. પ્રકાશક: KruPa Digital Hub.</p></div>
       <div class="note note-warn">${icon('alert')}<div>
         <ul style="padding-left:1.1rem;margin:0">
-          <li>આ <strong>ખાનગી માહિતી એપ</strong> છે — કોઈ સરકારી વિભાગની સત્તાવાર એપ નથી.</li>
-          <li>દરેક કાર્ડ પર સત્તાવાર સ્રોતની લિંક છે. અરજી પહેલાં સત્તાવાર સાઇટ કે કચેરીમાં ખાતરી કરો.</li>
-          <li><strong>અમે ક્યારેય પૈસા, OTP કે આધાર નંબર માંગતા નથી.</strong> કોઈ આ એપના નામે માંગે તો તે ફ્રોડ છે — 1930 પર ફોન કરો.</li>
+          <li>આ <strong>ખાનગી માહિતી એપ</strong> છે. કોઈ સરકારી વિભાગની એપ નથી અને સરકાર સાથે જોડાયેલી નથી.</li>
+          <li>માહિતી સરકારી વેબસાઇટ અને સરકારી ઠરાવ પરથી લીધી છે. દરેક કાર્ડ પર "સ્રોત" માં મૂળ લિંક છે. અરજી સત્તાવાર સાઇટ પર જ કરો.</li>
         </ul></div></div>
-      <div class="card"><h2 class="section-title" style="margin-top:0">${icon('users')}KruPa Digital Hub</h2>
-        <p>${esc(APP.name)} એ KruPa Digital Hub ની એપ છે. યોજના ગાઈડ, દસ્તાવેજ ગાઈડ અને પ્રસંગની માહિતી KruPa Digital Hub ની ગાઈડ પરથી લીધી છે. ફોર્મ ભરવામાં મદદ માટે નજીકના KruPa ઓપરેટર કે CSC સેન્ટરનો સંપર્ક કરો.</p></div>
-      <div class="card"><h2 class="section-title" style="margin-top:0">${icon('lock')}તમારી માહિતી</h2>
-        <p>લોગિન નથી. પ્રોફાઇલ, સેવ કરેલું અને ✓ ચેકલિસ્ટ ફક્ત આ ફોનમાં રહે છે; અમારા સર્વર પર જતું નથી. <a href="privacy.html">પ્રાઇવસી પોલિસી</a></p></div>
-      <div class="card"><h2 class="section-title" style="margin-top:0">${icon('book')}માહિતી ક્યાંથી આવે છે</h2>
-        <p>દરેક કાર્ડ સરકારી વેબસાઇટ, સરકારી ઠરાવ અને KruPa Digital Hub ની ગાઈડ પરથી સરળ ગુજરાતીમાં લખાય છે. કાર્ડની નીચે "સ્રોત" માં મૂળ લિંક અને છેલ્લે અપડેટની તારીખ છે. સત્તાવાર સાઇટ પરથી ચકાસાય નહીં ત્યાં સુધી કાર્ડ પર "ચકાસણી બાકી" લખેલું રહે છે.</p>
-        <p class="mt muted">હાલમાં: ${state.schemes.length} યોજના, ${state.docs.length} દસ્તાવેજ, ${state.events.length} પ્રસંગ · ${allItems().filter((x) => x.verified).length} ચકાસેલાં</p></div>
       <div class="menu-list card">
-        <a href="#/guide">${icon('help')}એપ કેવી રીતે વાપરવી</a>
         <a href="#/contact">${icon('message')}સંપર્ક અને સૂચન</a>
         <a href="privacy.html">${icon('lock')}પ્રાઇવસી પોલિસી</a>
         <a href="terms.html">${icon('forms')}નિયમો અને શરતો</a>
@@ -922,52 +872,8 @@ function viewContact() {
     c.email && `<a class="help-row" href="mailto:${esc(c.email)}">${lineTile('message', 'blue')}<div><div class="num">ઈમેલ</div><div class="t">${esc(c.email)}</div></div>${icon('chev', 'ic chev')}</a>`,
   ].filter(Boolean);
   return `
-    ${pageHead('સંપર્ક અને સૂચન', 'ભૂલ દેખાય, નવી યોજના ખબર પડે કે કંઈ સમજાય નહીં તો જણાવો.', 'message', '#/')}
+    ${pageHead('સંપર્ક અને સૂચન', 'ભૂલ દેખાય કે સૂચન હોય તો જણાવો.', 'message', '#/')}
     ${rows.length ? `<div class="help-list">${rows.join('')}</div>` : `<div class="empty">સંપર્કની વિગત ટૂંક સમયમાં ઉમેરાશે.</div>`}
-    <div class="card mt">
-      <h2 class="h2">${icon('help')}ફોર્મ ભરવામાં મદદ</h2>
-      <p class="mt">આ એપ ફક્ત માહિતી આપે છે, અરજી નથી કરતી. ફોર્મ ભરવા માટે નજીકના <strong>KruPa Digital Hub</strong> ઓપરેટર, CSC સેન્ટર કે ગ્રામ પંચાયતના VCE ની મદદ લો.</p>
-    </div>
-    <p class="note note-warn mt">${icon('shield')}<span>અમે ક્યારેય પૈસા, OTP કે આધાર નંબર માંગતા નથી. કોઈ માંગે તો 1930 પર ફોન કરો.</span></p>
-    ${footer()}`;
-}
-
-// ---------- એપ કેવી રીતે વાપરવી (VCE / જાણકાર બીજાને શીખવી શકે) ----------
-
-const GUIDE = [
-  ['home', 'મારા માટે', 'પ્રોફાઇલ પ્રમાણે તમને લાગુ પડતી યોજના અહીં દેખાય છે. "નવું" લખેલું હોય તે છેલ્લી મુલાકાત પછી ઉમેરાયેલું છે.'],
-  ['search', 'શોધો', 'ઉપરના ખાનામાં "પેન્શન", "આવક", "લોન" જેવો શબ્દ લખો.'],
-  ['book', 'યોજના ખોલો', 'કાર્ડ પર ટેપ કરો: કોને મળે, લાભ, ફી, કેટલા દિવસ, પુરાવા અને અરજીનાં પગલાં દેખાશે.'],
-  ['list', 'પુરાવાનું લિસ્ટ', 'જે પુરાવો તૈયાર હોય તેના પર ટેપ કરો, ✓ થઈ જશે. આ ફોનમાં યાદ રહે છે.'],
-  ['speaker', 'સાંભળો', '"સાંભળો" દબાવો એટલે એપ આખી માહિતી ગુજરાતીમાં વાંચી સંભળાવશે.'],
-  ['share', 'વોટ્સએપ પર મોકલો', 'કોઈને કામ આવે એવી યોજના એક બટનથી વોટ્સએપમાં મોકલો.'],
-  ['star', 'સેવ કરો', 'જરૂરી યોજના સેવ કરો, પછી "સેવ" ટેબમાં મળશે.'],
-  ['calendar', 'જીવનના પ્રસંગ', 'બાળકનો જન્મ, લગ્ન, ઘડપણ જેવા પ્રસંગે શું કઢાવવું અને કઈ સહાય મળે તેનું લિસ્ટ.'],
-  ['user', 'પ્રોફાઇલ અને અક્ષર', 'ઉપર જમણી બાજુના મેનુમાંથી પ્રોફાઇલ બદલો, અક્ષર મોટા કરો કે રાત્રે ડાર્ક દેખાવ કરો.'],
-  ['external', 'અરજી', 'અરજી હંમેશાં "સત્તાવાર સાઇટ પર અરજી" બટનથી સરકારી સાઇટ પર જ કરો.'],
-];
-
-function viewGuide() {
-  return `
-    ${pageHead('એપ કેવી રીતે વાપરવી', '10 નાની વાત. પહેલી વાર કોઈને એપ બતાવો ત્યારે આ પેજ સાથે જુઓ.', 'help', '#/')}
-    <ol class="guide-list">${GUIDE.map(([ic, t, d], i) => `<li><span class="num">${i + 1}</span><div><b>${icon(ic, 'ic-sm')}${t}</b><p>${d}</p></div></li>`).join('')}</ol>
-    <div class="card mt stack">
-      <h2 class="h2">${icon('phone')}ફોનમાં ઇન્સ્ટોલ કરવી</h2>
-      <ol class="plain-steps">
-        <li>Chrome માં એપની લિંક ખોલો.</li>
-        <li>ઉપર જમણી બાજુ ⋮ (ત્રણ ટપકાં) દબાવો.</li>
-        <li>"Add to Home screen" કે "Install app" દબાવો.</li>
-        <li>હોમ સ્ક્રીન પર એપનું આઇકન આવી જશે. નેટ વગર પણ ખૂલશે.</li>
-      </ol>
-    </div>
-    <div class="card mt stack">
-      <h2 class="h2">${icon('speaker')}અવાજ ન આવે તો</h2>
-      <ol class="plain-steps">
-        <li>ફોનના Settings ખોલો.</li>
-        <li>"Text-to-speech" શોધો.</li>
-        <li>Google ના Speech Services માં ગુજરાતી ભાષા ડાઉનલોડ કરો.</li>
-      </ol>
-    </div>
     ${footer()}`;
 }
 
@@ -982,7 +888,6 @@ const NAV = [
   { route: 'today', href: '#/today', ic: 'bell', label: 'આજનું' },
   { route: 'help', href: '#/help', ic: 'phone', label: 'જરૂરી ફોન નંબર' },
   { group: 'મદદ' },
-  { route: 'guide', href: '#/guide', ic: 'help', label: 'કેવી રીતે વાપરવી' },
   { route: 'contact', href: '#/contact', ic: 'message', label: 'સંપર્ક અને સૂચન' },
   { route: 'about', href: '#/about', ic: 'info', label: 'એપ વિશે' },
 ];
@@ -1329,7 +1234,7 @@ function currentRoute() {
   return { name: parts[0] || 'home', arg: decodeURIComponent(parts[1] || ''), params: new URLSearchParams(query) };
 }
 
-const VIEW_NAMES = ['home', 'all', 'docs', 'events', 'event', 'scheme', 'saved', 'today', 'help', 'profile', 'about', 'guide', 'contact'];
+const VIEW_NAMES = ['home', 'all', 'docs', 'events', 'event', 'scheme', 'saved', 'today', 'help', 'profile', 'about', 'contact'];
 const views_known = (n) => VIEW_NAMES.includes(n);
 
 function currentTab() {
@@ -1358,7 +1263,6 @@ function render() {
       help: viewHelp,
       profile: viewProfile,
       about: viewAbout,
-      guide: viewGuide,
       contact: viewContact,
     };
     html = (views[name] || viewHome)();
