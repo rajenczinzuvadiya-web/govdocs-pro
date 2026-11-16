@@ -2,7 +2,7 @@
   "updatedOn": "2026-11-16",
   "schemes": [
     {
-      "id": "ganga-swarupa",
+      "id": "ganga-swarupa-sahay",
       "kind": "scheme",
       "title": "ગંગા સ્વરૂપા આર્થિક સહાય યોજના",
       "summary": "પતિના અવસાન પછી ગુજરાતની બહેનોને દર મહિને સીધી બેંક ખાતામાં સહાય.",
@@ -138,7 +138,7 @@
       }
     },
     {
-      "id": "sant-surdas",
+      "id": "sant-surdas-divyang-sahay",
       "kind": "scheme",
       "title": "દિવ્યાંગ સહાય (સંત સુરદાસ યોજના, ઓળખપત્ર, બસ પાસ)",
       "summary": "દિવ્યાંગ વ્યક્તિને દર મહિને સહાય, સાથે દિવ્યાંગ ઓળખપત્ર અને મફત બસ પાસ.",
@@ -202,7 +202,7 @@
       "verified": false
     },
     {
-      "id": "vahli-dikri",
+      "id": "vhali-dikri",
       "kind": "scheme",
       "title": "વ્હાલી દીકરી યોજના",
       "summary": "દીકરીના ભણતર અને ભવિષ્ય માટે ત્રણ હપ્તામાં કુલ ₹1,10,000 સુધીની સહાય.",
@@ -328,7 +328,7 @@
       "verified": false
     },
     {
-      "id": "ayushman",
+      "id": "ayushman-pmjay-ma",
       "kind": "scheme",
       "title": "આયુષ્માન ભારત PMJAY-MA કાર્ડ",
       "summary": "નક્કી કરેલી હોસ્પિટલમાં કુટુંબ દીઠ વર્ષે ₹10 લાખ સુધીની મફત (કેશલેસ) સારવાર.",
@@ -437,7 +437,7 @@
       "verified": false
     },
     {
-      "id": "pmay-g",
+      "id": "pm-awas-gramin",
       "kind": "scheme",
       "title": "PM આવાસ યોજના (ગ્રામીણ)",
       "summary": "ગામમાં કાચા ઘર કે ઘર વગરના કુટુંબને પાકું ઘર બાંધવા સહાય.",
@@ -487,7 +487,7 @@
       "verified": false
     },
     {
-      "id": "e-shram",
+      "id": "e-shram-card",
       "kind": "scheme",
       "title": "ઇ-શ્રમ કાર્ડ",
       "summary": "અસંગઠિત ક્ષેત્રના શ્રમિકો માટે મફત નોંધણી અને UAN કાર્ડ — સરકારી યોજનાઓ સુધી પહોંચવાનો રસ્તો.",
@@ -601,7 +601,7 @@
       "verified": false
     },
     {
-      "id": "nfbs",
+      "id": "rashtriya-kutumb-sahay",
       "kind": "scheme",
       "title": "રાષ્ટ્રીય કુટુંબ સહાય યોજના",
       "summary": "કુટુંબના મુખ્ય કમાનાર વ્યક્તિનું અવસાન થાય ત્યારે કુટુંબને એક વખતની આર્થિક સહાય.",
@@ -850,7 +850,7 @@
       }
     },
     {
-      "id": "pmmvy",
+      "id": "pm-matru-vandana",
       "kind": "scheme",
       "title": "PM માતૃ વંદના યોજના (PMMVY)",
       "summary": "સગર્ભા અને ધાવણ આપતી માતાને પોષણ અને આરામ માટે સીધી બેંક ખાતામાં સહાય.",
@@ -1151,7 +1151,7 @@
       }
     },
     {
-      "id": "ikhedut",
+      "id": "ikhedut-yojana",
       "kind": "scheme",
       "title": "iKhedut યોજનાઓ (ખેતી, બાગાયત, પશુપાલન સહાય)",
       "summary": "ખેતીનાં ઓજાર, બિયારણ, પાઇપલાઇન, બાગાયત, પશુપાલન જેવી ઘણી સહાય માટે ગુજરાતનું એક જ ઓનલાઈન પોર્ટલ.",
@@ -1331,7 +1331,7 @@
       "verified": false
     },
     {
-      "id": "ujjwala",
+      "id": "pm-ujjwala",
       "kind": "scheme",
       "title": "PM ઉજ્જવલા યોજના (મફત ગેસ કનેક્શન)",
       "summary": "ગરીબ કુટુંબની બહેનોને મફત LPG ગેસ કનેક્શન અને બાટલા પર સબસિડી.",
@@ -1393,7 +1393,7 @@
       }
     },
     {
-      "id": "surya-ghar",
+      "id": "pm-surya-ghar",
       "kind": "scheme",
       "title": "PM સૂર્ય ઘર મફત વીજળી યોજના (રૂફટોપ સોલર)",
       "summary": "ઘરના ધાબા પર સોલર પેનલ મૂકવા સબસિડી — દર મહિને વીજળી બિલ ઓછું.",
@@ -2526,6 +2526,19 @@
     "jati-dakhlo": "caste-certificate",
     "jan-dhan": "jan-dhan-account",
     "jan-suraksha-vima": "pm-suraksha-bima",
-    "jssk-jsy": "jssk"
+    "jssk-jsy": "jssk",
+    "ganga-swarupa": "ganga-swarupa-sahay",
+    "sant-surdas": "sant-surdas-divyang-sahay",
+    "vahli-dikri": "vhali-dikri",
+    "ayushman": "ayushman-pmjay-ma",
+    "pmay-g": "pm-awas-gramin",
+    "e-shram": "e-shram-card",
+    "nfbs": "rashtriya-kutumb-sahay",
+    "pmmvy": "pm-matru-vandana",
+    "ikhedut": "ikhedut-yojana",
+    "ujjwala": "pm-ujjwala",
+    "surya-ghar": "pm-surya-ghar",
+    "udyam": "udyam-registration",
+    "udid": "udid-card"
   }
 }

@@ -1,0 +1,41 @@
+# KruPa Digital Hub (એડમિન → ગાઇડ મેનેજ) માંથી લાઇવ યોજના, દસ્તાવેજ અને પ્રસંગ જાણકારમાં લાવે.
+# દર 3 કલાકે આપોઆપ. તરત જોઈએ તો: GitHub → Actions → "Digital Hub માંથી માહિતી" → Run workflow.
+name: Digital Hub માંથી માહિતી
+
+on:
+  schedule:
+    - cron: '17 */3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: sync-hub
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Digital Hub માંથી લાવો
+        run: node scripts/sync-hub.mjs
+      - name: ડેટા ચકાસો
+        run: node scripts/check-data.mjs
+      - name: સેવ કરો અને લાઇવ કરો
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- data; then echo "નવું કંઈ નથી"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          git commit -m "Data from KruPa Digital Hub"
+          git push
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" > /dev/null || echo "Pages build: GitHub will pick up the push"

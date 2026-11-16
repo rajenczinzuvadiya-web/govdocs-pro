@@ -12,6 +12,7 @@ const state = {
   events: [],
   updates: [],
   helplines: [],
+  renamed: {},
   profile: store.getProfile(),
   seen: new Set(store.getSeen() || []),
   installPrompt: null,
@@ -42,7 +43,9 @@ function toast(msg) {
 const todayISO = () => new Date().toISOString().slice(0, 10);
 const visible = (list) => list.filter((s) => !isExpired(s));
 const allItems = () => [...state.schemes, ...state.docs];
-const findItem = (id) => state.schemes.find((s) => s.id === id) || state.docs.find((s) => s.id === id);
+// જૂની લિંક (બદલાયેલું id) પણ નવા કાર્ડ પર ખૂલે — KruPa Digital Hub નાં id સાથે મેળ (`renamed`)
+const findOne = (id) => state.schemes.find((s) => s.id === id) || state.docs.find((s) => s.id === id);
+const findItem = (id) => findOne(id) || (state.renamed[id] ? findOne(state.renamed[id]) : undefined);
 const isDoc = (s) => s.kind === 'doc';
 const isNew = (s) => !state.seen.has(s.id);
 const itemHref = (s) => `#/scheme/${encodeURIComponent(s.id)}`;
@@ -56,9 +59,9 @@ function markSeen(id) {
 
 // વર્ઝન 0.1 વખતનાં કાર્ડ (જૂના યુઝરને બાકીનાં "નવું" દેખાય)
 const V01_IDS = [
-  'pm-kisan', 'ikhedut', 'digital-gujarat-scholarship', 'nsp', 'ojas', 'pmegp', 'pmmvy', 'vahli-dikri',
-  'ganga-swarupa', 'vrudh-pension', 'ayushman', 'pmay-g', 'ration-card', 'birth-certificate', 'udid',
-  'sant-surdas', 'pm-svanidhi', 'udyam',
+  'pm-kisan', 'ikhedut-yojana', 'digital-gujarat-scholarship', 'nsp', 'ojas', 'pmegp', 'pm-matru-vandana',
+  'vhali-dikri', 'ganga-swarupa-sahay', 'vrudh-pension', 'ayushman-pmjay-ma', 'pm-awas-gramin', 'ration-card',
+  'birth-certificate', 'udid-card', 'sant-surdas-divyang-sahay', 'pm-svanidhi', 'udyam-registration',
 ];
 
 // ---------- ડેટા ----------
@@ -81,8 +84,14 @@ async function loadData() {
     state.error = false;
     // જૂનું કાર્ડ નવા વધુ વિગતવાળા કાર્ડથી બદલાયું હોય તો સેવ કરેલું સાચવવું
     const renamed = s.renamed || {};
+    state.renamed = renamed;
     const saved = store.getSaved();
     if (saved.some((id) => renamed[id])) store.setSaved([...new Set(saved.map((id) => renamed[id] || id))]);
+    // જોયેલાં કાર્ડ પણ નવા id પર (નહીં તો નામ બદલાયેલું કાર્ડ "નવું" દેખાય)
+    if ([...state.seen].some((id) => renamed[id])) {
+      state.seen = new Set([...state.seen].map((id) => renamed[id] || id));
+      store.setSeen([...state.seen]);
+    }
     if (store.getSeen() === null) {
       state.seen = new Set(state.profile ? V01_IDS : allItems().map((x) => x.id));
       store.setSeen([...state.seen]);

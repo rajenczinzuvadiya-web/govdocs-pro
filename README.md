@@ -58,8 +58,8 @@ js/speak.js         ગુજરાતીમાં વાંચીને સં�
 js/store.js         ફોનમાં સેવ
 data/schemes.json   યોજના કાર્ડ
 data/updates.json   "આજનું" માહિતી
-data/documents.json દસ્તાવેજ ગાઈડ (KruPa પરથી)
-data/events.json    જીવનના પ્રસંગ (KruPa પરથી)
+data/documents.json દસ્તાવેજ ગાઈડ (KruPa Digital Hub માંથી આપોઆપ)
+data/events.json    જીવનના પ્રસંગ (KruPa Digital Hub માંથી આપોઆપ)
 data/helplines.json જરૂરી ફોન નંબર
 sw.js               ઑફલાઇન
 manifest.json       ફોનમાં ઇન્સ્ટોલ / Play Store (TWA) માટે
@@ -69,11 +69,16 @@ icons/icon-source.png  આઇકનનું મૂળ ચિત્ર (1024, �
 store/feature-bg.png   Play Store ના મોટા ફોટાનું ચિત્ર (નામ script ઉમેરે)
 store/              Play Store: લખાણ (listing.md), ફોટા, અપલોડની રીત (README.md)
 scripts/check-data.mjs    ડેટા ચકાસણી
+scripts/sync-hub.mjs      KruPa Digital Hub માંથી યોજના / દસ્તાવેજ / પ્રસંગ (દર 3 કલાકે, .github/workflows/sync-hub.yml)
 scripts/make-icons.mjs    icon-source.png પરથી બધા આઇકન
 scripts/store-images.mjs  Play Store ના ફોટા
 ```
 
 કોઈ build કે npm install ની જરૂર નથી.
+
+## માહિતી ક્યાંથી આવે (16/11/26 થી)
+
+યોજના, દસ્તાવેજ અને પ્રસંગ KruPa Digital Hub → એડમિન → ગાઇડ મેનેજમાં લખાય છે. ત્યાં "ચાલુ" કરેલું કાર્ડ દર 3 કલાકે અહીં આવે (`from: "hub"`), ત્યાં બંધ કરો તો અહીંથી જાય. તરત જોઈએ તો GitHub → Actions → "Digital Hub માંથી માહિતી" → Run workflow. `from: "hub"` વાળું કાર્ડ અહીં બદલશો તો આવતી વખતે પાછું Digital Hub જેવું થઈ જશે, એટલે સુધારો Digital Hub માં કરવો.
 
 ## ફોનમાં ચલાવીને જોવું
 
