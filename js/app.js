@@ -7,7 +7,10 @@ import * as voice from './speak.js';
 const state = {
   schemes: [],
   updates: [],
+  helplines: [],
   profile: store.getProfile(),
+  seen: new Set(store.getSeen() || []),
+  installPrompt: null,
   loaded: false,
   error: false,
 };
@@ -48,10 +51,37 @@ async function loadData() {
     state.updates = u.updates || [];
     state.dataUpdatedOn = s.updatedOn || null;
     state.error = false;
+    // પહેલી વાર એપ ખોલી હોય તો બધું "જોયેલું" ગણવું; પછી ઉમેરાય તે જ "નવું" દેખાય
+    if (store.getSeen() === null) {
+      // વર્ઝન 0.1 વાપરનારને ત્યારનાં કાર્ડ જ "જોયેલાં" ગણવાં, એટલે નવાં ઉમેરાયેલાં "નવું" દેખાય
+      const ids = state.profile ? V01_IDS : state.schemes.map((x) => x.id);
+      state.seen = new Set(ids);
+      store.setSeen([...state.seen]);
+    }
   } catch {
     state.error = true;
   }
+  try {
+    const h = await fetch('data/helplines.json', { cache: 'no-cache' }).then((r) => r.json());
+    state.helplines = h.helplines || [];
+  } catch {
+    /* નંબરનું પેજ ખાલી દેખાશે */
+  }
   state.loaded = true;
+}
+
+const V01_IDS = [
+  'pm-kisan', 'ikhedut', 'digital-gujarat-scholarship', 'nsp', 'ojas', 'pmegp', 'pmmvy', 'vahli-dikri',
+  'ganga-swarupa', 'vrudh-pension', 'ayushman', 'pmay-g', 'ration-card', 'birth-certificate', 'udid',
+  'sant-surdas', 'pm-svanidhi', 'udyam',
+];
+
+const isNew = (s) => !state.seen.has(s.id);
+
+function markSeen(id) {
+  if (state.seen.has(id)) return;
+  state.seen.add(id);
+  store.setSeen([...state.seen]);
 }
 
 // ---------- કાર્ડ ----------
@@ -65,7 +95,8 @@ function categoryTags(ids) {
 
 function badges(s) {
   const d = deadlineText(s);
-  let out = `<span class="badge badge-${d.tone}">${esc(d.text)}</span>`;
+  let out = isNew(s) ? `<span class="badge badge-new">🆕 નવું</span>` : '';
+  out += `<span class="badge badge-${d.tone}">${esc(d.text)}</span>`;
   if (!s.verified) out += `<span class="badge badge-draft">ચકાસણી બાકી</span>`;
   if (store.isSaved(s.id)) out += `<span class="badge badge-saved">⭐ સેવ</span>`;
   return out;
@@ -176,19 +207,65 @@ function versionLine() {
 function viewHome() {
   const p = state.profile;
   if (!p || !p.categories || !p.categories.length) return viewOnboarding();
-  const mine = sortForProfile(visible(state.schemes).filter((s) => matches(s, p)), p);
+  // નવી યોજના સૌથી ઉપર, પછી પોતાના વર્ગની અને નજીકની છેલ્લી તારીખવાળી
+  const mine = sortForProfile(visible(state.schemes).filter((s) => matches(s, p)), p).sort(
+    (a, b) => Number(isNew(b)) - Number(isNew(a))
+  );
   const incomplete = !p.age && !p.district;
+  const fresh = mine.filter(isNew).length;
   return `
     ${reminderBanner()}
+    ${installBanner()}
     <section class="page-head">
       <h1>મારા માટે</h1>
-      <p class="muted">તમને લાગુ પડી શકે એવી <strong>${mine.length}</strong> યોજના</p>
+      <p class="muted">તમને લાગુ પડી શકે એવી <strong>${mine.length}</strong> યોજના${fresh ? `, તેમાંથી <strong class="new-count">${fresh} નવી</strong>` : ''}</p>
       <div class="tags tags-edit">${categoryTags(p.categories)} <a class="link" href="#/profile">બદલો</a></div>
     </section>
     ${incomplete ? `<a class="banner banner-info" href="#/profile">👤 ઉંમર અને જિલ્લો ઉમેરો, એટલે વધુ સાચી યોજના દેખાશે →</a>` : ''}
+    <div class="quick">
+      <a class="quick-btn" href="#/help"><span aria-hidden="true">📞</span>જરૂરી ફોન નંબર</a>
+      <a class="quick-btn" href="${shareAppLink()}" target="_blank" rel="noopener"><span aria-hidden="true">📲</span>એપ ગ્રુપમાં મોકલો</a>
+    </div>
     ${list(mine, 'તમારા વર્ગ માટે હજુ કાર્ડ નથી. જલ્દી ઉમેરાશે. ત્યાં સુધી <a href="#/all">બધી યોજના</a> જુઓ.')}
     <p class="muted small center"><a class="link" href="#/about">આ એપ વિશે અને જરૂરી સૂચના</a></p>
     <p class="muted small center">${versionLine()}</p>`;
+}
+
+function shareAppLink() {
+  const text = [
+    `*${APP.name}* 📲`,
+    'સરકારી યોજના, સહાય, ભરતી અને જરૂરી માહિતી, સરળ ગુજરાતીમાં અને બોલીને.',
+    'ખેડૂત, વિદ્યાર્થી, માતા, વડીલ — દરેક માટે.',
+    '',
+    `મફત એપ: ${appUrl()}`,
+  ].join('\n');
+  return 'https://wa.me/?text=' + encodeURIComponent(text);
+}
+
+function installBanner() {
+  if (!state.installPrompt) return '';
+  return `<button class="banner banner-install" data-action="install">📲 એપ ફોનમાં ઇન્સ્ટોલ કરો, એટલે હોમ સ્ક્રીન પરથી સીધી ખુલશે</button>`;
+}
+
+function viewHelp() {
+  const rows = state.helplines
+    .map(
+      (h) => `
+      <a class="help-row" href="tel:${esc(h.number)}">
+        <span class="help-icon" aria-hidden="true">${esc(h.icon)}</span>
+        <span class="help-text"><strong>${esc(h.display || h.number)}</strong><span>${esc(h.title)}</span></span>
+        <span class="help-call">📞 ફોન</span>
+      </a>`
+    )
+    .join('');
+  return `
+    <a class="back" href="#/" data-action="back">← પાછા</a>
+    <section class="page-head">
+      <h1>📞 જરૂરી ફોન નંબર</h1>
+      <p class="muted">નંબર પર ટેપ કરો એટલે સીધો ફોન લાગશે. બધા નંબર મફત છે.</p>
+    </section>
+    <div class="help-list">${rows || '<div class="empty">નંબર લોડ ન થયા.</div>'}</div>
+    <p class="note">⚠️ ફ્રોડથી સાવધાન: કોઈ સરકારી અધિકારી ફોન પર OTP, PIN કે પૈસા માંગતા નથી.</p>`;
 }
 
 let allFilter = { q: '', cat: '' };
@@ -198,7 +275,11 @@ function filteredAll() {
   return visible(state.schemes).filter((s) => {
     if (allFilter.cat && !s.categories.includes(allFilter.cat)) return false;
     if (!q) return true;
-    return [s.title, s.summary, s.benefit, ...(s.documents || [])].join(' ').toLowerCase().includes(q);
+    const catLabels = s.categories.map((c) => (CATEGORY_BY_ID[c] ? CATEGORY_BY_ID[c].label : ''));
+    return [s.title, s.summary, s.benefit, s.howToApply, ...(s.documents || []), ...catLabels]
+      .join(' ')
+      .toLowerCase()
+      .includes(q);
   });
 }
 
@@ -281,18 +362,41 @@ function shareText(s) {
   ].join('\n');
 }
 
+function docChecklist(s) {
+  const ready = store.getDocs(s.id);
+  const items = s.documents
+    .map(
+      (d, i) => `
+      <li><button type="button" class="doc ${ready.includes(i) ? 'done' : ''}" data-action="doc" data-id="${esc(s.id)}" data-i="${i}" aria-pressed="${ready.includes(i)}">
+        <span class="doc-box" aria-hidden="true"></span><span>${esc(d)}</span>
+      </button></li>`
+    )
+    .join('');
+  return `
+    <p class="muted small" id="doc-progress">${docProgress(s, ready)}</p>
+    <ul class="checklist">${items}</ul>`;
+}
+
+function docProgress(s, ready) {
+  const n = ready.filter((i) => i < s.documents.length).length;
+  if (n === s.documents.length) return '✅ બધા ડોક્યુમેન્ટ તૈયાર છે!';
+  return `તૈયાર હોય તેના પર ટેપ કરો: ${n} / ${s.documents.length} તૈયાર`;
+}
+
 function viewScheme(id) {
   const s = findScheme(id);
   if (!s) return `<div class="empty">આ યોજના મળી નહીં. <a href="#/">પાછા જાઓ</a></div>`;
   const saved = store.isSaved(s.id);
   const wa = 'https://wa.me/?text=' + encodeURIComponent(shareText(s));
+  const badgeHtml = badges(s);
+  markSeen(s.id);
   return `
     <a class="back" href="#/" data-action="back">← પાછા</a>
     <article class="detail">
       <div class="tags">${categoryTags(s.categories)}</div>
       <h1>${esc(s.title)}</h1>
       <p class="lead">${esc(s.summary)}</p>
-      <div class="badges">${badges(s)}</div>
+      <div class="badges">${badgeHtml}</div>
 
       <div class="actions">
         <button class="btn btn-primary btn-big" data-action="speak" data-id="${esc(s.id)}">🔊 સાંભળો</button>
@@ -304,7 +408,10 @@ function viewScheme(id) {
 
       <section><h2>✅ શું મળશે</h2><p>${esc(s.benefit)}</p></section>
       <section><h2>👥 કોણ લાયક</h2><ul>${s.eligibility.map((e) => `<li>${esc(e)}</li>`).join('')}</ul></section>
-      <section><h2>📄 કયા ડોક્યુમેન્ટ જોઈએ</h2><ul class="checklist">${s.documents.map((d) => `<li>${esc(d)}</li>`).join('')}</ul></section>
+      <section>
+        <h2>📄 કયા ડોક્યુમેન્ટ જોઈએ</h2>
+        ${docChecklist(s)}
+      </section>
       <section><h2>📍 ક્યાં અરજી કરવી</h2><p>${esc(s.howToApply)}</p></section>
       <section><h2>📅 છેલ્લી તારીખ</h2><p>${s.lastDate ? esc(formatDate(s.lastDate)) : 'ચાલુ યોજના (કોઈ નક્કી છેલ્લી તારીખ નથી)'}</p></section>
 
@@ -373,6 +480,7 @@ function viewAbout() {
           <li><strong>અમે ક્યારેય પૈસા, OTP કે આધાર નંબર માંગતા નથી.</strong> કોઈ આ એપના નામે માંગે તો તે ફ્રોડ છે. ફ્રોડ થાય તો 1930 પર ફોન કરો.</li>
         </ul>
       </section>
+      <a class="btn btn-big btn-block" href="#/help">📞 જરૂરી ફોન નંબર</a>
       <section><h2>🔒 તમારી માહિતી</h2>
         <p>લોગિન નથી. પ્રોફાઇલ અને સેવ કરેલી યોજનાઓ ફક્ત તમારા ફોનમાં રહે છે; અમારા સર્વર પર જતી નથી. <a class="link" href="privacy.html">પ્રાઇવસી પોલિસી</a></p>
       </section>
@@ -410,6 +518,7 @@ function render() {
       scheme: () => viewScheme(arg),
       profile: viewProfile,
       about: viewAbout,
+      help: viewHelp,
     }[name]?.() ?? viewHome();
   }
   $view.innerHTML = html;
@@ -522,12 +631,33 @@ $view.addEventListener('click', async (e) => {
 
   if (action === 'reset') {
     if (!confirm('તમારી પ્રોફાઇલ અને સેવ કરેલી યોજનાઓ આ ફોનમાંથી કાઢી નાખીએ?')) return;
-    store.setProfile(null);
-    store.setNotified({});
-    store.getSaved().forEach((sid) => store.toggleSaved(sid));
+    store.clearAll();
     state.profile = null;
+    state.seen = new Set(state.schemes.map((x) => x.id));
+    store.setSeen([...state.seen]);
     location.hash = '#/';
     render();
+  }
+
+  if (action === 'doc') {
+    const i = Number(el.dataset.i);
+    const ready = store.toggleDoc(id, i);
+    const done = ready.includes(i);
+    el.classList.toggle('done', done);
+    el.setAttribute('aria-pressed', String(done));
+    const prog = document.getElementById('doc-progress');
+    if (prog) prog.textContent = docProgress(findScheme(id), ready);
+  }
+
+  if (action === 'install' && state.installPrompt) {
+    state.installPrompt.prompt();
+    try {
+      await state.installPrompt.userChoice;
+    } catch {
+      /* ignore */
+    }
+    state.installPrompt = null;
+    el.remove();
   }
 
   if (action === 'retry') {
@@ -546,6 +676,31 @@ window.addEventListener('hashchange', () => {
 });
 
 // ---------- શરૂઆત ----------
+
+// અક્ષરનું કદ: સામાન્ય → મોટા → ખૂબ મોટા
+const TEXT_SIZES = { m: 'સામાન્ય', l: 'મોટા', xl: 'ખૂબ મોટા' };
+function applyTextSize(size) {
+  document.documentElement.dataset.size = size;
+}
+applyTextSize(store.getTextSize());
+document.getElementById('text-size').addEventListener('click', () => {
+  const order = Object.keys(TEXT_SIZES);
+  const next = order[(order.indexOf(store.getTextSize()) + 1) % order.length];
+  store.setTextSize(next);
+  applyTextSize(next);
+  toast(`અક્ષર: ${TEXT_SIZES[next]}`);
+});
+
+// Android Chrome "ઇન્સ્ટોલ કરો" બટન બતાવવા દે ત્યારે
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  state.installPrompt = e;
+  if (currentRoute().name === 'home' && state.loaded) render();
+});
+window.addEventListener('appinstalled', () => {
+  state.installPrompt = null;
+  toast('એપ ઇન્સ્ટોલ થઈ ગઈ ✓');
+});
 
 document.title = APP.name;
 document.querySelectorAll('[data-app-name]').forEach((n) => (n.textContent = APP.name));

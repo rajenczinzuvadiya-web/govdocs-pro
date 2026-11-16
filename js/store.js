@@ -34,6 +34,30 @@ export const store = {
     return next.includes(id);
   },
 
+  // જોયેલી યોજનાઓ ("નવું" નિશાન માટે). null = પહેલી વાર એપ ખોલી.
+  getSeen: () => read('seen', null),
+  setSeen: (ids) => write('seen', ids),
+
+  // ડોક્યુમેન્ટ ચેકલિસ્ટ: { schemeId: [તૈયાર ડોક્યુમેન્ટના નંબર] }
+  getDocs: (id) => read('docs', {})[id] || [],
+  toggleDoc(id, i) {
+    const all = read('docs', {});
+    const list = all[id] || [];
+    all[id] = list.includes(i) ? list.filter((x) => x !== i) : [...list, i];
+    write('docs', all);
+    return all[id];
+  },
+
+  getTextSize: () => read('textSize', 'm'),
+  setTextSize: (v) => write('textSize', v),
+
+  clearAll() {
+    ['profile', 'saved', 'notified', 'seen', 'docs'].forEach((k) => {
+      delete memory[k];
+      try { localStorage.removeItem(PREFIX + k); } catch { /* ignore */ }
+    });
+  },
+
   // દરેક યોજના માટે છેલ્લે નોટિફિકેશન ક્યારે બતાવ્યું (દિવસમાં એક જ વાર)
   getNotified: () => read('notified', {}),
   setNotified: (map) => write('notified', map),

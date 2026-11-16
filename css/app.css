@@ -63,13 +63,15 @@
 * { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
+html[data-size="l"] { font-size: 18px; }
+html[data-size="xl"] { font-size: 20.5px; }
 
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
   font-family: "Noto Sans Gujarati", "Shruti", "Hind Vadodara", system-ui, sans-serif;
-  font-size: 19px;
+  font-size: 1.1875rem;
   line-height: 1.6;
   padding-bottom: calc(76px + env(safe-area-inset-bottom));
 }
@@ -99,10 +101,14 @@ ul { margin: 0; padding-left: 1.2em; }
 }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 1.15rem; }
 .brand img { border-radius: 8px; }
-.profile-btn {
+.top-actions { display: flex; gap: 8px; }
+.icon-btn {
   display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
-  background: rgba(255, 255, 255, .18); text-decoration: none; font-size: 1.3rem;
+  background: rgba(255, 255, 255, .18); color: inherit; border: 0; text-decoration: none;
+  font: inherit; font-size: 1.3rem; cursor: pointer;
 }
+.text-size-btn { display: flex; align-items: baseline; justify-content: center; white-space: nowrap; font-weight: 700; font-size: 1.15rem; }
+.text-size-btn span { font-size: .75em; }
 
 /* નીચેનું મેનુ */
 .nav {
@@ -149,6 +155,33 @@ a.card:active { transform: scale(.99); }
 .badge-over { background: var(--line); color: var(--muted); }
 .badge-draft { background: var(--draft-bg); color: var(--draft-ink); }
 .badge-saved { background: var(--soon-bg); color: var(--soon-ink); }
+.badge-new { background: var(--info-bg); color: var(--info-ink); }
+.new-count { color: var(--info-ink); }
+
+/* ઝડપી બટન */
+.quick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.quick-btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  min-height: 72px; padding: 10px; border-radius: var(--radius); text-align: center;
+  background: var(--surface); border: 1px solid var(--line); text-decoration: none; font-weight: 600; font-size: .92rem;
+  box-shadow: var(--shadow);
+}
+.quick-btn span { font-size: 1.5rem; line-height: 1.2; }
+
+/* ફોન નંબર */
+.help-list { display: grid; gap: 10px; margin-bottom: 16px; }
+.help-row {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; text-decoration: none;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.help-icon { font-size: 1.6rem; flex: none; }
+.help-text { display: grid; flex: 1; min-width: 0; line-height: 1.35; }
+.help-text strong { font-size: 1.25rem; color: var(--primary); }
+.help-text span { color: var(--muted); font-size: .9rem; }
+.help-call {
+  flex: none; padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: .9rem;
+  background: var(--primary); color: var(--primary-ink);
+}
 
 /* બેનર */
 .banner { display: block; border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px; text-decoration: none; }
@@ -157,6 +190,10 @@ a.card:active { transform: scale(.99); }
 .banner-urgent { background: var(--urgent-bg); color: var(--urgent-ink); }
 .banner-info { background: var(--info-bg); color: var(--info-ink); font-weight: 600; }
 .banner-draft { background: var(--draft-bg); color: var(--draft-ink); }
+.banner-install {
+  width: 100%; border: 0; font: inherit; font-weight: 700; text-align: left; cursor: pointer;
+  background: var(--primary); color: var(--primary-ink);
+}
 
 /* બટન */
 .btn {
@@ -178,9 +215,20 @@ form .btn-primary { width: 100%; }
 .detail section > * + * { margin-top: 6px; }
 .detail li + li { margin-top: 4px; }
 .actions { display: grid; gap: 10px; }
-.checklist { list-style: none; padding: 0; }
-.checklist li { padding-left: 1.6em; position: relative; }
-.checklist li::before { content: "☐"; position: absolute; left: 0; color: var(--primary); }
+.checklist { list-style: none; padding: 0; display: grid; gap: 6px; }
+.detail .checklist li + li { margin-top: 0; }
+.doc {
+  display: flex; align-items: flex-start; gap: 10px; width: 100%; min-height: 48px; padding: 10px 12px;
+  font: inherit; text-align: left; color: var(--text); cursor: pointer;
+  background: var(--surface); border: 1.5px solid var(--line); border-radius: 12px;
+}
+.doc-box {
+  flex: none; width: 24px; height: 24px; margin-top: 2px; border-radius: 6px;
+  border: 2px solid var(--primary); display: grid; place-items: center;
+}
+.doc.done { background: var(--primary-soft); border-color: var(--primary); }
+.doc.done .doc-box { background: var(--primary); }
+.doc.done .doc-box::after { content: "✓"; color: var(--primary-ink); font-weight: 700; font-size: 16px; line-height: 1; }
 .source { border-top: 1px solid var(--line); padding-top: 14px; color: var(--muted); font-size: .88rem; }
 .source > * + * { margin-top: 6px; }
 
