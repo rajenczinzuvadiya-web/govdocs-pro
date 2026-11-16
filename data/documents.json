@@ -57,6 +57,7 @@
       "title": "આધાર કાર્ડ — નવું અને સુધારો",
       "summary": "દરેક વ્યક્તિનો 12 અંકનો ઓળખ નંબર. નવું આધાર મફત બને છે; નામ, સરનામું, જન્મ તારીખ, મોબાઈલ સુધારી શકાય છે.",
       "categories": [],
+      "group": "doc-id",
       "benefit": "લગભગ દરેક સરકારી યોજના, બેંક ખાતું, રેશનકાર્ડ, શિષ્યવૃત્તિ, PAN, સિમ કાર્ડ અને DBT સહાય માટે.",
       "eligibility": [
         "ભારતમાં રહેતી દરેક વ્યક્તિ — નાનું બાળક પણ (બાળકનું આધાર માતા કે પિતાના આધાર સાથે બને છે)."
@@ -87,7 +88,6 @@
         "myaadhaar.uidai.gov.in પર “Check Enrolment & Update Status” માં પહોંચ નંબરથી સ્થિતિ જુઓ.",
         "આધાર ટપાલથી ઘરે આવે છે; રાહ ન જોવી હોય તો ઈ-આધાર ડાઉનલોડ કરો — તે પણ માન્ય છે."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://myaadhaar.uidai.gov.in/",
       "source": "UIDAI",
@@ -102,10 +102,9 @@
         }
       ],
       "words": "aadhaar aadhar card adhar update sudharo mobile link address uidai",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-id"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "pan-card",
@@ -113,6 +112,7 @@
       "title": "PAN કાર્ડ",
       "summary": "આવકવેરા વિભાગનો 10 અક્ષરનો કાયમી નંબર. આધાર હોય તો ઈ-PAN થોડી મિનિટમાં મફત મળે છે.",
       "categories": [],
+      "group": "doc-id",
       "benefit": "બેંક ખાતું, ₹50,000 થી વધુ રોકડ જમા, લોન, નોકરીનો પગાર, આવકવેરા રિટર્ન, વાહન / જમીનની ખરીદી.",
       "eligibility": [
         "કોઈ પણ વ્યક્તિ — બાળક માટે માતા-પિતા અરજી કરી શકે. ધંધો / કંપની / ટ્રસ્ટ માટે અલગ PAN બને."
@@ -141,7 +141,6 @@
         "incometax.gov.in પર “Instant e-PAN → Check Status” માં આધાર નંબરથી PAN જોવાય છે.",
         "PAN બન્યા પછી આધાર સાથે લિંક છે કે નહીં તે “Link Aadhaar Status” માં તપાસો."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.incometax.gov.in/",
       "source": "આવકવેરા વિભાગ (Instant e-PAN)",
@@ -160,10 +159,9 @@
         }
       ],
       "words": "pan card paan e-pan epan income tax navu pan",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-id"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "pan-aadhaar-link",
@@ -171,6 +169,7 @@
       "title": "PAN–આધાર લિંક",
       "summary": "PAN ને આધાર સાથે જોડવું ફરજિયાત છે; ન જોડો તો PAN બંધ (નકામું) થઈ જાય છે. હવે ₹1,000 ફી ભરીને લિંક થાય છે.",
       "categories": [],
+      "group": "doc-bank",
       "benefit": "PAN ચાલુ રહે — બેંકના કામ, આવકવેરા રિફંડ, રોકાણ અને પગારમાં વધુ TDS કપાતો અટકે.",
       "eligibility": [
         "જેમની પાસે PAN અને આધાર બંને છે એ દરેક વ્યક્તિ."
@@ -197,7 +196,6 @@
       "after": [
         "“Link Aadhaar Status” માં સ્થિતિ જોવાય છે. ફી ભર્યાની પહોંચ સાચવો."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.incometax.gov.in/",
       "source": "આવકવેરા વિભાગ",
@@ -208,10 +206,9 @@
         }
       ],
       "words": "pan aadhaar link aadhar pan link inoperative 1000 fee",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-bank"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "voter-id",
@@ -219,6 +216,7 @@
       "title": "ચૂંટણી કાર્ડ (મતદાર ઓળખપત્ર)",
       "summary": "મત આપવા અને ઓળખ / સરનામાના પુરાવા માટે. નવું નામ, સુધારો અને સરનામું બદલવાનું મફત છે.",
       "categories": [],
+      "group": "doc-id",
       "benefit": "મત આપવા, ઓળખ અને સરનામાનો પુરાવો, ઘણી યોજનાઓ અને બેંક કામમાં.",
       "eligibility": [
         "18 વર્ષ પૂરાં થયેલા ભારતીય નાગરિક (17 વર્ષે અગાઉથી અરજી થઈ શકે)."
@@ -246,7 +244,6 @@
         "voters.eci.gov.in પર “Track Application Status” માં સંદર્ભ નંબરથી સ્થિતિ જુઓ.",
         "મંજૂરી પછી “e-EPIC Download” થી ચૂંટણી કાર્ડ PDF ડાઉનલોડ થાય છે; છાપેલું કાર્ડ ટપાલ / BLO થી આવે છે."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://voters.eci.gov.in/",
       "source": "ચૂંટણી પંચ — મતદાર સેવા",
@@ -257,10 +254,9 @@
         }
       ],
       "words": "voter id card chutani card election card epic matdar form 6 form 8",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-id"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "passport",
@@ -268,6 +264,7 @@
       "title": "પાસપોર્ટ",
       "summary": "વિદેશ જવા માટેનો દસ્તાવેજ; ઓળખ અને સરનામાનો મજબૂત પુરાવો પણ છે.",
       "categories": [],
+      "group": "doc-id",
       "benefit": "વિદેશમાં ભણવા, નોકરી, ફરવા જવા; વિઝા માટે; ઓળખના પુરાવા તરીકે.",
       "eligibility": [
         "કોઈ પણ ભારતીય નાગરિક — બાળક માટે માતા-પિતા અરજી કરે."
@@ -295,7 +292,6 @@
       "after": [
         "passportindia.gov.in પર “Track Application Status” માં ફાઈલ નંબરથી સ્થિતિ જુઓ."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.passportindia.gov.in/",
       "source": "Passport Seva (વિદેશ મંત્રાલય)",
@@ -306,10 +302,9 @@
         }
       ],
       "words": "passport paasport videsh tatkal renew psk",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-id"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "income-certificate",
@@ -317,6 +312,7 @@
       "title": "આવકનો દાખલો",
       "summary": "કુટુંબની વાર્ષિક આવક બતાવતો દાખલો — શિષ્યવૃત્તિ, સહાય યોજના અને ફી માફીમાં સૌથી વધુ માંગાય છે.",
       "categories": [],
+      "group": "doc-cert",
       "benefit": "શિષ્યવૃત્તિ, ગંગા સ્વરૂપા / વૃદ્ધ સહાય, આવાસ યોજના, EWS / નોન-ક્રીમીલેયર, ફી માફી, હોસ્ટેલ પ્રવેશ.",
       "eligibility": [
         "ગુજરાતમાં રહેતી કોઈ પણ વ્યક્તિ / કુટુંબ."
@@ -335,7 +331,7 @@
       ],
       "steps": [
         "digitalgujarat.gov.in ખોલો. પહેલી વાર હો તો “Register” દબાવી અરજદારનો મોબાઇલ નંબર, નામ અને ઈમેલ લખો.",
-        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો, બીજા કોઈ પાસે ન રહે.",
+        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો — VCE પોતાની પાસે ન રાખે.",
         "“Login” થી મોબાઇલ નંબર અને પાસવર્ડ નાખી અંદર જાઓ. પહેલી વાર “Profile” માં નામ, જન્મ તારીખ, સરનામું આધાર મુજબ ભરો.",
         "સેવાઓમાં “આવકનો દાખલો” (Income Certificate) પસંદ કરી ફોર્મ ભરો — કુટુંબના દરેક કમાતા સભ્યની આવક લખો.",
         "પુરાવા સ્કેન કરી અપલોડ કરો, ફી ભરો અને અરજીની પ્રિન્ટ લો.",
@@ -350,7 +346,6 @@
         "Digital Gujarat પર “My Application” માં સ્થિતિ જુઓ; મંજૂર દાખલો ત્યાંથી ડાઉનલોડ થાય છે.",
         "કચેરીમાં અરજી કરી હોય તો પહોંચમાં લખેલી તારીખે દાખલો લેવા જાઓ."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
@@ -365,10 +360,9 @@
         }
       ],
       "words": "aavak no dakhlo income certificate avak dakhalo aavak praman patra",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-cert"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "caste-certificate",
@@ -376,6 +370,7 @@
       "title": "જાતિનો દાખલો (અનુસૂચિત જાતિ / અનુસૂચિત જનજાતિ)",
       "summary": "SC / ST અનામત, શિષ્યવૃત્તિ અને સહાય યોજના માટે જરૂરી જાતિનું પ્રમાણપત્ર.",
       "categories": [],
+      "group": "doc-cert",
       "benefit": "ભણતર અને સરકારી નોકરીમાં અનામત, શિષ્યવૃત્તિ, હોસ્ટેલ, આવાસ અને સમાજ કલ્યાણની સહાય યોજના.",
       "eligibility": [
         "ગુજરાતની અનુસૂચિત જાતિ (SC) અથવા અનુસૂચિત જનજાતિ (ST) ની યાદીમાં આવતી જાતિના લોકો."
@@ -393,7 +388,7 @@
       ],
       "steps": [
         "digitalgujarat.gov.in ખોલો. પહેલી વાર હો તો “Register” દબાવી અરજદારનો મોબાઇલ નંબર, નામ અને ઈમેલ લખો.",
-        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો, બીજા કોઈ પાસે ન રહે.",
+        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો — VCE પોતાની પાસે ન રાખે.",
         "“Login” થી મોબાઇલ નંબર અને પાસવર્ડ નાખી અંદર જાઓ. પહેલી વાર “Profile” માં નામ, જન્મ તારીખ, સરનામું આધાર મુજબ ભરો.",
         "સેવાઓમાં જાતિના દાખલાની સેવા (SC / ST) પસંદ કરી ફોર્મમાં જાતિ, પેટા જાતિ અને કુટુંબની વિગત ભરો.",
         "પિતાનો જાતિનો પુરાવો અને બીજા પુરાવા અપલોડ કરી ફી ભરો, અરજીની પ્રિન્ટ લો.",
@@ -407,7 +402,6 @@
       "after": [
         "Digital Gujarat પર “My Application” માં સ્થિતિ જુઓ અને મંજૂર દાખલો ડાઉનલોડ કરો."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
@@ -422,10 +416,9 @@
         }
       ],
       "words": "jati no dakhlo caste certificate sc st anusuchit jati janjati",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-cert"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "sebc-certificate",
@@ -433,6 +426,7 @@
       "title": "SEBC (બક્ષીપંચ) જાતિ પ્રમાણપત્ર",
       "summary": "સામાજિક અને શૈક્ષણિક રીતે પછાત વર્ગ (OBC ને ગુજરાતમાં SEBC કહે છે) નું જાતિ પ્રમાણપત્ર.",
       "categories": [],
+      "group": "doc-cert",
       "benefit": "ભણતર અને નોકરીમાં અનામત, શિષ્યવૃત્તિ, સહાય યોજના. અનામતના લાભ માટે સાથે નોન-ક્રીમીલેયર પ્રમાણપત્ર પણ જોઈએ.",
       "eligibility": [
         "ગુજરાતની SEBC (બક્ષીપંચ) યાદીમાં આવતી જાતિના લોકો."
@@ -450,7 +444,7 @@
       ],
       "steps": [
         "digitalgujarat.gov.in ખોલો. પહેલી વાર હો તો “Register” દબાવી અરજદારનો મોબાઇલ નંબર, નામ અને ઈમેલ લખો.",
-        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો, બીજા કોઈ પાસે ન રહે.",
+        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો — VCE પોતાની પાસે ન રાખે.",
         "“Login” થી મોબાઇલ નંબર અને પાસવર્ડ નાખી અંદર જાઓ. પહેલી વાર “Profile” માં નામ, જન્મ તારીખ, સરનામું આધાર મુજબ ભરો.",
         "સેવાઓમાં SEBC જાતિ પ્રમાણપત્રની સેવા પસંદ કરી ફોર્મ ભરો.",
         "પુરાવા અપલોડ કરી ફી ભરો અને અરજીની પ્રિન્ટ લો.",
@@ -463,7 +457,6 @@
       "after": [
         "Digital Gujarat પર “My Application” માં સ્થિતિ જુઓ અને મંજૂર પ્રમાણપત્ર ડાઉનલોડ કરો."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
@@ -478,10 +471,9 @@
         }
       ],
       "words": "sebc baxi panch bakshi panch obc certificate jati praman patra",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-cert"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "non-creamy-layer",
@@ -489,6 +481,7 @@
       "title": "નોન-ક્રીમીલેયર પ્રમાણપત્ર",
       "summary": "SEBC / OBC કુટુંબની આવક નક્કી મર્યાદાથી ઓછી છે એટલે અનામતનો લાભ મળે — તે બતાવતું પ્રમાણપત્ર.",
       "categories": [],
+      "group": "doc-cert",
       "benefit": "SEBC / OBC અનામત સાથે પ્રવેશ, સરકારી નોકરી અને પરીક્ષા, શિષ્યવૃત્તિ.",
       "eligibility": [
         "SEBC (બક્ષીપંચ) પ્રમાણપત્ર ધરાવતા, જેમના કુટુંબની વાર્ષિક આવક ₹8 લાખથી ઓછી હોય ⚠️ ચકાસો"
@@ -507,7 +500,7 @@
       ],
       "steps": [
         "digitalgujarat.gov.in ખોલો. પહેલી વાર હો તો “Register” દબાવી અરજદારનો મોબાઇલ નંબર, નામ અને ઈમેલ લખો.",
-        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો, બીજા કોઈ પાસે ન રહે.",
+        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો — VCE પોતાની પાસે ન રાખે.",
         "“Login” થી મોબાઇલ નંબર અને પાસવર્ડ નાખી અંદર જાઓ. પહેલી વાર “Profile” માં નામ, જન્મ તારીખ, સરનામું આધાર મુજબ ભરો.",
         "સેવાઓમાં નોન-ક્રીમીલેયર પ્રમાણપત્ર પસંદ કરો. રાજ્ય માટે જોઈએ છે કે કેન્દ્ર સરકાર માટે — તે ધ્યાનથી પસંદ કરો.",
         "કુટુંબના સભ્યોની નોકરી / આવકની વિગત ભરી પુરાવા અપલોડ કરો, ફી ભરો.",
@@ -520,7 +513,6 @@
       "after": [
         "Digital Gujarat પર “My Application” માં સ્થિતિ જુઓ અને મંજૂર પ્રમાણપત્ર ડાઉનલોડ કરો."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
@@ -535,10 +527,9 @@
         }
       ],
       "words": "non creamy layer ncl certificate non krimi layer obc sebc",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-cert"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "ews-certificate",
@@ -546,6 +537,7 @@
       "title": "EWS પ્રમાણપત્ર (આર્થિક રીતે નબળા વર્ગ)",
       "summary": "અનામત ન ધરાવતા (બિન-અનામત) વર્ગના ઓછી આવક વાળા કુટુંબને 10% અનામત માટેનું પ્રમાણપત્ર.",
       "categories": [],
+      "group": "doc-cert",
       "benefit": "ભણતરમાં પ્રવેશ અને સરકારી નોકરીમાં 10% અનામત; કેટલીક શિષ્યવૃત્તિ.",
       "eligibility": [
         "SC / ST / SEBC સિવાયના વર્ગના લોકો, જેમના કુટુંબની વાર્ષિક આવક ₹8 લાખથી ઓછી હોય ⚠️ ચકાસો"
@@ -564,7 +556,7 @@
       ],
       "steps": [
         "digitalgujarat.gov.in ખોલો. પહેલી વાર હો તો “Register” દબાવી અરજદારનો મોબાઇલ નંબર, નામ અને ઈમેલ લખો.",
-        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો, બીજા કોઈ પાસે ન રહે.",
+        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો — VCE પોતાની પાસે ન રાખે.",
         "“Login” થી મોબાઇલ નંબર અને પાસવર્ડ નાખી અંદર જાઓ. પહેલી વાર “Profile” માં નામ, જન્મ તારીખ, સરનામું આધાર મુજબ ભરો.",
         "સેવાઓમાં EWS પ્રમાણપત્ર પસંદ કરો — રાજ્ય માટે કે કેન્દ્ર સરકાર માટે તે ધ્યાનથી પસંદ કરો.",
         "કુટુંબની આવક અને જમીન / મકાનની વિગત ભરી પુરાવા અપલોડ કરો, ફી ભરો.",
@@ -577,7 +569,6 @@
       "after": [
         "Digital Gujarat પર “My Application” માં સ્થિતિ જુઓ અને મંજૂર પ્રમાણપત્ર ડાઉનલોડ કરો."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
@@ -592,10 +583,9 @@
         }
       ],
       "words": "ews certificate economically weaker section aarthik nabla varg 10 percent",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-cert"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "domicile-certificate",
@@ -603,6 +593,7 @@
       "title": "ડોમિસાઈલ (રહેઠાણ) પ્રમાણપત્ર",
       "summary": "તમે ગુજરાતના રહેવાસી છો તે બતાવતું પ્રમાણપત્ર — રાજ્યના પ્રવેશ અને નોકરીમાં માંગાય છે.",
       "categories": [],
+      "group": "doc-cert",
       "benefit": "મેડિકલ / ઇજનેરી વગેરેમાં રાજ્યની બેઠક પર પ્રવેશ, રાજ્યની સરકારી નોકરી, કેટલીક શિષ્યવૃત્તિ.",
       "eligibility": [
         "ગુજરાતમાં નક્કી વર્ષોથી રહેતા લોકો (સામાન્ય રીતે 10 વર્ષ) ⚠️ ચકાસો"
@@ -621,7 +612,7 @@
       ],
       "steps": [
         "digitalgujarat.gov.in ખોલો. પહેલી વાર હો તો “Register” દબાવી અરજદારનો મોબાઇલ નંબર, નામ અને ઈમેલ લખો.",
-        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો, બીજા કોઈ પાસે ન રહે.",
+        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો — VCE પોતાની પાસે ન રાખે.",
         "“Login” થી મોબાઇલ નંબર અને પાસવર્ડ નાખી અંદર જાઓ. પહેલી વાર “Profile” માં નામ, જન્મ તારીખ, સરનામું આધાર મુજબ ભરો.",
         "સેવાઓમાં ડોમિસાઈલ / રહેઠાણ પ્રમાણપત્ર પસંદ કરી ફોર્મ ભરો.",
         "દર વર્ષનો રહેઠાણ દેખાય તેવા પુરાવા અપલોડ કરો, ફી ભરો અને પ્રિન્ટ લો.",
@@ -634,7 +625,6 @@
       "after": [
         "Digital Gujarat પર “My Application” માં સ્થિતિ જુઓ અને મંજૂર પ્રમાણપત્ર ડાઉનલોડ કરો."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
@@ -645,10 +635,9 @@
         }
       ],
       "words": "domicile certificate rahethan praman patra residence certificate niwas",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-cert"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "birth-certificate",
@@ -660,6 +649,7 @@
         "mata",
         "samanya"
       ],
+      "group": "doc-family",
       "benefit": "શાળા પ્રવેશ, આધાર, પાસપોર્ટ, ચૂંટણી કાર્ડ, લગ્ન નોંધણી, સરકારી નોકરી અને યોજનામાં જન્મ તારીખનો પુરાવો.",
       "eligibility": [
         "ગુજરાતમાં જન્મેલું દરેક બાળક — દવાખાનામાં જન્મ હોય તો દવાખાનું, ઘરે જન્મ હોય તો કુટુંબ નોંધણી કરાવે."
@@ -687,7 +677,6 @@
       "after": [
         "eolakh.gujarat.gov.in પર નોંધણી નંબર / વિગતથી દાખલો શોધી ડાઉનલોડ કરો."
       ],
-      "howToApply": "ગામમાં તલાટી-કમ-મંત્રી (ગ્રામ પંચાયત), શહેરમાં નગરપાલિકા. ઓનલાઇન: crsorgi.gov.in",
       "lastDate": null,
       "officialLink": "https://eolakh.gujarat.gov.in/",
       "source": "e-Olakh (જન્મ-મરણ, ગુજરાત)",
@@ -702,10 +691,9 @@
         }
       ],
       "words": "janm no dakhlo birth certificate janam nondhani eolakh",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-family"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "death-certificate",
@@ -713,6 +701,7 @@
       "title": "મરણનો દાખલો",
       "summary": "અવસાનની નોંધણી અને દાખલો — 21 દિવસમાં નોંધણી મફત. વારસાઈ, પેન્શન, વીમા અને બેંક કામમાં જોઈએ.",
       "categories": [],
+      "group": "doc-family",
       "benefit": "વારસાઈ નોંધ, ગંગા સ્વરૂપા સહાય, રાષ્ટ્રીય કુટુંબ સહાય, વીમાનો દાવો, બેંક ખાતું / પેન્શન બંધ-ચાલુ કરવું.",
       "eligibility": [
         "અવસાન પામનારના કુટુંબના સભ્ય / જાણ કરનાર. દવાખાનામાં અવસાન હોય તો દવાખાનું નોંધણી કરે."
@@ -740,7 +729,6 @@
       "after": [
         "eolakh.gujarat.gov.in પર નોંધણી નંબર / વિગતથી દાખલો શોધી ડાઉનલોડ કરો."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://eolakh.gujarat.gov.in/",
       "source": "e-Olakh (જન્મ-મરણ, ગુજરાત)",
@@ -755,10 +743,9 @@
         }
       ],
       "words": "maran no dakhlo death certificate mrutyu nondhani eolakh",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-family"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "ration-card",
@@ -768,6 +755,7 @@
       "categories": [
         "samanya"
       ],
+      "group": "doc-family",
       "benefit": "NFSA / અંત્યોદય કાર્ડ પર સસ્તું કે મફત અનાજ; આયુષ્માન કાર્ડ, આવકનો દાખલો અને બીજી યોજનામાં કુટુંબનો પુરાવો.",
       "eligibility": [
         "ગુજરાતમાં રહેતું દરેક કુટુંબ (એક કુટુંબ = એક રેશનકાર્ડ)."
@@ -786,7 +774,7 @@
       "steps": [
         "નવું કાર્ડ / નામ ઉમેરવું / કમી કરવું — ગ્રામ પંચાયતના e-Gram કેન્દ્ર કે તાલુકા મામલતદાર કચેરી (પુરવઠા શાખા) / જનસેવા કેન્દ્ર પર અરજી કરો.",
         "digitalgujarat.gov.in ખોલો. પહેલી વાર હો તો “Register” દબાવી અરજદારનો મોબાઇલ નંબર, નામ અને ઈમેલ લખો.",
-        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો, બીજા કોઈ પાસે ન રહે.",
+        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો — VCE પોતાની પાસે ન રાખે.",
         "“Login” થી મોબાઇલ નંબર અને પાસવર્ડ નાખી અંદર જાઓ. પહેલી વાર “Profile” માં નામ, જન્મ તારીખ, સરનામું આધાર મુજબ ભરો.",
         "ઓનલાઈન: Digital Gujarat પર રેશનકાર્ડની સેવા પસંદ કરી ફોર્મ ભરો અને પુરાવા અપલોડ કરો.",
         "કાર્ડ બન્યા પછી દરેક સભ્યનું e-KYC સસ્તા અનાજની દુકાને આંગળાંની છાપથી કરાવો."
@@ -799,7 +787,6 @@
         "ipds.gujarat.gov.in પર રેશનકાર્ડની વિગત અને મળવાપાત્ર જથ્થો જોવાય છે.",
         "“Mera Ration” એપથી બીજા ગામ / રાજ્યમાં પણ અનાજ લઈ શકાય છે."
       ],
-      "howToApply": "મામલતદાર કચેરી, ગ્રામ પંચાયતના VCE કે Digital Gujarat પરથી.",
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
       "source": "અન્ન, નાગરિક પુરવઠા અને ગ્રાહકોની બાબતોનો વિભાગ, ગુજરાત",
@@ -814,10 +801,9 @@
         }
       ],
       "words": "ration card rashan card navu nam umervu kami karvu nfsa e-kyc",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-family"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "aadhaar-bank-seeding",
@@ -825,6 +811,7 @@
       "title": "બેંક ખાતું આધાર સાથે જોડવું (DBT માટે)",
       "summary": "સરકારી સહાય (DBT) સીધી ખાતામાં આવે તે માટે બેંક ખાતું આધાર સાથે “સીડ” કરાવવું જરૂરી છે.",
       "categories": [],
+      "group": "doc-bank",
       "benefit": "સહાયના પૈસા અટક્યા વગર સીધા પોતાના ખાતામાં આવે.",
       "eligibility": [
         "સહાય, શિષ્યવૃત્તિ, પેન્શન, PM કિસાન, ગેસ સબસિડી વગેરે મેળવતી દરેક વ્યક્તિ."
@@ -850,7 +837,6 @@
       "after": [
         "પૈસા આવ્યા કે નહીં તે બેંકના SMS / પાસબુકમાં અને pfms.nic.in પર જોવાય છે ⚠️ ચકાસો"
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://myaadhaar.uidai.gov.in/",
       "source": "myAadhaar (Bank Seeding Status)",
@@ -865,10 +851,9 @@
         }
       ],
       "words": "aadhaar bank seeding dbt npci link bank khatu aadhar jodvu sahay aavti nathi",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-bank"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "satbar-8a",
@@ -876,6 +861,7 @@
       "title": "૭/૧૨ અને ૮-અ ની નકલ",
       "summary": "ખેતીની જમીનનો રેકર્ડ: ૭/૧૨ માં સર્વે નંબર, માલિક અને પાક; ૮-અ માં ખાતેદારની બધી જમીનની યાદી.",
       "categories": [],
+      "group": "doc-land",
       "benefit": "PM કિસાન, i-Khedut સહાય, પાક લોન / કિસાન ક્રેડિટ કાર્ડ, પાક વીમો, વારસાઈ, જમીન વેચાણ-ખરીદી, આવકનો દાખલો.",
       "eligibility": [
         "ગુજરાતમાં ખેતીની જમીન ધરાવતા ખાતેદાર — કોઈ પણ વ્યક્તિ રેકર્ડ જોઈ શકે છે."
@@ -900,7 +886,6 @@
       "after": [
         "નોંધની સ્થિતિ AnyROR પર “હક્કપત્રક (ગામ નમૂના નં. ૬)” અને “નોંધની વિગત” માં જોવાય છે."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://anyror.gujarat.gov.in/",
       "source": "AnyROR (મહેસૂલ વિભાગ, ગુજરાત)",
@@ -915,10 +900,9 @@
         }
       ],
       "words": "7/12 712 satbar 8a 8-a utara jamin record anyror khatedar",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-land"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "udyam-registration",
@@ -929,6 +913,7 @@
         "vepari",
         "yuvan"
       ],
+      "group": "doc-business",
       "benefit": "મુદ્રા અને બેંક લોનમાં સરળતા, સરકારી સહાય / સબસિડી, સરકારી ખરીદીમાં પ્રાથમિકતા, ધંધાનો પુરાવો.",
       "eligibility": [
         "દુકાન, સેવા, કારખાનું કે નાનો ધંધો કરતા કોઈ પણ વ્યક્તિ / પેઢી (સૂક્ષ્મ, લઘુ, મધ્યમ ઉદ્યોગ)."
@@ -957,7 +942,6 @@
       "after": [
         "udyamregistration.gov.in પર “Print / Verify” માં Udyam નંબરથી પ્રમાણપત્ર ડાઉનલોડ થાય છે."
       ],
-      "howToApply": "ફક્ત udyamregistration.gov.in પર જાતે, અથવા CSC સેન્ટર પરથી.",
       "lastDate": null,
       "officialLink": "https://udyamregistration.gov.in/",
       "source": "Udyam Registration (MSME મંત્રાલય)",
@@ -972,10 +956,9 @@
         }
       ],
       "words": "udyam msme udyog aadhaar registration nondhani dhandho dukan certificate",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-business"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "driving-licence",
@@ -983,6 +966,7 @@
       "title": "ડ્રાઇવિંગ લાયસન્સ (લર્નિંગ અને પાકું)",
       "summary": "વાહન ચલાવવાની કાયદેસર પરવાનગી — પહેલાં લર્નિંગ લાયસન્સ, પછી ટેસ્ટ આપી પાકું લાયસન્સ.",
       "categories": [],
+      "group": "doc-id",
       "benefit": "વાહન ચલાવવા, ઓળખ અને સરનામાનો પુરાવો, ડ્રાઇવરની નોકરી.",
       "eligibility": [
         "ગિયર વગરનું 50cc સુધીનું વાહન: 16 વર્ષે (માતા-પિતાની સંમતિથી); બીજાં વાહન: 18 વર્ષે; ભારે / વ્યાપારી વાહન માટે નિયમ જુદા."
@@ -1010,7 +994,6 @@
       "after": [
         "sarathi.parivahan.gov.in પર “Application Status” માં સ્થિતિ જુઓ; લાયસન્સ DigiLocker માં પણ આવે છે."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://sarathi.parivahan.gov.in/",
       "source": "Sarathi (માર્ગ પરિવહન મંત્રાલય)",
@@ -1021,10 +1004,9 @@
         }
       ],
       "words": "driving licence license lyasan learning rto sarathi dl",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-id"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "digilocker",
@@ -1032,6 +1014,7 @@
       "title": "DigiLocker — દસ્તાવેજ ફોનમાં",
       "summary": "આધાર, PAN, લાયસન્સ, માર્કશીટ જેવા સરકારી દસ્તાવેજ ફોનમાં રાખવાની સરકારી મફત સેવા.",
       "categories": [],
+      "group": "doc-id",
       "benefit": "દસ્તાવેજ ખોવાય તો પણ તરત મળે; ઘણી કચેરી અને પ્રવેશમાં DigiLocker ની નકલ ચાલે છે.",
       "eligibility": [
         "આધાર અને મોબાઈલ ધરાવતી દરેક વ્યક્તિ."
@@ -1053,7 +1036,6 @@
         "આધાર અને બીજા દસ્તાવેજમાં નામ જુદું હોય તો દસ્તાવેજ ખેંચાતો નથી — પહેલાં સુધારો કરાવો."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.digilocker.gov.in/",
       "source": "DigiLocker",
@@ -1064,10 +1046,9 @@
         }
       ],
       "words": "digilocker digi locker documents phone ma marksheet",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-id"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "abha-card",
@@ -1075,6 +1056,7 @@
       "title": "ABHA આરોગ્ય કાર્ડ",
       "summary": "14 અંકનો આરોગ્ય ખાતા નંબર — દવાખાનાના રિપોર્ટ અને સારવારની વિગત એક જગ્યાએ.",
       "categories": [],
+      "group": "doc-id",
       "benefit": "રિપોર્ટ / દવાની ચિઠ્ઠી ફોનમાં, દવાખાને લાઈન ટૂંકી (QR સ્કેન), આયુષ્માન અને સરકારી દવાખાનામાં વપરાય.",
       "eligibility": [
         "કોઈ પણ વ્યક્તિ — બાળક માટે માતા-પિતા બનાવી શકે."
@@ -1095,7 +1077,6 @@
         "એક વ્યક્તિના બે ABHA ન બનાવો — ખોવાય તો “Retrieve ABHA” થી એ જ મળે છે."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://abha.abdm.gov.in/",
       "source": "ABHA (રાષ્ટ્રીય આરોગ્ય સત્તામંડળ)",
@@ -1106,10 +1087,9 @@
         }
       ],
       "words": "abha card health id aarogya card abdm 14 digit",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-id"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "udid-card",
@@ -1119,6 +1099,7 @@
       "categories": [
         "divyang"
       ],
+      "group": "doc-cert",
       "benefit": "સંત સુરદાસ સહાય, બસ / રેલવે છૂટ, શિષ્યવૃત્તિ, નોકરીમાં અનામત, સાધન સહાય (ઘણી સહાય 40% કે વધુ દિવ્યાંગતા પર).",
       "eligibility": [
         "શારીરિક કે માનસિક દિવ્યાંગતા ધરાવતી કોઈ પણ વ્યક્તિ."
@@ -1145,7 +1126,6 @@
       "after": [
         "swavlambancard.gov.in પર “Track Your Application” માં સ્થિતિ જુઓ."
       ],
-      "howToApply": "swavlambancard.gov.in પર ઓનલાઇન અરજી, પછી જિલ્લા સરકારી હોસ્પિટલમાં તપાસ.",
       "lastDate": null,
       "officialLink": "https://www.swavlambancard.gov.in/",
       "source": "Swavlamban Card (UDID)",
@@ -1156,10 +1136,9 @@
         }
       ],
       "words": "udid card divyang praman patra disability certificate viklang",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-cert"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "apaar-id",
@@ -1167,6 +1146,7 @@
       "title": "APAAR ID (વિદ્યાર્થીનું ભણતર ખાતું)",
       "summary": "દરેક વિદ્યાર્થીનો 12 અંકનો કાયમી નંબર — શાળા-કૉલેજનાં પરિણામ અને પ્રમાણપત્ર એક જગ્યાએ.",
       "categories": [],
+      "group": "doc-study",
       "benefit": "માર્કશીટ / પ્રમાણપત્ર DigiLocker માં, શાળા બદલવામાં અને પ્રવેશમાં સરળતા, કૉલેજમાં ક્રેડિટ (ABC).",
       "eligibility": [
         "શાળા કે કૉલેજમાં ભણતો દરેક વિદ્યાર્થી."
@@ -1188,7 +1168,6 @@
         "આધાર અને શાળાના રેકર્ડમાં નામ જુદું હોય તો APAAR બનતું નથી — પહેલાં સુધારો કરાવો."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://apaar.education.gov.in/",
       "source": "APAAR (શિક્ષણ મંત્રાલય)",
@@ -1199,10 +1178,9 @@
         }
       ],
       "words": "apaar id one nation one student abc academic bank of credits",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-study"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "leaving-certificate",
@@ -1210,6 +1188,7 @@
       "title": "શાળા છોડ્યાનું પ્રમાણપત્ર (LC) — નવું, નકલ, સુધારો",
       "summary": "શાળા છોડતી વખતે મળતું પ્રમાણપત્ર — જન્મ તારીખ અને જાતિનો મહત્ત્વનો પુરાવો.",
       "categories": [],
+      "group": "doc-study",
       "benefit": "નવી શાળા / કૉલેજમાં પ્રવેશ, જાતિ-આવકના દાખલા, ઉંમરનો પુરાવો, સરકારી નોકરી.",
       "eligibility": [
         "શાળામાં ભણેલો દરેક વિદ્યાર્થી."
@@ -1232,7 +1211,6 @@
         "અસલ LC એક જ મળે છે — પ્રમાણિત નકલો બનાવી રાખો."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.education.gujarat.gov.in/",
       "source": "શિક્ષણ વિભાગ, ગુજરાત",
@@ -1243,10 +1221,9 @@
         }
       ],
       "words": "lc leaving certificate shala chhodyanu pramanpatra school leaving tc transfer certificate",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-study"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "duplicate-marksheet",
@@ -1254,6 +1231,7 @@
       "title": "ધો. 10 / 12 ની માર્કશીટ — નકલ (GSEB)",
       "summary": "ગુજરાત બોર્ડની માર્કશીટ / પ્રમાણપત્ર ખોવાય કે ફાટી જાય તો નકલ મેળવવાની રીત.",
       "categories": [],
+      "group": "doc-study",
       "benefit": "પ્રવેશ, નોકરી, પાસપોર્ટ અને ઉંમર / ભણતરના પુરાવા માટે.",
       "eligibility": [
         "GSEB (ગુજરાત માધ્યમિક અને ઉચ્ચતર માધ્યમિક શિક્ષણ બોર્ડ) ની પરીક્ષા આપનાર."
@@ -1275,7 +1253,6 @@
         "બેઠક નંબર ન હોય તો શાળામાંથી GR પરથી મેળવો — ખોટા વર્ષે અરજી ન કરો."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.gseb.org/",
       "source": "GSEB",
@@ -1290,10 +1267,9 @@
         }
       ],
       "words": "marksheet duplicate gseb 10 12 dhoran nakal certificate lost",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-study"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "marriage-registration",
@@ -1301,6 +1277,7 @@
       "title": "લગ્ન નોંધણી / લગ્નનો દાખલો",
       "summary": "ગુજરાતમાં લગ્નની સરકારી નોંધણી — વિઝા, સરનામું બદલવું, વારસાઈ અને યોજનામાં લગ્નનો પુરાવો.",
       "categories": [],
+      "group": "doc-family",
       "benefit": "કુંવરબાઈનું મામેરું જેવી સહાય, પાસપોર્ટ-વિઝા, રેશનકાર્ડ / આધારમાં ફેરફાર, બેંક અને વારસાઈ.",
       "eligibility": [
         "ગુજરાતમાં લગ્ન થયાં હોય કે વર-કન્યામાંથી કોઈ ગુજરાતમાં રહેતું હોય. વર 21, કન્યા 18 વર્ષ પૂરાં."
@@ -1327,7 +1304,6 @@
         "મોડું કરવાથી ફી અને વધુ પુરાવા લાગે છે."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://gujhealth.gujarat.gov.in/",
       "source": "આરોગ્ય અને પરિવાર કલ્યાણ વિભાગ (લગ્ન નોંધણી), ગુજરાત",
@@ -1338,10 +1314,9 @@
         }
       ],
       "words": "lagna nondhani marriage registration certificate lagan no dakhlo",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-family"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "pedhinamu",
@@ -1349,6 +1324,7 @@
       "title": "પેઢીનામું",
       "summary": "કુટુંબના વારસદારોની યાદી — વારસાઈ, બેંક ખાતું, વીમો અને સહાયમાં માંગાય છે.",
       "categories": [],
+      "group": "doc-family",
       "benefit": "જમીનની વારસાઈ નોંધ, બેંક / વીમાના પૈસા, રાષ્ટ્રીય કુટુંબ સહાય, મકાન નામે કરવું.",
       "eligibility": [
         "કુટુંબના કોઈ સભ્યનું અવસાન થયું હોય ત્યારે તેના વારસદાર."
@@ -1373,7 +1349,6 @@
         "બધા વારસદારની સાચી ઉંમર અને સરનામું લખો."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://revenuedepartment.gujarat.gov.in/",
       "source": "મહેસૂલ વિભાગ, ગુજરાત",
@@ -1384,10 +1359,9 @@
         }
       ],
       "words": "pedhinamu pedhi namu family tree vaaras heirs certificate",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-family"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "varsai-nondh",
@@ -1395,6 +1369,7 @@
       "title": "વારસાઈ નોંધ (જમીન વારસદારોના નામે)",
       "summary": "ખાતેદારના અવસાન પછી ૭/૧૨ માં વારસદારોનાં નામ ચઢાવવાં — i-ORA પર ઓનલાઈન અરજી.",
       "categories": [],
+      "group": "doc-land",
       "benefit": "જમીન પોતાના નામે થાય — પછી PM કિસાન, પાક લોન, વેચાણ, સહાય મળે.",
       "eligibility": [
         "અવસાન પામેલા ખાતેદારના બધા વારસદાર (દીકરા, દીકરી, પત્ની…)."
@@ -1422,7 +1397,6 @@
       "after": [
         "AnyROR પર “નોંધની વિગત” માં નોંધ નંબરથી સ્થિતિ જુઓ."
       ],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://iora.gujarat.gov.in/",
       "source": "i-ORA (મહેસૂલ વિભાગ)",
@@ -1437,10 +1411,9 @@
         }
       ],
       "words": "varsai nondh varsai entry jamin vaaras 7/12 name heirs iora",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-land"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "khatedar-pramanpatra",
@@ -1448,6 +1421,7 @@
       "title": "ખેડૂત ખાતેદાર પ્રમાણપત્ર",
       "summary": "તમે ગુજરાતના ખેડૂત ખાતેદાર છો તે બતાવતું પ્રમાણપત્ર.",
       "categories": [],
+      "group": "doc-land",
       "benefit": "ખેતીની જમીન ખરીદવા, ખેડૂત માટેની સહાય અને લોનમાં ખેડૂત હોવાનો પુરાવો.",
       "eligibility": [
         "ગુજરાતમાં ખેતીની જમીન ધરાવતા ખાતેદાર."
@@ -1470,7 +1444,6 @@
         "૭/૧૨ માં નામ અને આધારમાં નામ જુદું હોય તો પહેલાં સુધારો કરાવો."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://revenuedepartment.gujarat.gov.in/",
       "source": "મહેસૂલ વિભાગ, ગુજરાત",
@@ -1481,10 +1454,9 @@
         }
       ],
       "words": "khedut khatedar pramanpatra farmer certificate khatedar no dakhlo",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-land"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "farmer-id",
@@ -1492,6 +1464,7 @@
       "title": "ફાર્મર ID (ખેડૂત નોંધણી — Farmer Registry)",
       "summary": "દરેક ખેડૂતનો ડિજિટલ ઓળખ નંબર — આધાર અને જમીનના રેકર્ડ સાથે જોડાયેલો.",
       "categories": [],
+      "group": "doc-land",
       "benefit": "PM કિસાન અને ખેતીની સહાય, પાક લોન, સરકારી ખરીદીમાં ઝડપી ખરાઈ.",
       "eligibility": [
         "ગુજરાતમાં ખેતીની જમીન ધરાવતા દરેક ખેડૂત."
@@ -1514,7 +1487,6 @@
         "બધા ગામની જમીન જોડો — છૂટી ગયેલી જમીનની સહાય અટકી શકે."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://gjfr.agristack.gov.in/",
       "source": "Gujarat Farmer Registry (AgriStack)",
@@ -1529,10 +1501,9 @@
         }
       ],
       "words": "farmer id farmer registry agristack khedut nondhani kisan id",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-land"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "gharvero-akarni",
@@ -1540,6 +1511,7 @@
       "title": "ઘરવેરા આકારણીમાં નામ (ઘરનો ઉતારો)",
       "summary": "ગામમાં ઘર / પ્લોટ પંચાયતના આકારણી રજિસ્ટરમાં પોતાના નામે કરાવવું અને ઉતારો મેળવવો.",
       "categories": [],
+      "group": "doc-land",
       "benefit": "ઘરની માલિકીનો પુરાવો, વીજ / પાણી જોડાણ, આવાસ યોજના, બેંક લોન, સરનામાનો પુરાવો.",
       "eligibility": [
         "ગામમાં ઘર / પ્લોટ ખરીદનાર, વારસામાં મેળવનાર કે નવું ઘર બાંધનાર."
@@ -1562,7 +1534,6 @@
         "દર વર્ષે વેરો ભરી પહોંચ સાચવો — સરનામાના પુરાવા તરીકે કામ લાગે છે."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://panchayat.gujarat.gov.in/",
       "source": "પંચાયત વિભાગ, ગુજરાત",
@@ -1573,10 +1544,9 @@
         }
       ],
       "words": "ghar vero akarni house tax property tax name transfer gram panchayat utaro",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-land"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "vij-jodan-naam",
@@ -1584,6 +1554,7 @@
       "title": "વીજળી જોડાણ પોતાના નામે (નામ ફેર)",
       "summary": "ઘર ખરીદ્યા કે વારસામાં મળ્યા પછી લાઈટ બિલ પોતાના નામે કરાવવું.",
       "categories": [],
+      "group": "doc-land",
       "benefit": "લાઈટ બિલ સરનામાનો પુરાવો બને, સોલર (PM સૂર્ય ઘર) અને વીજ કંપનીની સેવા પોતાના નામે.",
       "eligibility": [
         "ઘર / દુકાનના નવા માલિક કે વારસદાર."
@@ -1606,7 +1577,6 @@
         "બાકી બિલ હોય તો નામ ફેર થતો નથી — પહેલાં ભરો."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.guvnl.com/",
       "source": "GUVNL (ગુજરાતની વીજ કંપનીઓ)",
@@ -1617,10 +1587,9 @@
         }
       ],
       "words": "light bill name change vij jodan electricity connection naam fer ugvcl mgvcl pgvcl dgvcl",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-land"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "mamta-card",
@@ -1628,6 +1597,7 @@
       "title": "મમતા કાર્ડ (માતા અને બાળ સુરક્ષા કાર્ડ)",
       "summary": "સગર્ભાની તપાસ અને બાળકની દરેક રસીની નોંધવાળું કાર્ડ — આંગણવાડી / આરોગ્ય કેન્દ્રમાંથી મફત.",
       "categories": [],
+      "group": "doc-family",
       "benefit": "તપાસ અને રસી સમયસર; PM માતૃ વંદના, નમો શ્રી, જનની સુરક્ષા જેવી સહાયમાં અને શાળા પ્રવેશમાં રસીનો પુરાવો.",
       "eligibility": [
         "દરેક સગર્ભા બહેન અને 5 વર્ષથી નાનું બાળક."
@@ -1650,7 +1620,6 @@
         "રસીની તારીખ ચૂકશો નહીં."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://gujhealth.gujarat.gov.in/",
       "source": "આરોગ્ય અને પરિવાર કલ્યાણ વિભાગ, ગુજરાત",
@@ -1661,10 +1630,9 @@
         }
       ],
       "words": "mamta card mcp card mother child protection rasi vaccination aanganwadi",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-family"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "nominee-claim",
@@ -1672,6 +1640,7 @@
       "title": "બેંક / વીમાના પૈસા — નોમિની અને વારસદારનો દાવો",
       "summary": "ખાતેદારના અવસાન પછી બેંક ખાતું, FD અને વીમાના પૈસા મેળવવાની રીત.",
       "categories": [],
+      "group": "doc-bank",
       "benefit": "અવસાન પામનારના બેંકના પૈસા, FD, વીમો (PMJJBY, PMSBY, LIC વગેરે) કુટુંબને મળે.",
       "eligibility": [
         "ખાતામાં લખેલો નોમિની; નોમિની ન હોય તો કાયદેસર વારસદાર."
@@ -1697,7 +1666,6 @@
         "જન સુરક્ષા વીમાનો દાવો મોડો ન કરો."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.rbi.org.in/",
       "source": "રિઝર્વ બેંક (ગ્રાહક માહિતી)",
@@ -1712,10 +1680,9 @@
         }
       ],
       "words": "nominee claim bank death claim insurance vimo dava varasdar fd",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-bank"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "jeevan-pramaan",
@@ -1723,6 +1690,7 @@
       "title": "પેન્શનરનું જીવન પ્રમાણપત્ર (હયાતીનો દાખલો)",
       "summary": "પેન્શન ચાલુ રહે તે માટે દર વર્ષે “હું જીવિત છું” તેની ખરાઈ — બેંકમાં કે ફોનથી.",
       "categories": [],
+      "group": "doc-bank",
       "benefit": "પેન્શન અટક્યા વગર ચાલુ રહે.",
       "eligibility": [
         "સરકારી / બેંક મારફતે પેન્શન મેળવતા વડીલો."
@@ -1746,7 +1714,6 @@
         "પ્રમાણપત્ર આપ્યા પછી મળેલો નંબર / SMS સાચવો."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://jeevanpramaan.gov.in/",
       "source": "Jeevan Pramaan",
@@ -1757,10 +1724,9 @@
         }
       ],
       "words": "jeevan pramaan life certificate hayati no dakhlo pension november",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-bank"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "jan-dhan-account",
@@ -1768,6 +1734,7 @@
       "title": "બેંક ખાતું — જનધન (શૂન્ય બેલેન્સ)",
       "summary": "ઓછા પૈસા વાળા કુટુંબ માટે શૂન્ય બેલેન્સ બચત ખાતું — સરકારી સહાય માટે જરૂરી.",
       "categories": [],
+      "group": "doc-bank",
       "benefit": "સહાય / શિષ્યવૃત્તિ / પેન્શન સીધાં ખાતામાં, RuPay કાર્ડ (અકસ્માત વીમા સાથે), મિનિમમ બેલેન્સ નહીં.",
       "eligibility": [
         "10 વર્ષથી મોટી કોઈ પણ વ્યક્તિ (સગીર માટે વાલી સાથે) ⚠️ ચકાસો"
@@ -1791,7 +1758,6 @@
         "PIN કોઈને ન આપો."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://pmjdy.gov.in/",
       "source": "PM જનધન યોજના",
@@ -1802,10 +1768,9 @@
         }
       ],
       "words": "jan dhan account bank khatu zero balance pmjdy navu khatu",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-bank"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "gst-registration",
@@ -1813,6 +1778,7 @@
       "title": "GST નોંધણી",
       "summary": "ધંધાનું વેચાણ નક્કી મર્યાદાથી વધુ હોય ત્યારે ફરજિયાત નોંધણી — gst.gov.in પર મફત.",
       "categories": [],
+      "group": "doc-business",
       "benefit": "કાયદેસર બિલ, ઇનપુટ ટેક્સ ક્રેડિટ, મોટી કંપની / સરકારને માલ વેચી શકાય.",
       "eligibility": [
         "વર્ષનું વેચાણ માલમાં ₹40 લાખ / સેવામાં ₹20 લાખથી વધુ હોય, બીજા રાજ્યમાં માલ વેચતા હોય કે ઓનલાઈન વેચાણ કરતા હોય ⚠️ ચકાસો"
@@ -1837,7 +1803,6 @@
         "ધંધો બંધ કરો તો નોંધણી રદ કરાવો."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://www.gst.gov.in/",
       "source": "GST પોર્ટલ",
@@ -1848,10 +1813,9 @@
         }
       ],
       "words": "gst registration gstin nondhani dhandho tax number",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-business"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "gumasta-dhara",
@@ -1859,6 +1823,7 @@
       "title": "ગુમાસ્તા ધારા નોંધણી (દુકાન / ઓફિસ)",
       "summary": "દુકાન, ઓફિસ કે ધંધાની જગ્યાની રાજ્યના કાયદા મુજબ નોંધણી / જાણ.",
       "categories": [],
+      "group": "doc-business",
       "benefit": "ધંધાનો સરનામા સાથે પુરાવો — બેંકનું કરંટ ખાતું, લોન અને બીજી નોંધણીમાં માંગાય છે.",
       "eligibility": [
         "દુકાન, ઓફિસ, હોટલ, ગોડાઉન જેવી ધંધાની જગ્યા — કર્મચારીની સંખ્યા પ્રમાણે નોંધણી કે ફક્ત જાણ ⚠️ ચકાસો"
@@ -1881,7 +1846,6 @@
         "ધંધાનું સરનામું બદલો તો નોંધણીમાં પણ બદલો."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://labour.gujarat.gov.in/",
       "source": "શ્રમ અને રોજગાર વિભાગ, ગુજરાત",
@@ -1892,10 +1856,9 @@
         }
       ],
       "words": "gumasta dhara shop establishment registration dukan nondhani gumasta licence",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-business"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "fssai-registration",
@@ -1903,6 +1866,7 @@
       "title": "FSSAI નોંધણી (ખાવાની વસ્તુનો ધંધો)",
       "summary": "ખાવાની વસ્તુ બનાવવા, વેચવા કે હોટલ-લારી ચલાવવા માટે ફૂડ સેફ્ટીની નોંધણી / લાયસન્સ.",
       "categories": [],
+      "group": "doc-business",
       "benefit": "કાયદેસર ધંધો, પેકિંગ પર FSSAI નંબર, મોટા વેપારી / ઓનલાઈન વેચાણમાં જરૂરી.",
       "eligibility": [
         "કરિયાણું, ડેરી, મીઠાઈ, નાસ્તાની લારી, હોટલ, ટિફિન, અથાણાં-પાપડ જેવો કોઈ પણ ખાવાનો ધંધો."
@@ -1926,7 +1890,6 @@
         "પેકિંગ પર 14 અંકનો FSSAI નંબર છાપવો જરૂરી છે."
       ],
       "after": [],
-      "howToApply": "",
       "lastDate": null,
       "officialLink": "https://foscos.fssai.gov.in/",
       "source": "FoSCoS (FSSAI)",
@@ -1937,10 +1900,9 @@
         }
       ],
       "words": "fssai food licence registration khavani vastu hotel lari foscos",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-business"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     },
     {
       "id": "anubandham",
@@ -1950,6 +1912,7 @@
       "categories": [
         "yuvan"
       ],
+      "group": "doc-job",
       "benefit": "ભરતી મેળા અને ખાનગી / સરકારી નોકરીની માહિતી, કંપનીઓ સીધો સંપર્ક કરી શકે.",
       "eligibility": [
         "નોકરી શોધતા ગુજરાતના યુવાનો (ભણતર પ્રમાણે)."
@@ -1972,7 +1935,6 @@
         "મોબાઈલ નંબર બદલાય તો પ્રોફાઈલમાં બદલો — નહીં તો કંપનીનો સંપર્ક ન થાય."
       ],
       "after": [],
-      "howToApply": "anubandham.gujarat.gov.in પર નોંધણી, અથવા જિલ્લા રોજગાર કચેરીમાં.",
       "lastDate": null,
       "officialLink": "https://anubandham.gujarat.gov.in/",
       "source": "અનુબંધમ (રોજગાર અને તાલીમ, ગુજરાત)",
@@ -1983,10 +1945,9 @@
         }
       ],
       "words": "anubandham rojgar kacheri employment exchange naukri job registration bharti melo",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
-      "group": "doc-job"
+      "from": "hub",
+      "updatedOn": "2026-11-04",
+      "verified": false
     }
   ]
 }

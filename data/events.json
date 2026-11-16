@@ -72,8 +72,8 @@
           "note": ""
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     },
     {
       "id": "sagarbha-mata",
@@ -121,8 +121,8 @@
           "note": "સરકારી / માન્ય દવાખાનામાં પ્રસૂતિ"
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     },
     {
       "id": "vidyarthi",
@@ -201,8 +201,8 @@
           "note": "માતા-પિતા ગુમાવેલું બાળક હોય તો"
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     },
     {
       "id": "college-bharati",
@@ -293,8 +293,8 @@
           "note": ""
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     },
     {
       "id": "lagna",
@@ -355,8 +355,8 @@
           "note": "સમૂહ લગ્નમાં"
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     },
     {
       "id": "kutumb-ma-avsan",
@@ -429,8 +429,8 @@
           "note": "અકસ્માતથી અવસાન હોય તો દાવો"
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     },
     {
       "id": "vidhva-bahen",
@@ -502,8 +502,8 @@
           "note": "પુનઃલગ્ન કરે તો"
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     },
     {
       "id": "vadil",
@@ -557,8 +557,8 @@
           "note": "70 વર્ષ ઉપરના દરેક વડીલને આયુષ્માન વય વંદના કાર્ડ"
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     },
     {
       "id": "divyang",
@@ -600,8 +600,8 @@
           "note": ""
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     },
     {
       "id": "khedut",
@@ -661,8 +661,8 @@
           "note": ""
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     },
     {
       "id": "shramik",
@@ -735,8 +735,8 @@
           "note": ""
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     },
     {
       "id": "dhandho-sharu",
@@ -809,8 +809,8 @@
           "note": "અનુસૂચિત જાતિ માટે"
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     },
     {
       "id": "navu-ghar",
@@ -876,8 +876,8 @@
           "note": ""
         }
       ],
-      "from": "krupa",
-      "verified": false
+      "from": "hub",
+      "verified": true
     }
   ]
 }
