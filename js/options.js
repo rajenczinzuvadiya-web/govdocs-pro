@@ -1,17 +1,17 @@
 // યુઝર વર્ગ અને પ્રોફાઇલના વિકલ્પો
 
 export const CATEGORIES = [
-  { id: 'khedut', label: 'ખેડૂત', icon: '🌾', hint: 'ખેતી સહાય, પાક નુકસાન, મંડી ભાવ' },
-  { id: 'vidyarthi', label: 'વિદ્યાર્થી', icon: '🎓', hint: 'શિષ્યવૃત્તિ, પરીક્ષા, પ્રવેશ' },
-  { id: 'yuvan', label: 'બેરોજગાર / યુવાન', icon: '💼', hint: 'ભરતી, તાલીમ, સ્વરોજગાર લોન' },
-  { id: 'mata', label: 'માતા / સગર્ભા', icon: '🤰', hint: 'પોષણ, બાળકની રસી, દીકરી યોજના' },
-  { id: 'vali', label: 'માતા-પિતા', icon: '👨‍👩‍👧', hint: 'બાળકોનું શિક્ષણ, આરોગ્ય, જન્મ દાખલો' },
-  { id: 'vrudh', label: 'વૃદ્ધ', icon: '👴', hint: 'પેન્શન, આરોગ્ય, ફ્રોડ ચેતવણી' },
-  { id: 'vidhva', label: 'વિધવા', icon: '🌸', hint: 'ગંગા સ્વરૂપા સહાય, તાલીમ' },
-  { id: 'divyang', label: 'દિવ્યાંગ', icon: '♿', hint: 'સહાય, સાધનો, પ્રમાણપત્ર' },
-  { id: 'shikshak', label: 'શિક્ષક', icon: '📚', hint: 'પરિપત્રો, ભરતી, તાલીમ' },
-  { id: 'vepari', label: 'નાના વેપારી / દુકાનદાર', icon: '🏪', hint: 'વ્યવસાય લોન, Udyam' },
-  { id: 'samanya', label: 'સામાન્ય માણસ', icon: '🏠', hint: 'રેશનકાર્ડ, આયુષ્માન, આવાસ' },
+  { id: 'khedut', label: 'ખેડૂત', icon: 'wheat', tone: 'green', hint: 'ખેતી સહાય, પાક નુકસાન, મંડી ભાવ' },
+  { id: 'vidyarthi', label: 'વિદ્યાર્થી', icon: 'graduation', tone: 'sky', hint: 'શિષ્યવૃત્તિ, પરીક્ષા, પ્રવેશ' },
+  { id: 'yuvan', label: 'બેરોજગાર / યુવાન', icon: 'briefcase', tone: 'indigo', hint: 'ભરતી, તાલીમ, સ્વરોજગાર લોન' },
+  { id: 'mata', label: 'માતા / સગર્ભા', icon: 'pregnant', tone: 'pink', hint: 'પોષણ, બાળકની રસી, દીકરી યોજના' },
+  { id: 'vali', label: 'માતા-પિતા', icon: 'child', tone: 'cyan', hint: 'બાળકોનું શિક્ષણ, આરોગ્ય, જન્મ દાખલો' },
+  { id: 'vrudh', label: 'વૃદ્ધ', icon: 'elder', tone: 'amber', hint: 'પેન્શન, આરોગ્ય, ફ્રોડ ચેતવણી' },
+  { id: 'vidhva', label: 'વિધવા', icon: 'woman', tone: 'violet', hint: 'ગંગા સ્વરૂપા સહાય, તાલીમ' },
+  { id: 'divyang', label: 'દિવ્યાંગ', icon: 'wheelchair', tone: 'teal', hint: 'સહાય, સાધનો, પ્રમાણપત્ર' },
+  { id: 'shikshak', label: 'શિક્ષક', icon: 'school', tone: 'purple', hint: 'પરિપત્રો, ભરતી, તાલીમ' },
+  { id: 'vepari', label: 'નાના વેપારી / દુકાનદાર', icon: 'store', tone: 'orange', hint: 'વ્યવસાય લોન, Udyam' },
+  { id: 'samanya', label: 'સામાન્ય માણસ', icon: 'people', tone: 'slate', hint: 'રેશનકાર્ડ, આયુષ્માન, આવાસ' },
 ];
 
 export const CATEGORY_BY_ID = Object.fromEntries(CATEGORIES.map((c) => [c.id, c]));

@@ -1,0 +1,883 @@
+{
+  "updatedOn": "2026-11-16",
+  "events": [
+    {
+      "id": "balak-no-janm",
+      "title": "બાળકનો જન્મ",
+      "icon": "👶",
+      "summary": "નવા બાળક માટે પહેલા વર્ષમાં કરવાનાં કામ અને દીકરી / માતાને મળી શકે એવી સહાય.",
+      "categories": [
+        "mata",
+        "vali"
+      ],
+      "items": [
+        {
+          "title": "",
+          "itemId": "birth-certificate",
+          "type": "doc",
+          "note": "જન્મના 21 દિવસમાં નોંધણી — મફત"
+        },
+        {
+          "title": "જન્મ નોંધણીમાં બાળકનું નામ ઉમેરાવવું",
+          "itemId": "birth-certificate",
+          "type": "doc",
+          "note": "નામ નક્કી થાય એટલે તરત"
+        },
+        {
+          "title": "બાળકનું આધાર (બાળ આધાર)",
+          "itemId": "aadhaar-card",
+          "type": "doc",
+          "note": "5 અને 15 વર્ષે આંગળાંની છાપ ફરી આપવી — મફત"
+        },
+        {
+          "title": "રેશનકાર્ડમાં બાળકનું નામ ઉમેરવું",
+          "itemId": "ration-card",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "મમતા કાર્ડમાં રસીની નોંધ",
+          "itemId": "mamta-card",
+          "type": "doc",
+          "note": "આંગણવાડી / આરોગ્ય કેન્દ્રમાંથી દરેક રસી સમયસર"
+        },
+        {
+          "title": "બાળકનું ABHA આરોગ્ય કાર્ડ",
+          "itemId": "abha-card",
+          "type": "doc",
+          "note": "મરજિયાત"
+        },
+        {
+          "title": "",
+          "itemId": "vahli-dikri",
+          "type": "scheme",
+          "note": "દીકરી હોય તો"
+        },
+        {
+          "title": "",
+          "itemId": "sukanya-samriddhi",
+          "type": "scheme",
+          "note": "દીકરી હોય તો — બચત ખાતું"
+        },
+        {
+          "title": "",
+          "itemId": "pmmvy",
+          "type": "scheme",
+          "note": "માતા માટે"
+        },
+        {
+          "title": "આયુષ્માન કાર્ડમાં બાળકનું નામ",
+          "itemId": "ayushman",
+          "type": "scheme",
+          "note": ""
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    },
+    {
+      "id": "sagarbha-mata",
+      "title": "સગર્ભા માતા",
+      "icon": "🤰",
+      "summary": "ગર્ભ રહે ત્યારથી પ્રસૂતિ સુધી — નોંધણી, તપાસ અને માતાને મળી શકે એવી સહાય.",
+      "categories": [
+        "mata"
+      ],
+      "items": [
+        {
+          "title": "આરોગ્ય કેન્દ્ર / આંગણવાડીમાં વહેલી નોંધણી અને મમતા કાર્ડ",
+          "itemId": "mamta-card",
+          "type": "doc",
+          "note": "દરેક તપાસ અને રસીની નોંધ એમાં થાય છે"
+        },
+        {
+          "title": "માતાનું બેંક ખાતું આધાર સાથે જોડવું",
+          "itemId": "aadhaar-bank-seeding",
+          "type": "doc",
+          "note": "સહાય સીધી ખાતામાં આવે તે માટે"
+        },
+        {
+          "title": "",
+          "itemId": "ayushman",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "pmmvy",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "namo-shri",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "janani-suraksha",
+          "type": "scheme",
+          "note": "સરકારી / માન્ય દવાખાનામાં પ્રસૂતિ"
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    },
+    {
+      "id": "vidyarthi",
+      "title": "શાળા પ્રવેશ / વિદ્યાર્થી",
+      "icon": "🎒",
+      "summary": "શાળામાં પ્રવેશથી ધોરણ 12 સુધી — જોઈતા દસ્તાવેજ અને શિષ્યવૃત્તિ.",
+      "categories": [
+        "vidyarthi",
+        "vali"
+      ],
+      "items": [
+        {
+          "title": "",
+          "itemId": "birth-certificate",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "વિદ્યાર્થીનું આધાર કાર્ડ",
+          "itemId": "aadhaar-card",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "apaar-id",
+          "type": "doc",
+          "note": "શાળા મારફતે બને છે"
+        },
+        {
+          "title": "",
+          "itemId": "income-certificate",
+          "type": "doc",
+          "note": "શિષ્યવૃત્તિ અને ફી માફી માટે"
+        },
+        {
+          "title": "જાતિનો દાખલો (લાગુ હોય તો)",
+          "itemId": "caste-certificate",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "SEBC પ્રમાણપત્ર (લાગુ હોય તો)",
+          "itemId": "sebc-certificate",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "વિદ્યાર્થીના નામે બેંક ખાતું, આધાર સાથે જોડેલું",
+          "itemId": "aadhaar-bank-seeding",
+          "type": "doc",
+          "note": "શિષ્યવૃત્તિ એ જ ખાતામાં આવે છે"
+        },
+        {
+          "title": "",
+          "itemId": "digital-gujarat-scholarship",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "namo-lakshmi",
+          "type": "scheme",
+          "note": "ધોરણ 9 થી 12 ની દીકરીઓ"
+        },
+        {
+          "title": "",
+          "itemId": "namo-saraswati",
+          "type": "scheme",
+          "note": "ધોરણ 11–12 વિજ્ઞાન પ્રવાહની દીકરીઓ"
+        },
+        {
+          "title": "",
+          "itemId": "palak-mata-pita",
+          "type": "scheme",
+          "note": "માતા-પિતા ગુમાવેલું બાળક હોય તો"
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    },
+    {
+      "id": "college-bharati",
+      "title": "કૉલેજ પ્રવેશ / સરકારી ભરતી",
+      "icon": "🎓",
+      "summary": "કૉલેજ, મેડિકલ-ઇજનેરી પ્રવેશ અને સરકારી નોકરીની અરજી પહેલાં તૈયાર રાખવાના દસ્તાવેજ.",
+      "categories": [
+        "vidyarthi",
+        "yuvan"
+      ],
+      "items": [
+        {
+          "title": "શાળા છોડ્યાનું પ્રમાણપત્ર (LC)",
+          "itemId": "leaving-certificate",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "ધોરણ 10 / 12 ની માર્કશીટ (ખોવાય તો નકલ)",
+          "itemId": "duplicate-marksheet",
+          "type": "doc",
+          "note": "અસલ + સ્કેન કરેલી નકલ"
+        },
+        {
+          "title": "",
+          "itemId": "digilocker",
+          "type": "doc",
+          "note": "બધા દસ્તાવેજ ફોનમાં"
+        },
+        {
+          "title": "",
+          "itemId": "domicile-certificate",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "જાતિનો દાખલો (લાગુ હોય તો)",
+          "itemId": "caste-certificate",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "SEBC પ્રમાણપત્ર (લાગુ હોય તો)",
+          "itemId": "sebc-certificate",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "non-creamy-layer",
+          "type": "doc",
+          "note": "SEBC હોય તો — રાજ્ય / કેન્દ્રનો નમૂનો જુદો"
+        },
+        {
+          "title": "",
+          "itemId": "ews-certificate",
+          "type": "doc",
+          "note": "બિન-અનામત વર્ગ હોય તો"
+        },
+        {
+          "title": "",
+          "itemId": "pan-card",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "ફોટો અને સહી જાહેરનામામાં લખેલા માપમાં",
+          "itemId": "",
+          "type": "doc",
+          "note": "એપના “ફોટો / સહી KB” સાધનથી"
+        },
+        {
+          "title": "",
+          "itemId": "anubandham",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "mysy",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "digital-gujarat-scholarship",
+          "type": "scheme",
+          "note": ""
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    },
+    {
+      "id": "lagna",
+      "title": "લગ્ન",
+      "icon": "💍",
+      "summary": "લગ્ન પછી કરવાનાં કામ — નોંધણી, દસ્તાવેજમાં નામ / સરનામું, અને દીકરીના લગ્નની સહાય.",
+      "categories": [
+        "samanya",
+        "vali"
+      ],
+      "items": [
+        {
+          "title": "",
+          "itemId": "marriage-registration",
+          "type": "doc",
+          "note": "ગામમાં તલાટી-કમ-મંત્રી, શહેરમાં નગરપાલિકા"
+        },
+        {
+          "title": "પિયરના રેશનકાર્ડમાંથી નામ કમી, સાસરે ઉમેરવું",
+          "itemId": "ration-card",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "આધારમાં અટક / સરનામું સુધારવું",
+          "itemId": "aadhaar-card",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "ચૂંટણી કાર્ડમાં સરનામું ખસેડવું (ફોર્મ 8)",
+          "itemId": "voter-id",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "બેંક ખાતામાં નામ / સરનામું સુધારવું",
+          "itemId": "",
+          "type": "doc",
+          "note": "નવા આધાર અને લગ્નના દાખલા સાથે"
+        },
+        {
+          "title": "PAN માં નામ સુધારવું (જરૂર હોય તો)",
+          "itemId": "pan-card",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "kunvarbai-nu-mameru",
+          "type": "scheme",
+          "note": "દીકરીના લગ્ન માટે"
+        },
+        {
+          "title": "",
+          "itemId": "saat-fera-samuh-lagna",
+          "type": "scheme",
+          "note": "સમૂહ લગ્નમાં"
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    },
+    {
+      "id": "kutumb-ma-avsan",
+      "title": "કુટુંબમાં અવસાન",
+      "icon": "🕊️",
+      "summary": "દુઃખના સમયે ક્રમ પ્રમાણે કરવાનાં કામ — નોંધણી, વારસાઈ, બેંક-વીમાનો દાવો અને સહાય.",
+      "categories": [
+        "samanya",
+        "vidhva"
+      ],
+      "items": [
+        {
+          "title": "",
+          "itemId": "death-certificate",
+          "type": "doc",
+          "note": "21 દિવસમાં નોંધણી — 2–3 નકલ રાખો"
+        },
+        {
+          "title": "",
+          "itemId": "pedhinamu",
+          "type": "doc",
+          "note": "તલાટી-કમ-મંત્રી પાસે"
+        },
+        {
+          "title": "",
+          "itemId": "varsai-nondh",
+          "type": "doc",
+          "note": "જમીન હોય તો — i-ORA પર"
+        },
+        {
+          "title": "રેશનકાર્ડમાંથી નામ કમી કરવું",
+          "itemId": "ration-card",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "બેંક ખાતું, FD અને વીમો — નોમિની / વારસદારનો દાવો",
+          "itemId": "nominee-claim",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "ઘર વારસદારના નામે (આકારણી)",
+          "itemId": "gharvero-akarni",
+          "type": "doc",
+          "note": "ઘર હોય તો"
+        },
+        {
+          "title": "લાઈટ બિલ વારસદારના નામે",
+          "itemId": "vij-jodan-naam",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "nfbs",
+          "type": "scheme",
+          "note": "કુટુંબના કમાનાર સભ્યનું અવસાન થાય તો"
+        },
+        {
+          "title": "",
+          "itemId": "pm-jeevan-jyoti-bima",
+          "type": "scheme",
+          "note": "ખાતામાંથી આ વીમો કપાતો હોય તો દાવો"
+        },
+        {
+          "title": "",
+          "itemId": "pm-suraksha-bima",
+          "type": "scheme",
+          "note": "અકસ્માતથી અવસાન હોય તો દાવો"
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    },
+    {
+      "id": "vidhva-bahen",
+      "title": "વિધવા બહેન",
+      "icon": "🤍",
+      "summary": "પતિના અવસાન પછી બહેનને મળી શકે એવી સહાય અને તે માટે જોઈતા દસ્તાવેજ.",
+      "categories": [
+        "vidhva"
+      ],
+      "items": [
+        {
+          "title": "પતિનો મરણનો દાખલો",
+          "itemId": "death-certificate",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "income-certificate",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "રેશનકાર્ડમાં કુટુંબના વડા તરીકે નામ",
+          "itemId": "ration-card",
+          "type": "doc",
+          "note": "પુરવઠા શાખા / જનસેવા કેન્દ્રમાં"
+        },
+        {
+          "title": "",
+          "itemId": "pedhinamu",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "varsai-nondh",
+          "type": "doc",
+          "note": "જમીન હોય તો — i-ORA પર"
+        },
+        {
+          "title": "પતિના બેંક ખાતા / વીમાનો દાવો",
+          "itemId": "nominee-claim",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "aadhaar-bank-seeding",
+          "type": "doc",
+          "note": "સહાય સીધી ખાતામાં આવે તે માટે"
+        },
+        {
+          "title": "",
+          "itemId": "ganga-swarupa",
+          "type": "scheme",
+          "note": "દર મહિને સહાય"
+        },
+        {
+          "title": "",
+          "itemId": "nfbs",
+          "type": "scheme",
+          "note": "પતિ કુટુંબના કમાનાર હોય તો"
+        },
+        {
+          "title": "",
+          "itemId": "ganga-swarupa-punah-lagna",
+          "type": "scheme",
+          "note": "પુનઃલગ્ન કરે તો"
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    },
+    {
+      "id": "vadil",
+      "title": "વડીલ (60 વર્ષ ઉપર)",
+      "icon": "👴",
+      "summary": "વડીલો માટે પેન્શન, આરોગ્ય કાર્ડ અને દર વર્ષે યાદ રાખવાનાં કામ.",
+      "categories": [
+        "vrudh"
+      ],
+      "items": [
+        {
+          "title": "ઉંમરનો પુરાવો",
+          "itemId": "",
+          "type": "doc",
+          "note": "જન્મનો દાખલો / શાળા છોડ્યાનું પ્રમાણપત્ર / ચૂંટણી કાર્ડ"
+        },
+        {
+          "title": "",
+          "itemId": "income-certificate",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "aadhaar-bank-seeding",
+          "type": "doc",
+          "note": "પેન્શન સીધું ખાતામાં આવે તે માટે"
+        },
+        {
+          "title": "",
+          "itemId": "jeevan-pramaan",
+          "type": "doc",
+          "note": "દર વર્ષે — બેંકમાં કે ફોનથી"
+        },
+        {
+          "title": "",
+          "itemId": "abha-card",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "vrudh-pension",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "ayushman",
+          "type": "scheme",
+          "note": "70 વર્ષ ઉપરના દરેક વડીલને આયુષ્માન વય વંદના કાર્ડ"
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    },
+    {
+      "id": "divyang",
+      "title": "દિવ્યાંગ વ્યક્તિ",
+      "icon": "♿",
+      "summary": "દિવ્યાંગતાનું પ્રમાણપત્ર અને તેના આધારે મળતી સહાય, ઓળખપત્ર અને બસ પાસ.",
+      "categories": [
+        "divyang"
+      ],
+      "items": [
+        {
+          "title": "",
+          "itemId": "udid",
+          "type": "doc",
+          "note": "સિવિલ હોસ્પિટલના તબીબી બોર્ડમાંથી"
+        },
+        {
+          "title": "",
+          "itemId": "aadhaar-bank-seeding",
+          "type": "doc",
+          "note": "સહાય સીધી ખાતામાં આવે તે માટે"
+        },
+        {
+          "title": "",
+          "itemId": "income-certificate",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "sant-surdas",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "ayushman",
+          "type": "scheme",
+          "note": ""
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    },
+    {
+      "id": "khedut",
+      "title": "ખેડૂત",
+      "icon": "🌾",
+      "summary": "ખેડૂત માટે જમીનના રેકર્ડ, નોંધણી અને ખેતીની સહાય — ક્રમ પ્રમાણે.",
+      "categories": [
+        "khedut"
+      ],
+      "items": [
+        {
+          "title": "",
+          "itemId": "satbar-8a",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "khatedar-pramanpatra",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "farmer-id",
+          "type": "doc",
+          "note": "PM કિસાન અને સહાય માટે"
+        },
+        {
+          "title": "",
+          "itemId": "varsai-nondh",
+          "type": "doc",
+          "note": "જમીન વારસામાં આવી હોય તો"
+        },
+        {
+          "title": "",
+          "itemId": "aadhaar-bank-seeding",
+          "type": "doc",
+          "note": "PM કિસાનનો હપ્તો સીધો ખાતામાં"
+        },
+        {
+          "title": "",
+          "itemId": "pm-kisan",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "ikhedut",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "kisan-credit-card",
+          "type": "scheme",
+          "note": ""
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    },
+    {
+      "id": "shramik",
+      "title": "શ્રમિક / મજૂર",
+      "icon": "👷",
+      "summary": "મજૂરી કરતા કુટુંબ માટે નોંધણી, વીમો, પેન્શન અને આરોગ્યની સહાય.",
+      "categories": [
+        "yuvan",
+        "samanya"
+      ],
+      "items": [
+        {
+          "title": "",
+          "itemId": "e-shram",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "bandhkam-shramik",
+          "type": "doc",
+          "note": "બાંધકામમાં મજૂરી કરતા હોય તો"
+        },
+        {
+          "title": "",
+          "itemId": "ration-card",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "jan-dhan-account",
+          "type": "doc",
+          "note": "ખાતું ન હોય તો"
+        },
+        {
+          "title": "",
+          "itemId": "aadhaar-bank-seeding",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "ayushman",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "pm-suraksha-bima",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "pm-jeevan-jyoti-bima",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "atal-pension",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "ujjwala",
+          "type": "scheme",
+          "note": ""
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    },
+    {
+      "id": "dhandho-sharu",
+      "title": "ધંધો / દુકાન શરૂ કરવી",
+      "icon": "🏪",
+      "summary": "નાનો ધંધો કે દુકાન શરૂ કરતાં પહેલાં નોંધણી, બેંક ખાતું અને લોન-સહાય.",
+      "categories": [
+        "vepari",
+        "yuvan"
+      ],
+      "items": [
+        {
+          "title": "",
+          "itemId": "pan-card",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "udyam",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "ધંધાના નામે બેંક ખાતું (કરંટ ખાતું)",
+          "itemId": "",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "gst-registration",
+          "type": "doc",
+          "note": "વેચાણ મર્યાદાથી વધુ હોય કે બીજા રાજ્યમાં વેચાણ હોય તો"
+        },
+        {
+          "title": "",
+          "itemId": "gumasta-dhara",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "fssai-registration",
+          "type": "doc",
+          "note": "ખાવાની વસ્તુનો ધંધો હોય તો"
+        },
+        {
+          "title": "",
+          "itemId": "mudra-loan",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "pm-vishwakarma",
+          "type": "scheme",
+          "note": "કારીગર / પરંપરાગત ધંધો હોય તો"
+        },
+        {
+          "title": "",
+          "itemId": "manav-kalyan",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "manav-garima",
+          "type": "scheme",
+          "note": "અનુસૂચિત જાતિ માટે"
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    },
+    {
+      "id": "navu-ghar",
+      "title": "નવું ઘર / સરનામું બદલ્યું",
+      "icon": "🏠",
+      "summary": "ઘર બદલ્યા પછી દસ્તાવેજમાં નવું સરનામું, અને ઘર માટે મળી શકે એવી સહાય.",
+      "categories": [
+        "samanya"
+      ],
+      "items": [
+        {
+          "title": "આધારમાં નવું સરનામું",
+          "itemId": "aadhaar-card",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "ચૂંટણી કાર્ડમાં સરનામું ખસેડવું (ફોર્મ 8)",
+          "itemId": "voter-id",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "રેશનકાર્ડમાં સરનામું / નવું કાર્ડ",
+          "itemId": "ration-card",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "gharvero-akarni",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "vij-jodan-naam",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "pmay-g",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "dr-ambedkar-awas",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "surya-ghar",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "ujjwala",
+          "type": "scheme",
+          "note": ""
+        }
+      ],
+      "from": "krupa",
+      "verified": false
+    }
+  ]
+}
