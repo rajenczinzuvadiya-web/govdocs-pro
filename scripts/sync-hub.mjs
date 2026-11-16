@@ -218,19 +218,21 @@ async function main() {
       return;
     }
   }
-  const now = { schemes: read('schemes.json'), documents: read('documents.json'), events: read('events.json') };
-  const out = merge(feed, now);
-  if (out.skip) {
-    console.log(out.skip);
-    return;
-  }
   const today = new Date().toISOString().slice(0, 10);
   let changed = 0;
+  // ભરતી પહેલાં અને અલગ: યોજનાની સલામતી-રોક (ઓછાં કાર્ડ) ભરતીને ન અટકાવે.
   const jobsNow = read('jobs.json');
   const jobs = mergeJobs(feed, jobsNow);
   if (jobs && !same(jobs, jobsNow)) {
     writeFileSync(at('jobs.json'), JSON.stringify({ ...jobs, updatedOn: today }, null, 2) + '\n');
     changed++;
+  }
+  if (jobs) console.log(`Digital Hub: ભરતી ${jobs.jobs.filter((j) => j.from === 'hub').length}`);
+  const now = { schemes: read('schemes.json'), documents: read('documents.json'), events: read('events.json') };
+  const out = merge(feed, now);
+  if (out.skip) {
+    console.log(out.skip, changed ? '(ભરતી બદલાઈ)' : '');
+    return;
   }
   for (const f of ['schemes', 'documents', 'events']) {
     if (same(out[f], now[f])) continue;
@@ -239,7 +241,7 @@ async function main() {
   }
   out.notes.forEach((n) => console.log('•', n));
   const c = out.counts;
-  console.log(`Digital Hub: યોજના ${c.schemes}, દસ્તાવેજ ${c.documents}, પ્રસંગ ${c.events}${jobs ? `, ભરતી ${jobs.jobs.filter((j) => j.from === 'hub').length}` : ''} · ${changed ? `${changed} ફાઇલ બદલાઈ` : 'નવું કંઈ નથી'}`);
+  console.log(`Digital Hub: યોજના ${c.schemes}, દસ્તાવેજ ${c.documents}, પ્રસંગ ${c.events} · ${changed ? `${changed} ફાઇલ બદલાઈ` : 'નવું કંઈ નથી'}`);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) main();
