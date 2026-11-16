@@ -1,14 +1,14 @@
 {
-  "name": "ગામની જાણકારી",
-  "short_name": "ગામની જાણકારી",
-  "description": "ગામના દરેક માણસ માટે યોજના, સહાય, ભરતી અને જરૂરી માહિતી, સરળ ગુજરાતીમાં.",
+  "name": "જાણકાર",
+  "short_name": "જાણકાર",
+  "description": "યોજના, સહાય અને દાખલાની માહિતી, ગુજરાતીમાં. KruPa Digital Hub ની ખાનગી માહિતી એપ, સરકારી નથી.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f6f5f0",
-  "theme_color": "#14663a",
+  "background_color": "#ffffff",
+  "theme_color": "#1e2f6b",
   "lang": "gu-IN",
   "dir": "ltr",
   "categories": ["education", "news", "lifestyle"],
@@ -16,5 +16,10 @@
     { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "યોજના", "url": "./#/all", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "દસ્તાવેજ", "url": "./#/docs", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "જરૂરી ફોન નંબર", "url": "./#/help", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
   ]
 }
