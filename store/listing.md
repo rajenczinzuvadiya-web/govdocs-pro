@@ -55,7 +55,8 @@ https://www.india.gov.in
 | Developer name | KruPa Digital Hub |
 | App category | Education |
 | Tags | Education, Reference |
-| Contact email | તમારો ઈમેલ (Play Store પર જાહેર દેખાશે) |
+| Contact email | krupadigitalhub@gmail.com (Play Store પર જાહેર દેખાશે) |
+| Phone (વૈકલ્પિક) | +91 7777919128 |
 | Privacy policy | `https://jankar.krupadigitalhub.in/privacy.html` |
 | Ads | No, my app does not contain ads |
 | Target audience | 18 and over |

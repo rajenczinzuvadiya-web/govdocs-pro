@@ -14,5 +14,5 @@ export const APP = {
   reminderDays: 7,
   // સંપર્ક: ભરશો એટલે એપમાં "ભૂલ જણાવો" અને "સંપર્ક" બટન દેખાશે.
   // email: 'name@example.com'   whatsapp: દેશના કોડ સાથે, જગ્યા વગર, જેમ કે '919876543210'
-  contact: { email: '', whatsapp: '' },
+  contact: { email: 'krupadigitalhub@gmail.com', whatsapp: '917777919128' },
 };
