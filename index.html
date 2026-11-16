@@ -17,31 +17,55 @@
     try {
       var t = JSON.parse(localStorage.getItem('gj:theme') || '"auto"');
       if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      var s = JSON.parse(localStorage.getItem('gj:shade') || '""');
+      if (s === 'soft' || s === 'softer' || s === 'black') document.documentElement.dataset.shade = s;
       var z = JSON.parse(localStorage.getItem('gj:zoom') || '100');
       if ([80, 90, 110, 120].indexOf(z) > -1) document.documentElement.dataset.zoom = String(z);
     } catch (e) {}
   </script>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#/"><img src="icons/icon-192.png" alt="" width="32" height="32"><span class="wordmark"><span class="w1">જાણકાર</span></span></a>
-    <button id="menu-btn" class="menu-btn" type="button" aria-label="મેનુ: પ્રોફાઇલ, ઝૂમ, દેખાવ">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
-      <svg class="ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-    </button>
-  </header>
+  <div class="shell">
+    <aside class="side" aria-label="મુખ્ય મેનુ">
+      <a class="side-brand" href="#/"><img src="icons/icon-192.png" alt="" width="32" height="32"><span class="wordmark">જાણકાર</span></a>
+      <nav class="side-nav" id="side-nav"></nav>
+    </aside>
 
-  <main id="view" class="wrap" tabindex="-1"></main>
+    <div class="main-col">
+      <header class="topbar">
+        <a class="brand" href="#/"><img src="icons/icon-192.png" alt="" width="32" height="32"><span class="wordmark">જાણકાર</span></a>
+        <div class="top-search" id="top-search">
+          <label class="gsearch">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="search"/></svg>
+            <input id="gsearch" type="search" autocomplete="off" placeholder="યોજના, દાખલો, પ્રસંગ શોધો…" aria-label="આખી એપમાં શોધો">
+            <kbd>Ctrl K</kbd>
+          </label>
+          <div class="gresults" id="gresults" hidden></div>
+        </div>
+        <button class="top-btn search-open" id="search-open" type="button" aria-label="શોધો"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="search"/></svg></button>
+        <button class="top-btn search-close" id="search-close" type="button" aria-label="શોધ બંધ કરો"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="close"/></svg></button>
+        <div class="top-right">
+          <span class="top-zoom" id="top-zoom"></span>
+          <a class="top-btn bell" id="bell" href="#/today" aria-label="આજનું"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="bell"/></svg><span class="badge" id="bell-badge" hidden></span></a>
+          <div class="pm">
+            <button id="menu-btn" class="pm-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="મેનુ: પ્રોફાઇલ, ઝૂમ, દેખાવ">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="user"/></svg>
+              <svg class="ic-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="chevdown"/></svg>
+            </button>
+            <div class="pm-panel" id="pm-panel" hidden></div>
+          </div>
+        </div>
+      </header>
 
-  <nav class="nav" aria-label="મુખ્ય મેનુ">
-    <a class="nav-brand" href="#/"><img src="icons/icon-192.png" alt="" width="36" height="36"><span class="wordmark"><span class="w1">જાણકાર</span></span></a>
-    <a href="#/" data-route="home"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="home"/></svg></span><span>મારા માટે</span></a>
-    <a href="#/all" data-route="all"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="book"/></svg></span><span>યોજના</span></a>
-    <a href="#/docs" data-route="docs"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="folder"/></svg></span><span>દસ્તાવેજ</span></a>
-    <a href="#/events" data-route="events"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="calendar"/></svg></span><span>પ્રસંગ</span></a>
-    <a href="#/saved" data-route="saved"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="star"/></svg></span><span>સેવ</span></a>
-    <div class="nav-foot">ખાનગી માહિતી એપ — સરકારી નથી.</div>
-  </nav>
+      <main id="view" class="wrap" tabindex="-1"></main>
+      <footer class="foot" id="foot"></footer>
+    </div>
+  </div>
+
+  <nav class="tabs" id="tabs" aria-label="નીચેનું મેનુ"></nav>
+  <div id="drawer"></div>
+  <a class="fab" id="fab" href="#/contact" aria-label="સંપર્ક અને સૂચન"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="message"/></svg></a>
+  <button class="totop" id="totop" type="button" aria-label="ઉપર જાઓ" hidden><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
   <div id="modal"></div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
