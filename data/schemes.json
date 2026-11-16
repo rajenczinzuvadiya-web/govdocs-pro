@@ -1,0 +1,334 @@
+{
+  "updatedOn": "2026-11-16",
+  "schemes": [
+    {
+      "id": "pm-kisan",
+      "title": "પીએમ કિસાન સન્માન નિધિ",
+      "summary": "ખેડૂત પરિવારને વર્ષે ₹6,000 સીધા બેંક ખાતામાં.",
+      "categories": ["khedut"],
+      "benefit": "વર્ષે ₹6,000, ₹2,000 ના ત્રણ હપ્તામાં સીધા બેંક ખાતામાં જમા થાય.",
+      "eligibility": [
+        "પોતાના નામે ખેતીની જમીન ધરાવતો ખેડૂત પરિવાર.",
+        "આવકવેરો ભરનાર, સરકારી કર્મચારી અને ડૉક્ટર-વકીલ જેવા વ્યાવસાયિકો લાયક નથી.",
+        "હપ્તો મેળવવા e-KYC ફરજિયાત છે."
+      ],
+      "documents": ["આધાર કાર્ડ", "જમીનના કાગળ (7/12 અને 8-અ)", "આધાર સાથે લિંક બેંક ખાતું", "મોબાઇલ નંબર"],
+      "howToApply": "pmkisan.gov.in પર New Farmer Registration થી, અથવા ગ્રામ પંચાયત / CSC સેન્ટર પરથી.",
+      "lastDate": null,
+      "officialLink": "https://pmkisan.gov.in",
+      "source": "pmkisan.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "ikhedut",
+      "title": "i-Khedut પોર્ટલની ખેતી સહાય યોજનાઓ",
+      "summary": "ખેતીનાં સાધનો, સિંચાઈ, બાગાયત અને પશુપાલન માટે સહાય.",
+      "categories": ["khedut"],
+      "benefit": "ટ્રેક્ટર-સાધનો, ટપક સિંચાઈ, બાગાયત, પશુપાલન જેવી અલગ અલગ યોજનાઓમાં સહાય. રકમ યોજના પ્રમાણે અલગ હોય છે.",
+      "eligibility": [
+        "ગુજરાતના ખેડૂત, જેમના નામે જમીન છે.",
+        "દરેક યોજનાની શરત અલગ છે, પોર્ટલ પર યોજના ખોલીને વાંચવી."
+      ],
+      "documents": ["આધાર કાર્ડ", "7/12 અને 8-અ", "બેંક પાસબુક", "મોબાઇલ નંબર", "જાતિનો દાખલો (લાગુ પડે તો)"],
+      "howToApply": "ikhedut.gujarat.gov.in પર, ફક્ત પોર્ટલ ખુલ્લું હોય તે સમયગાળામાં. ગ્રામ પંચાયતના VCE પાસેથી પણ અરજી થાય.",
+      "lastDate": null,
+      "officialLink": "https://ikhedut.gujarat.gov.in",
+      "source": "ikhedut.gujarat.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "digital-gujarat-scholarship",
+      "title": "Digital Gujarat શિષ્યવૃત્તિ",
+      "summary": "ધોરણ 10 પછી ભણતા વિદ્યાર્થીઓ માટે રાજ્ય સરકારની શિષ્યવૃત્તિ.",
+      "categories": ["vidyarthi"],
+      "benefit": "ફી અને અભ્યાસ ખર્ચમાં સહાય. રકમ કોર્સ, જાતિ અને આવક પ્રમાણે અલગ.",
+      "eligibility": [
+        "ગુજરાતમાં ધોરણ 11 કે તેથી ઉપર ભણતા વિદ્યાર્થી.",
+        "SC, ST, OBC, EWS અને બીજા વર્ગ માટે અલગ યોજનાઓ; આવક મર્યાદા યોજના પ્રમાણે."
+      ],
+      "documents": ["આધાર કાર્ડ", "જાતિનો દાખલો", "આવકનો દાખલો", "છેલ્લી માર્કશીટ", "ફી ભર્યાની રસીદ", "બેંક પાસબુક", "ફોટો"],
+      "howToApply": "digitalgujarat.gov.in પર લોગિન કરીને Scholarship વિભાગમાંથી. શાળા/કોલેજમાંથી ખરાઈ થાય છે.",
+      "lastDate": null,
+      "officialLink": "https://www.digitalgujarat.gov.in",
+      "source": "digitalgujarat.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "nsp",
+      "title": "નેશનલ સ્કોલરશિપ પોર્ટલ (NSP)",
+      "summary": "કેન્દ્ર સરકારની અનેક શિષ્યવૃત્તિ એક જ પોર્ટલ પર.",
+      "categories": ["vidyarthi"],
+      "benefit": "લઘુમતી, દિવ્યાંગ, મેરિટ આધારિત વગેરે કેન્દ્રની શિષ્યવૃત્તિ. રકમ યોજના પ્રમાણે.",
+      "eligibility": [
+        "દરેક શિષ્યવૃત્તિની શરત અલગ; પોર્ટલ પર યોજનાની માર્ગદર્શિકા વાંચવી."
+      ],
+      "documents": ["આધાર કાર્ડ", "આવકનો દાખલો", "માર્કશીટ", "બેંક ખાતું", "સંસ્થાની વિગત"],
+      "howToApply": "scholarships.gov.in પર One Time Registration કરીને.",
+      "lastDate": null,
+      "officialLink": "https://scholarships.gov.in",
+      "source": "scholarships.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "ojas",
+      "title": "OJAS: ગુજરાત સરકારની ભરતી અરજી",
+      "summary": "GSSSB, GPSC, પોલીસ જેવી સરકારી ભરતીની ઓનલાઇન અરજી.",
+      "categories": ["yuvan", "shikshak"],
+      "benefit": "રાજ્ય સરકારની ઘણી ભરતીની જાહેરાત અને અરજી એક જ જગ્યાએ.",
+      "eligibility": [
+        "ઉંમર, ભણતર અને બીજી શરતો દરેક ભરતીની જાહેરાતમાં અલગ હોય છે.",
+        "અરજી કરતાં પહેલાં આખી જાહેરાત ધ્યાનથી વાંચવી."
+      ],
+      "documents": ["ફોટો અને સહી (જાહેરાતમાં લખેલી સાઇઝમાં)", "માર્કશીટ અને પ્રમાણપત્ર", "જાતિ / નોન-ક્રીમીલેયર દાખલો (લાગુ પડે તો)", "મોબાઇલ નંબર અને ઈમેલ"],
+      "howToApply": "ojas.gujarat.gov.in પર ભરતી પસંદ કરીને Apply. અરજીનો કન્ફર્મેશન નંબર સાચવી રાખવો.",
+      "lastDate": null,
+      "officialLink": "https://ojas.gujarat.gov.in",
+      "source": "ojas.gujarat.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "pmegp",
+      "title": "PMEGP: નવો ધંધો શરૂ કરવા લોન સબસિડી",
+      "summary": "નાનો ઉદ્યોગ કે સેવા વ્યવસાય શરૂ કરવા બેંક લોન પર સબસિડી.",
+      "categories": ["yuvan", "vepari"],
+      "benefit": "પ્રોજેક્ટ ખર્ચના આશરે 15% થી 35% સબસિડી, ગામ/શહેર અને વર્ગ પ્રમાણે.",
+      "eligibility": [
+        "18 વર્ષથી વધુ ઉંમર.",
+        "મોટા પ્રોજેક્ટ માટે ઓછામાં ઓછું ધોરણ 8 પાસ.",
+        "નવો એકમ હોવો જોઈએ; જૂના ધંધા માટે નહીં."
+      ],
+      "documents": ["આધાર કાર્ડ", "પ્રોજેક્ટ રિપોર્ટ", "ભણતરનું પ્રમાણપત્ર", "જાતિનો દાખલો (લાગુ પડે તો)", "બેંક ખાતું"],
+      "howToApply": "KVIC ના PMEGP ઈ-પોર્ટલ પર ઓનલાઇન અરજી, પછી બેંક લોન મંજૂર કરે.",
+      "lastDate": null,
+      "officialLink": "https://www.kviconline.gov.in/pmegpeportal/",
+      "source": "kviconline.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false,
+      "rules": { "minAge": 18 }
+    },
+    {
+      "id": "pmmvy",
+      "title": "પ્રધાનમંત્રી માતૃ વંદના યોજના",
+      "summary": "સગર્ભા અને ધાત્રી માતાને પોષણ માટે રોકડ સહાય.",
+      "categories": ["mata"],
+      "benefit": "પહેલા બાળક માટે ₹5,000 (હપ્તામાં). બીજું બાળક દીકરી હોય તો ₹6,000.",
+      "eligibility": [
+        "સગર્ભા કે ધાત્રી માતા.",
+        "સરકારી કર્મચારી માતાઓ લાયક નથી."
+      ],
+      "documents": ["આધાર કાર્ડ", "મમતા કાર્ડ (MCP કાર્ડ)", "આધાર સાથે લિંક બેંક ખાતું", "મોબાઇલ નંબર"],
+      "howToApply": "નજીકની આંગણવાડી કે પ્રાથમિક આરોગ્ય કેન્દ્રમાં, અથવા pmmvy.wcd.gov.in પર.",
+      "lastDate": null,
+      "officialLink": "https://pmmvy.wcd.gov.in",
+      "source": "pmmvy.wcd.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "vahli-dikri",
+      "title": "વહાલી દીકરી યોજના",
+      "summary": "દીકરીના ભણતર અને લગ્ન માટે કુલ ₹1,10,000 સહાય.",
+      "categories": ["mata", "vali"],
+      "benefit": "ધોરણ 1 માં ₹4,000, ધોરણ 9 માં ₹6,000 અને 18 વર્ષ પૂરાં થાય ત્યારે ₹1,00,000.",
+      "eligibility": [
+        "2 ઓગસ્ટ 2019 પછી જન્મેલી દીકરી.",
+        "કુટુંબની વાર્ષિક આવક ₹2 લાખ સુધી.",
+        "સંતાનની સંખ્યાની શરત સત્તાવાર પેજ પર ચકાસવી."
+      ],
+      "documents": ["દીકરીનો જન્મ દાખલો", "માતા-પિતાનું આધાર કાર્ડ", "આવકનો દાખલો", "કુટુંબના બાળકોના જન્મ દાખલા", "બેંક ખાતું"],
+      "howToApply": "ગ્રામ પંચાયતના VCE, ICDS કચેરી કે મામલતદાર કચેરીમાં. દીકરીના જન્મના 1 વર્ષમાં અરજી કરવી.",
+      "lastDate": null,
+      "officialLink": "https://wcd.gujarat.gov.in",
+      "source": "wcd.gujarat.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false,
+      "rules": { "maxIncome": 200000 }
+    },
+    {
+      "id": "ganga-swarupa",
+      "title": "ગંગા સ્વરૂપા આર્થિક સહાય યોજના",
+      "summary": "વિધવા બહેનોને દર મહિને આર્થિક સહાય.",
+      "categories": ["vidhva"],
+      "benefit": "દર મહિને ₹1,250 સીધા બેંક કે પોસ્ટ ખાતામાં.",
+      "eligibility": [
+        "18 વર્ષથી વધુ ઉંમરની વિધવા બહેન.",
+        "ગુજરાતની રહેવાસી."
+      ],
+      "documents": ["પતિનો મરણ દાખલો", "આધાર કાર્ડ", "ઉંમરનો પુરાવો", "આવકનો દાખલો", "બેંક કે પોસ્ટ ખાતાની પાસબુક"],
+      "howToApply": "મામલતદાર કચેરી, ગ્રામ પંચાયતના VCE અથવા Digital Gujarat પરથી.",
+      "lastDate": null,
+      "officialLink": "https://www.digitalgujarat.gov.in",
+      "source": "digitalgujarat.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false,
+      "rules": { "minAge": 18 }
+    },
+    {
+      "id": "vrudh-pension",
+      "title": "વૃદ્ધ પેન્શન સહાય",
+      "summary": "60 વર્ષથી વધુ ઉંમરના ઓછી આવકવાળા વડીલોને માસિક પેન્શન.",
+      "categories": ["vrudh"],
+      "benefit": "દર મહિને પેન્શન. રકમ ઉંમર પ્રમાણે અલગ, સત્તાવાર પેજ પર ચકાસવી.",
+      "eligibility": [
+        "60 વર્ષ કે વધુ ઉંમર.",
+        "BPL યાદીમાં નામ અથવા નિયત આવક મર્યાદામાં."
+      ],
+      "documents": ["આધાર કાર્ડ", "ઉંમરનો પુરાવો", "આવકનો દાખલો કે BPL કાર્ડ", "બેંક કે પોસ્ટ ખાતું", "ફોટો"],
+      "howToApply": "મામલતદાર કચેરી કે ગ્રામ પંચાયતના VCE પાસે.",
+      "lastDate": null,
+      "officialLink": "https://www.digitalgujarat.gov.in",
+      "source": "digitalgujarat.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false,
+      "rules": { "minAge": 60 }
+    },
+    {
+      "id": "ayushman",
+      "title": "આયુષ્માન ભારત (PM-JAY) કાર્ડ",
+      "summary": "પરિવાર દીઠ વર્ષે ₹5 લાખ સુધી મફત સારવાર.",
+      "categories": ["samanya", "vrudh"],
+      "benefit": "નોંધાયેલી સરકારી અને ખાનગી હોસ્પિટલમાં વર્ષે ₹5 લાખ સુધીની સારવાર મફત. 70 વર્ષથી વધુ ઉંમરના દરેક વડીલને આવક જોયા વગર વય વંદના કાર્ડ.",
+      "eligibility": [
+        "યાદીમાં નામ ધરાવતા પરિવાર (રેશનકાર્ડ/આવકના આધારે).",
+        "70 વર્ષથી વધુ ઉંમરના બધા વડીલો."
+      ],
+      "documents": ["આધાર કાર્ડ", "રેશનકાર્ડ", "મોબાઇલ નંબર"],
+      "howToApply": "beneficiary.nha.gov.in, Ayushman એપ, CSC સેન્ટર કે સરકારી હોસ્પિટલમાં.",
+      "lastDate": null,
+      "officialLink": "https://beneficiary.nha.gov.in",
+      "source": "nha.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "pmay-g",
+      "title": "પ્રધાનમંત્રી આવાસ યોજના (ગ્રામીણ)",
+      "summary": "ઘર વગરના કે કાચા ઘરવાળા પરિવારને પાકું ઘર બાંધવા સહાય.",
+      "categories": ["samanya"],
+      "benefit": "મેદાની વિસ્તારમાં ઘર બાંધવા ₹1.20 લાખ સહાય, હપ્તામાં.",
+      "eligibility": [
+        "ગામમાં રહેતો ઘર વગરનો કે કાચા ઘરવાળો પરિવાર.",
+        "પસંદગી સર્વે યાદી અને ગ્રામસભા દ્વારા થાય છે."
+      ],
+      "documents": ["આધાર કાર્ડ", "રેશનકાર્ડ", "બેંક ખાતું", "જોબ કાર્ડ (મનરેગા)", "જમીનનો પુરાવો"],
+      "howToApply": "ગ્રામ પંચાયત / તાલુકા પંચાયતમાં તપાસ કરો કે યાદીમાં નામ છે કે નહીં.",
+      "lastDate": null,
+      "officialLink": "https://pmayg.nic.in",
+      "source": "pmayg.nic.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "ration-card",
+      "title": "રેશનકાર્ડ અને મફત અનાજ",
+      "summary": "નવું રેશનકાર્ડ, નામ ઉમેરવું કે સુધારવું, અને NFSA હેઠળ અનાજ.",
+      "categories": ["samanya"],
+      "benefit": "લાયક પરિવારોને સસ્તા અનાજની દુકાનેથી મફત અનાજ. રેશનકાર્ડ ઘણી યોજનામાં ઓળખ તરીકે કામ આવે.",
+      "eligibility": [
+        "ગુજરાતમાં રહેતો પરિવાર.",
+        "મફત અનાજ (NFSA) માટે આવક અને બીજી શરતો લાગુ."
+      ],
+      "documents": ["પરિવારના બધા સભ્યોનાં આધાર કાર્ડ", "રહેઠાણનો પુરાવો", "આવકનો દાખલો", "જૂનું કાર્ડ (સુધારા માટે)"],
+      "howToApply": "મામલતદાર કચેરી, ગ્રામ પંચાયતના VCE કે Digital Gujarat પરથી.",
+      "lastDate": null,
+      "officialLink": "https://dcs-dof.gujarat.gov.in",
+      "source": "dcs-dof.gujarat.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "birth-certificate",
+      "title": "જન્મ દાખલો કેવી રીતે કઢાવવો",
+      "summary": "બાળકના જન્મની નોંધણી 21 દિવસમાં મફત.",
+      "categories": ["vali", "mata", "samanya"],
+      "benefit": "જન્મ દાખલો શાળા પ્રવેશ, આધાર અને ઘણી યોજનાઓ માટે જરૂરી છે.",
+      "eligibility": [
+        "જન્મના 21 દિવસમાં નોંધણી મફત; મોડું થાય તો લેટ ફી અને વધારાના કાગળ લાગે."
+      ],
+      "documents": ["હોસ્પિટલનો જન્મ રિપોર્ટ (ઘરે જન્મ હોય તો સાક્ષી)", "માતા-પિતાનું આધાર કાર્ડ", "રહેઠાણનો પુરાવો"],
+      "howToApply": "ગામમાં તલાટી-કમ-મંત્રી (ગ્રામ પંચાયત), શહેરમાં નગરપાલિકા. ઓનલાઇન: crsorgi.gov.in",
+      "lastDate": null,
+      "officialLink": "https://crsorgi.gov.in",
+      "source": "crsorgi.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "udid",
+      "title": "UDID કાર્ડ (દિવ્યાંગતા પ્રમાણપત્ર)",
+      "summary": "દિવ્યાંગ વ્યક્તિ માટે આખા દેશમાં ચાલતું એક ઓળખ કાર્ડ.",
+      "categories": ["divyang"],
+      "benefit": "દિવ્યાંગતાનું પ્રમાણપત્ર અને ઓળખ કાર્ડ; ઘણી સહાય, પેન્શન અને સાધન યોજના માટે જરૂરી.",
+      "eligibility": [
+        "કોઈપણ પ્રકારની દિવ્યાંગતા ધરાવતી વ્યક્તિ.",
+        "સરકારી હોસ્પિટલમાં તબીબી તપાસ થાય છે."
+      ],
+      "documents": ["ફોટો", "આધાર કાર્ડ", "સરનામાનો પુરાવો", "જૂનું દિવ્યાંગ પ્રમાણપત્ર (હોય તો)"],
+      "howToApply": "swavlambancard.gov.in પર ઓનલાઇન અરજી, પછી જિલ્લા સરકારી હોસ્પિટલમાં તપાસ.",
+      "lastDate": null,
+      "officialLink": "https://www.swavlambancard.gov.in",
+      "source": "swavlambancard.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "sant-surdas",
+      "title": "સંત સુરદાસ યોજના (દિવ્યાંગ સહાય)",
+      "summary": "વધુ દિવ્યાંગતા ધરાવતી વ્યક્તિને માસિક આર્થિક સહાય.",
+      "categories": ["divyang"],
+      "benefit": "દર મહિને આર્થિક સહાય. રકમ અને ટકાવારીની શરત સત્તાવાર પેજ પર ચકાસવી.",
+      "eligibility": [
+        "નિયત ટકાવારીથી વધુ દિવ્યાંગતા.",
+        "ગુજરાતના રહેવાસી."
+      ],
+      "documents": ["દિવ્યાંગતા પ્રમાણપત્ર / UDID કાર્ડ", "આધાર કાર્ડ", "ઉંમરનો પુરાવો", "બેંક ખાતું"],
+      "howToApply": "esamajkalyan.gujarat.gov.in પર ઓનલાઇન, અથવા જિલ્લા સમાજ સુરક્ષા કચેરીમાં.",
+      "lastDate": null,
+      "officialLink": "https://esamajkalyan.gujarat.gov.in",
+      "source": "esamajkalyan.gujarat.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "pm-svanidhi",
+      "title": "પીએમ સ્વનિધિ: ફેરિયાઓ માટે લોન",
+      "summary": "લારી-ગલ્લાવાળા અને ફેરિયાઓને ગેરંટી વગર નાની લોન.",
+      "categories": ["vepari"],
+      "benefit": "ગેરંટી વગર કાર્યકારી મૂડી લોન; સમયસર ચૂકવો તો આગળ મોટી લોન, વ્યાજ સબસિડી અને ડિજિટલ પેમેન્ટ પર કેશબેક. લોનની રકમ સત્તાવાર પેજ પર ચકાસવી.",
+      "eligibility": [
+        "શહેર કે નગરમાં લારી, ગલ્લો કે ફેરી કરતા વેપારી.",
+        "નગરપાલિકાનું વેન્ડિંગ પ્રમાણપત્ર કે ભલામણ પત્ર."
+      ],
+      "documents": ["આધાર કાર્ડ (મોબાઇલ સાથે લિંક)", "વેન્ડિંગ પ્રમાણપત્ર / ભલામણ પત્ર", "બેંક ખાતું"],
+      "howToApply": "pmsvanidhi.mohua.gov.in પર, CSC સેન્ટર કે બેંકમાંથી.",
+      "lastDate": null,
+      "officialLink": "https://pmsvanidhi.mohua.gov.in",
+      "source": "pmsvanidhi.mohua.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    },
+    {
+      "id": "udyam",
+      "title": "Udyam નોંધણી (MSME)",
+      "summary": "નાના ધંધાની સરકારી નોંધણી, સંપૂર્ણ મફત.",
+      "categories": ["vepari", "yuvan"],
+      "benefit": "MSME તરીકે ઓળખ; બેંક લોન, સરકારી ટેન્ડર અને ઘણી યોજનાઓમાં ફાયદો.",
+      "eligibility": [
+        "કોઈપણ નાનો કે મધ્યમ ધંધો, દુકાન કે ઉદ્યોગ.",
+        "નોંધણી મફત છે. પૈસા માંગતી નકલી વેબસાઇટથી સાવધાન."
+      ],
+      "documents": ["માલિકનું આધાર કાર્ડ (મોબાઇલ સાથે લિંક)", "PAN કાર્ડ", "બેંક ખાતાની વિગત"],
+      "howToApply": "ફક્ત udyamregistration.gov.in પર જાતે, અથવા CSC સેન્ટર પરથી.",
+      "lastDate": null,
+      "officialLink": "https://udyamregistration.gov.in",
+      "source": "udyamregistration.gov.in",
+      "updatedOn": "2026-11-16",
+      "verified": false
+    }
+  ]
+}

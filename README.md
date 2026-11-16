@@ -1,22 +1,109 @@
-# GovDocs Pro
+# ગામની જાણકારી
 
-A comprehensive web application for preparing government job and service documents.
+ગામના દરેક માણસને તેના માટે કઈ યોજના, સહાય, નોકરી અને માહિતી છે તે સરળ ગુજરાતીમાં, બોલીને અને સામેથી જણાવતી એપ.
 
-## Current Features (MVP v1)
-- Photo & Signature Resizing with exact KB compression.
-- Government Presets (SSC, UPSC, Railway, etc.).
-- PDF Tools: JPG to PDF and PDF Merge.
-- Client-side processing for security and privacy.
+> "બોલો અને જાણો કે તમને શું મળી શકે, અને કેવી રીતે."
 
-## Directory Structure
-- `/assets`: Global static files (CSS, Global JS, Logos, and Icons).
-- `/components`: Modular UI logic for reusable elements (Uploaders, Previewers, Headers).
-- `/presets`: Configuration files for government-specific requirements (Dimensions, KB limits).
-- `/tools`: Dedicated namespaces for individual tools. Each tool has its own directory and entry page.
-  - `/photo-resize/`
-  - `/photo-compress/`
-  - `/signature-resize/`
-  - `/pdf-merge/`
-  - ...and future expansions.
-- `/utils`: Core "Engines" for image processing, PDF manipulation, and file helpers.
-- `index.html`: The primary landing page and tool directory.
+"ગામની જાણકારી" હાલનું કામચલાઉ નામ છે. નામ નક્કી થાય ત્યારે આ ત્રણ જગ્યાએ બદલવું: `js/config.js`, `manifest.json` અને `index.html` નું `<title>`.
+
+## પહેલા વર્ઝનમાં શું છે
+
+| ફીચર | ક્યાં |
+|---|---|
+| પ્રોફાઇલ: લોગિન વગર, ફક્ત ફોનમાં સેવ | 👤 બટન → `js/store.js` |
+| મારા માટે: પ્રોફાઇલ પ્રમાણે યોજના | 🏠 ટેબ → `js/match.js` |
+| યોજના કાર્ડ: શું મળે, કોણ લાયક, ડોક્યુમેન્ટ, ક્યાં અરજી, છેલ્લી તારીખ, સત્તાવાર લિંક, સ્રોત | `data/schemes.json` |
+| આજનું: નવી માહિતી અને ચેતવણી | 📰 ટેબ → `data/updates.json` |
+| બોલીને સાંભળો: ફોનનું મફત ગુજરાતી TTS | `js/speak.js` |
+| છેલ્લી તારીખની યાદ: ⭐ સેવ કરો, તારીખના 7 દિવસ પહેલાંથી યાદ | ⭐ ટેબ |
+| WhatsApp પર શેર | દરેક કાર્ડ પર |
+| ઑફલાઇન: છેલ્લી માહિતી નેટ વગર પણ દેખાય | `sw.js` |
+
+છેલ્લી તારીખ પૂરી થાય એટલે કાર્ડ આપોઆપ છુપાઈ જાય છે. ચકાસણી બાકી હોય તેવા કાર્ડ પર "ચકાસણી બાકી" લખેલું દેખાય છે.
+
+**નોટિફિકેશન વિશે:** હાલમાં યાદ એપ ખોલો ત્યારે દેખાય છે (banner અને ફોનનું નોટિફિકેશન). એપ બંધ હોય ત્યારે પણ નોટિફિકેશન આવે તે માટે Firebase Cloud Messaging આગળના પગલામાં ઉમેરવું પડશે.
+
+## ફાઇલો
+
+```
+index.html          એપનું એક જ પેજ
+css/app.css         ડિઝાઇન (મોટા અક્ષર, ડાર્ક મોડ સાથે)
+js/app.js           સ્ક્રીન અને બટનનું કામ
+js/config.js        એપનું નામ, યાદ કેટલા દિવસ પહેલાં
+js/options.js       યુઝર વર્ગ, જાતિ, જિલ્લા, આવક શ્રેણી
+js/match.js         યોજના લાગુ પડે છે કે નહીં
+js/speak.js         ગુજરાતીમાં વાંચીને સંભળાવવું
+js/store.js         ફોનમાં સેવ
+data/schemes.json   યોજના કાર્ડ
+data/updates.json   "આજનું" માહિતી
+sw.js               ઑફલાઇન
+manifest.json       ફોનમાં ઇન્સ્ટોલ / Play Store (TWA) માટે
+privacy.html        પ્રાઇવસી પોલિસી (Play Store માટે ફરજિયાત)
+scripts/check-data.mjs  ડેટા ચકાસણી
+```
+
+કોઈ build કે npm install ની જરૂર નથી.
+
+## ફોનમાં ચલાવીને જોવું
+
+```
+python3 -m http.server 8080
+```
+
+પછી બ્રાઉઝરમાં `http://localhost:8080` ખોલો. ફાઇલ સીધી ડબલ-ક્લિક કરીને ખોલવાથી નહીં ચાલે, કારણ કે ડેટા `fetch` થી આવે છે.
+
+## નવું યોજના કાર્ડ ઉમેરવું
+
+`data/schemes.json` માં આ રીતે ઉમેરો:
+
+```json
+{
+  "id": "nani-angreji-id",
+  "title": "યોજનાનું નામ",
+  "summary": "એક લીટીમાં શું છે",
+  "categories": ["khedut"],
+  "benefit": "શું મળશે",
+  "eligibility": ["કોણ લાયક — દરેક શરત અલગ લીટીમાં"],
+  "documents": ["આધાર કાર્ડ", "..."],
+  "howToApply": "ક્યાં અને કેવી રીતે અરજી",
+  "lastDate": "2026-12-31",
+  "officialLink": "https://...",
+  "source": "સ્રોતનું નામ",
+  "updatedOn": "2026-11-16",
+  "verified": false,
+  "rules": { "minAge": 18, "maxAge": 35, "maxIncome": 250000, "jati": ["sc", "st"] }
+}
+```
+
+- `lastDate`: ચાલુ યોજના હોય તો `null`.
+- `rules` વૈકલ્પિક છે. પ્રોફાઇલમાં જે માહિતી ભરી ન હોય તેના આધારે યોજના છુપાતી નથી.
+- વર્ગ (`categories`): `khedut`, `vidyarthi`, `yuvan`, `mata`, `vali`, `vrudh`, `vidhva`, `divyang`, `shikshak`, `vepari`, `samanya`. `samanya` વાળી યોજના દરેકને દેખાય છે.
+- સત્તાવાર પેજ પરથી ચકાસ્યા પછી જ `"verified": true` કરવું.
+
+ઉમેર્યા પછી ચકાસો:
+
+```
+node scripts/check-data.mjs
+```
+
+કોડ બદલો ત્યારે `sw.js` માં `VERSION` વધારો, જેથી યુઝર્સના ફોનમાં નવું વર્ઝન આવે. ફક્ત `data/` બદલો ત્યારે તેની જરૂર નથી.
+
+## લોન્ચ પહેલાંનું ચેકલિસ્ટ
+
+- [ ] એપનું નામ નક્કી કરવું. નામમાં "Gov" કે "સરકારી" જેવો શબ્દ ન રાખવો, અને Play Store પર એ નામની બીજી એપ નથી તે ચકાસવું.
+- [ ] `data/schemes.json` ના દરેક કાર્ડ સત્તાવાર પેજ પરથી ચકાસીને `verified: true` કરવા.
+- [ ] `privacy.html` માં સંપર્ક ઈમેલ ઉમેરવો.
+- [ ] એપને https વેબસાઇટ પર મૂકવી (GitHub Pages / Netlify / Cloudflare Pages, મફત).
+- [ ] Bubblewrap કે PWABuilder થી TWA (Android એપ) બનાવવી, અને `.well-known/assetlinks.json` મૂકવી.
+- [ ] Play Console: Data Safety ફોર્મ ("ડેટા ફોનમાં જ રહે છે"), અને વર્ણનમાં "આ ખાનગી માહિતી એપ છે, સરકાર સાથે જોડાયેલી નથી".
+- [ ] 12+ ટેસ્ટર સાથે 14 દિવસનો ક્લોઝ્ડ ટેસ્ટ.
+
+## પછીનાં વર્ઝનમાં
+
+- Firebase Cloud Messaging: એપ બંધ હોય ત્યારે પણ નોટિફિકેશન
+- GitHub Actions: દરરોજ સવારે સ્રોત ચેક કરીને નવા કાર્ડનો ડ્રાફ્ટ
+- બોલીને પૂછો (AI જવાબ, ફક્ત ચકાસેલા કાર્ડમાંથી)
+- મંડી ભાવ અને હવામાન ચેતવણી
+- નજીકના CSC / KruPa Digital Hub ઓપરેટરની યાદી
+
+જૂની GovDocs Pro એપનો કોડ git history માં છે (`git log` માં 8f459e1 સુધીના commits).
