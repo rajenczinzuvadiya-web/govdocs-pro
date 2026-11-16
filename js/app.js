@@ -46,6 +46,7 @@ async function loadData() {
     ]);
     state.schemes = s.schemes || [];
     state.updates = u.updates || [];
+    state.dataUpdatedOn = s.updatedOn || null;
     state.error = false;
   } catch {
     state.error = true;
@@ -167,6 +168,11 @@ function categoryChoices(selected) {
   ).join('');
 }
 
+function versionLine() {
+  const d = state.dataUpdatedOn ? ` · માહિતી અપડેટ: ${esc(formatDate(state.dataUpdatedOn))}` : '';
+  return `વર્ઝન ${esc(APP.version)}${d}`;
+}
+
 function viewHome() {
   const p = state.profile;
   if (!p || !p.categories || !p.categories.length) return viewOnboarding();
@@ -181,7 +187,8 @@ function viewHome() {
     </section>
     ${incomplete ? `<a class="banner banner-info" href="#/profile">👤 ઉંમર અને જિલ્લો ઉમેરો, એટલે વધુ સાચી યોજના દેખાશે →</a>` : ''}
     ${list(mine, 'તમારા વર્ગ માટે હજુ કાર્ડ નથી. જલ્દી ઉમેરાશે. ત્યાં સુધી <a href="#/all">બધી યોજના</a> જુઓ.')}
-    <p class="muted small center"><a class="link" href="#/about">આ એપ વિશે અને જરૂરી સૂચના</a></p>`;
+    <p class="muted small center"><a class="link" href="#/about">આ એપ વિશે અને જરૂરી સૂચના</a></p>
+    <p class="muted small center">${versionLine()}</p>`;
 }
 
 let allFilter = { q: '', cat: '' };
@@ -369,6 +376,7 @@ function viewAbout() {
       <section><h2>🔒 તમારી માહિતી</h2>
         <p>લોગિન નથી. પ્રોફાઇલ અને સેવ કરેલી યોજનાઓ ફક્ત તમારા ફોનમાં રહે છે; અમારા સર્વર પર જતી નથી. <a class="link" href="privacy.html">પ્રાઇવસી પોલિસી</a></p>
       </section>
+      <p class="muted small">${versionLine()}</p>
     </article>`;
 }
 
