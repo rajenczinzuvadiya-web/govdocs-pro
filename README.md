@@ -5,7 +5,7 @@
 - નામ: **જાણકાર** (ટેગલાઇન નથી). Play Store માં: "જાણકાર: યોજના, સહાય, દાખલા"; ભરતી વિભાગ બને પછી "ભરતી" ઉમેરવું.
 - સરનામું: `https://jankar.krupadigitalhub.in` (સેટિંગની રીત `store/README.md` માં).
 - KruPa ની ત્રણ એપ: **જાણકાર** (ગ્રામજનો, Play Store), **KruPa Digital Hub** (VCE, વેબ), **KruPa Doc Hub** (ઝેરોક્ષ દુકાન, વેબ). જાણકારના મેનુમાં "ઓપરેટર માટે" બંનેની લિંક છે (`js/config.js` → `krupa`).
-- નામ બદલાય તો: `js/config.js`, `manifest.json`, `index.html`, `icons/icon.svg`, `store/listing.md`, `scripts/store-images.mjs`.
+- નામ બદલાય તો: `js/config.js`, `manifest.json`, `index.html`, `icons/icon-source.png`, `store/feature-bg.png`, `store/listing.md`, `scripts/store-images.mjs`.
 
 ## પહેલા વર્ઝનમાં શું છે
 
@@ -65,10 +65,11 @@ sw.js               ઑફલાઇન
 manifest.json       ફોનમાં ઇન્સ્ટોલ / Play Store (TWA) માટે
 privacy.html        પ્રાઇવસી પોલિસી (Play Store માટે ફરજિયાત)
 terms.html          નિયમો અને શરતો
-icons/icon.svg      આઇકનનું મૂળ ચિત્ર
+icons/icon-source.png  આઇકનનું મૂળ ચિત્ર (1024, આખો ચોરસ; બદલો પછી node scripts/make-icons.mjs)
+store/feature-bg.png   Play Store ના મોટા ફોટાનું ચિત્ર (નામ script ઉમેરે)
 store/              Play Store: લખાણ (listing.md), ફોટા, અપલોડની રીત (README.md)
 scripts/check-data.mjs    ડેટા ચકાસણી
-scripts/make-icons.mjs    icon.svg પરથી PNG આઇકન
+scripts/make-icons.mjs    icon-source.png પરથી બધા આઇકન
 scripts/store-images.mjs  Play Store ના ફોટા
 ```
 

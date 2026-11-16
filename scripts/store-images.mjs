@@ -33,17 +33,15 @@ for (const [name, route] of shots) {
   await p.screenshot({ path: `${OUT}screenshots/${name}.png` });
 }
 
-// Feature graphic: વાદળી પટ્ટો + આઇકન + નામ + KruPa Digital Hub (યુઝર 16/11/26: વિષયની લીટી નહીં)
+// Feature graphic: store/feature-bg.png (ચોપડી + માણસ) પર જમણી બાજુ નામ, એપના જ font માં
 const fg = await (await b.newContext({ viewport: { width: 1024, height: 500 } })).newPage();
 await fg.goto(U, { waitUntil: 'networkidle' });
 await fg.evaluate(() => {
   document.body.innerHTML = `
-    <div style="position:fixed;inset:0;display:flex;align-items:center;gap:56px;padding:0 72px;
-      background:linear-gradient(135deg,#1e2f6b,#2c4596);color:#fff;font-family:'Hind Vadodara',sans-serif">
-      <img src="icons/icon-512.png" style="width:220px;height:220px;border-radius:44px;box-shadow:0 18px 40px rgba(0,0,0,.3)">
-      <div>
-        <div style="font-size:96px;font-weight:700;line-height:1.1">જાણકાર</div>
-        <div style="margin-top:18px;font-size:30px;color:#f4b56a;font-weight:600">KruPa Digital Hub</div>
+    <div style="position:fixed;inset:0;background:url(store/feature-bg.png) center/cover;font-family:'Hind Vadodara',sans-serif">
+      <div style="position:absolute;left:52%;right:4%;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+        <div style="font-size:120px;font-weight:700;line-height:1.05;color:#fff;text-shadow:0 4px 18px rgba(10,20,60,.45)">જાણકાર</div>
+        <div style="margin-top:14px;font-size:30px;font-weight:600;color:#f4b56a;text-shadow:0 2px 10px rgba(10,20,60,.5)">KruPa Digital Hub</div>
       </div>
     </div>`;
 });
