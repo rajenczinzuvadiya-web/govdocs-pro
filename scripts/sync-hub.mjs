@@ -167,12 +167,13 @@ async function main() {
   let feed;
   if (arg) feed = JSON.parse(readFileSync(arg));
   else {
-    const res = await fetch(FEED_URL, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(30000) });
-    if (!res.ok) {
-      console.log(`Digital Hub એ જવાબ ન આપ્યો (${res.status}). કંઈ બદલ્યું નથી.`);
+    // redirect: 'manual' — લોગિન પેજ પર મોકલે (જૂનું deploy) તો એ પણ "જવાબ નહીં" ગણાય.
+    const res = await fetch(FEED_URL, { headers: { accept: 'application/json' }, redirect: 'manual', signal: AbortSignal.timeout(30000) }).catch(() => null);
+    feed = res && res.ok ? await res.json().catch(() => null) : null;
+    if (!feed) {
+      console.log(`Digital Hub એ સાચો જવાબ ન આપ્યો (${res ? res.status : 'નેટ'}). કંઈ બદલ્યું નથી.`);
       return;
     }
-    feed = await res.json();
   }
   const now = { schemes: read('schemes.json'), documents: read('documents.json'), events: read('events.json') };
   const out = merge(feed, now);
