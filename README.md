@@ -135,7 +135,7 @@ node scripts/check-data.mjs
 ## લોન્ચ પહેલાંનું ચેકલિસ્ટ
 
 - [x] એપનું નામ: જાણકાર (16/11/26).
-- [ ] `jankar.krupadigitalhub.in` ચાલુ કરવું (`store/README.md` પગલું 1).
+- [x] `jankar.krupadigitalhub.in` ચાલુ કરવું (`store/README.md` પગલું 1).
 - [ ] `data/schemes.json` ના દરેક કાર્ડ સત્તાવાર પેજ પરથી ચકાસીને `verified: true` કરવા.
 - [ ] `js/config.js` માં સંપર્ક ઈમેલ અને વોટ્સએપ નંબર ભરવા (privacy, સંપર્ક પેજ અને "ભૂલ જણાવો" માં આપોઆપ આવશે).
 - [ ] એપને https વેબસાઇટ પર મૂકવી (GitHub Pages / Netlify / Cloudflare Pages, મફત).

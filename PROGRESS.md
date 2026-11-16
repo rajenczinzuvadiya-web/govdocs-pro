@@ -1,5 +1,9 @@
 # જાણકાર — કામ ક્યાં પહોંચ્યું (નવું ઉપર)
 
+## 16/11/26 — સરનામું `jankar.krupadigitalhub.in` ચાલુ
+- યુઝરે Vercel DNS માં `jankar` CNAME અને GitHub Pages માં Custom domain કર્યું ("DNS check successful"). Digital Hub નું `JANKAR_URL` નવા સરનામે.
+- યુઝરે Digital Hub ગાઇડ મેનેજમાં "🌐 બધું ચાલુ કરો" કર્યું.
+
 ## 16/11/26 — v0.6.0: KruPa Digital Hub માંથી માહિતી આપોઆપ
 - યુઝર: "Digital Hub માંથી manage થાય ને જાણકારમાં દેખાય." Digital Hub ના ગાઇડ મેનેજમાં ચાલુ કરેલી યોજના / દસ્તાવેજ / પ્રસંગ દર 3 કલાકે અહીં આવે (`scripts/sync-hub.mjs`, `.github/workflows/sync-hub.yml`, Digital Hub નું `/api/jankar`).
 - સલામતી: 20 થી ઓછાં કાર્ડ આવે કે પહેલાંથી અડધાથી ઓછાં, તો કંઈ ન બદલાય; ડેટા ચકાસણી નિષ્ફળ જાય તો સેવ ન થાય. જાણકારનાં પોતાનાં કાર્ડ રહે; વર્ગ અને છેલ્લી તારીખ Digital Hub માં ન ભરી હોય તો અહીંનાં રહે.
@@ -15,10 +19,9 @@
 - `store/`: Play Store નું લખાણ, Data safety, 6 screenshot, આઇકન, મોટો ફોટો, અપલોડની ક્લિક-બાય-ક્લિક રીત.
 
 ## યુઝરે કરવાનું (નવી ચેટમાં પહેલાં આ યાદ કરાવવું)
-1. ડોમેન `jankar.krupadigitalhub.in`: Vercel DNS માં CNAME + GitHub Pages માં Custom domain (`store/README.md` પગલું 1).
+1. GitHub Pages માં "Enforce HTTPS" ✓ (ન થાય તો 1 કલાક પછી).
 2. Play Console એકાઉન્ટ ($25) અને PWABuilder થી Android ફાઇલ (`store/README.md` પગલાં 2–7). zip માંની `assetlinks.json` Claude ને આપવી.
 3. 12 ટેસ્ટર (Gmail) ભેગા કરવા: 14 દિવસનો ટેસ્ટ.
-4. Digital Hub → એડમિન → ગાઇડ મેનેજ → "🌐 બધું ચાલુ કરો": ત્યારે જ બધાં કાર્ડ Digital Hub માંથી જાણકારમાં આવવા લાગે. ડોમેન ચાલુ થાય એટલે Claude ને કહેવું (Digital Hub નું `JANKAR_URL` બદલવા).
 
 ## આગળનું કામ (Claude, ક્રમ પ્રમાણે)
 1. **ભરતી વિભાગ + "આજનું" + હેલ્પલાઇન Digital Hub એડમિનમાંથી** (ગાઇડ જેવું: ત્યાં લખો, `/api/jankar` થી અહીં), પછી નામ અને મોટા ફોટામાં "ભરતી".
