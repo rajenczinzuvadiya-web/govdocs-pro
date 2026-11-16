@@ -4,42 +4,50 @@
     {
       "id": "doc-id",
       "label": "ઓળખના પુરાવા",
-      "icon": "🪪"
+      "icon": "idcard",
+      "tone": "blue"
     },
     {
       "id": "doc-cert",
       "label": "આવક / જાતિ / રહેઠાણના દાખલા",
-      "icon": "📜"
+      "icon": "certificate",
+      "tone": "green"
     },
     {
       "id": "doc-family",
       "label": "કુટુંબ: જન્મ, મરણ, લગ્ન, રેશનકાર્ડ",
-      "icon": "👨‍👩‍👧"
+      "icon": "users",
+      "tone": "pink"
     },
     {
       "id": "doc-study",
       "label": "ભણતર",
-      "icon": "🎓"
+      "icon": "graduation",
+      "tone": "sky"
     },
     {
       "id": "doc-bank",
       "label": "બેંક / ટેક્સ",
-      "icon": "🏦"
+      "icon": "bank",
+      "tone": "indigo"
     },
     {
       "id": "doc-land",
       "label": "જમીન / ઘર",
-      "icon": "🏡"
+      "icon": "land",
+      "tone": "brown"
     },
     {
       "id": "doc-business",
       "label": "ધંધો / દુકાન",
-      "icon": "🏪"
+      "icon": "store",
+      "tone": "orange"
     },
     {
       "id": "doc-job",
       "label": "નોકરી / રોજગાર",
-      "icon": "💼"
+      "icon": "briefcase",
+      "tone": "violet"
     }
   ],
   "documents": [

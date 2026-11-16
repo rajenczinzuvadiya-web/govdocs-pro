@@ -61,11 +61,11 @@ export function sortForProfile(list, profile) {
   });
 }
 
-const dateFmt = new Intl.DateTimeFormat('gu-IN', { day: 'numeric', month: 'long', year: 'numeric' });
-
+/** તારીખ DD/MM/YY (KruPa નિયમ) */
 export function formatDate(iso) {
   if (!iso) return '';
-  return dateFmt.format(new Date(iso + 'T00:00:00'));
+  const [y, m, d] = iso.split('-');
+  return `${d}/${m}/${y.slice(2)}`;
 }
 
 /** કાર્ડ પર બતાવવાનો તારીખનો સંદેશ */

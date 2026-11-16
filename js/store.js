@@ -49,8 +49,17 @@ export const store = {
     return all[id];
   },
 
-  getTextSize: () => read('textSize', 'm'),
-  setTextSize: (v) => write('textSize', v),
+  // ઝૂમ (80–120) અને દેખાવ (auto / light / dark) — આ ફોન પૂરતું
+  getZoom: () => {
+    const z = Number(read('zoom', 100));
+    return [80, 90, 100, 110, 120].includes(z) ? z : 100;
+  },
+  setZoom: (z) => write('zoom', z),
+  getTheme: () => {
+    const t = read('theme', 'auto');
+    return ['auto', 'light', 'dark'].includes(t) ? t : 'auto';
+  },
+  setTheme: (t) => write('theme', t),
 
   clearAll() {
     ['profile', 'saved', 'notified', 'seen', 'docs'].forEach((k) => {

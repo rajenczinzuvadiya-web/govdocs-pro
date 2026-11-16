@@ -4,32 +4,45 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>ગામની જાણકારી</title>
-  <meta name="description" content="ગામના દરેક માણસ માટે સરકારી યોજના, સહાય, ભરતી અને જરૂરી માહિતી, સરળ ગુજરાતીમાં અને બોલીને.">
-  <meta name="theme-color" content="#14663a">
+  <meta name="description" content="સરકારી યોજના, દાખલા, સહાય અને જરૂરી માહિતી — સરળ ગુજરાતીમાં અને બોલીને.">
+  <meta name="theme-color" content="#ffffff">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preload" href="fonts/hind-vadodara-gujarati-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/app.css">
+  <script>
+    // સેવ કરેલો દેખાવ અને ઝૂમ પહેલા જ લાગુ (સફેદ-કાળું ઝબકે નહીં)
+    try {
+      var t = JSON.parse(localStorage.getItem('gj:theme') || '"auto"');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      var z = JSON.parse(localStorage.getItem('gj:zoom') || '100');
+      if ([80, 90, 110, 120].indexOf(z) > -1) document.documentElement.dataset.zoom = String(z);
+    } catch (e) {}
+  </script>
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="#/"><img src="icons/icon-192.png" alt="" width="32" height="32"><span data-app-name>ગામની જાણકારી</span></a>
-    <div class="top-actions">
-      <button id="text-size" class="icon-btn text-size-btn" type="button" aria-label="અક્ષર મોટા કરો">અ<span>+</span></button>
-      <a class="icon-btn" href="#/profile" aria-label="મારી પ્રોફાઇલ">👤</a>
-    </div>
+    <a class="brand" href="#/"><img src="icons/icon-192.png" alt="" width="32" height="32"><span class="wordmark"><span class="w1">ગામની</span> <span class="w2">જાણકારી</span></span></a>
+    <button id="menu-btn" class="menu-btn" type="button" aria-label="મેનુ: પ્રોફાઇલ, ઝૂમ, દેખાવ">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+      <svg class="ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
   </header>
 
   <main id="view" class="wrap" tabindex="-1"></main>
 
   <nav class="nav" aria-label="મુખ્ય મેનુ">
-    <a href="#/" data-route="home"><span aria-hidden="true">🏠</span>મારા માટે</a>
-    <a href="#/all" data-route="all"><span aria-hidden="true">📋</span>યોજના</a>
-    <a href="#/docs" data-route="docs"><span aria-hidden="true">🪪</span>દસ્તાવેજ</a>
-    <a href="#/events" data-route="events"><span aria-hidden="true">🧭</span>પ્રસંગ</a>
-    <a href="#/saved" data-route="saved"><span aria-hidden="true">⭐</span>સેવ</a>
+    <a class="nav-brand" href="#/"><img src="icons/icon-192.png" alt="" width="36" height="36"><span class="wordmark"><span class="w1">ગામની</span> <span class="w2">જાણકારી</span></span></a>
+    <a href="#/" data-route="home"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="home"/></svg></span><span>મારા માટે</span></a>
+    <a href="#/all" data-route="all"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="book"/></svg></span><span>યોજના</span></a>
+    <a href="#/docs" data-route="docs"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="folder"/></svg></span><span>દસ્તાવેજ</span></a>
+    <a href="#/events" data-route="events"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="calendar"/></svg></span><span>પ્રસંગ</span></a>
+    <a href="#/saved" data-route="saved"><span class="pill"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path data-i="star"/></svg></span><span>સેવ</span></a>
+    <div class="nav-foot">ખાનગી માહિતી એપ — સરકારી નથી.</div>
   </nav>
 
+  <div id="modal"></div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <noscript><p class="wrap">આ એપ ચલાવવા JavaScript ચાલુ કરો.</p></noscript>
