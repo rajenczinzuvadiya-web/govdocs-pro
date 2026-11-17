@@ -68,7 +68,8 @@ async function loadData() {
       get('documents.json').catch(() => ({})),
       get('events.json').catch(() => ({})),
     ]);
-    const jb = await get('jobs.json').catch(() => ({}));
+    // ભરતી હાલ બંધ (APP.jobs = false): ડેટા લાવવો જ નહીં, એટલે ટેબ, હોમ, શોધ, સેવ — ક્યાંય ન દેખાય.
+    const jb = APP.jobs ? await get('jobs.json').catch(() => ({})) : {};
     state.jobOrgs = jb.orgs || [];
     state.jobs = (jb.jobs || []).map((j) => ({ ...j, kind: 'job', summary: jobLine(j) }));
     state.schemes = s.schemes || [];
@@ -156,23 +157,13 @@ function itemList(items, empty) {
 
 // ફૂટર: દરેક પેજના છેલ્લે (સ્ક્રીનના તળિયે), એક જ જગ્યાએથી. KruPa Digital Hub ના ફૂટર જેવું:
 // અમારી એપ · અમને ફોલો કરો · માહિતીનાં પેજ · ©
-const extLink = (href, text) => `<li><a href="${esc(href)}" target="_blank" rel="noopener">${esc(text)}</a></li>`;
 const COPY_FROM = 2026;
+// ફૂટર: ફક્ત માહિતીનાં પેજની એક હાર અને © (યુઝર 17/11/26: "વધારાનું કાઢી નાખો"). એપ અને ફોલો હોમ પર છે.
 function renderFooter() {
-  const k = APP.krupa || {};
   const y = new Date().getFullYear();
-  const col = (title, items) => (items.length ? `<div class="fcol"><p class="fhead">${title}</p><ul>${items.join('')}</ul></div>` : '');
   document.getElementById('foot').innerHTML = `
-    <div class="foot-in">
-      <div class="fbrand">
-        <a href="#/"><img src="icons/icon-192.png" alt="" width="36" height="36"><b>${esc(APP.name)}</b></a>
-        <p>${esc(APP.about)}</p>
-      </div>
-      ${col('અમારી એપ', [k.digitalHub && extLink(k.digitalHub, 'KruPa Digital Hub'), k.docHub && extLink(k.docHub, 'KruPa Doc Hub')].filter(Boolean))}
-      ${col('અમને ફોલો કરો', (APP.social || []).map((l) => extLink(l.href, l.label)))}
-      ${col('માહિતી', INFO_LINKS.map((l) => `<li><a href="#/${l.route}">${esc(l.label)}</a></li>`))}
-    </div>
-    <p class="fcopy">© ${y > COPY_FROM ? `${COPY_FROM}–${y}` : COPY_FROM} KruPa Digital Hub. સર્વ હક્ક સ્વાધીન.</p>`;
+    <nav class="foot-links" aria-label="માહિતી">${INFO_LINKS.map((l) => `<a href="#/${l.route}">${esc(l.label)}</a>`).join('')}</nav>
+    <p class="fcopy">© ${y > COPY_FROM ? `${COPY_FROM}–${y}` : COPY_FROM} KruPa Digital Hub</p>`;
 }
 
 // ---------- છેલ્લી તારીખની યાદ ----------
@@ -775,7 +766,9 @@ function shareText(s) {
 }
 
 const dots = (arr) => `<ul class="dots">${arr.map((t) => `<li><span>${esc(t)}</span></li>`).join('')}</ul>`;
-const part = (title, ic, body, cls = '') => `<section class="part ${cls}"><h2><span class="sq">${icon(ic)}</span>${title}</h2>${body}</section>`;
+// ખૂલતો-બંધ થતો વિભાગ (યુઝર 17/11/26: બધા ખુલ્લા હોય તો જગ્યા રોકે). પહેલો ખુલ્લો, બાકીના નામ + ગણતરી સાથે બંધ.
+const part = (title, ic, body, { cls = '', open = false, n = 0 } = {}) => `
+  <details class="part ${cls}"${open ? ' open' : ''}><summary><h2><span class="sq">${icon(ic)}</span>${title}${n ? `<span class="n">${n}</span>` : ''}</h2>${icon('chevdown', 'ic chev')}</summary><div class="part-body">${body}</div></details>`;
 
 function docProgress(s, ready) {
   const n = ready.filter((i) => i < s.documents.length).length;
@@ -801,6 +794,19 @@ const stepPic = (s, i) => {
   return u ? `<img class="step-pic" src="${esc(u)}" alt="પગલું ${i + 1}" loading="lazy" decoding="async">` : '';
 };
 
+// પુરાવા, પગલાં, ભૂલો, અરજી પછી — ફક્ત જે ભરેલું હોય (Digital Hub માં બંધ કરેલો ભાગ ખાલી આવે). પહેલો ખુલ્લો.
+function foldParts(s, k) {
+  const steps = s.steps || [];
+  const list = [
+    (s.documents || []).length && ['કયા પુરાવા જોઈએ', 'list', docChecklist(s), '', s.documents.length],
+    s.howToApply && [k.where, 'pin', `<p>${esc(s.howToApply)}</p>`, '', 0],
+    steps.length && [k.steps, 'forms', `<ol class="timeline">${steps.map((t, i) => `<li><span class="num">${i + 1}</span><div class="txt">${t ? esc(t) : ''}${stepPic(s, i)}</div></li>`).join('')}</ol>`, '', steps.length],
+    (s.mistakes || []).length && ['આ ભૂલો ન કરો', 'alert', dots(s.mistakes), 'warn', s.mistakes.length],
+    (s.after || []).length && ['અરજી પછી', 'hourglass', dots(s.after), '', s.after.length],
+  ].filter(Boolean);
+  return list.map(([t, ic, body, cls, n], i) => part(t, ic, body, { cls, open: i === 0, n })).join('');
+}
+
 function viewItem(id) {
   const s = findItem(id);
   if (!s) return `<div class="empty">આ માહિતી મળી નહીં. <a href="#/">હોમ પર જાઓ</a></div>`;
@@ -814,8 +820,10 @@ function viewItem(id) {
     ['clock', 'કેટલા દિવસ', s.days],
     ['banknote', 'ફી', s.fee],
     ['hourglass', 'માન્યતા', s.validity],
-    ...(isDoc(s) ? [] : [['calendar', 'છેલ્લી તારીખ', s.lastDate ? formatDate(s.lastDate) : 'ચાલુ યોજના']]),
+    ['calendar', 'છેલ્લી તારીખ', s.lastDate ? formatDate(s.lastDate) : ''],
   ].filter(([, , v]) => v);
+  // અરજીનું બટન: Digital Hub માં "અરજીની વેબસાઇટ" બંધ હોય તો applyLink ખાલી આવે, એટલે બટન નહીં.
+  const apply = s.from === 'hub' && 'applyLink' in s ? s.applyLink : s.officialLink;
   const sources = (s.sources && s.sources.length ? s.sources : [{ label: s.source, url: s.officialLink }])
     .map((x) => `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.label)}</a>`)
     .join('');
@@ -833,22 +841,18 @@ function viewItem(id) {
     </div>
     ${events.length ? `<div class="related"><span>આ પ્રસંગમાં કામ આવે:</span>${events.map((e) => `<a class="chip" href="#/event/${e.id}"><span aria-hidden="true">${e.icon}</span>${esc(e.title)}</a>`).join('')}</div>` : ''}
     <div class="actions">
-      <a class="btn btn-kesari" href="${esc(s.officialLink)}" target="_blank" rel="noopener">${icon('external')}${k.apply}</a>
+      ${apply ? `<a class="btn btn-kesari" href="${esc(apply)}" target="_blank" rel="noopener">${icon('external')}${k.apply}</a>` : ''}
       <button class="btn" data-action="save" data-id="${esc(s.id)}" aria-pressed="${saved}">${icon('star', saved ? 'ic filled' : 'ic')}<span>${saved ? 'સેવ થયેલ' : 'સેવ કરો'}</span></button>
       <a class="btn btn-ok" href="${wa}" target="_blank" rel="noopener">${icon('share')}વોટ્સએપ પર મોકલો</a>
     </div>
     <div class="facts-main">
-      <div class="fact">${'<span class="sq">' + icon('users') + '</span>'}<div><div class="k">${k.who}</div><div class="v">${s.eligibility.map(esc).join('<br>')}</div></div></div>
-      <div class="fact good"><span class="sq">${icon('gift')}</span><div><div class="k">${k.benefit}</div><div class="v">${esc(s.benefit)}</div></div></div>
+      ${s.eligibility.length ? `<div class="fact"><span class="sq">${icon('users')}</span><div><div class="k">${k.who}</div><div class="v">${s.eligibility.map(esc).join('<br>')}</div></div></div>` : ''}
+      ${s.benefit ? `<div class="fact good"><span class="sq">${icon('gift')}</span><div><div class="k">${k.benefit}</div><div class="v">${esc(s.benefit)}</div></div></div>` : ''}
     </div>
     ${small.length ? `<div class="facts-small">${small.map(([ic, kk, v]) => `<div class="fact">${icon(ic)}<div><div class="k">${kk}</div><div class="v">${esc(v)}</div></div></div>`).join('')}</div>` : ''}
     <div class="parts">
       <div class="parts-main">
-        ${part('કયા પુરાવા જોઈએ', 'list', docChecklist(s))}
-        ${s.howToApply ? part(k.where, 'pin', `<p>${esc(s.howToApply)}</p>`) : ''}
-        ${s.steps && s.steps.length ? part(k.steps, 'forms', `<ol class="timeline">${s.steps.map((t, i) => `<li><span class="num">${i + 1}</span><div class="txt">${esc(t)}${stepPic(s, i)}</div></li>`).join('')}</ol>`) : ''}
-        ${s.mistakes && s.mistakes.length ? part('આ ભૂલો ન કરો', 'alert', dots(s.mistakes), 'warn') : ''}
-        ${s.after && s.after.length ? part('અરજી પછી', 'hourglass', dots(s.after)) : ''}
+        ${foldParts(s, k)}
       </div>
       <aside class="parts-side">
         ${reportLink(s) ? `<div class="card side-box">
@@ -1009,7 +1013,6 @@ const NAV = [
   { route: 'docs', href: '#/docs', ic: 'folder', label: 'દસ્તાવેજ ગાઇડ', short: 'દસ્તાવેજ' },
   { route: 'events', href: '#/events', ic: 'calendar', label: 'જીવનના પ્રસંગ', short: 'પ્રસંગ' },
   { route: 'saved', href: '#/saved', ic: 'star', label: 'સેવ કરેલ' },
-  { route: 'today', href: '#/today', ic: 'bell', label: 'આજે શું નવું' },
   { route: 'help', href: '#/help', ic: 'phone', label: 'જરૂરી ફોન નંબર' },
   { group: 'મદદ' },
   { route: 'contact', href: '#/contact', ic: 'message', label: 'સંપર્ક અને સૂચન' },

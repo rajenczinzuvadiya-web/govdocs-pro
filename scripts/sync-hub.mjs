@@ -29,6 +29,7 @@ const isDate = (v) => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) && 
 const strs = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === 'string' && x.trim()) : []);
 const str = (v) => (typeof v === 'string' ? v.trim() : '');
 // ફોટો: ફક્ત https સરનામું (Digital Hub ના guide-shots ના જાહેર ફોટા). ખોટું હોય તો ''.
+const link = (v) => (str(v).startsWith('https://') ? str(v) : '');
 const img = (v) => (/^https:\/\/[^\s"'<>]+$/.test(str(v)) ? str(v) : '');
 
 /** Digital Hub નું એક કાર્ડ → જાણકારનું કાર્ડ (ખોટું હોય તો null). */
@@ -40,6 +41,11 @@ function card(raw, kind, local, groupIds) {
   const sources = (Array.isArray(raw.sources) ? raw.sources : [])
     .filter((x) => x && str(x.url).startsWith('https://'))
     .map((x) => ({ label: str(x.label) || str(x.url), url: str(x.url) }));
+  // પગલું = લખાણ અને/અથવા screenshot (એ જ ક્રમમાં). બંને ખાલી હોય તે પગલું છોડાય.
+  const pics = Array.isArray(raw.stepImages) ? raw.stepImages : [];
+  const steps = (Array.isArray(raw.steps) ? raw.steps : [])
+    .map((t, i) => ({ text: str(t), image: img(pics[i]) }))
+    .filter((x) => x.text || x.image);
   const officialLink = str(raw.officialLink).startsWith('https://') ? str(raw.officialLink) : sources[0]?.url || local?.officialLink || '';
   const out = {
     id: raw.id,
@@ -54,18 +60,20 @@ function card(raw, kind, local, groupIds) {
     days: str(raw.days),
     validity: str(raw.validity),
     documents: strs(raw.documents),
-    steps: strs(raw.steps),
+    steps: steps.map((x) => x.text),
     mistakes: strs(raw.mistakes),
     after: strs(raw.after),
     lastDate: isDate(raw.lastDate) ? raw.lastDate : isDate(local?.lastDate) ? local.lastDate : null,
     officialLink,
+    // અરજીનું બટન: Digital Hub માં "અરજીની વેબસાઇટ" બંધ હોય તો '' (બટન નહીં). જૂના ફીડમાં ન હોય તો officialLink વપરાય.
+    ...('applyLink' in (raw || {}) ? { applyLink: link(raw.applyLink) } : {}),
     source: str(raw.source) || sources[0]?.label || local?.source || '',
     sources,
     words: str(raw.words),
     ...(str(raw.video).startsWith('https://') ? { video: str(raw.video) } : {}),
     // Digital Hub માં મૂકેલો યોજનાનો ફોટો અને પગલાંના screenshot (steps સાથે એ જ ક્રમમાં, ન હોય ત્યાં '')
     ...(img(raw.image) ? { image: img(raw.image) } : {}),
-    ...(Array.isArray(raw.stepImages) && raw.stepImages.some(img) ? { stepImages: strs(raw.steps).map((_, i) => img(raw.stepImages[i])) } : {}),
+    ...(steps.some((x) => x.image) ? { stepImages: steps.map((x) => x.image) } : {}),
     from: 'hub',
     updatedOn: isDate(raw.updatedOn) ? raw.updatedOn : local?.updatedOn || new Date().toISOString().slice(0, 10),
     verified: raw.verified === true,
@@ -73,7 +81,8 @@ function card(raw, kind, local, groupIds) {
   if (local?.rules) out.rules = local.rules;
   const ok =
     out.title && out.summary && out.benefit && out.officialLink && out.source &&
-    out.eligibility.length && out.documents.length && out.steps.length &&
+    // "પુરાવા" કે "પગલાં" Digital Hub માં બંધ હોય તો ખાલી આવે — બંને ખાલી ન ચાલે.
+    out.eligibility.length && (out.documents.length || out.steps.length) &&
     (kind === 'doc' ? groupIds.has(out.group) : out.categories.length);
   return ok ? out : null;
 }
@@ -164,7 +173,6 @@ export function merge(feed, { schemes: S, documents: D, events: E }) {
 
 // ---------- ભરતી ----------
 const JOB_TYPES = new Set(['bharti', 'callletter', 'answerkey', 'result']);
-const link = (v) => (str(v).startsWith('https://') ? str(v) : '');
 
 /**
  * Digital Hub ની ભરતી (feed.jobs) → data/jobs.json. ફીડમાં `jobs` ન હોય (જૂનું Digital Hub) તો null = કંઈ ન બદલવું.

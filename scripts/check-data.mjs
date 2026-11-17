@@ -20,10 +20,14 @@ function checkItem(s, kind) {
   for (const f of ['id', 'title', 'summary', 'benefit', 'officialLink', 'source', 'updatedOn']) {
     if (!s[f] || typeof s[f] !== 'string') errors.push(`${at}: "${f}" ખૂટે છે`);
   }
-  for (const f of ['eligibility', 'documents']) {
+  // Digital Hub માં એડમિન "પુરાવા" કે "પગલાં" બંધ કરી શકે (પાના પર શું બતાવવું): ત્યાંથી આવેલા કાર્ડમાં એ ખાલી ચાલે, બંને નહીં.
+  const hub = s.from === 'hub';
+  for (const f of hub ? ['eligibility'] : ['eligibility', 'documents']) {
     if (!Array.isArray(s[f]) || !s[f].length) errors.push(`${at}: "${f}" ખાલી છે`);
   }
-  if (!s.howToApply && !(s.steps && s.steps.length)) errors.push(`${at}: "howToApply" કે "steps" માંથી એક જોઈએ`);
+  if (!Array.isArray(s.documents)) errors.push(`${at}: "documents" યાદી હોવી જોઈએ`);
+  if (!s.howToApply && !(s.steps && s.steps.length) && !(hub && s.documents && s.documents.length)) errors.push(`${at}: "howToApply" કે "steps" માંથી એક જોઈએ`);
+  if ('applyLink' in s && typeof s.applyLink !== 'string') errors.push(`${at}: "applyLink" લખાણ હોવું જોઈએ`);
   if (ids.has(s.id)) errors.push(`${at}: id બે વાર છે`);
   ids.add(s.id);
   if ((s.kind || 'scheme') !== kind) errors.push(`${at}: kind "${kind}" હોવું જોઈએ`);
@@ -33,7 +37,7 @@ function checkItem(s, kind) {
     errors.push(`${at}: અજાણ્યો વિભાગ "${s.group}"`);
   }
   (s.categories || []).forEach((c) => cats.has(c) || errors.push(`${at}: અજાણ્યો વર્ગ "${c}"`));
-  const links = [s.officialLink, ...(s.sources || []).map((x) => x.url), s.image, ...(s.stepImages || []).filter(Boolean)];
+  const links = [s.officialLink, s.applyLink, ...(s.sources || []).map((x) => x.url), s.image, ...(s.stepImages || []).filter(Boolean)];
   if (s.stepImages && (!Array.isArray(s.stepImages) || s.stepImages.length !== (s.steps || []).length)) errors.push(`${at}: stepImages ની ગણતરી steps જેટલી હોવી જોઈએ`);
   links.forEach((u) => u && !u.startsWith('https://') && errors.push(`${at}: લિંક https:// થી શરૂ થવી જોઈએ (${u})`));
   if (s.lastDate != null && !isDate(s.lastDate)) errors.push(`${at}: lastDate YYYY-MM-DD કે null હોવી જોઈએ`);
