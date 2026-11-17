@@ -1,5 +1,5 @@
 {
-  "updatedOn": "2026-11-16",
+  "updatedOn": "2026-11-17",
   "groups": [
     {
       "id": "doc-id",
@@ -90,6 +90,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://myaadhaar.uidai.gov.in/",
+      "applyLink": "https://myaadhaar.uidai.gov.in/",
       "source": "UIDAI",
       "sources": [
         {
@@ -143,6 +144,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.incometax.gov.in/",
+      "applyLink": "https://www.incometax.gov.in/",
       "source": "આવકવેરા વિભાગ (Instant e-PAN)",
       "sources": [
         {
@@ -198,6 +200,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.incometax.gov.in/",
+      "applyLink": "https://www.incometax.gov.in/",
       "source": "આવકવેરા વિભાગ",
       "sources": [
         {
@@ -246,6 +249,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://voters.eci.gov.in/",
+      "applyLink": "https://voters.eci.gov.in/",
       "source": "ચૂંટણી પંચ — મતદાર સેવા",
       "sources": [
         {
@@ -294,6 +298,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.passportindia.gov.in/",
+      "applyLink": "https://www.passportindia.gov.in/",
       "source": "Passport Seva (વિદેશ મંત્રાલય)",
       "sources": [
         {
@@ -348,6 +353,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
+      "applyLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
       "sources": [
         {
@@ -404,6 +410,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
+      "applyLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
       "sources": [
         {
@@ -459,6 +466,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
+      "applyLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
       "sources": [
         {
@@ -515,6 +523,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
+      "applyLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
       "sources": [
         {
@@ -571,6 +580,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
+      "applyLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
       "sources": [
         {
@@ -627,6 +637,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
+      "applyLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
       "sources": [
         {
@@ -679,6 +690,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://eolakh.gujarat.gov.in/",
+      "applyLink": "https://eolakh.gujarat.gov.in/",
       "source": "e-Olakh (જન્મ-મરણ, ગુજરાત)",
       "sources": [
         {
@@ -731,6 +743,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://eolakh.gujarat.gov.in/",
+      "applyLink": "https://eolakh.gujarat.gov.in/",
       "source": "e-Olakh (જન્મ-મરણ, ગુજરાત)",
       "sources": [
         {
@@ -789,6 +802,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
+      "applyLink": "https://www.digitalgujarat.gov.in/",
       "source": "અન્ન, નાગરિક પુરવઠા અને ગ્રાહકોની બાબતોનો વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -839,6 +853,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://myaadhaar.uidai.gov.in/",
+      "applyLink": "https://myaadhaar.uidai.gov.in/",
       "source": "myAadhaar (Bank Seeding Status)",
       "sources": [
         {
@@ -888,6 +903,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://anyror.gujarat.gov.in/",
+      "applyLink": "https://anyror.gujarat.gov.in/",
       "source": "AnyROR (મહેસૂલ વિભાગ, ગુજરાત)",
       "sources": [
         {
@@ -944,6 +960,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://udyamregistration.gov.in/",
+      "applyLink": "https://udyamregistration.gov.in/",
       "source": "Udyam Registration (MSME મંત્રાલય)",
       "sources": [
         {
@@ -996,6 +1013,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://sarathi.parivahan.gov.in/",
+      "applyLink": "https://sarathi.parivahan.gov.in/",
       "source": "Sarathi (માર્ગ પરિવહન મંત્રાલય)",
       "sources": [
         {
@@ -1038,6 +1056,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://www.digilocker.gov.in/",
+      "applyLink": "https://www.digilocker.gov.in/",
       "source": "DigiLocker",
       "sources": [
         {
@@ -1079,6 +1098,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://abha.abdm.gov.in/",
+      "applyLink": "https://abha.abdm.gov.in/",
       "source": "ABHA (રાષ્ટ્રીય આરોગ્ય સત્તામંડળ)",
       "sources": [
         {
@@ -1128,6 +1148,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.swavlambancard.gov.in/",
+      "applyLink": "https://www.swavlambancard.gov.in/",
       "source": "Swavlamban Card (UDID)",
       "sources": [
         {
@@ -1170,6 +1191,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://apaar.education.gov.in/",
+      "applyLink": "https://apaar.education.gov.in/",
       "source": "APAAR (શિક્ષણ મંત્રાલય)",
       "sources": [
         {
@@ -1213,6 +1235,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://www.education.gujarat.gov.in/",
+      "applyLink": "",
       "source": "શિક્ષણ વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -1255,6 +1278,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://www.gseb.org/",
+      "applyLink": "https://www.gseb.org/",
       "source": "GSEB",
       "sources": [
         {
@@ -1306,6 +1330,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://gujhealth.gujarat.gov.in/",
+      "applyLink": "",
       "source": "આરોગ્ય અને પરિવાર કલ્યાણ વિભાગ (લગ્ન નોંધણી), ગુજરાત",
       "sources": [
         {
@@ -1351,6 +1376,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://revenuedepartment.gujarat.gov.in/",
+      "applyLink": "",
       "source": "મહેસૂલ વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -1399,6 +1425,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://iora.gujarat.gov.in/",
+      "applyLink": "https://iora.gujarat.gov.in/",
       "source": "i-ORA (મહેસૂલ વિભાગ)",
       "sources": [
         {
@@ -1446,6 +1473,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://revenuedepartment.gujarat.gov.in/",
+      "applyLink": "",
       "source": "મહેસૂલ વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -1489,6 +1517,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://gjfr.agristack.gov.in/",
+      "applyLink": "https://gjfr.agristack.gov.in/",
       "source": "Gujarat Farmer Registry (AgriStack)",
       "sources": [
         {
@@ -1536,6 +1565,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://panchayat.gujarat.gov.in/",
+      "applyLink": "",
       "source": "પંચાયત વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -1579,6 +1609,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://www.guvnl.com/",
+      "applyLink": "https://www.guvnl.com/",
       "source": "GUVNL (ગુજરાતની વીજ કંપનીઓ)",
       "sources": [
         {
@@ -1622,6 +1653,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://gujhealth.gujarat.gov.in/",
+      "applyLink": "",
       "source": "આરોગ્ય અને પરિવાર કલ્યાણ વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -1668,6 +1700,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://www.rbi.org.in/",
+      "applyLink": "",
       "source": "રિઝર્વ બેંક (ગ્રાહક માહિતી)",
       "sources": [
         {
@@ -1716,6 +1749,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://jeevanpramaan.gov.in/",
+      "applyLink": "https://jeevanpramaan.gov.in/",
       "source": "Jeevan Pramaan",
       "sources": [
         {
@@ -1760,6 +1794,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://pmjdy.gov.in/",
+      "applyLink": "",
       "source": "PM જનધન યોજના",
       "sources": [
         {
@@ -1805,6 +1840,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://www.gst.gov.in/",
+      "applyLink": "https://www.gst.gov.in/",
       "source": "GST પોર્ટલ",
       "sources": [
         {
@@ -1848,6 +1884,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://labour.gujarat.gov.in/",
+      "applyLink": "",
       "source": "શ્રમ અને રોજગાર વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -1892,6 +1929,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://foscos.fssai.gov.in/",
+      "applyLink": "https://foscos.fssai.gov.in/",
       "source": "FoSCoS (FSSAI)",
       "sources": [
         {
@@ -1937,6 +1975,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://anubandham.gujarat.gov.in/",
+      "applyLink": "https://anubandham.gujarat.gov.in/",
       "source": "અનુબંધમ (રોજગાર અને તાલીમ, ગુજરાત)",
       "sources": [
         {

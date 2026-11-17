@@ -1,5 +1,5 @@
 {
-  "updatedOn": "2026-11-16",
+  "updatedOn": "2026-11-17",
   "schemes": [
     {
       "id": "ganga-swarupa-sahay",
@@ -11,10 +11,10 @@
       ],
       "benefit": "દર મહિને ₹1,250, સીધા બેંક / પોસ્ટ ખાતામાં (DBT).",
       "eligibility": [
-        "ગુજરાતમાં રહેતી, 18 વર્ષથી મોટી, પુનઃલગ્ન ન કર્યાં હોય એવી ગંગા સ્વરૂપા બહેન. કુટુંબની આવક મર્યાદામાં હોવી જોઈએ (ગામમાં ₹1,20,000, શહેરમાં ₹1,50,000 સુધી ⚠️ ચકાસો)."
+        "ગુજરાતમાં રહેતી, 18 વર્ષથી મોટી, પુનઃલગ્ન ન કર્યાં હોય એવી ગંગા સ્વરૂપા બહેન. કુટુંબની આવક મર્યાદામાં હોવી જોઈએ (ગામમાં ₹1,20,000, શહેરમાં ₹1,50,000 સુધી)."
       ],
-      "fee": "સરકારી ફી નથી",
-      "days": "આશરે 30 થી 60 દિવસ ⚠️ ચકાસો",
+      "fee": "",
+      "days": "",
       "validity": "પુનઃલગ્ન ન થાય ત્યાં સુધી — દર વર્ષે પુનઃલગ્ન ન કર્યાનો દાખલો આપવો પડે",
       "documents": [
         "પતિનો મરણ દાખલો",
@@ -26,27 +26,12 @@
         "પુનઃલગ્ન ન કર્યાનું સોગંદનામું",
         "પાસપોર્ટ સાઇઝ ફોટો"
       ],
-      "steps": [
-        "digitalgujarat.gov.in ખોલો. પહેલી વાર હો તો “Register” દબાવી અરજદારનો મોબાઇલ નંબર, નામ અને ઈમેલ લખો.",
-        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો, બીજા કોઈ પાસે ન રહે.",
-        "“Login” થી મોબાઇલ નંબર અને પાસવર્ડ નાખી અંદર જાઓ. પહેલી વાર “Profile” માં નામ, જન્મ તારીખ, સરનામું આધાર મુજબ ભરો.",
-        "સેવાઓની યાદીમાં “ગંગા સ્વરૂપા આર્થિક સહાય” શોધી “Apply Online” દબાવો.",
-        "પતિનું નામ, અવસાનની તારીખ, આવક અને બેંક ખાતાની વિગત પુરાવા મુજબ ભરો.",
-        "બધા પુરાવા સ્કેન કરી અપલોડ કરો, ફોર્મ તપાસી “Submit” કરો અને અરજીની પ્રિન્ટ લો.",
-        "ઓફલાઈન અરજી હોય તો ભરેલું ફોર્મ અને પુરાવાની નકલ મામલતદાર કચેરીએ જમા કરાવી પહોંચ લો."
-      ],
-      "mistakes": [
-        "બેંક ખાતું આધાર સાથે જોડાયેલું ન હોય તો સહાય અટકે છે.",
-        "મરણ દાખલામાં અને આધારમાં પતિનું નામ જુદું લખાયું હોય તો અરજી પાછી આવે છે.",
-        "દર વર્ષે પુનઃલગ્ન ન કર્યાનો દાખલો સમયસર ન આપો તો ચુકવણી બંધ થાય છે."
-      ],
-      "after": [
-        "Digital Gujarat પર “My Application” માં અરજીની સ્થિતિ જોવાય છે.",
-        "મંજૂરી પછી સહાય દર મહિને ખાતામાં આવે છે — પાસબુક છપાવી તપાસો."
-      ],
-      "howToApply": "મામલતદાર કચેરી, ગ્રામ પંચાયતના VCE અથવા Digital Gujarat પરથી.",
+      "steps": [],
+      "mistakes": [],
+      "after": [],
       "lastDate": null,
-      "officialLink": "https://www.digitalgujarat.gov.in/",
+      "officialLink": "https://wcd.gujarat.gov.in/",
+      "applyLink": "",
       "source": "મહિલા અને બાળ વિકાસ વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -63,9 +48,10 @@
         }
       ],
       "words": "ganga swarupa vidhva sahay widow pension vidhava",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
+      "image": "https://dxxxjvakvrleqalojfrm.supabase.co/storage/v1/object/public/guide-shots/5438df10-ffab-48e1-a615-b1df246520a5.jpg",
+      "from": "hub",
+      "updatedOn": "2026-11-01",
+      "verified": true,
       "rules": {
         "minAge": 18
       }
@@ -78,42 +64,30 @@
       "categories": [
         "vrudh"
       ],
-      "benefit": "60 થી 79 વર્ષ: દર મહિને ₹1,000; 80 વર્ષ અને વધુ: દર મહિને ₹1,250 ⚠️ ચકાસો",
+      "benefit": "60 થી 79 વર્ષ: દર મહિને ₹1,000; 80 વર્ષ અને વધુ: દર મહિને ₹1,250",
       "eligibility": [
-        "ગુજરાતમાં રહેતા 60 વર્ષ કે વધુ ઉંમરના વડીલ, જેમની આવક મર્યાદામાં હોય. નિરાધાર વૃદ્ધ સહાયમાં 21 વર્ષથી મોટો દીકરો ન હોવો જોઈએ ⚠️ ચકાસો. BPL યાદીમાં નામ હોય તો ઇન્દિરા ગાંધી રાષ્ટ્રીય વૃદ્ધ પેન્શન."
+        "ગુજરાતમાં રહેતા 60 વર્ષ કે વધુ ઉંમરના વડીલ, જેમની આવક મર્યાદામાં હોય. નિરાધાર વૃદ્ધ સહાયમાં 21 વર્ષથી મોટો દીકરો ન હોવો જોઈએ. BPL યાદીમાં નામ હોય તો ઇન્દિરા ગાંધી રાષ્ટ્રીય વૃદ્ધ પેન્શન."
       ],
-      "fee": "સરકારી ફી નથી",
-      "days": "આશરે 30 થી 60 દિવસ ⚠️ ચકાસો",
+      "fee": "",
+      "days": "",
       "validity": "આજીવન (શરતો જળવાય ત્યાં સુધી)",
       "documents": [
         "આધાર કાર્ડ",
-        "ઉંમરનો પુરાવો (જન્મ દાખલો / શાળા છોડ્યાનું પ્રમાણપત્ર / ડૉક્ટરનો ઉંમરનો દાખલો)",
+        "ઉંમરનો પુરાવો",
         "આવકનો દાખલો",
+        "બેંક પાસબુક",
+        "પાસપોર્ટ સાઈઝ ફોટો",
+        "ઉંમરનો પુરાવો (૬૦ વર્ષ કે વધુ)",
         "રેશનકાર્ડ",
-        "BPL દાખલો (ઇન્દિરા ગાંધી પેન્શન માટે)",
-        "21 વર્ષથી મોટો દીકરો નથી તેનો દાખલો / સોગંદનામું (નિરાધાર સહાય માટે)",
-        "બેંક કે પોસ્ટ ખાતાની પાસબુક",
-        "પાસપોર્ટ સાઇઝ ફોટો"
+        "BPL દાખલો (0 થી 20 સ્કોર ફરજીયાત)",
+        "બેંક પાસબુક / કેન્સલ ચેકની નકલ"
       ],
-      "steps": [
-        "digitalgujarat.gov.in ખોલો. પહેલી વાર હો તો “Register” દબાવી અરજદારનો મોબાઇલ નંબર, નામ અને ઈમેલ લખો.",
-        "મોબાઇલ પર આવેલો OTP લખી પાસવર્ડ બનાવો. પાસવર્ડ અરજદારને જ આપો, બીજા કોઈ પાસે ન રહે.",
-        "“Login” થી મોબાઇલ નંબર અને પાસવર્ડ નાખી અંદર જાઓ. પહેલી વાર “Profile” માં નામ, જન્મ તારીખ, સરનામું આધાર મુજબ ભરો.",
-        "સેવાઓમાં “નિરાધાર વૃદ્ધ સહાય” (કે ઇન્દિરા ગાંધી વૃદ્ધ પેન્શન) શોધી “Apply Online” દબાવો.",
-        "ઉંમર, આવક, કુટુંબના સભ્યો અને બેંક ખાતાની વિગત ભરો.",
-        "પુરાવા અપલોડ કરી “Submit” કરો અને અરજીની પ્રિન્ટ અરજદારને આપો."
-      ],
-      "mistakes": [
-        "આધાર અને શાળાના દાખલામાં જન્મ તારીખ જુદી હોય તો ઉંમર સાબિત થતી નથી — પહેલાં સુધારો કરાવો.",
-        "ખાતું બંધ કે નિષ્ક્રિય હોય તો પૈસા પાછા જાય છે."
-      ],
-      "after": [
-        "Digital Gujarat પર અરજીની સ્થિતિ જોવાય છે; મામલતદાર કચેરીમાંથી મંજૂરીનો હુકમ મળે છે.",
-        "80 વર્ષ પૂરાં થાય ત્યારે વધારાની રકમ માટે કચેરીમાં જાણ કરો ⚠️ ચકાસો"
-      ],
-      "howToApply": "મામલતદાર કચેરી કે ગ્રામ પંચાયતના VCE પાસે.",
+      "steps": [],
+      "mistakes": [],
+      "after": [],
       "lastDate": null,
-      "officialLink": "https://www.digitalgujarat.gov.in/",
+      "officialLink": "https://sje.gujarat.gov.in/",
+      "applyLink": "",
       "source": "સામાજિક ન્યાય અને અધિકારિતા વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -130,9 +104,10 @@
         }
       ],
       "words": "vrudh pension vrudhdh sahay old age pension niradhar indira gandhi ignoaps",
-      "from": "krupa",
-      "updatedOn": "2026-11-16",
-      "verified": false,
+      "image": "https://dxxxjvakvrleqalojfrm.supabase.co/storage/v1/object/public/guide-shots/97be0cbb-daf6-4a27-bca2-fd5a987a7336.jpg",
+      "from": "hub",
+      "updatedOn": "2026-11-01",
+      "verified": true,
       "rules": {
         "minAge": 60
       }
@@ -180,6 +155,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://esamajkalyan.gujarat.gov.in/",
+      "applyLink": "https://esamajkalyan.gujarat.gov.in/",
       "source": "e-Samaj Kalyan",
       "sources": [
         {
@@ -243,6 +219,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://wcd.gujarat.gov.in/",
+      "applyLink": "https://wcd.gujarat.gov.in/",
       "source": "મહિલા અને બાળ વિકાસ વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -308,6 +285,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://esamajkalyan.gujarat.gov.in/",
+      "applyLink": "https://esamajkalyan.gujarat.gov.in/",
       "source": "e-Samaj Kalyan",
       "sources": [
         {
@@ -364,6 +342,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://beneficiary.nha.gov.in/",
+      "applyLink": "https://beneficiary.nha.gov.in/",
       "source": "PMJAY (નેશનલ હેલ્થ ઓથોરિટી)",
       "sources": [
         {
@@ -419,6 +398,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://pmkisan.gov.in/",
+      "applyLink": "https://pmkisan.gov.in/",
       "source": "PM-KISAN",
       "sources": [
         {
@@ -468,6 +448,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://pmayg.nic.in/",
+      "applyLink": "https://pmayg.nic.in/",
       "source": "PMAY-G (ગ્રામીણ વિકાસ મંત્રાલય)",
       "sources": [
         {
@@ -517,6 +498,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://eshram.gov.in/",
+      "applyLink": "https://eshram.gov.in/",
       "source": "e-Shram (શ્રમ અને રોજગાર મંત્રાલય)",
       "sources": [
         {
@@ -580,6 +562,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
+      "applyLink": "https://www.digitalgujarat.gov.in/",
       "source": "Digital Gujarat",
       "sources": [
         {
@@ -637,6 +620,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
+      "applyLink": "https://www.digitalgujarat.gov.in/",
       "source": "NSAP (રાષ્ટ્રીય સામાજિક સહાય)",
       "sources": [
         {
@@ -698,6 +682,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://wcd.gujarat.gov.in/",
+      "applyLink": "https://wcd.gujarat.gov.in/",
       "source": "મહિલા અને બાળ વિકાસ વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -758,6 +743,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://esamajkalyan.gujarat.gov.in/",
+      "applyLink": "https://esamajkalyan.gujarat.gov.in/",
       "source": "e-Samaj Kalyan",
       "sources": [
         {
@@ -818,6 +804,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://gseb.org/",
+      "applyLink": "",
       "source": "શિક્ષણ વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -877,6 +864,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://pmmvy.wcd.gov.in/",
+      "applyLink": "https://pmmvy.wcd.gov.in/",
       "source": "PMMVY (મહિલા અને બાળ વિકાસ મંત્રાલય)",
       "sources": [
         {
@@ -934,6 +922,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.indiapost.gov.in/",
+      "applyLink": "https://www.indiapost.gov.in/",
       "source": "India Post — Sukanya Samriddhi Account",
       "sources": [
         {
@@ -990,6 +979,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.jansuraksha.gov.in/",
+      "applyLink": "https://www.jansuraksha.gov.in/",
       "source": "Jan Suraksha (નાણા મંત્રાલય)",
       "sources": [
         {
@@ -1050,6 +1040,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.jansuraksha.gov.in/",
+      "applyLink": "https://www.jansuraksha.gov.in/",
       "source": "Jan Suraksha (નાણા મંત્રાલય)",
       "sources": [
         {
@@ -1109,6 +1100,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.npscra.nsdl.co.in/scheme-details.php",
+      "applyLink": "https://www.npscra.nsdl.co.in/scheme-details.php",
       "source": "PFRDA — Atal Pension Yojana",
       "sources": [
         {
@@ -1177,6 +1169,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://ikhedut.gujarat.gov.in/",
+      "applyLink": "https://ikhedut.gujarat.gov.in/",
       "source": "iKhedut (કૃષિ, ખેડૂત કલ્યાણ અને સહકાર વિભાગ, ગુજરાત)",
       "sources": [
         {
@@ -1234,6 +1227,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://pmkisan.gov.in/",
+      "applyLink": "https://pmkisan.gov.in/",
       "source": "PM-KISAN (KCC ફોર્મ)",
       "sources": [
         {
@@ -1294,6 +1288,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://esamajkalyan.gujarat.gov.in/",
+      "applyLink": "https://esamajkalyan.gujarat.gov.in/",
       "source": "e-Samaj Kalyan (સામાજિક ન્યાય અને અધિકારિતા વિભાગ)",
       "sources": [
         {
@@ -1352,6 +1347,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.pmuy.gov.in/",
+      "applyLink": "https://www.pmuy.gov.in/",
       "source": "PM ઉજ્જવલા યોજના (પેટ્રોલિયમ મંત્રાલય)",
       "sources": [
         {
@@ -1411,6 +1407,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://pmsuryaghar.gov.in/",
+      "applyLink": "https://pmsuryaghar.gov.in/",
       "source": "PM Surya Ghar (નવી અને નવીનીકરણીય ઊર્જા મંત્રાલય)",
       "sources": [
         {
@@ -1467,6 +1464,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://pmvishwakarma.gov.in/",
+      "applyLink": "https://pmvishwakarma.gov.in/",
       "source": "PM Vishwakarma (MSME મંત્રાલય)",
       "sources": [
         {
@@ -1528,6 +1526,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://e-kutir.gujarat.gov.in/",
+      "applyLink": "https://e-kutir.gujarat.gov.in/",
       "source": "e-Kutir (કુટિર અને ગ્રામોદ્યોગ કમિશનર, ગુજરાત)",
       "sources": [
         {
@@ -1588,6 +1587,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://esamajkalyan.gujarat.gov.in/",
+      "applyLink": "https://esamajkalyan.gujarat.gov.in/",
       "source": "e-Samaj Kalyan (સામાજિક ન્યાય અને અધિકારિતા વિભાગ)",
       "sources": [
         {
@@ -1646,6 +1646,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://enirmanbocw.gujarat.gov.in/",
+      "applyLink": "https://enirmanbocw.gujarat.gov.in/",
       "source": "ઇ-નિર્માણ (ગુજરાત મકાન અને અન્ય બાંધકામ શ્રમયોગી કલ્યાણ બોર્ડ)",
       "sources": [
         {
@@ -1704,6 +1705,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://www.jansamarth.in/",
+      "applyLink": "https://www.jansamarth.in/",
       "source": "PM Mudra Yojana",
       "sources": [
         {
@@ -1767,6 +1769,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://mysy.guj.nic.in/",
+      "applyLink": "https://mysy.guj.nic.in/",
       "source": "MYSY (શિક્ષણ વિભાગ, ગુજરાત)",
       "sources": [
         {
@@ -1819,6 +1822,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://www.education.gujarat.gov.in/",
+      "applyLink": "",
       "source": "શિક્ષણ વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -1874,6 +1878,7 @@
       ],
       "lastDate": null,
       "officialLink": "https://esamajkalyan.gujarat.gov.in/",
+      "applyLink": "https://esamajkalyan.gujarat.gov.in/",
       "source": "e-Samaj Kalyan",
       "sources": [
         {
@@ -1923,6 +1928,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://gujhealth.gujarat.gov.in/",
+      "applyLink": "",
       "source": "આરોગ્ય અને પરિવાર કલ્યાણ વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -1967,6 +1973,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://nhm.gov.in/",
+      "applyLink": "",
       "source": "રાષ્ટ્રીય આરોગ્ય મિશન",
       "sources": [
         {
@@ -2012,6 +2019,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://scholarships.gov.in/",
+      "applyLink": "https://scholarships.gov.in/",
       "source": "scholarships.gov.in",
       "sources": [
         {
@@ -2054,6 +2062,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://ojas.gujarat.gov.in/",
+      "applyLink": "https://ojas.gujarat.gov.in/",
       "source": "ojas.gujarat.gov.in",
       "sources": [
         {
@@ -2098,6 +2107,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://www.kviconline.gov.in/pmegpeportal/",
+      "applyLink": "https://www.kviconline.gov.in/pmegpeportal/",
       "source": "kviconline.gov.in",
       "sources": [
         {
@@ -2141,6 +2151,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://pmsvanidhi.mohua.gov.in/",
+      "applyLink": "https://pmsvanidhi.mohua.gov.in/",
       "source": "pmsvanidhi.mohua.gov.in",
       "sources": [
         {
@@ -2183,6 +2194,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://www.digitalgujarat.gov.in/",
+      "applyLink": "https://www.digitalgujarat.gov.in/",
       "source": "digitalgujarat.gov.in",
       "sources": [
         {
@@ -2222,6 +2234,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://soilhealth.dac.gov.in/",
+      "applyLink": "https://soilhealth.dac.gov.in/",
       "source": "soilhealth.dac.gov.in",
       "sources": [
         {
@@ -2263,6 +2276,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://pmkusum.mnre.gov.in/",
+      "applyLink": "https://pmkusum.mnre.gov.in/",
       "source": "pmkusum.mnre.gov.in",
       "sources": [
         {
@@ -2304,6 +2318,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://maandhan.in/",
+      "applyLink": "https://maandhan.in/",
       "source": "maandhan.in",
       "sources": [
         {
@@ -2349,6 +2364,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://www.skillindiadigital.gov.in/",
+      "applyLink": "https://www.skillindiadigital.gov.in/",
       "source": "skillindiadigital.gov.in",
       "sources": [
         {
@@ -2389,6 +2405,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://www.apprenticeshipindia.gov.in/",
+      "applyLink": "https://www.apprenticeshipindia.gov.in/",
       "source": "apprenticeshipindia.gov.in",
       "sources": [
         {
@@ -2430,6 +2447,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://nhm.gov.in/",
+      "applyLink": "https://nhm.gov.in/",
       "source": "nhm.gov.in",
       "sources": [
         {
@@ -2470,6 +2488,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://uwin.mohfw.gov.in/",
+      "applyLink": "https://uwin.mohfw.gov.in/",
       "source": "uwin.mohfw.gov.in",
       "sources": [
         {
@@ -2512,6 +2531,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://wcd.gujarat.gov.in/",
+      "applyLink": "https://wcd.gujarat.gov.in/",
       "source": "wcd.gujarat.gov.in",
       "sources": [
         {
@@ -2556,6 +2576,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://rte.orpgujarat.com/",
+      "applyLink": "https://rte.orpgujarat.com/",
       "source": "rte.orpgujarat.com",
       "sources": [
         {
@@ -2597,6 +2618,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://depwd.gov.in/",
+      "applyLink": "https://depwd.gov.in/",
       "source": "depwd.gov.in",
       "sources": [
         {
@@ -2637,6 +2659,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://esamajkalyan.gujarat.gov.in/",
+      "applyLink": "https://esamajkalyan.gujarat.gov.in/",
       "source": "esamajkalyan.gujarat.gov.in",
       "sources": [
         {
@@ -2678,6 +2701,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://www.sebexam.org/",
+      "applyLink": "https://www.sebexam.org/",
       "source": "sebexam.org",
       "sources": [
         {
@@ -2715,6 +2739,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://diksha.gov.in/",
+      "applyLink": "https://diksha.gov.in/",
       "source": "diksha.gov.in",
       "sources": [
         {
@@ -2757,6 +2782,7 @@
       "after": [],
       "lastDate": null,
       "officialLink": "https://nrega.nic.in/",
+      "applyLink": "https://nrega.nic.in/",
       "source": "nrega.nic.in",
       "sources": [
         {
