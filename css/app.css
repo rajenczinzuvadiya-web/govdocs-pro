@@ -362,6 +362,7 @@ body.bare .wrap { max-width: none; padding: 0; }
 .tone-purple { background: linear-gradient(135deg, #a855f7, #7e22ce); }
 .tone-pink { background: linear-gradient(135deg, #f472b6, #c026d3); }
 .tone-rose { background: linear-gradient(135deg, #fb7185, #e11d48); }
+.tone-red { background: linear-gradient(135deg, #f87171, #dc2626); }
 .tone-orange { background: linear-gradient(135deg, #fbbf24, #f97316); }
 .tone-amber { background: linear-gradient(135deg, #eab308, #d97706); }
 .tone-brown { background: linear-gradient(135deg, #b45309, #44403c); }

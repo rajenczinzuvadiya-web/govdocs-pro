@@ -1,4 +1,4 @@
-// KruPa Digital Hub (એડમિન → ગાઇડ મેનેજ, ભરતી) માં લાઇવ થયેલી યોજના, દસ્તાવેજ, પ્રસંગ અને ભરતી જાણકારના data/ માં લાવે.
+// KruPa Digital Hub (એડમિન → ગાઇડ મેનેજ, ભરતી) માં લાઇવ થયેલી યોજના, દસ્તાવેજ, પ્રસંગ, ભરતી, "આજે શું નવું" અને ફોન નંબર જાણકારના data/ માં લાવે.
 // GitHub Actions દર 3 કલાકે ચલાવે છે (.github/workflows/sync-hub.yml). હાથથી: node scripts/sync-hub.mjs [feed.json]
 //
 // નિયમો:
@@ -214,6 +214,65 @@ export function mergeJobs(feed, J) {
   return { ...J, orgs, jobs };
 }
 
+// ---------- "આજે શું નવું" અને જરૂરી ફોન નંબર ----------
+const UPDATE_TYPES = new Set(['jankari', 'chetavani']);
+const MAX_UPDATES = 40;
+export const TONES = new Set(['green', 'lime', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'pink', 'rose', 'orange', 'amber', 'brown', 'slate', 'red']);
+
+/**
+ * Digital Hub ની પોસ્ટ (feed.updates) → data/updates.json. ફીડમાં `updates` ન હોય તો null = કંઈ ન બદલવું.
+ * Digital Hub ની (`from: "hub"`) બધી બદલાય; જાણકારની પોતાની (ફ્રોડની ચેતવણી) રહે. નવી ઉપર, વધુમાં વધુ 40.
+ */
+export function mergeUpdates(feed, U) {
+  if (!Array.isArray(feed?.updates)) return null;
+  const got = new Map();
+  for (const r of feed.updates) {
+    if (!r || typeof r.id !== 'string' || !/^[a-z0-9-]{2,80}$/.test(r.id) || got.has(r.id)) continue;
+    const u = {
+      id: r.id,
+      date: isDate(r.date) ? r.date : '',
+      type: UPDATE_TYPES.has(r.type) ? r.type : 'jankari',
+      title: str(r.title),
+      summary: str(r.summary),
+      categories: strs(r.categories).filter((c) => CATS.has(c)),
+      link: link(r.link),
+      source: str(r.source),
+      ...(img(r.image) ? { image: img(r.image) } : {}),
+      from: 'hub',
+      verified: r.verified === true,
+    };
+    if (!u.categories.length) u.categories = ['samanya'];
+    if (u.date && u.title && u.summary) got.set(u.id, u);
+  }
+  const updates = [...U.updates.filter((u) => u.from !== 'hub' && !got.has(u.id)), ...got.values()]
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
+    .slice(0, MAX_UPDATES);
+  return { ...U, updates };
+}
+
+/**
+ * Digital Hub ના ફોન નંબર (feed.helplines) → data/helplines.json. આખી યાદી બદલાય (ક્રમ પણ Digital Hub નો).
+ * ફીડમાં ન હોય કે 5 થી ઓછા સાચા નંબર હોય (ભૂલ) તો null = જૂની યાદી રહે.
+ */
+export function mergeHelplines(feed, H) {
+  if (!Array.isArray(feed?.helplines)) return null;
+  const seen = new Set();
+  const helplines = [];
+  for (const r of feed.helplines) {
+    const number = str(r?.number).replace(/[\s-]/g, '');
+    if (!/^[0-9]{3,12}$/.test(number) || !str(r.title) || seen.has(number)) continue;
+    seen.add(number);
+    helplines.push({
+      number,
+      title: str(r.title),
+      tone: TONES.has(r.tone) ? r.tone : 'blue',
+      // દેખાવ: Digital Hub માં લખ્યું હોય તેમ (1800-180-1551), ફોન ફક્ત આંકડાથી.
+      ...((str(r.display) || str(r.number)) !== number ? { display: str(r.display) || str(r.number) } : {}),
+    });
+  }
+  return helplines.length >= 5 ? { ...H, helplines } : null;
+}
+
 // ---------- ફાઇલ સાથે ચલાવવું ----------
 const same = (a, b) => JSON.stringify({ ...a, updatedOn: '' }) === JSON.stringify({ ...b, updatedOn: '' });
 
@@ -242,6 +301,16 @@ async function main() {
     changed++;
   }
   if (jobs) console.log(`Digital Hub: ભરતી ${jobs.jobs.filter((j) => j.from === 'hub').length}`);
+  // "આજે શું નવું" અને ફોન નંબર પણ અલગ: યોજનાની રોક એમને ન અટકાવે.
+  for (const [f, fn, key] of [['updates.json', mergeUpdates, 'updates'], ['helplines.json', mergeHelplines, 'helplines']]) {
+    const before = read(f);
+    const after = fn(feed, before);
+    if (!after) continue;
+    console.log(`Digital Hub: ${key === 'updates' ? 'આજે શું નવું' : 'ફોન નંબર'} ${after[key].length}`);
+    if (same(after, before)) continue;
+    writeFileSync(at(f), JSON.stringify({ ...after, updatedOn: today }, null, 2) + '\n');
+    changed++;
+  }
   const now = { schemes: read('schemes.json'), documents: read('documents.json'), events: read('events.json') };
   const out = merge(feed, now);
   if (out.skip) {
