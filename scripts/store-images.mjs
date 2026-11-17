@@ -11,7 +11,7 @@ const profile = JSON.stringify({ categories: ['khedut', 'vrudh', 'samanya'], age
 const shots = [
   ['1-home', '#/'],
   ['2-yojana', '#/all'],
-  ['3-vigat', '#/scheme/ganga-swarupa'],
+  ['3-vigat', '#/scheme/ganga-swarupa-sahay'],
   ['4-dastavej', '#/docs'],
   ['5-prasang', '#/event/balak-no-janm'],
   ['6-swagat', 'welcome'],

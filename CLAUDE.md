@@ -1,4 +1,4 @@
-# જાણકાર (પહેલાં "ગામની જાણકારી") — કામ શરૂ કરતાં પહેલાં
+# જાણકાર — કામ શરૂ કરતાં પહેલાં
 
 - આ એપ KruPa Digital Hub ના નિયમો અને દેખાવ પ્રમાણે બને છે (યુઝર, 2026-11-16).
   નિયમો: `rajenczinzuvadiya-web/krupa-digital-hub` → `docs/context/01-overview.md` (કામ કરવાની રીત) અને `05-branding-ui.md` (દેખાવ).
@@ -11,6 +11,6 @@
 - ડેટા: `data/*.json`, ચકાસણી `node scripts/check-data.mjs`. ફક્ત સત્તાવાર પેજ પરથી ચકાસ્યા પછી `verified: true`.
 - `main` માં merge = GitHub Pages પર લાઇવ. કોડ બદલાય ત્યારે `js/config.js` નું `version` અને `sw.js` નું `VERSION` વધારવું.
 - યોજના / દસ્તાવેજ / પ્રસંગ KruPa Digital Hub ગાઇડ મેનેજમાં (16/11/26): `from: "hub"` કાર્ડ અહીં ન બદલવું, `scripts/sync-hub.mjs` દર 3 કલાકે બદલી નાખે.
-- "આજનું" પોસ્ટ ઉમેરવી: ફક્ત `data/` ની જરૂરી ફાઇલ બદલવી (આખી JSON ન વાંચવી; `node -e` થી જરૂરી કાર્ડ શોધવું), `node scripts/check-data.mjs`, પછી commit. ફક્ત ડેટા બદલાય ત્યારે version વધારવાની જરૂર નથી.
+- "આજે શું નવું" પોસ્ટ ઉમેરવી: ફક્ત `data/` ની જરૂરી ફાઇલ બદલવી (આખી JSON ન વાંચવી; `node -e` થી જરૂરી કાર્ડ શોધવું), `node scripts/check-data.mjs`, પછી commit. ફક્ત ડેટા બદલાય ત્યારે version વધારવાની જરૂર નથી.
 - Play Store: `store/` (લખાણ, ફોટા, અપલોડની રીત). દેખાવ બદલાય ત્યારે `node scripts/store-images.mjs` થી ફોટા ફરી બનાવવા.
 - નવી ચેટમાં પહેલો જવાબ: `PROGRESS.md` ના "યુઝરે કરવાનું" ટૂંકમાં યાદ કરાવો, પછી "આગળનું કામ" નું પહેલું કામ પૂછ્યા વગર શરૂ કરો. કામ પૂરું થાય એટલે `PROGRESS.md` માં ઉપર તારીખ સાથે નોંધ, PR બનાવી merge (યુઝર 16/11/26).
