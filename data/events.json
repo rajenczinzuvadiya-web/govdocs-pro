@@ -1,5 +1,5 @@
 {
-  "updatedOn": "2026-11-16",
+  "updatedOn": "2026-11-17",
   "events": [
     {
       "id": "balak-no-janm",
@@ -484,8 +484,8 @@
           "note": "સહાય સીધી ખાતામાં આવે તે માટે"
         },
         {
-          "title": "ગંગા સ્વરૂપા આર્થિક સહાય યોજના",
-          "itemId": "",
+          "title": "",
+          "itemId": "ganga-swarupa-sahay",
           "type": "scheme",
           "note": "દર મહિને સહાય"
         },
