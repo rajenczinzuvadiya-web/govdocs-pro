@@ -483,7 +483,32 @@ function viewHome() {
       ${homeMineBox(p)}
       ${homeEventsBox(p)}
       ${homeDocsBox()}
-    </div>`;
+    </div>
+    ${otherApps()}`;
+}
+
+// "અમારી બીજી એપ" (યુઝર 17/11/26): હોમના છેલ્લે KruPa ની બીજી બે એપ — Digital Hub અને Doc Hub પણ
+// પોતાના મુખ્ય પાને બાકીની બે એ જ રીતે બતાવે છે. સાદી લિંક, નવા ટૅબમાં.
+function otherApps() {
+  const k = APP.krupa || {};
+  const apps = [
+    k.digitalHub && { id: 'digitalhub', href: k.digitalHub, logo: 'icons/digital-hub.png', name: 'KruPa Digital Hub', head: 'આપનું કામ, <em>હવે ઝડપી અને સરળ</em>', line: 'ગુજરાતનાં સરકારી ફોર્મ ભરો અને પ્રિન્ટ કરો.' },
+    k.docHub && { id: 'dochub', href: k.docHub, logo: 'icons/doc-hub.png', name: 'KruPa Doc Hub', head: 'સમય બચાવો, <em>સરળ અને ઝડપી કામ</em>', line: 'ઝેરોક્ષ / પ્રિન્ટની દુકાન માટે: ફોટો → સીધો, સાફ A4 / PDF' },
+  ].filter(Boolean);
+  if (!apps.length) return '';
+  return `
+    <section class="oapps" aria-label="અમારી બીજી એપ" data-other-app>
+      <p class="oapps-kick">અમારી બીજી એપ</p>
+      <div class="oapps-grid">${apps.map((a) => `
+        <a class="oapp" href="${esc(a.href)}" target="_blank" rel="noopener" data-other="${a.id}">
+          <img src="${a.logo}" alt="" width="64" height="64">
+          <b>${esc(a.name)}</b>
+          <span class="oapp-head">${a.head}</span>
+          <small>${esc(a.line)}</small>
+          <span class="oapp-go">જુઓ ${icon('arrow', 'ic-sm')}</span>
+        </a>`).join('')}
+      </div>
+    </section>`;
 }
 
 // ---------- યાદી: યોજના અને દસ્તાવેજ ----------

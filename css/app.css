@@ -791,3 +791,17 @@ legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 @media (min-width: 1440px) { .wl-choices { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 fieldset.card > legend { float: left; width: 100%; margin-bottom: .75rem; }
 fieldset.card > legend + * { clear: both; }
+
+/* "અમારી બીજી એપ" (17/11/26): હોમના છેલ્લે, Digital Hub / Doc Hub ના મુખ્ય પાના જેવું */
+.oapps { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--line); text-align: center; }
+.oapps-kick { font-size: .875rem; font-weight: 700; color: var(--kesari); }
+.oapps-grid { display: grid; gap: 1rem; margin: 1.25rem auto 0; max-width: 64rem; }
+@media (min-width: 768px) { .oapps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.oapp { display: grid; justify-items: center; align-content: start; gap: .6rem; padding: 1.5rem; border: 1px solid var(--line); border-radius: 1.5rem; background: var(--surface); box-shadow: var(--shadow); color: var(--ink); text-decoration: none; transition: transform .15s, box-shadow .15s, border-color .15s; }
+.oapp:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: var(--shadow-md); }
+.oapp img { width: 64px; height: 64px; border-radius: 1rem; }
+.oapp b { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+.oapp-head { font-size: 1.1rem; font-weight: 700; }
+.oapp-head em { font-style: normal; color: var(--kesari); }
+.oapp small { font-size: .9rem; color: var(--muted); }
+.oapp-go { display: inline-flex; align-items: center; gap: .25rem; min-height: 2.75rem; margin-top: .4rem; padding: 0 1.25rem; border-radius: .75rem; background: var(--primary); color: var(--on-primary); font-size: .875rem; font-weight: 700; }
