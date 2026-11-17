@@ -28,6 +28,8 @@ const GROUP_CATS = {
 const isDate = (v) => typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) && !Number.isNaN(Date.parse(v));
 const strs = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === 'string' && x.trim()) : []);
 const str = (v) => (typeof v === 'string' ? v.trim() : '');
+// ફોટો: ફક્ત https સરનામું (Digital Hub ના guide-shots ના જાહેર ફોટા). ખોટું હોય તો ''.
+const img = (v) => (/^https:\/\/[^\s"'<>]+$/.test(str(v)) ? str(v) : '');
 
 /** Digital Hub નું એક કાર્ડ → જાણકારનું કાર્ડ (ખોટું હોય તો null). */
 function card(raw, kind, local, groupIds) {
@@ -61,6 +63,9 @@ function card(raw, kind, local, groupIds) {
     sources,
     words: str(raw.words),
     ...(str(raw.video).startsWith('https://') ? { video: str(raw.video) } : {}),
+    // Digital Hub માં મૂકેલો યોજનાનો ફોટો અને પગલાંના screenshot (steps સાથે એ જ ક્રમમાં, ન હોય ત્યાં '')
+    ...(img(raw.image) ? { image: img(raw.image) } : {}),
+    ...(Array.isArray(raw.stepImages) && raw.stepImages.some(img) ? { stepImages: strs(raw.steps).map((_, i) => img(raw.stepImages[i])) } : {}),
     from: 'hub',
     updatedOn: isDate(raw.updatedOn) ? raw.updatedOn : local?.updatedOn || new Date().toISOString().slice(0, 10),
     verified: raw.verified === true,
@@ -190,6 +195,7 @@ export function mergeJobs(feed, J) {
       notification: link(r.notification),
       applyLink: link(r.applyLink),
       source: str(r.source),
+      ...(img(r.image) ? { image: img(r.image) } : {}),
       from: 'hub',
       updatedOn: isDate(r.updatedOn) ? r.updatedOn : new Date().toISOString().slice(0, 10),
       verified: r.verified === true,

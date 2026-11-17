@@ -2,8 +2,8 @@ import { APP } from './config.js';
 import { CATEGORIES, CATEGORY_BY_ID, JATI, OCCUPATIONS, INCOME, DISTRICTS } from './options.js';
 import { store } from './store.js';
 import { matches, sortForProfile, isExpired, daysLeft, deadlineText, formatDate } from './match.js';
-import * as voice from './speak.js';
-import { icon, tile, linePath } from './icons.js';
+import { icon, tile, linePath, socialIcon } from './icons.js';
+import { INFO_PAGES, INFO_LINKS, INFO_UPDATED } from './pages.js';
 
 const state = {
   schemes: [],
@@ -14,7 +14,6 @@ const state = {
   jobOrgs: [],
   updates: [],
   helplines: [],
-  renamed: {},
   profile: store.getProfile(),
   seen: new Set(store.getSeen() || []),
   installPrompt: null,
@@ -45,9 +44,7 @@ function toast(msg) {
 const todayISO = () => new Date().toISOString().slice(0, 10);
 const visible = (list) => list.filter((s) => !isExpired(s));
 const allItems = () => [...state.schemes, ...state.docs];
-// જૂની લિંક (બદલાયેલું id) પણ નવા કાર્ડ પર ખૂલે — KruPa Digital Hub નાં id સાથે મેળ (`renamed`)
-const findOne = (id) => state.schemes.find((s) => s.id === id) || state.docs.find((s) => s.id === id) || state.jobs.find((s) => s.id === id);
-const findItem = (id) => findOne(id) || (state.renamed[id] ? findOne(state.renamed[id]) : undefined);
+const findItem = (id) => state.schemes.find((s) => s.id === id) || state.docs.find((s) => s.id === id) || state.jobs.find((s) => s.id === id);
 const isDoc = (s) => s.kind === 'doc';
 const isNew = (s) => !state.seen.has(s.id);
 const isJob = (s) => s.kind === 'job';
@@ -59,13 +56,6 @@ function markSeen(id) {
   state.seen.add(id);
   store.setSeen([...state.seen]);
 }
-
-// વર્ઝન 0.1 વખતનાં કાર્ડ (જૂના યુઝરને બાકીનાં "નવું" દેખાય)
-const V01_IDS = [
-  'pm-kisan', 'ikhedut-yojana', 'digital-gujarat-scholarship', 'nsp', 'ojas', 'pmegp', 'pm-matru-vandana',
-  'vhali-dikri', 'ganga-swarupa-sahay', 'vrudh-pension', 'ayushman-pmjay-ma', 'pm-awas-gramin', 'ration-card',
-  'birth-certificate', 'udid-card', 'sant-surdas-divyang-sahay', 'pm-svanidhi', 'udyam-registration',
-];
 
 // ---------- ડેટા ----------
 
@@ -88,18 +78,9 @@ async function loadData() {
     state.events = ev.events || [];
     state.dataUpdatedOn = s.updatedOn || null;
     state.error = false;
-    // જૂનું કાર્ડ નવા વધુ વિગતવાળા કાર્ડથી બદલાયું હોય તો સેવ કરેલું સાચવવું
-    const renamed = s.renamed || {};
-    state.renamed = renamed;
-    const saved = store.getSaved();
-    if (saved.some((id) => renamed[id])) store.setSaved([...new Set(saved.map((id) => renamed[id] || id))]);
-    // જોયેલાં કાર્ડ પણ નવા id પર (નહીં તો નામ બદલાયેલું કાર્ડ "નવું" દેખાય)
-    if ([...state.seen].some((id) => renamed[id])) {
-      state.seen = new Set([...state.seen].map((id) => renamed[id] || id));
-      store.setSeen([...state.seen]);
-    }
+    // પહેલી વાર: હાલનું બધું "જોયેલું", પછી આવે તે જ "નવું"
     if (store.getSeen() === null) {
-      state.seen = new Set(state.profile ? V01_IDS : allItems().map((x) => x.id));
+      state.seen = new Set([...allItems(), ...state.jobs].map((x) => x.id));
       store.setSeen([...state.seen]);
     }
   } catch {
@@ -136,7 +117,10 @@ const groupTile = (id, size = '') => {
   const g = groupOf(id);
   return g ? tile(g.icon, g.tone, size) : tile('clipboard', 'slate', size);
 };
+// Digital Hub માં મૂકેલો ફોટો (https) — હોય તો રંગીન tile ને બદલે ફોટો
+const pic = (u) => (typeof u === 'string' && /^https:\/\/[^\s"'<>]+$/.test(u) ? u : '');
 function itemTile(s, profile) {
+  if (pic(s.image)) return `<span class="tile pic" aria-hidden="true"><img src="${esc(pic(s.image))}" alt="" loading="lazy" decoding="async"></span>`;
   if (isDoc(s)) return groupTile(s.group);
   if (isJob(s)) return jobTile(s);
   const cats = (profile && profile.categories) || [];
@@ -170,21 +154,25 @@ function itemList(items, empty) {
   return `<ul class="list">${items.map((s) => itemCard(s)).join('')}</ul>`;
 }
 
-// પેજનો ફૂટર હવે ખોખામાં એક જ વાર (KruPa #174: એક પાતળી લીટી). જૂની views હજુ footer() બોલાવે છે.
-function footer() {
-  return '';
-}
-
+// ફૂટર: દરેક પેજના છેલ્લે (સ્ક્રીનના તળિયે), એક જ જગ્યાએથી. KruPa Digital Hub ના ફૂટર જેવું:
+// અમારી એપ · અમને ફોલો કરો · માહિતીનાં પેજ · ©
+const extLink = (href, text) => `<li><a href="${esc(href)}" target="_blank" rel="noopener">${esc(text)}</a></li>`;
+const COPY_FROM = 2026;
 function renderFooter() {
-  const links = [
-    ['#/about', 'એપ વિશે'],
-    ['privacy.html', 'પ્રાઇવસી'],
-    ['terms.html', 'નિયમો'],
-    ['#/contact', 'સંપર્ક'],
-  ];
+  const k = APP.krupa || {};
+  const y = new Date().getFullYear();
+  const col = (title, items) => (items.length ? `<div class="fcol"><p class="fhead">${title}</p><ul>${items.join('')}</ul></div>` : '');
   document.getElementById('foot').innerHTML = `
-    <span>© ${new Date().getFullYear()} ${esc(APP.name)} · ખાનગી એપ, સરકારી નથી.</span>
-    <nav aria-label="માહિતી">${links.map(([h, t], i) => `${i ? '<i>•</i>' : ''}<a href="${h}">${t}</a>`).join('')}</nav>`;
+    <div class="foot-in">
+      <div class="fbrand">
+        <a href="#/"><img src="icons/icon-192.png" alt="" width="36" height="36"><b>${esc(APP.name)}</b></a>
+        <p>${esc(APP.about)}</p>
+      </div>
+      ${col('અમારી એપ', [k.digitalHub && extLink(k.digitalHub, 'KruPa Digital Hub'), k.docHub && extLink(k.docHub, 'KruPa Doc Hub')].filter(Boolean))}
+      ${col('અમને ફોલો કરો', (APP.social || []).map((l) => extLink(l.href, l.label)))}
+      ${col('માહિતી', INFO_LINKS.map((l) => `<li><a href="#/${l.route}">${esc(l.label)}</a></li>`))}
+    </div>
+    <p class="fcopy">© ${y > COPY_FROM ? `${COPY_FROM}–${y}` : COPY_FROM} KruPa Digital Hub. સર્વ હક્ક સ્વાધીન.</p>`;
 }
 
 // ---------- છેલ્લી તારીખની યાદ ----------
@@ -264,7 +252,7 @@ const FEATURES = [
   ['book', 'indigo', 'યોજના ગાઇડ', 'કોને મળે, કેટલો લાભ, કયા પુરાવા'],
   ['idcard', 'sky', 'દસ્તાવેજ ગાઇડ', 'આવક, જાતિ, આધાર જેવા દાખલા કેમ કઢાવવા'],
   ['calendar', 'pink', 'જીવનના પ્રસંગ', 'જન્મ, લગ્ન, ઘડપણમાં શું કરવું તેનું લિસ્ટ'],
-  ['mobile', 'green', 'સાંભળો અને મોકલો', 'એપ વાંચીને સંભળાવે, વોટ્સએપ પર મોકલો'],
+  ['mobile', 'green', 'વોટ્સએપ પર મોકલો', 'કોઈ પણ માહિતી એક ટેપમાં બીજાને મોકલો'],
 ];
 const featureItems = () => FEATURES.map(([ic, tone, t, d]) => `<li>${tile(ic, tone)}<span><b>${t}</b><small>${d}</small></span></li>`).join('');
 
@@ -291,11 +279,9 @@ function welcomeBody(step) {
   if (step === 1)
     return `
       ${welcomeSteps(1)}
-      <p class="greet">નમસ્તે 🙏</p>
       <h1>${esc(APP.name)} માં સ્વાગત છે</h1>
-      <p class="lead">બે નાનાં પગલાં: તમે કોણ છો તે પસંદ કરો, પછી અક્ષર અને દેખાવ. એટલે તમારા માટેની યોજના પહેલાં દેખાશે.</p>
+      <p class="lead">તમે કોણ છો તે પસંદ કરો, એટલે તમારા માટેની યોજના પહેલાં દેખાશે.</p>
       <ul class="feature-grid phone-only">${featureItems()}</ul>
-      <p class="note note-info mt">${icon('lock')}<span>લોગિન નથી. માહિતી ફક્ત આ ફોનમાં રહે છે. આ ખાનગી માહિતી એપ છે, સરકારી નથી.</span></p>
       <button class="btn btn-primary btn-block btn-lg mt" type="button" data-action="welcome-next">શરૂ કરો ${icon('chev')}</button>`;
   if (step === 2) {
     const w = state.welcomeDraft;
@@ -328,12 +314,6 @@ function welcomeBody(step) {
       <div class="card stack mt">
         <h2 class="h2">${icon('sun')}દેખાવ</h2>
         <div class="look-pick">${LOOKS.map(([v, label]) => `<button type="button" class="l${v}" data-action="look" data-level="${v}" aria-pressed="${lv === v}"><i></i>${label}</button>`).join('')}</div>
-        <p class="muted small">પછી ગમે ત્યારે ઉપર જમણી બાજુના ${icon('user', 'ic-sm')} મેનુમાંથી બદલી શકાશે.</p>
-      </div>
-      <div class="card stack mt">
-        <h2 class="h2">${icon('speaker')}અવાજ ચકાસો</h2>
-        <p class="muted">દબાવો એટલે ફોન ગુજરાતીમાં બોલશે. ન બોલે તો ફોનના સેટિંગમાં ગુજરાતી અવાજ ઉમેરવો પડશે.</p>
-        <button class="btn" type="button" data-action="voice-test">${icon('speaker')}<span>સાંભળો</span></button>
       </div>
       <div class="row-split mt">
         <button class="btn" type="button" data-action="welcome-back">${icon('arrow', 'ic flip')}પાછા</button>
@@ -475,7 +455,7 @@ function viewHome() {
     </section>
     ${latest ? `
       <a class="tip ${latest.type === 'chetavani' ? 'warn' : ''}" href="#/today">${icon(latest.type === 'chetavani' ? 'alert' : 'bulb')}
-        <span><b>${latest.type === 'chetavani' ? 'ચેતવણી' : 'આજનું'}:</b> ${esc(latest.title)} <span class="go">જુઓ →</span></span>
+        <span><b>${latest.type === 'chetavani' ? 'ચેતવણી' : 'આજે નવું'}:</b> ${esc(latest.title)} <span class="go">જુઓ →</span></span>
       </a>` : ''}
     <div id="home-results">${homeResults()}</div>
     <div class="home-grid">
@@ -484,7 +464,8 @@ function viewHome() {
       ${homeEventsBox(p)}
       ${homeDocsBox()}
     </div>
-    ${otherApps()}`;
+    ${otherApps()}
+    ${followUs()}`;
 }
 
 // "અમારી બીજી એપ" (યુઝર 17/11/26): હોમના છેલ્લે KruPa ની બીજી બે એપ — Digital Hub અને Doc Hub પણ
@@ -508,6 +489,20 @@ function otherApps() {
           <span class="oapp-go">જુઓ ${icon('arrow', 'ic-sm')}</span>
         </a>`).join('')}
       </div>
+    </section>`;
+}
+
+// "અમને ફોલો કરો" (હોમના છેલ્લે, Digital Hub અને Doc Hub જેવું): KruPa ની ચાર ચેનલ
+function followUs() {
+  const links = APP.social || [];
+  if (!links.length) return '';
+  return `
+    <section class="follow" aria-label="અમને ફોલો કરો" data-follow-us>
+      <p class="oapps-kick">અમને ફોલો કરો</p>
+      <p class="follow-name">KruPa Digital Hub</p>
+      <div class="follow-grid">${links
+        .map((l) => `<a href="${esc(l.href)}" target="_blank" rel="noopener" style="background:${esc(l.color)}" data-social="${esc(l.id)}">${socialIcon(l.id)}${esc(l.action)}</a>`)
+        .join('')}</div>
     </section>`;
 }
 
@@ -611,8 +606,7 @@ function viewEvents() {
         <span class="muted">${n ? `${n} / ${e.items.length} થઈ ગયું` : `${e.items.length} કામ`}</span>
       </a>`;
       })
-      .join('')}</div>
-    ${footer()}`;
+      .join('')}</div>`;
 }
 
 function eventItemTitle(it) {
@@ -656,8 +650,7 @@ function viewEvent(id) {
         ${docs.length ? `<section class="part"><h2><span class="sq">${icon('forms')}</span>કરવાનાં કામ / દસ્તાવેજ</h2><ul class="ev-list">${docs.map(row).join('')}</ul></section>` : ''}
         ${helps.length ? `<section class="part"><h2><span class="sq">${icon('gift')}</span>મળી શકે એવી સહાય</h2><ul class="ev-list">${helps.map(row).join('')}</ul></section>` : ''}
       </div>
-    </div>
-    ${footer()}`;
+    </div>`;
 }
 
 // ---------- ભરતી (નવી ભરતી, કોલ લેટર, આન્સર કી, પરિણામ) ----------
@@ -732,8 +725,8 @@ function viewJob(id) {
   const isPdf = /\.pdf($|\?)/i.test(j.notification || '');
   return `
     <nav class="crumb"><a class="back-btn" href="#/jobs" data-action="back" aria-label="પાછા">${icon('arrow')}</a><a href="#/jobs">ભરતી</a>${j.type === 'bharti' ? '' : ` › <span>${esc(t.label)}</span>`}</nav>
-    <div class="detail-head">
-      ${jobTile(j)}
+    <div class="detail-head${pic(j.image) ? ' has-pic' : ''}">
+      ${pic(j.image) ? `<img class="hero-pic" src="${esc(pic(j.image))}" alt="${esc(j.title)}" decoding="async">` : jobTile(j)}
       <div><h1>${esc(j.title)}</h1><p class="lead">${esc(org.label)}</p></div>
     </div>
     ${d && d.tone !== 'ok' ? `<p class="progress mt">${icon('clock', 'ic-sm')} ${esc(d.text)}</p>` : ''}
@@ -771,24 +764,6 @@ const KIND_TEXT = {
   doc: { benefit: 'ક્યાં કામ આવે', who: 'કોણ કઢાવી શકે', steps: 'કઢાવવાનાં પગલાં', where: 'ક્યાંથી કઢાવવું', apply: 'અરજીની વેબસાઇટ ખોલો', list: 'દસ્તાવેજ ગાઈડ', listHref: '#/docs' },
 };
 const kindText = (s) => KIND_TEXT[isDoc(s) ? 'doc' : 'scheme'];
-const forSpeech = (t) => String(t || '').replace(/⚠️\s*ચકાસો/g, '').replace(/⚠️/g, '');
-
-function speechText(s) {
-  const k = kindText(s);
-  const parts = [
-    s.title + '.',
-    s.summary,
-    `${k.benefit}. ${s.benefit}`,
-    `${k.who}. ${s.eligibility.join(' ')}`,
-    s.fee ? `ફી. ${s.fee}.` : '',
-    s.days ? `કેટલા દિવસ. ${s.days}.` : '',
-    `કયા પુરાવા જોઈએ. ${s.documents.join(', ')}.`,
-    s.howToApply ? `${k.where}. ${s.howToApply}` : '',
-    s.steps && s.steps.length ? `${k.steps}. ` + s.steps.map((t, i) => `પગલું ${i + 1}. ${t}`).join(' ') : '',
-    isDoc(s) ? '' : s.lastDate ? `છેલ્લી તારીખ ${formatDate(s.lastDate)}.` : 'આ ચાલુ યોજના છે.',
-  ];
-  return forSpeech(parts.filter(Boolean).join('\n'));
-}
 
 function shareText(s) {
   const k = kindText(s);
@@ -820,6 +795,12 @@ function docChecklist(s) {
       .join('')}</ul>`;
 }
 
+// પગલાનો ફોટો (Digital Hub ના screenshot): stepImages[i]
+const stepPic = (s, i) => {
+  const u = pic((s.stepImages || [])[i]);
+  return u ? `<img class="step-pic" src="${esc(u)}" alt="પગલું ${i + 1}" loading="lazy" decoding="async">` : '';
+};
+
 function viewItem(id) {
   const s = findItem(id);
   if (!s) return `<div class="empty">આ માહિતી મળી નહીં. <a href="#/">હોમ પર જાઓ</a></div>`;
@@ -843,8 +824,8 @@ function viewItem(id) {
       <a class="back-btn" href="${k.listHref}" data-action="back" aria-label="પાછા">${icon('arrow')}</a>
       <a href="${k.listHref}">${k.list}</a>${isDoc(s) && groupOf(s.group) ? ` › <span>${esc(groupOf(s.group).label)}</span>` : ''}
     </nav>
-    <div class="detail-head">
-      ${itemTile(s, state.profile)}
+    <div class="detail-head${pic(s.image) ? ' has-pic' : ''}">
+      ${pic(s.image) ? `<img class="hero-pic" src="${esc(pic(s.image))}" alt="${esc(s.title)}" decoding="async">` : itemTile(s, state.profile)}
       <div>
         <h1>${esc(s.title)}</h1>
         <p class="lead">${esc(s.summary)}</p>
@@ -853,7 +834,6 @@ function viewItem(id) {
     ${events.length ? `<div class="related"><span>આ પ્રસંગમાં કામ આવે:</span>${events.map((e) => `<a class="chip" href="#/event/${e.id}"><span aria-hidden="true">${e.icon}</span>${esc(e.title)}</a>`).join('')}</div>` : ''}
     <div class="actions">
       <a class="btn btn-kesari" href="${esc(s.officialLink)}" target="_blank" rel="noopener">${icon('external')}${k.apply}</a>
-      <button class="btn" data-action="speak" data-id="${esc(s.id)}">${icon('speaker')}<span>સાંભળો</span></button>
       <button class="btn" data-action="save" data-id="${esc(s.id)}" aria-pressed="${saved}">${icon('star', saved ? 'ic filled' : 'ic')}<span>${saved ? 'સેવ થયેલ' : 'સેવ કરો'}</span></button>
       <a class="btn btn-ok" href="${wa}" target="_blank" rel="noopener">${icon('share')}વોટ્સએપ પર મોકલો</a>
     </div>
@@ -866,7 +846,7 @@ function viewItem(id) {
       <div class="parts-main">
         ${part('કયા પુરાવા જોઈએ', 'list', docChecklist(s))}
         ${s.howToApply ? part(k.where, 'pin', `<p>${esc(s.howToApply)}</p>`) : ''}
-        ${s.steps && s.steps.length ? part(k.steps, 'forms', `<ol class="timeline">${s.steps.map((t, i) => `<li><span class="num">${i + 1}</span><div class="txt">${esc(t)}</div></li>`).join('')}</ol>`) : ''}
+        ${s.steps && s.steps.length ? part(k.steps, 'forms', `<ol class="timeline">${s.steps.map((t, i) => `<li><span class="num">${i + 1}</span><div class="txt">${esc(t)}${stepPic(s, i)}</div></li>`).join('')}</ol>`) : ''}
         ${s.mistakes && s.mistakes.length ? part('આ ભૂલો ન કરો', 'alert', dots(s.mistakes), 'warn') : ''}
         ${s.after && s.after.length ? part('અરજી પછી', 'hourglass', dots(s.after)) : ''}
       </div>
@@ -881,8 +861,7 @@ function viewItem(id) {
           <div class="sources">${sources}<span>છેલ્લે અપડેટ: ${esc(formatDate(s.updatedOn))}</span>${s.verified ? '' : '<span>ચકાસણી બાકી: અરજી પહેલાં સત્તાવાર સાઇટ પર ખાતરી કરો.</span>'}</div>
         </div>
       </aside>
-    </div>
-    ${footer()}`;
+    </div>`;
 }
 
 // ---------- સેવ, આજનું, ફોન નંબર, પ્રોફાઇલ, એપ વિશે ----------
@@ -892,38 +871,34 @@ function viewSaved() {
   return `
     ${pageHead('સેવ કરેલ', 'સેવ કરેલી યોજનાની છેલ્લી તારીખ પહેલાં યાદ કરાવીશું.', 'star')}
     ${reminderNote()}
-    <div class="mt">${itemList(saved, 'હજુ કંઈ સેવ નથી કર્યું. યોજના કે દાખલો ખોલીને "સેવ કરો" દબાવો.')}</div>
-    ${footer()}`;
+    <div class="mt">${itemList(saved, 'હજુ કંઈ સેવ નથી કર્યું. યોજના કે દાખલો ખોલીને "સેવ કરો" દબાવો.')}</div>`;
 }
 
 function viewToday() {
   const items = [...state.updates].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
   return `
-    ${pageHead('આજનું', 'નવી માહિતી અને જરૂરી ચેતવણી', 'bell', '#/')}
+    ${pageHead('આજે શું નવું આવ્યું?', 'નવી માહિતી અને જરૂરી ચેતવણી', 'bell', '#/')}
     <div class="news">${
       items.length
         ? items
             .map(
               (u) => `
       <article class="card ${u.type === 'chetavani' ? 'warn' : ''}">
+        ${pic(u.image) ? `<img class="news-pic" src="${esc(pic(u.image))}" alt="" loading="lazy" decoding="async">` : ''}
         <span class="when">${icon(u.type === 'chetavani' ? 'alert' : 'info', 'ic-sm')}${u.type === 'chetavani' ? 'ચેતવણી' : 'જાણકારી'} · ${esc(formatDate(u.date))}</span>
         <h3>${esc(u.title)}</h3>
         <p class="muted">${esc(u.summary)}</p>
-        <div class="row">
-          <button class="btn" data-action="speak-update" data-id="${esc(u.id)}">${icon('speaker')}<span>સાંભળો</span></button>
-          ${u.link ? `<a class="btn" href="${esc(u.link)}" target="_blank" rel="noopener">${icon('external')}મૂળ સ્રોત</a>` : ''}
-        </div>
+        ${u.link ? `<div class="row"><a class="btn" href="${esc(u.link)}" target="_blank" rel="noopener">${icon('external')}મૂળ સ્રોત</a></div>` : ''}
       </article>`
             )
             .join('')
-        : '<div class="empty">આજે કોઈ નવી માહિતી નથી.</div>'
-    }</div>
-    ${footer()}`;
+        : '<div class="empty">હમણાં કોઈ નવી માહિતી નથી.</div>'
+    }</div>`;
 }
 
 function viewHelp() {
   return `
-    ${pageHead('જરૂરી ફોન નંબર', 'નંબર પર ટેપ કરો એટલે સીધો ફોન લાગશે.', 'phone', '#/')}
+    ${pageHead('જરૂરી ફોન નંબર', '', 'phone', '#/')}
     <div class="help-list">${
       state.helplines
         .map(
@@ -935,8 +910,7 @@ function viewHelp() {
       </a>`
         )
         .join('') || '<div class="empty">નંબર લોડ ન થયા.</div>'
-    }</div>
-    ${footer()}`;
+    }</div>`;
 }
 
 function viewProfile() {
@@ -950,7 +924,7 @@ function viewProfile() {
       })
       .join('');
   return `
-    ${pageHead('મારી પ્રોફાઇલ', 'બધું વૈકલ્પિક છે. માહિતી ફક્ત આ ફોનમાં રહે છે.', 'user', '#/')}
+    ${pageHead('મારી પ્રોફાઇલ', 'બધું વૈકલ્પિક છે.', 'user', '#/')}
     <form id="profile" class="stack">
       <fieldset class="card">
         <legend>તમે કોણ છો? (એક કે વધુ)</legend>
@@ -966,28 +940,39 @@ function viewProfile() {
       </div>
       <button class="btn btn-primary btn-block" type="submit">${icon('published')}સેવ કરો</button>
       ${state.profile ? `<button class="btn btn-ghost btn-block" type="button" data-action="reset">${icon('trash')}મારી બધી માહિતી ફોનમાંથી કાઢી નાખો</button>` : ''}
-    </form>
-    ${footer()}`;
+    </form>`;
 }
 
-function viewAbout() {
+// માહિતીનાં પેજ (js/pages.js): અમારા વિશે, ગોપનીયતા નીતિ, નિયમો અને શરતો, ડિસ્ક્લેમર, કોપીરાઇટ નીતિ
+function contactHtml() {
+  const c = APP.contact || {};
+  const parts = [
+    c.whatsapp && `વોટ્સએપ <a href="https://wa.me/${esc(c.whatsapp)}" target="_blank" rel="noopener">${esc(c.whatsapp.replace(/^91/, ''))}</a>`,
+    c.email && `ઈમેલ <a href="mailto:${esc(c.email)}">${esc(c.email)}</a>`,
+  ].filter(Boolean);
+  return parts.length ? parts.join(' · ') : 'એપના મેનુમાં "સંપર્ક અને સૂચન" જુઓ.';
+}
+
+function viewInfo(route) {
+  const pg = INFO_PAGES[route];
+  const link = INFO_LINKS.find((l) => l.route === route);
+  const fill = (t) => esc(t).replace(/\{APP\}/g, esc(APP.name)).replace(/\{CONTACT\}/g, contactHtml());
+  const others = INFO_LINKS.filter((l) => l.route !== route);
   return `
-    ${pageHead(`${esc(APP.name)} વિશે`, '', 'info', '#/')}
-    <div class="stack">
-      <div class="card"><p>યોજના, સહાય અને દાખલાની માહિતી સરળ ગુજરાતીમાં આપતી એપ. પ્રકાશક: KruPa Digital Hub.</p></div>
-      <div class="note note-warn">${icon('alert')}<div>
-        <ul style="padding-left:1.1rem;margin:0">
-          <li>આ <strong>ખાનગી માહિતી એપ</strong> છે. કોઈ સરકારી વિભાગની એપ નથી અને સરકાર સાથે જોડાયેલી નથી.</li>
-          <li>માહિતી સરકારી વેબસાઇટ અને સરકારી ઠરાવ પરથી લીધી છે. દરેક કાર્ડ પર "સ્રોત" માં મૂળ લિંક છે. અરજી સત્તાવાર સાઇટ પર જ કરો.</li>
-        </ul></div></div>
-      <div class="menu-list card">
-        <a href="#/contact">${icon('message')}સંપર્ક અને સૂચન</a>
-        <a href="privacy.html">${icon('lock')}પ્રાઇવસી પોલિસી</a>
-        <a href="terms.html">${icon('forms')}નિયમો અને શરતો</a>
-      </div>
-      <p class="muted center">વર્ઝન ${esc(APP.version)}${state.dataUpdatedOn ? ` · માહિતી ${esc(formatDate(state.dataUpdatedOn))}` : ''}</p>
-    </div>
-    ${footer()}`;
+    ${pageHead(pg.title, pg.sub ? esc(pg.sub) : `અમલ તારીખ: ${INFO_UPDATED}`, link.ic, '#/')}
+    <article class="card info-doc">${pg.parts
+      .map(
+        (x, i) => `
+      <section>
+        <h2><span class="n">${i + 1}</span>${fill(x.title)}</h2>
+        ${x.text ? `<p>${fill(x.text)}</p>` : ''}
+        ${x.points ? `<ul>${x.points.map((t) => `<li>${fill(t)}</li>`).join('')}</ul>` : ''}
+        ${x.after ? `<p>${fill(x.after)}</p>` : ''}
+      </section>`
+      )
+      .join('')}
+    </article>
+    <nav class="info-more" aria-label="બીજાં પેજ">${others.map((l) => `<a href="#/${l.route}">${icon(l.ic, 'ic-sm')}${esc(l.label)}</a>`).join('')}</nav>`;
 }
 
 // ---------- સંપર્ક ----------
@@ -1012,8 +997,7 @@ function viewContact() {
   ].filter(Boolean);
   return `
     ${pageHead('સંપર્ક અને સૂચન', 'ભૂલ દેખાય કે સૂચન હોય તો જણાવો.', 'message', '#/')}
-    ${rows.length ? `<div class="help-list">${rows.join('')}</div>` : `<div class="empty">સંપર્કની વિગત ટૂંક સમયમાં ઉમેરાશે.</div>`}
-    ${footer()}`;
+    ${rows.length ? `<div class="help-list">${rows.join('')}</div>` : `<div class="empty">સંપર્કની વિગત ટૂંક સમયમાં ઉમેરાશે.</div>`}`;
 }
 
 // ---------- ખોખું: બાજુનું મેનુ, નીચેનાં ટેબ, "વધુ", 👤 મેનુ, ઝૂમ, દેખાવ, શોધ (KruPa Digital Hub જેવું) ----------
@@ -1025,11 +1009,11 @@ const NAV = [
   { route: 'docs', href: '#/docs', ic: 'folder', label: 'દસ્તાવેજ ગાઇડ', short: 'દસ્તાવેજ' },
   { route: 'events', href: '#/events', ic: 'calendar', label: 'જીવનના પ્રસંગ', short: 'પ્રસંગ' },
   { route: 'saved', href: '#/saved', ic: 'star', label: 'સેવ કરેલ' },
-  { route: 'today', href: '#/today', ic: 'bell', label: 'આજનું' },
+  { route: 'today', href: '#/today', ic: 'bell', label: 'આજે શું નવું' },
   { route: 'help', href: '#/help', ic: 'phone', label: 'જરૂરી ફોન નંબર' },
   { group: 'મદદ' },
   { route: 'contact', href: '#/contact', ic: 'message', label: 'સંપર્ક અને સૂચન' },
-  { route: 'about', href: '#/about', ic: 'info', label: 'એપ વિશે' },
+  { route: 'about', href: '#/about', ic: 'info', label: 'અમારા વિશે' },
 ];
 // ભરતી હોય ત્યારે જ "ભરતી" ટેબ (નહીં તો નીચે "પ્રસંગ")
 const tabRoutes = () => (state.jobs.length ? ['home', 'jobs', 'all', 'docs'] : ['home', 'all', 'docs', 'events']);
@@ -1296,14 +1280,14 @@ document.addEventListener('click', (e) => {
   if (!e.target.closest('.dd')) document.querySelectorAll('.dd.open').forEach(closeDd);
 });
 
-// 🔔 આજનું: નહીં જોયેલી પોસ્ટનો નંબર
+// 🔔 આજે શું નવું: નહીં જોયેલી પોસ્ટનો નંબર
 function renderBell() {
   const seen = store.getSeenUpdates();
   const n = seen ? state.updates.filter((u) => !seen.includes(u.id)).length : state.updates.length;
   const b = document.getElementById('bell-badge');
   b.textContent = n > 9 ? '9+' : String(n);
   b.hidden = !n;
-  document.getElementById('bell').setAttribute('aria-label', n ? `આજનું: ${n} નવું` : 'આજનું');
+  document.getElementById('bell').setAttribute('aria-label', n ? `આજે શું નવું: ${n}` : 'આજે શું નવું');
 }
 
 // ⬆ ઉપર જાઓ (1.2 સ્ક્રીન નીચે ગયા પછી)
@@ -1332,7 +1316,7 @@ function appConfirm(msg, okLabel, danger = false) {
 let confirmResolve = null;
 
 function shareAppLink() {
-  const text = [`*${APP.name}*`, APP.about, 'ગુજરાતીમાં વાંચીને સંભળાવે પણ છે.', '', `મફત એપ: ${appUrl()}`].join('\n');
+  const text = [`*${APP.name}*`, APP.about, '', `મફત એપ: ${appUrl()}`].join('\n');
   return 'https://wa.me/?text=' + encodeURIComponent(text);
 }
 
@@ -1379,7 +1363,7 @@ function currentRoute() {
   return { name: parts[0] || 'home', arg: decodeURIComponent(parts[1] || ''), params: new URLSearchParams(query) };
 }
 
-const VIEW_NAMES = ['home', 'jobs', 'job', 'all', 'docs', 'events', 'event', 'scheme', 'saved', 'today', 'help', 'profile', 'about', 'contact'];
+const VIEW_NAMES = ['home', 'jobs', 'job', 'all', 'docs', 'events', 'event', 'scheme', 'saved', 'today', 'help', 'profile', 'contact', ...Object.keys(INFO_PAGES)];
 const views_known = (n) => VIEW_NAMES.includes(n);
 
 function currentTab() {
@@ -1389,7 +1373,6 @@ function currentTab() {
 }
 
 function render() {
-  voice.stop();
   const { name, arg, params } = currentRoute();
   let html;
   if (!state.loaded) html = '<div class="empty">લોડ થાય છે…</div>';
@@ -1409,13 +1392,13 @@ function render() {
       today: viewToday,
       help: viewHelp,
       profile: viewProfile,
-      about: viewAbout,
       contact: viewContact,
     };
-    html = (views[name] || viewHome)();
+    html = INFO_PAGES[name] ? viewInfo(name) : (views[name] || viewHome)();
   }
   $view.innerHTML = html;
-  document.body.classList.toggle('bare', Boolean(state.welcomeStep) && (name === 'home' || !views_known(name)));
+  const firstRun = !state.loaded && !(state.profile && state.profile.categories && state.profile.categories.length);
+  document.body.classList.toggle('bare', (firstRun || Boolean(state.welcomeStep)) && (name === 'home' || !views_known(name)));
   setActiveNav(currentTab());
   if (name === 'today' && state.loaded) store.setSeenUpdates(state.updates.map((u) => u.id));
   renderBell();
@@ -1469,22 +1452,6 @@ $view.addEventListener('input', (e) => {
   }
 });
 
-let voiceHintShown = false;
-function startSpeaking(btn, text) {
-  if (voice.isSpeaking()) {
-    voice.stop();
-    return;
-  }
-  if (!voice.canSpeak()) return toast('આ ફોનમાં વાંચીને સંભળાવવાની સુવિધા નથી.');
-  const label = btn.innerHTML;
-  btn.innerHTML = `${icon('stop')}<span>બંધ કરો</span>`;
-  voice.speak(text, () => (btn.innerHTML = label));
-  if (!voice.hasGujaratiVoice() && !voiceHintShown) {
-    voiceHintShown = true;
-    toast('ગુજરાતી અવાજ ન આવે તો ફોનના Settings → Text-to-speech માં ગુજરાતી ભાષા ઉમેરો.');
-  }
-}
-
 let inAppNavigations = 0;
 
 $view.addEventListener('click', async (e) => {
@@ -1518,15 +1485,6 @@ $view.addEventListener('click', async (e) => {
     applyLook();
     render();
   }
-  if (action === 'voice-test') startSpeaking(el, `નમસ્તે. ${APP.name} માં આપનું સ્વાગત છે. આ એપ યોજનાની માહિતી ગુજરાતીમાં વાંચીને સંભળાવશે.`);
-
-  if (action === 'speak') startSpeaking(el, speechText(findItem(id)));
-
-  if (action === 'speak-update') {
-    const u = state.updates.find((x) => x.id === id);
-    if (u) startSpeaking(el, u.title + '.\n' + u.summary);
-  }
-
   if (action === 'save') {
     const s = findItem(id);
     const now = store.toggleSaved(id);

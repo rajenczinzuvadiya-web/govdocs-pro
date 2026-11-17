@@ -33,7 +33,8 @@ function checkItem(s, kind) {
     errors.push(`${at}: અજાણ્યો વિભાગ "${s.group}"`);
   }
   (s.categories || []).forEach((c) => cats.has(c) || errors.push(`${at}: અજાણ્યો વર્ગ "${c}"`));
-  const links = [s.officialLink, ...(s.sources || []).map((x) => x.url)];
+  const links = [s.officialLink, ...(s.sources || []).map((x) => x.url), s.image, ...(s.stepImages || []).filter(Boolean)];
+  if (s.stepImages && (!Array.isArray(s.stepImages) || s.stepImages.length !== (s.steps || []).length)) errors.push(`${at}: stepImages ની ગણતરી steps જેટલી હોવી જોઈએ`);
   links.forEach((u) => u && !u.startsWith('https://') && errors.push(`${at}: લિંક https:// થી શરૂ થવી જોઈએ (${u})`));
   if (s.lastDate != null && !isDate(s.lastDate)) errors.push(`${at}: lastDate YYYY-MM-DD કે null હોવી જોઈએ`);
   if (s.updatedOn && !isDate(s.updatedOn)) errors.push(`${at}: updatedOn YYYY-MM-DD હોવી જોઈએ`);
@@ -68,7 +69,7 @@ for (const j of jobs) {
   if (!JOB_TYPES.includes(j.type)) errors.push(`${at}: અજાણ્યો પ્રકાર "${j.type}"`);
   if (!orgIds.has(j.org)) errors.push(`${at}: અજાણી સંસ્થા "${j.org}"`);
   if (!j.notification && !j.applyLink) errors.push(`${at}: સત્તાવાર જાહેરાત કે અરજીની લિંક જોઈએ`);
-  [j.notification, j.applyLink].forEach((u) => u && !u.startsWith('https://') && errors.push(`${at}: લિંક https:// થી શરૂ થવી જોઈએ (${u})`));
+  [j.notification, j.applyLink, j.image].forEach((u) => u && !u.startsWith('https://') && errors.push(`${at}: લિંક https:// થી શરૂ થવી જોઈએ (${u})`));
   for (const f of ['date', 'startDate', 'lastDate', 'updatedOn']) if (j[f] != null && !isDate(j[f])) errors.push(`${at}: ${f} YYYY-MM-DD હોવી જોઈએ`);
   if (j.posts != null && !(Number.isInteger(j.posts) && j.posts > 0)) errors.push(`${at}: posts આંકડો કે null હોવો જોઈએ`);
   if (ids.has(j.id)) errors.push(`${at}: id બે વાર છે`);
