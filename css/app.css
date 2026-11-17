@@ -263,29 +263,12 @@ button { font: inherit; color: inherit; }
 .drawer-head button:hover { background: rgba(255,255,255,.1); color: #fff; }
 .drawer .side-nav { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }
 
-/* ફૂટર: દરેક પેજના તળિયે (નાનું પેજ હોય તો પણ સ્ક્રીનના છેલ્લે) — અમારી એપ · ફોલો · માહિતી · © */
-.foot { border-top: 1px solid var(--line); background: var(--surface); color: var(--muted); font-size: .875rem; }
-.foot-in {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 1rem;
-  padding: 1.75rem 1rem 1.25rem;
-}
-.fbrand { grid-column: 1 / -1; }
-.fbrand a { display: inline-flex; align-items: center; gap: .6rem; color: var(--ink); text-decoration: none; }
-.fbrand img { width: 36px; height: 36px; border-radius: .6rem; }
-.fbrand b { font-size: 1.25rem; font-weight: 700; color: var(--primary); }
-.fbrand p { margin-top: .5rem; max-width: 22rem; }
-.fhead { margin-bottom: .35rem; font-weight: 700; color: var(--ink); }
-.fcol ul { list-style: none; margin: 0; padding: 0; }
-.fcol a { display: inline-flex; align-items: center; min-height: 2.25rem; color: var(--muted); text-decoration: none; }
-.fcol a:hover { color: var(--primary); text-decoration: underline; }
-.fcol:last-child { grid-column: 1 / -1; }
-.fcol:last-child ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1rem; }
-.fcopy { padding: .9rem 1rem; border-top: 1px solid var(--line); text-align: center; font-size: .8rem; }
-@media (min-width: 768px) {
-  .foot-in { grid-template-columns: 1.4fr 1fr 1fr 1.4fr; padding: 2rem 1.5rem 1.5rem; }
-  .fbrand, .fcol:last-child { grid-column: auto; }
-}
-@media (min-width: 1024px) { .foot-in { padding: 2rem 5rem 1.5rem 2rem; } .fcopy { padding: .9rem 2rem; } }
+/* ફૂટર: દરેક પેજના તળિયે, ફક્ત માહિતીનાં પેજની એક હાર + © */
+.foot { border-top: 1px solid var(--line); background: var(--surface); color: var(--muted); font-size: .85rem; }
+.foot-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 1.1rem; padding: .6rem 1rem 0; }
+.foot-links a { display: inline-flex; align-items: center; min-height: 2.5rem; color: var(--muted); text-decoration: none; }
+.foot-links a:hover { color: var(--primary); text-decoration: underline; }
+.fcopy { padding: .1rem 1rem .9rem; text-align: center; font-size: .8rem; }
 
 /* 💬 સંપર્ક (જમણે નીચે) અને ⬆ ઉપર (ડાબે નીચે), KruPa ContactFab / ScrollTopButton */
 .fab, .totop {
@@ -576,7 +559,7 @@ body.bare .wrap { max-width: none; padding: 0; }
 .parts { display: grid; gap: 2rem; margin-top: 2rem; }
 @media (min-width: 1024px) { .parts { grid-template-columns: minmax(0, 1fr) 20rem; align-items: start; } }
 @media (min-width: 1280px) { .parts { grid-template-columns: minmax(0, 1fr) 24rem; } }
-.parts-main { display: grid; gap: 2rem; min-width: 0; }
+.parts-main { display: grid; gap: .75rem; min-width: 0; align-content: start; }
 .parts-side { display: grid; gap: 1rem; min-width: 0; }
 .parts.one { grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 1024px) { .parts.one .parts-main { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
@@ -584,8 +567,18 @@ body.bare .wrap { max-width: none; padding: 0; }
 .part h2 { display: flex; align-items: center; gap: .6rem; font-size: 1.1rem; font-weight: 800; }
 .part h2 .sq { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: .5rem; background: var(--primary-soft); color: var(--primary); flex: none; }
 .part.warn h2 .sq { background: var(--warn-soft); color: var(--warn); }
-.part > *:not(h2) { margin-top: .75rem; }
-.part > p { font-size: .95rem; line-height: 1.6; }
+/* ખૂલતો-બંધ થતો વિભાગ: આખું મથાળું બટન, જમણે ⌄ */
+details.part { border: 1px solid var(--line); border-radius: .9rem; background: var(--surface); }
+details.part > summary { display: flex; align-items: center; gap: .5rem; min-height: 3.25rem; padding: .5rem .9rem; cursor: pointer; list-style: none; border-radius: .9rem; }
+details.part > summary::-webkit-details-marker { display: none; }
+details.part > summary:hover { background: var(--primary-soft); }
+details.part > summary h2 { flex: 1; min-width: 0; }
+details.part .n { margin-left: .2rem; padding: 0 .5rem; border-radius: 999px; background: var(--bg); color: var(--muted); font-size: .8rem; font-weight: 700; }
+details.part .chev { flex: none; color: var(--muted); transition: transform .15s; }
+details.part[open] .chev { transform: rotate(180deg); }
+.part-body { padding: 0 .9rem .9rem; }
+.part-body > * + *, section.part > * + * { margin-top: .75rem; }
+.part-body > p { font-size: .95rem; line-height: 1.6; }
 .dots { list-style: none; margin: 0; padding: .9rem 1rem; display: grid; gap: .6rem; border-radius: .9rem; border: 1px solid var(--line); background: var(--surface); }
 .dots li { display: flex; gap: .6rem; font-size: .95rem; line-height: 1.55; overflow-wrap: anywhere; }
 .dots li::before { content: ""; flex: none; width: .4rem; height: .4rem; margin-top: .6em; border-radius: 999px; background: var(--primary); }
