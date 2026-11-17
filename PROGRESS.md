@@ -1,5 +1,11 @@
 # જાણકાર — કામ ક્યાં પહોંચ્યું (નવું ઉપર)
 
+## 17/11/26 — v0.8.1: હોમ પર "અમારી બીજી એપ"
+- યુઝર: "મુખ્ય પાને અમારી બીજી એપ ત્રણેય એપમાં — Digital Hub માં Doc Hub + જાણકાર, Doc Hub માં Digital Hub + જાણકાર, જાણકારમાં Digital Hub + Doc Hub."
+- હોમના છેલ્લે બે કાર્ડ (`otherApps()` in `js/app.js`, `.oapps` CSS): લોગો (`icons/digital-hub.png`, `icons/doc-hub.png`, SW માં પણ), નામ, એક લીટી, "જુઓ →" (નવા ટૅબમાં). સરનામાં `APP.krupa`.
+- Digital Hub / Doc Hub માં એ જ ભાગ (તેમના PR), સાથે KruPa ની ચેનલો (વોટ્સએપ, YouTube, Facebook, Instagram) "અમને ફોલો કરો". જાણકારમાં ચેનલની લિંક હજુ નહીં — યુઝરનો નિર્ણય બાકી.
+- Playwright 360 / 390 / 1366 / 1440 (ત્રણે એપ): કાર્ડ, લોગો, આડું સ્ક્રોલ 0, JS ભૂલ 0 — PASS.
+
 ## 16/11/26 — ભરતી: Digital Hub નો ભાગ
 - KruPa Digital Hub ([PR #292](https://github.com/rajenczinzuvadiya-web/krupa-digital-hub/pull/292)): એડમિન → ગાઇડ મેનેજ → "💼 ભરતી (જાણકાર)". ત્યાં લખો, "ચાલુ કરો" એટલે `/api/jankar` માં `jobs`, અહીં દર 3 કલાકે.
 - રોજ સવારે ≈6 વાગ્યે Digital Hub (મુંબઈ) OJAS, GPSC, GSSSB, પંચાયત મંડળ જુએ અને નવી લિંક ડ્રાફ્ટમાં મૂકે. યુઝર નામ ગુજરાતીમાં કરી, વિગત ભરી "ચાલુ કરો".

@@ -1,6 +1,6 @@
 // ઑફલાઇન: એપ ફોનમાં સેવ રહે, અને છેલ્લી ડાઉનલોડ થયેલી માહિતી નેટ વગર પણ દેખાય.
 // કોડ બદલો ત્યારે VERSION વધારવું, એટલે યુઝર્સના ફોનમાં નવું વર્ઝન આવે.
-const VERSION = 'v10';
+const VERSION = 'v11';
 const SHELL = `shell-${VERSION}`;
 const DATA = 'data';
 
@@ -27,6 +27,8 @@ const SHELL_FILES = [
   'icons/icon-192.png',
   'icons/icon-512.png',
   'icons/icon-maskable-512.png',
+  'icons/digital-hub.png',
+  'icons/doc-hub.png',
 ];
 
 self.addEventListener('install', (event) => {
