@@ -82,9 +82,28 @@ for (const j of jobs) {
   else if (!j.verified) unverified++;
 }
 
+// આજે શું નવું (data/updates.json) અને ફોન નંબર (data/helplines.json)
+const { updates } = read('updates.json');
+const upIds = new Set();
+for (const u of updates) {
+  const at = `આજે શું નવું "${u.id || '?'}"`;
+  for (const f of ['id', 'title', 'summary', 'date']) if (!u[f] || typeof u[f] !== 'string') errors.push(`${at}: "${f}" ખૂટે છે`);
+  if (!['jankari', 'chetavani'].includes(u.type)) errors.push(`${at}: અજાણ્યો પ્રકાર "${u.type}"`);
+  if (u.date && !isDate(u.date)) errors.push(`${at}: date YYYY-MM-DD હોવી જોઈએ`);
+  [u.link, u.image].forEach((x) => x && !x.startsWith('https://') && errors.push(`${at}: લિંક https:// થી શરૂ થવી જોઈએ (${x})`));
+  if (upIds.has(u.id)) errors.push(`${at}: id બે વાર છે`);
+  upIds.add(u.id);
+}
+const { helplines } = read('helplines.json');
+if (helplines.length < 5) errors.push(`ફોન નંબર: ફક્ત ${helplines.length} છે`);
+for (const h of helplines) {
+  if (!/^[0-9]{3,12}$/.test(h.number || '')) errors.push(`ફોન નંબર "${h.number}": ફક્ત આંકડા જોઈએ`);
+  if (!h.title) errors.push(`ફોન નંબર "${h.number}": નામ ખૂટે છે`);
+}
+
 errors.forEach((e) => console.log('❌', e));
 console.log(
-  `\nયોજના ${schemes.length}, દસ્તાવેજ ${documents.length}, પ્રસંગ ${events.length}, ભરતી ${jobs.length} · ` +
+  `\nયોજના ${schemes.length}, દસ્તાવેજ ${documents.length}, પ્રસંગ ${events.length}, ભરતી ${jobs.length}, આજે શું નવું ${updates.length}, ફોન નંબર ${helplines.length} · ` +
     `${errors.length} ભૂલ · ${unverified} કાર્ડની ચકાસણી બાકી`
 );
 process.exit(errors.length ? 1 : 0);
