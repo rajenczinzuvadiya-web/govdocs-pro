@@ -269,6 +269,8 @@ button { font: inherit; color: inherit; }
 .foot-links a { display: inline-flex; align-items: center; min-height: 2.5rem; color: var(--muted); text-decoration: none; }
 .foot-links a:hover { color: var(--primary); text-decoration: underline; }
 .fcopy { padding: .1rem 1rem .9rem; text-align: center; font-size: .8rem; }
+/* ફોન: નીચેનાં ગોળ બટન (💬 ⬆) ફૂટરની લિંક પર ન આવે, એટલે બાજુમાં જગ્યા */
+@media (max-width: 1023px) { .foot { padding: 0 3.75rem; } }
 
 /* 💬 સંપર્ક (જમણે નીચે) અને ⬆ ઉપર (ડાબે નીચે), KruPa ContactFab / ScrollTopButton */
 .fab, .totop {
@@ -620,11 +622,12 @@ details.part[open] .chev { transform: rotate(180deg); }
 fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 .field { display: grid; gap: .35rem; font-weight: 600; font-size: .95rem; }
-.field input, .field select {
+.field input, .field select, .field textarea {
   font: inherit; font-weight: 400; width: 100%; min-height: 3rem; padding: .5rem .75rem;
   border-radius: .6rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink); outline: none;
 }
-.field input:focus, .field select:focus { border-color: var(--primary); }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--primary); }
+.field textarea { min-height: 6rem; resize: vertical; line-height: 1.5; }
 .form-grid { display: grid; gap: 1rem; }
 @media (min-width: 720px) { .form-grid { grid-template-columns: 1fr 1fr; } }
 .choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
@@ -646,6 +649,9 @@ legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 @media (min-width: 1280px) { .help-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .help-row { display: flex; align-items: center; gap: .85rem; padding: .8rem 1rem; border-radius: .9rem; border: 1px solid var(--line); background: var(--surface); text-decoration: none; box-shadow: var(--shadow); min-width: 0; }
 .help-row:hover { border-color: var(--primary-ring); }
+button.help-row { width: 100%; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.report-msg { color: var(--danger, #b42318); font-weight: 600; }
+.report-msg a { color: var(--primary); }
 .help-row > div { min-width: 0; flex: 1; }
 .help-row .num { font-size: 1.25rem; font-weight: 800; color: var(--primary); line-height: 1.2; }
 .help-row .t { font-size: .875rem; color: var(--muted); line-height: 1.35; }
@@ -727,7 +733,7 @@ legend { font-weight: 700; margin-bottom: .6rem; padding: 0; }
 .wl-in h1 { font-size: 1.5rem; font-weight: 800; line-height: 1.3; color: var(--primary); }
 .wl-in .lead { margin-top: .4rem; color: var(--muted); font-size: 1rem; }
 @media (min-width: 1024px) {
-  .wl { grid-template-columns: 52% 1fr; min-height: calc(100dvh - 3.5rem); }
+  .wl { grid-template-columns: 52% 1fr; min-height: 100vh; min-height: 100dvh; } /* બધી ઊંચાઈ (ઉપર બાર નથી) */
   .wl-brand { display: flex; flex-direction: column; justify-content: center; padding: 3rem 3.5rem; }
   .wl-brand > div { max-width: 42rem; }
   .wl-logo img { width: 4.5rem; height: 4.5rem; border-radius: 1.1rem; }
@@ -820,7 +826,7 @@ fieldset.card > legend + * { clear: both; }
 .follow-grid a:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
 /* માહિતીનાં પેજ (અમારા વિશે, ગોપનીયતા નીતિ…) */
-.info-doc { max-width: 56rem; padding: 1.25rem; }
+.info-doc { padding: 1.25rem; }
 @media (min-width: 640px) { .info-doc { padding: 1.75rem 2rem; } }
 .info-doc section + section { margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
 .info-doc h2 { display: flex; align-items: center; gap: .6rem; font-size: 1.1rem; font-weight: 700; color: var(--ink); }
@@ -829,9 +835,6 @@ fieldset.card > legend + * { clear: both; }
 .info-doc ul { padding-left: 1.25rem; }
 .info-doc li + li { margin-top: .3rem; }
 .info-doc a { color: var(--primary); font-weight: 600; }
-.info-more { display: flex; flex-wrap: wrap; gap: .5rem; max-width: 56rem; margin-top: 1rem; }
-.info-more a { display: inline-flex; align-items: center; gap: .4rem; min-height: 2.75rem; padding: 0 .9rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); font-size: .9rem; font-weight: 600; text-decoration: none; }
-.info-more a:hover { border-color: var(--primary); color: var(--primary); }
 
 /* Digital Hub માં મૂકેલા ફોટા: યાદીમાં નાનો ફોટો, વિગતમાં મોટો, પગલાંમાં screenshot */
 .tile.pic { padding: 0; overflow: hidden; background: var(--primary-soft); }

@@ -4,6 +4,7 @@ import { store } from './store.js';
 import { matches, sortForProfile, isExpired, daysLeft, deadlineText, formatDate } from './match.js';
 import { icon, tile, linePath, socialIcon } from './icons.js';
 import { INFO_PAGES, INFO_LINKS, INFO_UPDATED } from './pages.js';
+import { sendFeedback } from './feedback.js';
 
 const state = {
   schemes: [],
@@ -158,11 +159,13 @@ function itemList(items, empty) {
 // ફૂટર: દરેક પેજના છેલ્લે (સ્ક્રીનના તળિયે), એક જ જગ્યાએથી. KruPa Digital Hub ના ફૂટર જેવું:
 // અમારી એપ · અમને ફોલો કરો · માહિતીનાં પેજ · ©
 const COPY_FROM = 2026;
-// ફૂટર: ફક્ત માહિતીનાં પેજની એક હાર અને © (યુઝર 17/11/26: "વધારાનું કાઢી નાખો"). એપ અને ફોલો હોમ પર છે.
+// ફૂટર: ફક્ત નિયમોનાં પેજ અને © (યુઝર 17/11/26: "વધારાનું કાઢી નાખો"). એપ અને ફોલો હોમ પર છે.
+// યુઝર 19/11/26: એક સ્ક્રીન પર એક લિંક બે વાર નહીં, "સંપર્ક" અને "અમારા વિશે" મેનુમાં છે એટલે ફૂટરમાં નહીં.
+const FOOT_SKIP = new Set(['about', 'contact']);
 function renderFooter() {
   const y = new Date().getFullYear();
   document.getElementById('foot').innerHTML = `
-    <nav class="foot-links" aria-label="માહિતી">${INFO_LINKS.map((l) => `<a href="#/${l.route}">${esc(l.label)}</a>`).join('')}</nav>
+    <nav class="foot-links" aria-label="માહિતી">${INFO_LINKS.filter((l) => !FOOT_SKIP.has(l.route)).map((l) => `<a href="#/${l.route}">${esc(l.label)}</a>`).join('')}</nav>
     <p class="fcopy">© ${y > COPY_FROM ? `${COPY_FROM}–${y}` : COPY_FROM} KruPa Digital Hub</p>`;
 }
 
@@ -641,7 +644,8 @@ function viewEvent(id) {
         ${docs.length ? `<section class="part"><h2><span class="sq">${icon('forms')}</span>કરવાનાં કામ / દસ્તાવેજ</h2><ul class="ev-list">${docs.map(row).join('')}</ul></section>` : ''}
         ${helps.length ? `<section class="part"><h2><span class="sq">${icon('gift')}</span>મળી શકે એવી સહાય</h2><ul class="ev-list">${helps.map(row).join('')}</ul></section>` : ''}
       </div>
-    </div>`;
+    </div>
+    <p class="mt"><button class="btn" type="button" data-action="report" data-title="${esc(e.title)}">${icon('message')}ભૂલ / સૂચન જણાવો</button></p>`;
 }
 
 // ---------- ભરતી (નવી ભરતી, કોલ લેટર, આન્સર કી, પરિણામ) ----------
@@ -855,11 +859,11 @@ function viewItem(id) {
         ${foldParts(s, k)}
       </div>
       <aside class="parts-side">
-        ${reportLink(s) ? `<div class="card side-box">
+        <div class="card side-box">
           <h3>${icon('alert')}માહિતીમાં ભૂલ છે?</h3>
           <p class="small muted">ફી, તારીખ કે નિયમ બદલાયા હોય તો જણાવો, અમે ચકાસીને સુધારીશું.</p>
-          <a class="btn" href="${reportLink(s)}" target="_blank" rel="noopener">${icon('message')}ભૂલ જણાવો</a>
-        </div>` : ''}
+          <button class="btn btn-block" type="button" data-action="report" data-title="${esc(s.title)}">${icon('message')}ભૂલ / સૂચન જણાવો</button>
+        </div>
         <div class="card side-box">
           <h3>${icon('book')}સ્રોત</h3>
           <div class="sources">${sources}<span>છેલ્લે અપડેટ: ${esc(formatDate(s.updatedOn))}</span>${s.verified ? '' : '<span>ચકાસણી બાકી: અરજી પહેલાં સત્તાવાર સાઇટ પર ખાતરી કરો.</span>'}</div>
@@ -961,7 +965,6 @@ function viewInfo(route) {
   const pg = INFO_PAGES[route];
   const link = INFO_LINKS.find((l) => l.route === route);
   const fill = (t) => esc(t).replace(/\{APP\}/g, esc(APP.name)).replace(/\{CONTACT\}/g, contactHtml());
-  const others = INFO_LINKS.filter((l) => l.route !== route);
   return `
     ${pageHead(pg.title, pg.sub ? esc(pg.sub) : `અમલ તારીખ: ${INFO_UPDATED}`, link.ic, '#/')}
     <article class="card info-doc">${pg.parts
@@ -975,8 +978,7 @@ function viewInfo(route) {
       </section>`
       )
       .join('')}
-    </article>
-    <nav class="info-more" aria-label="બીજાં પેજ">${others.map((l) => `<a href="#/${l.route}">${icon(l.ic, 'ic-sm')}${esc(l.label)}</a>`).join('')}</nav>`;
+    </article>`;
 }
 
 // ---------- સંપર્ક ----------
@@ -990,18 +992,16 @@ function contactLink(text, subject = APP.name) {
   return '';
 }
 
-const reportLink = (s) =>
-  contactLink(`${APP.name}: "${s.title}" માં ભૂલ છે.\nશું ખોટું છે:\n\nસાચી માહિતીની લિંક (હોય તો):\n\nકાર્ડ: ${appUrl()}${itemHref(s)}`, 'માહિતીમાં ભૂલ: ' + s.title);
-
 function viewContact() {
   const c = APP.contact || {};
   const rows = [
+    `<button class="help-row" type="button" data-action="report" data-title="">${lineTile('message', 'blue')}<div><div class="num">એપમાં જ લખો</div><div class="t">ભૂલ કે સૂચન સીધું એડમિનને જાય</div></div>${icon('chev', 'ic chev')}</button>`,
     c.whatsapp && `<a class="help-row" href="${contactLink(`${APP.name} વિશે:\n`)}" target="_blank" rel="noopener">${lineTile('chat', 'green')}<div><div class="num">વોટ્સએપ</div><div class="t">સૂચન, ભૂલ કે નવી યોજનાની માહિતી મોકલો</div></div>${icon('chev', 'ic chev')}</a>`,
     c.email && `<a class="help-row" href="mailto:${esc(c.email)}">${lineTile('message', 'blue')}<div><div class="num">ઈમેલ</div><div class="t">${esc(c.email)}</div></div>${icon('chev', 'ic chev')}</a>`,
   ].filter(Boolean);
   return `
     ${pageHead('સંપર્ક અને સૂચન', 'ભૂલ દેખાય કે સૂચન હોય તો જણાવો.', 'message', '#/')}
-    ${rows.length ? `<div class="help-list">${rows.join('')}</div>` : `<div class="empty">સંપર્કની વિગત ટૂંક સમયમાં ઉમેરાશે.</div>`}`;
+    <div class="help-list">${rows.join('')}</div>`;
 }
 
 // ---------- ખોખું: બાજુનું મેનુ, નીચેનાં ટેબ, "વધુ", 👤 મેનુ, ઝૂમ, દેખાવ, શોધ (KruPa Digital Hub જેવું) ----------
@@ -1453,6 +1453,68 @@ $view.addEventListener('input', (e) => {
     filters[scope].q = e.target.value;
     refreshList(scope);
   }
+});
+
+// ---------- ભૂલ / સૂચન (js/feedback.js) ----------
+// પૉપઅપ સ્ક્રીનની વચ્ચે: પ્રકાર, લખાણ, "મોકલો". ન જાય તો વોટ્સએપ પર મોકલવાની લિંક.
+let reportCtx = null;
+function openReport(title) {
+  reportCtx = { title, page: location.hash || '#/', kind: 'problem' };
+  openModal(`
+    <div class="dialog-head"><h2>ભૂલ / સૂચન જણાવો</h2><button class="top-btn" type="button" data-close="1" aria-label="બંધ કરો">${icon('close')}</button></div>
+    ${title ? `<p>${esc(title)}</p>` : ''}
+    <form id="report-form" class="stack mt">
+      <div class="seg" role="group" aria-label="પ્રકાર">
+        <button type="button" data-kind="problem" aria-pressed="true">${icon('alert', 'ic-sm')}ભૂલ / તકલીફ</button>
+        <button type="button" data-kind="suggestion" aria-pressed="false">${icon('bulb', 'ic-sm')}સૂચન</button>
+      </div>
+      <label class="field"><span>શું લખવું છે?</span><textarea name="message" rows="4" maxlength="1000" required minlength="5" placeholder="દા.ત. ફી બદલાઈ છે, લિંક ખૂલતી નથી"></textarea></label>
+      <p class="small muted">નામ કે મોબાઇલ નંબર જતો નથી. જવાબ જોઈએ તો વોટ્સએપ પર લખો.</p>
+      <p class="small report-msg" role="status" hidden></p>
+      <button class="btn btn-primary btn-block btn-lg" type="submit">${icon('published')}મોકલો</button>
+    </form>`);
+  const box = $modal.querySelector('textarea');
+  if (box) box.focus();
+}
+
+$view.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-action="report"]');
+  if (!el) return;
+  e.preventDefault();
+  openReport(el.dataset.title || '');
+});
+
+$modal.addEventListener('click', (e) => {
+  const k = e.target.closest('[data-kind]');
+  if (!k || !reportCtx) return;
+  reportCtx.kind = k.dataset.kind;
+  $modal.querySelectorAll('[data-kind]').forEach((b) => b.setAttribute('aria-pressed', String(b === k)));
+});
+
+$modal.addEventListener('submit', async (e) => {
+  if (e.target.id !== 'report-form' || !reportCtx) return;
+  e.preventDefault();
+  const form = e.target;
+  const msg = form.querySelector('.report-msg');
+  const message = form.message.value.trim();
+  if (message.length < 5) {
+    msg.hidden = false;
+    msg.textContent = 'થોડું વિગતે લખો.';
+    return;
+  }
+  const btn = form.querySelector('[type=submit]');
+  btn.disabled = true;
+  const r = await sendFeedback({ kind: reportCtx.kind, message, title: reportCtx.title, page: reportCtx.page });
+  btn.disabled = false;
+  if (r === 'ok') {
+    closeModal();
+    reportCtx = null;
+    toast('આભાર, એડમિનને મોકલ્યું.');
+    return;
+  }
+  const wa = contactLink(`${APP.name}: ${reportCtx.title ? `"${reportCtx.title}" ` : ''}${reportCtx.kind === 'problem' ? 'ભૂલ' : 'સૂચન'}\n${message}\n\nપેજ: ${appUrl()}${reportCtx.page}`);
+  msg.hidden = false;
+  msg.innerHTML = `${r === 'limit' ? 'આજે ઘણા સંદેશ ગયા છે.' : 'હાલ મોકલી શકાયું નહીં.'}${wa ? ` <a href="${wa}" target="_blank" rel="noopener">વોટ્સએપ પર મોકલો</a>` : ' થોડી વાર પછી ફરી પ્રયત્ન કરો.'}`;
 });
 
 let inAppNavigations = 0;

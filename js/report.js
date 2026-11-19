@@ -19,7 +19,7 @@ const NOISE = [
 
 export const isNoise = (message, stack = '') => NOISE.some((re) => re.test(message) || re.test(stack));
 
-function phoneId() {
+export function phoneId() {
   try {
     let id = localStorage.getItem('jankar-err-id');
     if (!/^[0-9a-f]{8}$/.test(id || '')) {
