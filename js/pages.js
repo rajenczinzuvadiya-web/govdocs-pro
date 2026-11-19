@@ -48,7 +48,7 @@ export const INFO_PAGES = {
       },
       {
         title: 'પ્રકાશક',
-        text: 'KruPa Digital Hub. બનાવનાર: રાજેનકુમાર ચંદુભાઈ ઝીંઝુવાડીયા.',
+        text: 'KruPa Digital Hub (krupadigitalhub.in).',
       },
       { title: 'સંપર્ક', text: '{CONTACT}' },
     ],
