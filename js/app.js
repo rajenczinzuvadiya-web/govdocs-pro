@@ -691,13 +691,24 @@ function viewJobs(params) {
   return listPage('jobs', 'ભરતી', 'સરકારી ભરતી, કોલ લેટર, આન્સર કી અને પરિણામ', 'briefcase', 'ભરતી શોધો… (જેમ કે ક્લાર્ક, પોલીસ)', JOB_CHIPS, 'પ્રકાર');
 }
 
+// વોટ્સએપ સંદેશ (યુઝર 20/11/26: ગોઠવણી બરાબર ન હતી): એક ખાનું એક લીટી, ખાલી ખાનું નહીં,
+// એપની લિંક પહેલી (વોટ્સએપ પહેલી લિંકનું કાર્ડ બતાવે), સત્તાવાર લિંક છેલ્લે.
+const waLine = (t) => String(t || '').replace(/\s+/g, ' ').replace(/\*/g, '').trim();
+const waJoin = (blocks) => blocks.filter((b) => b && b.length).map((b) => b.join('\n')).join('\n\n');
+
 function jobShareText(j) {
-  const lines = [`*${j.title}*`, jobOrg(j).label];
-  if (j.posts) lines.push(`👥 જગ્યા: ${j.posts}`);
-  if (j.qualification) lines.push(`🎓 લાયકાત: ${j.qualification}`);
-  if (j.lastDate) lines.push(`📅 છેલ્લી તારીખ: ${formatDate(j.lastDate)}`);
-  lines.push(`🔗 ${j.applyLink || j.notification}`, '', `વિગત ગુજરાતીમાં: ${appUrl()}${itemHref(j)}`);
-  return lines.join('\n');
+  const facts = [
+    j.posts && `👥 જગ્યા: ${waLine(j.posts)}`,
+    j.qualification && `🎓 લાયકાત: ${waLine(j.qualification)}`,
+    j.lastDate && `📅 છેલ્લી તારીખ: ${formatDate(j.lastDate)}`,
+  ].filter(Boolean);
+  const official = j.applyLink || j.notification;
+  return waJoin([
+    [`*${waLine(j.title)}*`, waLine(jobOrg(j).label)].filter(Boolean),
+    facts,
+    ['📱 પૂરી વિગત ગુજરાતીમાં:', `${appUrl()}${itemHref(j)}`],
+    official ? ['🔗 સત્તાવાર સાઇટ:', official] : null,
+  ]);
 }
 
 function viewJob(id) {
@@ -762,11 +773,21 @@ const kindText = (s) => KIND_TEXT[isDoc(s) ? 'doc' : 'scheme'];
 
 function shareText(s) {
   const k = kindText(s);
-  const lines = [`*${s.title}*`, s.summary, '', `✅ ${k.benefit}: ${s.benefit}`, `📄 પુરાવા: ${s.documents.join(', ')}`];
-  if (s.fee) lines.push(`💰 ફી: ${s.fee}`);
-  if (!isDoc(s)) lines.push(`📅 ${s.lastDate ? 'છેલ્લી તારીખ: ' + formatDate(s.lastDate) : 'ચાલુ યોજના'}`);
-  lines.push(`🔗 ${s.officialLink}`, '', `પૂરાં પગલાં ગુજરાતીમાં: ${appUrl()}${itemHref(s)}`);
-  return lines.join('\n');
+  const docs = (s.documents || []).map(waLine).filter(Boolean);
+  const facts = [
+    s.fee && `💰 ફી: ${waLine(s.fee)}`,
+    s.days && `⏱ કેટલા દિવસ: ${waLine(s.days)}`,
+    !isDoc(s) && `📅 ${s.lastDate ? 'છેલ્લી તારીખ: ' + formatDate(s.lastDate) : 'ચાલુ યોજના'}`,
+  ].filter(Boolean);
+  const official = s.from === 'hub' && s.applyLink ? s.applyLink : s.officialLink;
+  return waJoin([
+    [`*${waLine(s.title)}*`, waLine(s.summary)].filter(Boolean),
+    s.benefit ? [`✅ *${k.benefit}*`, waLine(s.benefit)] : null,
+    docs.length ? [`📄 *પુરાવા (${docs.length})*`, ...docs.map((d, i) => `${i + 1}. ${d}`)] : null,
+    facts,
+    ['📱 પૂરાં પગલાં ગુજરાતીમાં:', `${appUrl()}${itemHref(s)}`],
+    official ? ['🔗 સત્તાવાર સાઇટ:', official] : null,
+  ]);
 }
 
 const dots = (arr) => `<ul class="dots">${arr.map((t) => `<li><span>${esc(t)}</span></li>`).join('')}</ul>`;
