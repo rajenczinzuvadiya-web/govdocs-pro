@@ -57,6 +57,7 @@ for (const e of events) {
   const at = `પ્રસંગ "${e.id}"`;
   if (!e.title || !e.items || !e.items.length) errors.push(`${at}: નામ કે કામની યાદી ખૂટે છે`);
   (e.categories || []).forEach((c) => cats.has(c) || errors.push(`${at}: અજાણ્યો વર્ગ "${c}"`));
+  if (e.image && !e.image.startsWith('https://')) errors.push(`${at}: ફોટાની લિંક https:// થી શરૂ થવી જોઈએ (${e.image})`);
   e.items.forEach((it, i) => {
     if (it.itemId && !ids.has(it.itemId)) errors.push(`${at}: કામ ${i + 1} ની લિંક "${it.itemId}" કોઈ કાર્ડ પર નથી`);
     if (!it.itemId && !it.title) errors.push(`${at}: કામ ${i + 1} માં નામ કે લિંક નથી`);

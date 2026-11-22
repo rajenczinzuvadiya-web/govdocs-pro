@@ -19,6 +19,9 @@ Play Console માં દરેક ખાનામાં નીચેનું 
 ```
 જાણકાર ગામના દરેક માણસને સરળ ગુજરાતીમાં જણાવે છે કે તેને કઈ યોજના અને સહાય મળી શકે, અને તે કેવી રીતે મેળવવી.
 
+મહત્વની સૂચના:
+આ KruPa Digital Hub ની ખાનગી માહિતી એપ છે. તે કોઈ સરકારી વિભાગની સત્તાવાર એપ નથી, અને સરકાર સાથે જોડાયેલી નથી. એપ કોઈ અરજી કે સરકારી સેવા આપતી નથી.
+
 એપમાં શું છે:
 • યોજના ગાઈડ: ખેડૂત, વિદ્યાર્થી, યુવાન, માતા, વૃદ્ધ, વિધવા, દિવ્યાંગ, વેપારી માટેની યોજનાઓ. કોને મળે, કેટલો લાભ, કયા પુરાવા, ફી, કેટલા દિવસ અને અરજીનાં પગલાં.
 • દસ્તાવેજ ગાઈડ: આવકનો દાખલો, જાતિનો દાખલો, આધાર, રેશનકાર્ડ, જન્મનો દાખલો જેવા દાખલા ક્યાંથી અને કેવી રીતે કઢાવવા.
@@ -32,10 +35,8 @@ Play Console માં દરેક ખાનામાં નીચેનું 
 તમારી માહિતી સુરક્ષિત:
 • જાહેરાત નથી.
 • પ્રોફાઇલ ફક્ત તમારા ફોનમાં રહે છે.
+• "ભૂલ / સૂચન" માં ફક્ત તમે લખેલું લખાણ જાય છે, નામ કે નંબર નહીં.
 • અમે ક્યારેય પૈસા, OTP કે આધાર નંબર માંગતા નથી.
-
-મહત્વની સૂચના:
-આ KruPa Digital Hub ની ખાનગી માહિતી એપ છે. તે કોઈ સરકારી વિભાગની સત્તાવાર એપ નથી, અને સરકાર સાથે જોડાયેલી નથી. એપ કોઈ અરજી કે સરકારી સેવા આપતી નથી.
 
 માહિતીનો સ્રોત:
 માહિતી સરકારની સત્તાવાર વેબસાઇટ પરથી લેવામાં આવે છે, જેમ કે:
@@ -62,15 +63,27 @@ https://www.india.gov.in
 | News app | No |
 | Government app | No (ખાનગી એપ છે) |
 
-## Data safety ફોર્મના જવાબ
+## Data safety ફોર્મના જવાબ (22/11/26 બદલ્યા)
+
+એપ હવે બે વસ્તુ અમારા સર્વર (KruPa Digital Hub) પર મોકલે છે: તમે જાતે લખો તે "ભૂલ / સૂચન", અને એપની ભૂલની આપોઆપ નોંધ. બંને સાથે ફોને બનાવેલો 8 અક્ષરનો રેન્ડમ નંબર જાય છે. Google આને "collect" ગણે છે, એટલે "No" ખોટું ગણાય. પ્રોફાઇલ, સેવ અને ચેકલિસ્ટ ફોનમાં જ રહે છે (એ collect નથી).
+
+**પહેલું પેજ**
 
 | પ્રશ્ન | જવાબ |
 |---|---|
-| Does your app collect or share any of the required user data types? | No |
-| Is all of the user data collected by your app encrypted in transit? | Yes (https) |
-| Do you provide a way for users to request that their data is deleted? | Yes: એપમાં પ્રોફાઇલ → "મારી બધી માહિતી ફોનમાંથી કાઢી નાખો" |
+| Does your app collect or share any of the required user data types? | **Yes** |
+| Is all of the user data collected by your app encrypted in transit? | Yes |
+| Do you provide a way for users to request that their data is deleted? | Yes (ગોપનીયતા નીતિમાં: ઈમેલ / વોટ્સએપથી, 7 દિવસમાં) |
 
-કારણ: પ્રોફાઇલ અને સેવ કરેલું ફક્ત ફોનમાં રહે છે, અમારા સર્વર પર જતું નથી. Google ના નિયમમાં ફોનની બહાર ન જતી માહિતીને "collect" ગણાતી નથી.
+**Data types: આ ત્રણ જ ✓ કરો, બાકી બધું ખાલી**
+
+| વિભાગ → ખાનું | Collected | Shared | Optional? | શા માટે (Purpose) |
+|---|---|---|---|---|
+| App activity → Other user-generated content | ✓ | No | Optional (યુઝર જાતે મોકલે તો જ) | App functionality, Developer communications |
+| App info and performance → Crash logs | ✓ | No | Required (આપોઆપ) | Analytics |
+| Device or other IDs | ✓ | No | Required | App functionality (એક ફોનમાંથી વધારે સંદેશ રોકવા) |
+
+દરેકમાં "Is this data processed ephemerally?" → No.
 
 ## ફોટા
 
