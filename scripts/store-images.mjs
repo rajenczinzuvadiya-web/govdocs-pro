@@ -1,11 +1,28 @@
 // Play Store માટેના ફોટા બનાવે: store/feature-graphic.png (1024x500) અને store/screenshots/*.png (1080x1920).
-// પહેલાં એપ ચલાવો:  python3 -m http.server 8099   પછી:  node scripts/store-images.mjs
+// ચલાવો:  node scripts/store-images.mjs   (server ની જરૂર નથી: ફાઇલો સીધી browser ને અપાય છે)
+// ચાલુ server પરથી લેવું હોય તો:  APP_URL=http://localhost:8099/ node scripts/store-images.mjs
 import { createRequire } from 'node:module';
+import { readFileSync, existsSync } from 'node:fs';
+import { extname, join } from 'node:path';
 const require = createRequire(import.meta.url);
 const { chromium } = require('playwright');
 
-const U = process.env.APP_URL || 'http://localhost:8099/';
+const ROOT = new URL('../', import.meta.url).pathname;
+const LOCAL = 'http://jankar.local/';
+const U = process.env.APP_URL || LOCAL;
 const OUT = new URL('../store/', import.meta.url).pathname;
+const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.ttf': 'font/ttf' };
+// APP_URL ન હોય તો jankar.local ની દરેક માંગ repo ની ફાઇલમાંથી
+async function serveLocal(ctx) {
+  if (U !== LOCAL) return;
+  await ctx.route(LOCAL + '**', (route) => {
+    let path = decodeURIComponent(new URL(route.request().url()).pathname);
+    if (path.endsWith('/')) path += 'index.html';
+    const f = join(ROOT, path);
+    if (!f.startsWith(ROOT) || !existsSync(f)) return route.fulfill({ status: 404, body: '' });
+    return route.fulfill({ status: 200, contentType: TYPES[extname(f)] || 'application/octet-stream', body: readFileSync(f) });
+  });
+}
 const profile = JSON.stringify({ categories: ['khedut', 'vrudh', 'samanya'], age: '', district: 'રાજકોટ' });
 
 const shots = [
@@ -18,7 +35,8 @@ const shots = [
 ];
 
 const b = await chromium.launch();
-const ctx = await b.newContext({ viewport: { width: 360, height: 640 }, deviceScaleFactor: 3 });
+const ctx = await b.newContext({ viewport: { width: 360, height: 640 }, deviceScaleFactor: 3, serviceWorkers: 'block' });
+await serveLocal(ctx);
 const p = await ctx.newPage();
 await p.goto(U, { waitUntil: 'networkidle' });
 for (const [name, route] of shots) {
@@ -34,7 +52,9 @@ for (const [name, route] of shots) {
 }
 
 // Feature graphic: store/feature-bg.png (ચોપડી + માણસ) પર જમણી બાજુ નામ, એપના જ font માં
-const fg = await (await b.newContext({ viewport: { width: 1024, height: 500 } })).newPage();
+const fgCtx = await b.newContext({ viewport: { width: 1024, height: 500 }, serviceWorkers: 'block' });
+await serveLocal(fgCtx);
+const fg = await fgCtx.newPage();
 await fg.goto(U, { waitUntil: 'networkidle' });
 await fg.evaluate(() => {
   document.body.innerHTML = `

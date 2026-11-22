@@ -216,6 +216,12 @@ export function tile(name, tone, size = '') {
   return `<span class="tile tone-${tone} ${size}" aria-hidden="true"><svg viewBox="0 0 ${g[0]} 512" fill="currentColor"><path d="${g[1]}"/></svg></span>`;
 }
 
+/** ભરેલો આઇકન એકલો (થંબનેલમાં મોટો ઝાંખો આઇકન). */
+export function glyph(name, cls = '') {
+  const g = SOLID[name] || SOLID.clipboard;
+  return `<svg class="${cls}" viewBox="0 0 ${g[0]} 512" fill="currentColor" aria-hidden="true"><path d="${g[1]}"/></svg>`;
+}
+
 /** નીચેના ટેબના આઇકન (index.html) માટે. */
 export const linePath = (name) => LINE[name] || '';
 

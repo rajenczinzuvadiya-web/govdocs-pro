@@ -153,6 +153,7 @@ export function merge(feed, { schemes: S, documents: D, events: E }) {
       summary: str(raw.summary),
       categories: cats.length ? cats : strs(local?.categories),
       items,
+      ...(img(raw.image) ? { image: img(raw.image) } : {}),
       from: 'hub',
       verified: raw.verified === true,
     });

@@ -2,7 +2,7 @@ import { APP } from './config.js';
 import { CATEGORIES, CATEGORY_BY_ID, JATI, OCCUPATIONS, INCOME, DISTRICTS } from './options.js';
 import { store } from './store.js';
 import { matches, sortForProfile, isExpired, daysLeft, deadlineText, formatDate } from './match.js';
-import { icon, tile, linePath, socialIcon } from './icons.js';
+import { icon, tile, glyph, linePath, socialIcon } from './icons.js';
 import { INFO_PAGES, INFO_LINKS, INFO_UPDATED } from './pages.js';
 import { sendFeedback } from './feedback.js';
 
@@ -129,31 +129,96 @@ function itemTile(s, profile) {
   return catTile(s.categories.find((c) => cats.includes(c)) || s.categories[0]);
 }
 
-function itemCard(s, profile = state.profile) {
-  const meta = [];
-  if (!isDoc(s)) {
-    const d = deadlineText(s);
-    if (d.tone !== 'ok') meta.push(`<span class="pill-tag pt-${d.tone}">${icon('clock', 'ic-sm')}${esc(d.text)}</span>`);
+// ---------- થંબનેલ (યુઝર 22/11/26: YouTube ની જેમ મોટો ફોટો, જેથી લોકો ક્લિક કરે) ----------
+// Digital Hub નો ફોટો હોય તો ફોટો; ન હોય (કે ન ખૂલે) તો આપોઆપ થંબનેલ: રંગ + મોટો આઇકન + ટૂંકું નામ + ₹ રકમ.
+
+// ટૂંકું નામ: "(" કે " — " પહેલાંનો ભાગ ("વૃદ્ધ પેન્શન (નિરાધાર…)" → "વૃદ્ધ પેન્શન")
+const shortTitle = (t) => String(t || '').split(/\s*\(|\s+[—–-]\s+/)[0].trim() || String(t || '');
+// લાભની ₹ રકમ — ફક્ત "ચકાસો" ન લખ્યું હોય અને આખા લાભમાં એક જ રકમ હોય ત્યારે
+// (ઉંમર / પ્રકાર પ્રમાણે જુદી રકમ હોય તો એક રકમ મોટા અક્ષરે બતાવવી ગેરમાર્ગે દોરે, Play ની "ભ્રામક દાવા" નીતિ)
+function rupee(s) {
+  const b = String(s.benefit || '');
+  if (!b || b.includes('ચકાસો') || /\d\s*\/\s*\d/.test(b)) return '';
+  const all = b.match(/₹\s?\d+(?:,\d+)*(?:\s*(?:લાખ|કરોડ))?/g) || [];
+  return all.length === 1 ? all[0].replace(/\s+/g, ' ') : '';
+}
+// કાર્ડનો રંગ, આઇકન અને ઉપરનું નાનું લેબલ
+function itemLook(s, profile) {
+  if (isDoc(s)) {
+    const g = groupOf(s.group);
+    return g ? { ic: g.icon, tone: g.tone, label: g.label } : { ic: 'clipboard', tone: 'slate', label: 'દસ્તાવેજ' };
   }
-  if (store.isSaved(s.id)) meta.push(`<span class="pill-tag pt-saved">${icon('star', 'ic-sm')}સેવ</span>`);
-  return `
-    <li>
-      <a class="item" href="${itemHref(s)}">
-        ${isNew(s) ? `<span class="corner corner-new">${icon('sparkle', 'ic-sm')}નવું</span>` : ''}
-        ${itemTile(s, profile)}
-        <span class="item-body">
-          <span class="item-title">${esc(s.title)}</span>
-          <span class="item-line">${esc(s.summary)}</span>
-          ${meta.length ? `<span class="item-meta">${meta.join('')}</span>` : ''}
-        </span>
-        ${icon('chev', 'ic chev')}
-      </a>
-    </li>`;
+  if (isJob(s)) {
+    const t = JOB_TYPES[s.type];
+    return { ic: t.icon, tone: t.tone, label: t.label };
+  }
+  const cats = (profile && profile.categories) || [];
+  const c = CATEGORY_BY_ID[s.categories.find((x) => cats.includes(x)) || s.categories[0]];
+  return c ? { ic: c.icon, tone: c.tone, label: c.label } : { ic: 'clipboard', tone: 'slate', label: 'યોજના' };
+}
+const safeTone = (t) => (/^[a-z]+$/.test(t || '') ? t : 'blue');
+
+/**
+ * થંબનેલ (16:9). o = { img, tone, ic, emo, label, name, big, chip, badges, cls }
+ * ફોટો ઉપર રહે; ફોટો ન ખૂલે તો `img` નીકળી જાય ને નીચેનું આપોઆપ થંબનેલ દેખાય (setupThumbFallback).
+ */
+function thumb(o) {
+  const src = pic(o.img);
+  return `<span class="thumb tone-${safeTone(o.tone)}${o.cls ? ' ' + o.cls : ''}">
+    <span class="th-auto" aria-hidden="true">
+      ${o.emo ? `<span class="th-emo">${esc(o.emo)}</span>` : glyph(o.ic, 'th-ic')}
+      ${o.label ? `<span class="th-lab">${esc(o.label)}</span>` : ''}
+      ${o.big ? `<b class="th-big">${esc(o.big)}</b>` : ''}
+      ${o.name ? `<b class="th-name">${esc(o.name)}</b>` : ''}
+      ${o.chip ? `<span class="th-chip">${esc(o.chip)}</span>` : ''}
+    </span>
+    ${src ? `<img src="${esc(src)}" alt="" loading="lazy" decoding="async">` : ''}
+    ${o.badges ? `<span class="th-badges">${o.badges}</span>` : ''}
+  </span>`;
+}
+
+// યોજના / દસ્તાવેજ / ભરતીનું થંબનેલ. badges = true હોય તો "નવું", તારીખ, ★ સેવ ઉપર.
+function itemThumb(s, { badges = true, cls = '' } = {}) {
+  const look = itemLook(s, state.profile);
+  const b = [];
+  if (badges) {
+    if (isNew(s)) b.push(`<span class="thb thb-new">${icon('sparkle', 'ic-sm')}નવું</span>`);
+    if (!isDoc(s)) {
+      const d = deadlineText(s);
+      if (d.tone !== 'ok') b.push(`<span class="thb thb-${d.tone}">${icon('clock', 'ic-sm')}${esc(d.text)}</span>`);
+    }
+    if (store.isSaved(s.id)) b.push(`<span class="thb thb-saved">${icon('starfill', 'ic-sm')}સેવ</span>`);
+  }
+  let chip = '';
+  if (isDoc(s)) chip = /^મફત/.test(s.fee || '') && !String(s.fee).includes('ચકાસો') ? 'મફત' : '';
+  else if (!isJob(s)) chip = rupee(s);
+  return thumb({ img: s.image, tone: look.tone, ic: look.ic, label: look.label, name: shortTitle(s.title), chip, badges: b.join(''), cls });
+}
+
+// કાર્ડ: ઉપર થંબનેલ, નીચે નામ + એક લીટી + ›
+function tcard(href, th, title, line, extra = '') {
+  return `<li><a class="tcard" href="${href}">${th}<span class="tc-body"><span class="tc-text"><span class="tc-title">${esc(title)}</span>${line ? `<span class="tc-line">${esc(line)}</span>` : ''}${extra}</span>${icon('chev', 'ic-sm chev')}</span></a></li>`;
+}
+
+function itemCard(s) {
+  const line = isDoc(s) ? s.summary || (groupOf(s.group) || {}).label || '' : isJob(s) ? jobLine(s) : s.summary;
+  return tcard(itemHref(s), itemThumb(s), s.title, line);
+}
+
+function eventCard(e, mine) {
+  const n = store.getDocs('event:' + e.id).filter((i) => i < e.items.length).length;
+  const badges = mine ? `<span class="thb thb-mine">તમારા માટે</span>` : '';
+  return tcard(`#/event/${e.id}`, thumb({ img: e.image, tone: 'blue', emo: e.icon, name: e.title, badges }), e.title, n ? `${n} / ${e.items.length} થઈ ગયું` : `${e.items.length} કામ`);
+}
+
+function helpCard(h) {
+  const num = h.display || h.number;
+  return tcard(`tel:${esc(h.number)}`, thumb({ tone: h.tone || 'green', ic: 'phone', big: num, cls: 'th-num' }), h.title, '', `<span class="tc-call">${icon('phone', 'ic-sm')}ફોન કરો</span>`);
 }
 
 function itemList(items, empty) {
   if (!items.length) return `<div class="empty">${empty}</div>`;
-  return `<ul class="list">${items.map((s) => itemCard(s)).join('')}</ul>`;
+  return `<ul class="tgrid">${items.map((s) => itemCard(s)).join('')}</ul>`;
 }
 
 // ફૂટર: દરેક પેજના છેલ્લે (સ્ક્રીનના તળિયે), એક જ જગ્યાએથી. KruPa Digital Hub ના ફૂટર જેવું:
@@ -338,16 +403,11 @@ function homeResults() {
     ${itemList(hits, 'કંઈ મળ્યું નહીં. બીજો શબ્દ લખી જુઓ, જેમ કે "પેન્શન" કે "aavak".')}`;
 }
 
-// એક હાર: tile + નામ + નાની લીટી + › (KruPa ના હોમની યાદી જેવું)
-function rowItem(s) {
-  let tag = '';
-  if (!isDoc(s)) {
-    const d = deadlineText(s);
-    if (d.tone === 'urgent' || d.tone === 'soon') tag = `<span class="tag ${d.tone}">${esc(d.text)}</span>`;
-  }
-  if (!tag && isNew(s)) tag = '<span class="tag">નવું</span>';
-  const sub = isDoc(s) ? (groupOf(s.group) || {}).label || 'દસ્તાવેજ' : s.summary;
-  return `<li><a class="ri" href="${itemHref(s)}">${itemTile(s, state.profile)}<span><b>${esc(s.title)}</b><small>${esc(sub)}</small></span>${tag}${icon('chev', 'ic-sm chev')}</a></li>`;
+// હોમ: દરેક ભાગ = મથાળું + "બધી જુઓ" + થંબનેલની બે હાર (YouTube ના હોમ જેવું). વધારાનાં કાર્ડ CSS છુપાવે (`.cap`).
+// "વધુ બતાવો" બટન ફક્ત ત્યારે, જ્યારે એ સ્ક્રીનની બે હારમાં બધાં ન સમાય (n-le6 / n-le8 / n-le10).
+const fitClass = (n) => [6, 8, 10].filter((k) => n <= k).map((k) => 'n-le' + k).join(' ');
+function shelfHead(ic, title, href, label) {
+  return `<div class="shelf-head"><h2 class="box-title">${icon(ic)}${title}</h2>${href ? `<a class="shelf-link" href="${href}">${label} ${icon('chev', 'ic-sm')}</a>` : ''}</div>`;
 }
 
 function homeTabItems(p) {
@@ -367,59 +427,44 @@ function homeMineBox(p) {
     ['saved', 'star', `સેવ ${savedN}`],
   ];
   const items = homeTabItems(p);
-  const LIMIT = 8;
-  const shown = homeMore ? items : items.slice(0, LIMIT);
   const empty = {
     mine: 'તમારા વર્ગ માટે હજુ યોજના નથી. <a href="#/all">બધી યોજના જુઓ</a>',
     new: 'છેલ્લી મુલાકાત પછી કોઈ નવી યોજના નથી.',
     saved: 'હજુ કંઈ સેવ નથી. યોજના ખોલીને "સેવ કરો" દબાવો.',
   }[homeTab];
   return `
-    <section id="home-mine">
-      <h2 class="box-title">${icon('book')}તમારા માટેની યોજના</h2>
-      <div class="rbox">
-        <div class="rtabs" role="group" aria-label="યાદી પસંદ કરો">${tabs.map(([id, ic, label]) => `<button type="button" data-action="home-tab" data-tab="${id}" aria-pressed="${homeTab === id}">${icon(ic, 'ic-sm')}${label}</button>`).join('')}</div>
-        ${shown.length ? `<ul class="rlist">${shown.map(rowItem).join('')}</ul>` : `<p class="rempty">${empty}</p>`}
-        ${items.length > LIMIT && !homeMore ? `<button type="button" class="rmore" data-action="home-more">${icon('chevdown', 'ic-sm')}વધુ ${items.length - LIMIT} બતાવો</button>` : ''}
-      </div>
+    <section class="shelf" id="home-mine">
+      ${shelfHead('book', 'તમારા માટેની યોજના', homeTab === 'saved' ? '#/saved' : '#/all', homeTab === 'saved' ? 'બધું સેવ કરેલ' : 'બધી યોજના')}
+      <div class="rtabs" role="group" aria-label="યાદી પસંદ કરો">${tabs.map(([id, ic, label]) => `<button type="button" data-action="home-tab" data-tab="${id}" aria-pressed="${homeTab === id}">${icon(ic, 'ic-sm')}${label}</button>`).join('')}</div>
+      ${items.length ? `<ul class="tgrid${homeMore ? '' : ' cap'}">${items.map((s) => itemCard(s)).join('')}</ul>` : `<p class="rempty">${empty}</p>`}
+      ${items.length > 4 && !homeMore ? `<button type="button" class="rmore shelf-more ${fitClass(items.length)}" data-action="home-more">${icon('chevdown', 'ic-sm')}બધી ${items.length} બતાવો</button>` : ''}
     </section>`;
 }
 
 function homeEventsBox(p) {
   const isMine = (e) => e.categories.some((c) => p.categories.includes(c));
-  const evs = [...state.events].sort((a, b) => Number(isMine(b)) - Number(isMine(a))).slice(0, 6);
+  const evs = [...state.events].sort((a, b) => Number(isMine(b)) - Number(isMine(a))).slice(0, 12);
   return `
-    <section>
-      <h2 class="box-title">${icon('calendar')}જીવનના પ્રસંગ</h2>
-      <div class="rbox">
-        <ul class="rlist">${evs
-          .map((e) => {
-            const n = store.getDocs('event:' + e.id).filter((i) => i < e.items.length).length;
-            return `<li><a class="ri" href="#/event/${e.id}"><span class="emo" aria-hidden="true">${e.icon}</span><span><b>${esc(e.title)}</b><small>${n ? `${n} / ${e.items.length} થઈ ગયું` : `${e.items.length} કામ`}</small></span>${isMine(e) ? '<span class="tag">તમારા માટે</span>' : ''}${icon('chev', 'ic-sm chev')}</a></li>`;
-          })
-          .join('')}</ul>
-        <a class="rmore" href="#/events">બધા ${state.events.length} પ્રસંગ ${icon('arrow', 'ic-sm')}</a>
-      </div>
+    <section class="shelf">
+      ${shelfHead('calendar', 'જીવનના પ્રસંગ', '#/events', `બધા ${state.events.length} પ્રસંગ`)}
+      <ul class="tgrid compact cap">${evs.map((e) => eventCard(e, isMine(e))).join('')}</ul>
     </section>`;
 }
 
 function homeDocsBox() {
-  const docs = state.docs.slice(0, 6);
   return `
-    <section>
-      <h2 class="box-title">${icon('folder')}દસ્તાવેજ ગાઇડ</h2>
-      <div class="rbox">
-        <ul class="rlist">${docs.map(rowItem).join('')}</ul>
-        <a class="rmore" href="#/docs">બધા ${state.docs.length} દસ્તાવેજ ${icon('arrow', 'ic-sm')}</a>
-      </div>
-      <h2 class="box-title" style="margin-top:1.5rem">${icon('phone')}જરૂરી ફોન નંબર</h2>
-      <div class="rbox">
-        <ul class="rlist">${state.helplines
-          .slice(0, 3)
-          .map((h) => `<li><a class="ri" href="tel:${esc(h.number)}">${tile('phone', h.tone || 'green')}<span><b>${esc(h.display || h.number)}</b><small>${esc(h.title)}</small></span>${icon('chev', 'ic-sm chev')}</a></li>`)
-          .join('')}</ul>
-        <a class="rmore" href="#/help">બધા નંબર ${icon('arrow', 'ic-sm')}</a>
-      </div>
+    <section class="shelf">
+      ${shelfHead('folder', 'દસ્તાવેજ ગાઇડ', '#/docs', `બધા ${state.docs.length} દસ્તાવેજ`)}
+      <ul class="tgrid cap">${state.docs.slice(0, 10).map((s) => itemCard(s)).join('')}</ul>
+    </section>`;
+}
+
+function homeHelpBox() {
+  if (!state.helplines.length) return '';
+  return `
+    <section class="shelf">
+      ${shelfHead('phone', 'જરૂરી ફોન નંબર', '#/help', 'બધા નંબર')}
+      <ul class="tgrid compact cap">${state.helplines.slice(0, 12).map(helpCard).join('')}</ul>
     </section>`;
 }
 
@@ -452,11 +497,12 @@ function viewHome() {
         <span><b>${latest.type === 'chetavani' ? 'ચેતવણી' : 'આજે નવું'}:</b> ${esc(latest.title)} <span class="go">જુઓ →</span></span>
       </a>` : ''}
     <div id="home-results">${homeResults()}</div>
-    <div class="home-grid">
+    <div class="shelves">
       ${homeJobsBox()}
       ${homeMineBox(p)}
       ${homeEventsBox(p)}
       ${homeDocsBox()}
+      ${homeHelpBox()}
     </div>
     ${otherApps()}
     ${followUs()}`;
@@ -589,18 +635,7 @@ function viewEvents() {
   const sorted = [...state.events].sort((a, b) => Number(isMine(b)) - Number(isMine(a)));
   return `
     ${pageHead('જીવનના પ્રસંગ', 'પ્રસંગ પસંદ કરો: શું કઢાવવું અને કઈ સહાય મળી શકે તેનું લિસ્ટ.', 'calendar')}
-    <div class="event-grid">${sorted
-      .map((e) => {
-        const n = store.getDocs('event:' + e.id).filter((i) => i < e.items.length).length;
-        return `
-      <a class="event-card" href="#/event/${e.id}">
-        ${isMine(e) ? `<span class="corner">તમારા માટે</span>` : ''}
-        <span class="emo" aria-hidden="true">${e.icon}</span>
-        <b>${esc(e.title)}</b>
-        <span class="muted">${n ? `${n} / ${e.items.length} થઈ ગયું` : `${e.items.length} કામ`}</span>
-      </a>`;
-      })
-      .join('')}</div>`;
+    <ul class="tgrid compact">${sorted.map((e) => eventCard(e, isMine(e))).join('')}</ul>`;
 }
 
 function eventItemTitle(it) {
@@ -635,7 +670,7 @@ function viewEvent(id) {
   const helps = pairs.filter(([it]) => it.type === 'scheme');
   return `
     <nav class="crumb"><a class="back-btn" href="#/events" data-action="back" aria-label="પાછા">${icon('arrow')}</a><a href="#/events">જીવનના પ્રસંગ</a></nav>
-    <div class="detail-head"><span class="tile" style="background:var(--primary-soft);font-size:1.6rem">${e.icon}</span>
+    <div class="detail-head has-pic">${thumb({ img: e.image, tone: 'blue', emo: e.icon, name: e.title, cls: 'hero' })}
       <div><h1>${esc(e.title)}</h1><p class="lead">${esc(e.summary)}</p></div>
     </div>
     <p class="progress mt" id="event-progress">${eventProgress(e, ready)}</p>
@@ -731,8 +766,8 @@ function viewJob(id) {
   const isPdf = /\.pdf($|\?)/i.test(j.notification || '');
   return `
     <nav class="crumb"><a class="back-btn" href="#/jobs" data-action="back" aria-label="પાછા">${icon('arrow')}</a><a href="#/jobs">ભરતી</a>${j.type === 'bharti' ? '' : ` › <span>${esc(t.label)}</span>`}</nav>
-    <div class="detail-head${pic(j.image) ? ' has-pic' : ''}">
-      ${pic(j.image) ? `<img class="hero-pic" src="${esc(pic(j.image))}" alt="${esc(j.title)}" decoding="async">` : jobTile(j)}
+    <div class="detail-head has-pic">
+      ${itemThumb(j, { badges: false, cls: 'hero' })}
       <div><h1>${esc(j.title)}</h1><p class="lead">${esc(org.label)}</p></div>
     </div>
     ${d && d.tone !== 'ok' ? `<p class="progress mt">${icon('clock', 'ic-sm')} ${esc(d.text)}</p>` : ''}
@@ -751,15 +786,12 @@ function viewJob(id) {
 }
 
 function homeJobsBox() {
-  const jobs = visibleJobs().slice(0, 6);
+  const jobs = visibleJobs();
   if (!jobs.length) return '';
   return `
-    <section>
-      <h2 class="box-title">${icon('briefcase')}નવી ભરતી</h2>
-      <div class="rbox">
-        <ul class="rlist">${jobs.map(rowItem).join('')}</ul>
-        <a class="rmore" href="#/jobs">બધી ${visibleJobs().length} ભરતી ${icon('arrow', 'ic-sm')}</a>
-      </div>
+    <section class="shelf">
+      ${shelfHead('briefcase', 'નવી ભરતી', '#/jobs', `બધી ${jobs.length} ભરતી`)}
+      <ul class="tgrid cap">${jobs.slice(0, 10).map((j) => itemCard(j)).join('')}</ul>
     </section>`;
 }
 
@@ -857,8 +889,8 @@ function viewItem(id) {
       <a class="back-btn" href="${k.listHref}" data-action="back" aria-label="પાછા">${icon('arrow')}</a>
       <a href="${k.listHref}">${k.list}</a>${isDoc(s) && groupOf(s.group) ? ` › <span>${esc(groupOf(s.group).label)}</span>` : ''}
     </nav>
-    <div class="detail-head${pic(s.image) ? ' has-pic' : ''}">
-      ${pic(s.image) ? `<img class="hero-pic" src="${esc(pic(s.image))}" alt="${esc(s.title)}" decoding="async">` : itemTile(s, state.profile)}
+    <div class="detail-head has-pic">
+      ${itemThumb(s, { badges: false, cls: 'hero' })}
       <div>
         <h1>${esc(s.title)}</h1>
         <p class="lead">${esc(s.summary)}</p>
@@ -928,18 +960,7 @@ function viewToday() {
 function viewHelp() {
   return `
     ${pageHead('જરૂરી ફોન નંબર', '', 'phone', '#/')}
-    <div class="help-list">${
-      state.helplines
-        .map(
-          (h) => `
-      <a class="help-row" href="tel:${esc(h.number)}">
-        <span class="tile tone-${esc(h.tone || 'blue')}">${icon('phone')}</span>
-        <div><div class="num">${esc(h.display || h.number)}</div><div class="t">${esc(h.title)}</div></div>
-        <span class="call">${icon('phone', 'ic-sm')}ફોન</span>
-      </a>`
-        )
-        .join('') || '<div class="empty">નંબર લોડ ન થયા.</div>'
-    }</div>`;
+    ${state.helplines.length ? `<ul class="tgrid compact">${state.helplines.map(helpCard).join('')}</ul>` : '<div class="empty">નંબર લોડ ન થયા.</div>'}`;
 }
 
 function viewProfile() {
@@ -1022,7 +1043,8 @@ function viewContact() {
   ].filter(Boolean);
   return `
     ${pageHead('સંપર્ક અને સૂચન', 'ભૂલ દેખાય કે સૂચન હોય તો જણાવો.', 'message', '#/')}
-    <div class="help-list">${rows.join('')}</div>`;
+    <div class="help-list">${rows.join('')}</div>
+    <p class="small muted mt">"એપમાં જ લખો" થી ફક્ત તમે લખેલું લખાણ જાય છે, નામ કે મોબાઇલ નંબર નહીં. વિગત: <a href="#/privacy">ગોપનીયતા નીતિ</a></p>`;
 }
 
 // ---------- ખોખું: બાજુનું મેનુ, નીચેનાં ટેબ, "વધુ", 👤 મેનુ, ઝૂમ, દેખાવ, શોધ (KruPa Digital Hub જેવું) ----------
@@ -1490,7 +1512,7 @@ function openReport(title) {
         <button type="button" data-kind="suggestion" aria-pressed="false">${icon('bulb', 'ic-sm')}સૂચન</button>
       </div>
       <label class="field"><span>શું લખવું છે?</span><textarea name="message" rows="4" maxlength="1000" required minlength="5" placeholder="દા.ત. ફી બદલાઈ છે, લિંક ખૂલતી નથી"></textarea></label>
-      <p class="small muted">નામ કે મોબાઇલ નંબર જતો નથી. જવાબ જોઈએ તો વોટ્સએપ પર લખો.</p>
+      <p class="small muted">ફક્ત તમે લખેલું લખાણ જાય છે, નામ કે મોબાઇલ નંબર નહીં. આધાર કે બેંક નંબર ન લખો. જવાબ જોઈએ તો વોટ્સએપ પર લખો. <a href="#/privacy">ગોપનીયતા નીતિ</a></p>
       <p class="small report-msg" role="status" hidden></p>
       <button class="btn btn-primary btn-block btn-lg" type="submit">${icon('published')}મોકલો</button>
     </form>`);
@@ -1685,6 +1707,16 @@ $view.addEventListener('click', async (e) => {
     render();
   }
 });
+
+// થંબનેલનો ફોટો ન ખૂલે (ખોટી લિંક, નેટ નથી) તો ફોટો કાઢો: નીચેનું આપોઆપ થંબનેલ દેખાય.
+document.addEventListener(
+  'error',
+  (e) => {
+    const t = e.target;
+    if (t instanceof HTMLImageElement && t.parentElement && t.parentElement.classList.contains('thumb')) t.remove();
+  },
+  true
+);
 
 window.addEventListener('hashchange', () => {
   inAppNavigations++;
