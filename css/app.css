@@ -287,9 +287,6 @@ button { font: inherit; color: inherit; }
 }
 
 /* સ્વાગત વખતે એપનું ખોખું છુપાવવું (KruPa લોગિન પેજ જેવું) */
-body.bare .side, body.bare .topbar, body.bare .tabs, body.bare .fab, body.bare .totop, body.bare .foot { display: none !important; }
-body.bare .main-col { padding-bottom: 0; }
-body.bare .wrap { max-width: none; padding: 0; }
 
 /* ---------- પેજનું મથાળું ---------- */
 .page-head { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; }
@@ -743,53 +740,6 @@ button.help-row { width: 100%; font: inherit; color: inherit; text-align: left; 
 
 .ic.filled path { fill: currentColor; }
 
-/* ---------- સ્વાગત (પહેલી વાર): KruPa લોગિન પેજ જેવું — ડાબે વાદળી ભાગ, જમણે પગલાં ---------- */
-.wl { display: grid; grid-template-columns: 1fr; }
-.wl-brand {
-  position: relative; overflow: hidden; color: #fff;
-  background: radial-gradient(60rem 30rem at 85% 20%, rgba(108, 184, 255, .22), transparent 60%),
-              linear-gradient(160deg, var(--sidebar), var(--sidebar-2));
-  padding: 1.25rem 1rem 1.5rem;
-}
-.wl-logo { display: flex; align-items: center; gap: .75rem; }
-.wl-logo img { width: 3rem; height: 3rem; border-radius: .8rem; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
-.wl-logo b { font-size: 1.75rem; font-weight: 700; line-height: 1.1; }
-.wl-brand .about { margin-top: .6rem; font-size: 1rem; color: rgba(255,255,255,.85); line-height: 1.5; }
-.wl-words { display: none; }
-.wl-feats { display: none; }
-.wl-main { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 1.25rem 1rem 2rem; }
-.wl-in { width: 100%; max-width: 40rem; margin: 0 auto; }
-.wl-in h1 { font-size: 1.5rem; font-weight: 800; line-height: 1.3; color: var(--primary); }
-.wl-in .lead { margin-top: .4rem; color: var(--muted); font-size: 1rem; }
-@media (min-width: 1024px) {
-  .wl { grid-template-columns: 52% 1fr; min-height: 100vh; min-height: 100dvh; } /* બધી ઊંચાઈ (ઉપર બાર નથી) */
-  .wl-brand { display: flex; flex-direction: column; justify-content: center; padding: 3rem 3.5rem; }
-  .wl-brand > div { max-width: 42rem; }
-  .wl-logo img { width: 4.5rem; height: 4.5rem; border-radius: 1.1rem; }
-  .wl-logo b { font-size: 3rem; }
-  .wl-brand .about { font-size: 1.15rem; margin-top: 1rem; }
-  .wl-words { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.25rem; }
-  .wl-words span { padding: .2rem .8rem; border-radius: 999px; background: rgba(255, 194, 26, .16); color: #ffc21a; font-weight: 700; font-size: .95rem; }
-  .wl-feats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin-top: 2rem; list-style: none; padding: 0; }
-  .wl-feats li {
-    display: flex; align-items: center; gap: .8rem; padding: .9rem 1rem; border-radius: 1rem;
-    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
-  }
-  .wl-feats b { display: block; line-height: 1.3; }
-  .wl-feats small { display: block; color: rgba(255,255,255,.72); font-size: .85rem; line-height: 1.4; }
-  .wl-main { padding: 3rem 3.5rem; overflow-y: auto; }
-  .wl-in h1 { font-size: 2rem; }
-  .phone-only { display: none !important; }
-}
-.steps { display: flex; align-items: center; gap: .4rem; margin: 0 0 1.25rem; }
-.steps span { flex: 1; max-width: 4rem; height: .4rem; border-radius: 999px; background: var(--line); }
-.steps span.on { background: var(--primary); }
-.steps b { margin-left: auto; font-size: .9rem; color: var(--muted); }
-.feature-grid { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: .6rem; }
-@media (min-width: 720px) { .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.feature-grid li { display: flex; align-items: center; gap: .8rem; padding: .85rem 1rem; border-radius: 1rem; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
-.feature-grid b { display: block; line-height: 1.3; }
-.feature-grid small { display: block; color: var(--muted); font-size: .9rem; line-height: 1.4; }
 .btn-lg { min-height: 3.25rem; font-size: 1.1rem; font-weight: 700; }
 .row-split { display: flex; justify-content: space-between; align-items: center; gap: .75rem; }
 .row-split .btn-primary { flex: 1; max-width: 22rem; }
@@ -826,8 +776,7 @@ button.help-row { width: 100%; font: inherit; color: inherit; text-align: left; 
 .flip { transform: rotate(180deg); }
 .gresults .tile.sm { width: 2rem; height: 2rem; border-radius: .5rem; }
 .gresults .tile.sm svg { width: .95rem; height: .95rem; }
-@media (min-width: 1024px) { .wl-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (min-width: 1440px) { .wl-choices { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
 fieldset.card > legend { float: left; width: 100%; margin-bottom: .75rem; }
 fieldset.card > legend + * { clear: both; }
 
@@ -876,3 +825,74 @@ fieldset.card > legend + * { clear: both; }
 }
 .step-pic { display: block; width: 100%; max-width: 28rem; margin-top: .6rem; border: 1px solid var(--line); border-radius: .75rem; }
 .news-pic { display: block; width: 100%; max-height: 18rem; object-fit: cover; margin-bottom: .75rem; border-radius: .75rem; }
+
+/* ---------- હોમ (24/11/26): "શું જાણવું છે?" 4 ભાગ + "તમે કોણ છો?" વર્ગ ---------- */
+.scard-in:has(.qgrid) { max-width: none; }
+.scard-in:has(.qgrid) h2, .scard-in:has(.qgrid) .search-big { max-width: 42rem; margin-left: auto; margin-right: auto; }
+.qgrid { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+@media (min-width: 900px) { .qgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.qtile, .rtile { display: flex; align-items: center; gap: .7rem; height: 100%; padding: .75rem .8rem; border-radius: .9rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-decoration: none; box-shadow: var(--shadow); min-width: 0; }
+.qtile:hover, .rtile:hover { border-color: var(--primary-ring); }
+.qtile > span:not(.tile), .rtile > span:not(.tile) { display: grid; min-width: 0; flex: 1; line-height: 1.3; }
+.qtile b, .rtile b { font-weight: 700; overflow-wrap: anywhere; }
+.qtile small, .rtile small { color: var(--muted); font-size: .85rem; }
+.qtile .chev { flex: none; color: var(--muted); }
+@media (max-width: 419px) { .qtile { flex-direction: column; align-items: flex-start; } .qtile .chev { display: none; } }
+.who { margin-top: 1.5rem; }
+.rgrid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
+@media (min-width: 720px) { .rgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .rgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1600px) { .rgrid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.qtile .tile, .rtile .tile { flex: none; width: 2.5rem; height: 2.5rem; }
+.rtile.on { border-color: var(--primary); background: var(--primary-soft); }
+.who + .oapps, .who + .follow { margin-top: 1.5rem; }
+
+/* ---------- ફરજિયાત દસ્તાવેજ ---------- */
+.must { list-style: none; padding: 0; margin: .6rem 0 0; display: grid; gap: .5rem; }
+@media (min-width: 1024px) { .must { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.must li { display: flex; align-items: center; gap: .6rem; padding: .55rem .75rem; border-radius: .8rem; border: 1px solid var(--line); background: var(--surface); min-width: 0; }
+.must li.done { background: var(--ok-soft); border-color: rgba(27, 122, 75, .35); }
+.must a { display: grid; flex: 1; min-width: 0; color: var(--ink); text-decoration: none; line-height: 1.35; }
+.must a small { color: var(--muted); font-size: .875rem; }
+.must a:hover b { color: var(--primary); text-decoration: underline; }
+.must .chev { flex: none; color: var(--muted); }
+.must-tick { flex: none; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; margin: -.3rem; border: 0; background: none; cursor: pointer; }
+.must-tick .box { display: grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: .35rem; border: 2px solid var(--primary); color: #fff; font-weight: 800; }
+.must li.done .must-tick .box { background: var(--ok); border-color: var(--ok); }
+.must li.done .must-tick .box::after { content: "✓"; }
+.parts-main .part .must { margin-top: 0; }
+
+/* ---------- સંપર્ક અને સૂચન ફોર્મ ---------- */
+.contact-grid { display: grid; gap: 1rem; margin-top: 1rem; align-items: start; }
+@media (min-width: 1024px) { .contact-grid { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); } }
+.help-list.one { grid-template-columns: 1fr; }
+.subject { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; padding: .5rem .75rem; border-radius: .6rem; background: var(--primary-soft); color: var(--ink); }
+.seg label { position: relative; display: block; }
+.seg label input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg label span { display: inline-flex; align-items: center; gap: .3rem; min-height: 2.5rem; padding: 0 .75rem; border-radius: .45rem; font-weight: 600; font-size: .9rem; }
+.seg label input:checked + span { background: var(--primary); color: var(--on-primary); }
+.seg label input:focus-visible + span { outline: 2px solid var(--primary); outline-offset: 2px; }
+.docs-card .checks { margin-top: .5rem; }
+
+/* ---------- ઉપર: ઇમરજન્સી નંબર ---------- */
+.sos-btn { color: var(--danger); }
+.sos-label { display: none; }
+@media (min-width: 1024px) {
+  .sos-btn { width: auto; display: inline-flex; gap: .4rem; padding: 0 .8rem; border: 1px solid rgba(184, 65, 47, .35); background: var(--danger-soft); font-weight: 700; font-size: .9rem; }
+  .sos-btn:hover { background: var(--danger-soft); color: var(--danger); filter: brightness(.97); }
+  .sos-label { display: inline; }
+}
+
+/* ફોન: "અમારી બીજી એપ" નાનાં, આડાં કાર્ડ (યુઝર 24/11/26: હોમ બહુ લાંબું) */
+@media (max-width: 639px) {
+  .oapps { margin-top: 1.5rem; padding-top: 1.25rem; }
+  .oapps-grid { margin-top: .75rem; gap: .6rem; }
+  .oapp { grid-template-columns: auto minmax(0, 1fr); justify-items: start; align-items: center; column-gap: .8rem; row-gap: .1rem; padding: .8rem 1rem; border-radius: 1rem; text-align: left; }
+  .oapp img { grid-row: span 3; width: 48px; height: 48px; border-radius: .75rem; }
+  .oapp b { font-size: 1.05rem; }
+  .oapp-head { display: none; }
+  .oapp small { font-size: .85rem; line-height: 1.35; }
+  .oapp-go { min-height: 0; margin: 0; padding: 0; background: none; color: var(--primary); }
+  .follow { margin-top: 1.5rem; padding-top: 1.25rem; }
+  .follow-name { font-size: 1.2rem; }
+}
