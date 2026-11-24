@@ -11,8 +11,6 @@ const state = {
   docs: [],
   docGroups: [],
   events: [],
-  jobs: [],
-  jobOrgs: [],
   updates: [],
   helplines: [],
   profile: store.getProfile(),
@@ -44,11 +42,10 @@ function toast(msg) {
 const todayISO = () => new Date().toISOString().slice(0, 10);
 const visible = (list) => list.filter((s) => !isExpired(s));
 const allItems = () => [...state.schemes, ...state.docs];
-const findItem = (id) => state.schemes.find((s) => s.id === id) || state.docs.find((s) => s.id === id) || state.jobs.find((s) => s.id === id);
+const findItem = (id) => state.schemes.find((s) => s.id === id) || state.docs.find((s) => s.id === id);
 const isDoc = (s) => s.kind === 'doc';
 const isNew = (s) => !state.seen.has(s.id);
-const isJob = (s) => s.kind === 'job';
-const itemHref = (s) => `#/${isJob(s) ? 'job' : 'scheme'}/${encodeURIComponent(s.id)}`;
+const itemHref = (s) => `#/scheme/${encodeURIComponent(s.id)}`;
 const appUrl = () => location.origin + location.pathname;
 
 function markSeen(id) {
@@ -58,6 +55,20 @@ function markSeen(id) {
 }
 
 // ---------- ડેટા ----------
+
+// "⚠️ ચકાસો" ફક્ત એડમિન માટેનું નિશાન (Digital Hub ગાઇડ મેનેજ): લોકોને ન દેખાય (યુઝર 24/11/26).
+// લખાણમાંથી કાઢી નાખે; ફક્ત "⚠️ ચકાસો" હોય તે ખાનું ખાલી = દેખાય નહીં. રકમ / "મફત" નું નાનું લેબલ
+// ન ચકાસાયેલી વિગત પરથી ન બને, એટલે એ જાણ `unsure` માં રહે.
+const UNSURE_RE = /\s*⚠\uFE0F?(?:\s*ચકાસો)?/gu;
+const calm = (v) =>
+  typeof v === 'string'
+    ? v.replace(UNSURE_RE, '').trim()
+    : Array.isArray(v)
+      ? v.map(calm).filter((x) => x !== '')
+      : v && typeof v === 'object'
+        ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, calm(x)]))
+        : v;
+const calmCard = (s) => ({ ...calm(s), unsure: { benefit: /⚠/.test(s.benefit || ''), fee: /⚠/.test(s.fee || '') } });
 
 async function loadData() {
   const get = (f) => fetch('data/' + f, { cache: 'no-cache' }).then((r) => r.json());
@@ -70,20 +81,16 @@ async function loadData() {
     ]);
     const es = await get('essentials.json').catch(() => ({}));
     state.essentials = { all: es.all || [], roles: es.roles || {} };
-    // ભરતી હાલ બંધ (APP.jobs = false): ડેટા લાવવો જ નહીં, એટલે ટેબ, હોમ, શોધ, સેવ — ક્યાંય ન દેખાય.
-    const jb = APP.jobs ? await get('jobs.json').catch(() => ({})) : {};
-    state.jobOrgs = jb.orgs || [];
-    state.jobs = (jb.jobs || []).map((j) => ({ ...j, kind: 'job', summary: jobLine(j) }));
-    state.schemes = s.schemes || [];
+    state.schemes = (s.schemes || []).map(calmCard);
     state.updates = u.updates || [];
-    state.docs = d.documents || [];
+    state.docs = (d.documents || []).map(calmCard);
     state.docGroups = d.groups || [];
-    state.events = ev.events || [];
+    state.events = (ev.events || []).map(calm);
     state.dataUpdatedOn = s.updatedOn || null;
     state.error = false;
     // પહેલી વાર: હાલનું બધું "જોયેલું", પછી આવે તે જ "નવું"
     if (store.getSeen() === null) {
-      state.seen = new Set([...allItems(), ...state.jobs].map((x) => x.id));
+      state.seen = new Set(allItems().map((x) => x.id));
       store.setSeen([...state.seen]);
     }
   } catch {
@@ -125,7 +132,6 @@ const pic = (u) => (typeof u === 'string' && /^https:\/\/[^\s"'<>]+$/.test(u) ? 
 function itemTile(s, profile) {
   if (pic(s.image)) return `<span class="tile pic" aria-hidden="true"><img src="${esc(pic(s.image))}" alt="" loading="lazy" decoding="async"></span>`;
   if (isDoc(s)) return groupTile(s.group);
-  if (isJob(s)) return jobTile(s);
   const cats = (profile && profile.categories) || [];
   return catTile(s.categories.find((c) => cats.includes(c)) || s.categories[0]);
 }
@@ -135,11 +141,11 @@ function itemTile(s, profile) {
 
 // ટૂંકું નામ: "(" કે " — " પહેલાંનો ભાગ ("વૃદ્ધ પેન્શન (નિરાધાર…)" → "વૃદ્ધ પેન્શન")
 const shortTitle = (t) => String(t || '').split(/\s*\(|\s+[—–-]\s+/)[0].trim() || String(t || '');
-// લાભની ₹ રકમ — ફક્ત "ચકાસો" ન લખ્યું હોય અને આખા લાભમાં એક જ રકમ હોય ત્યારે
+// લાભની ₹ રકમ — ફક્ત લાભ ચકાસાયેલો હોય (calmCard) અને આખા લાભમાં એક જ રકમ હોય ત્યારે
 // (ઉંમર / પ્રકાર પ્રમાણે જુદી રકમ હોય તો એક રકમ મોટા અક્ષરે બતાવવી ગેરમાર્ગે દોરે, Play ની "ભ્રામક દાવા" નીતિ)
 function rupee(s) {
   const b = String(s.benefit || '');
-  if (!b || b.includes('ચકાસો') || /\d\s*\/\s*\d/.test(b)) return '';
+  if (!b || (s.unsure && s.unsure.benefit) || /\d\s*\/\s*\d/.test(b)) return '';
   const all = b.match(/₹\s?\d+(?:,\d+)*(?:\s*(?:લાખ|કરોડ))?/g) || [];
   return all.length === 1 ? all[0].replace(/\s+/g, ' ') : '';
 }
@@ -148,10 +154,6 @@ function itemLook(s, profile) {
   if (isDoc(s)) {
     const g = groupOf(s.group);
     return g ? { ic: g.icon, tone: g.tone, label: g.label } : { ic: 'clipboard', tone: 'slate', label: 'દસ્તાવેજ' };
-  }
-  if (isJob(s)) {
-    const t = JOB_TYPES[s.type];
-    return { ic: t.icon, tone: t.tone, label: t.label };
   }
   const cats = (profile && profile.categories) || [];
   const c = CATEGORY_BY_ID[s.categories.find((x) => cats.includes(x)) || s.categories[0]];
@@ -178,7 +180,7 @@ function thumb(o) {
   </span>`;
 }
 
-// યોજના / દસ્તાવેજ / ભરતીનું થંબનેલ. badges = true હોય તો "નવું", તારીખ, ★ સેવ ઉપર.
+// યોજના / દસ્તાવેજનું થંબનેલ. badges = true હોય તો "નવું", તારીખ, ★ સેવ ઉપર.
 function itemThumb(s, { badges = true, cls = '' } = {}) {
   const look = itemLook(s, state.profile);
   const b = [];
@@ -191,8 +193,8 @@ function itemThumb(s, { badges = true, cls = '' } = {}) {
     if (store.isSaved(s.id)) b.push(`<span class="thb thb-saved">${icon('starfill', 'ic-sm')}સેવ</span>`);
   }
   let chip = '';
-  if (isDoc(s)) chip = /^મફત/.test(s.fee || '') && !String(s.fee).includes('ચકાસો') ? 'મફત' : '';
-  else if (!isJob(s)) chip = rupee(s);
+  if (isDoc(s)) chip = /^મફત/.test(s.fee || '') && !(s.unsure && s.unsure.fee) ? 'મફત' : '';
+  else chip = rupee(s);
   return thumb({ img: s.image, tone: look.tone, ic: look.ic, label: look.label, name: shortTitle(s.title), chip, badges: b.join(''), cls });
 }
 
@@ -202,7 +204,7 @@ function tcard(href, th, title, line, extra = '') {
 }
 
 function itemCard(s) {
-  const line = isDoc(s) ? s.summary || (groupOf(s.group) || {}).label || '' : isJob(s) ? jobLine(s) : s.summary;
+  const line = isDoc(s) ? s.summary || (groupOf(s.group) || {}).label || '' : s.summary;
   return tcard(itemHref(s), itemThumb(s), s.title, line);
 }
 
@@ -373,7 +375,6 @@ function viewHome() {
         <span><b>${latest.type === 'chetavani' ? 'ચેતવણી' : 'આજે નવું'}:</b> ${esc(latest.title)} <span class="go">જુઓ →</span></span>
       </a>` : ''}
     <div id="home-results">${homeResults()}</div>
-    ${homeJobsBox()}
     ${homeWho(p)}
     ${otherApps()}
     ${followUs()}`;
@@ -495,7 +496,7 @@ function followUs() {
 
 // ---------- યાદી: યોજના અને દસ્તાવેજ ----------
 
-const filters = { all: { q: '', cat: '' }, docs: { q: '', cat: '' }, jobs: { q: '', cat: '' } };
+const filters = { all: { q: '', cat: '' }, docs: { q: '', cat: '' } };
 
 function searchText(s) {
   const cats = (s.categories || []).map((c) => (CATEGORY_BY_ID[c] ? CATEGORY_BY_ID[c].label : ''));
@@ -508,7 +509,6 @@ function searchText(s) {
 function filtered(scope) {
   const f = filters[scope];
   const q = f.q.trim().toLowerCase();
-  if (scope === 'jobs') return visibleJobs().filter((j) => (!f.cat || j.type === f.cat) && (!q || jobSearchText(j).includes(q)));
   const items = scope === 'docs' ? state.docs : visible(state.schemes);
   return items.filter((s) => {
     if (f.cat && !(scope === 'docs' ? s.group === f.cat : s.categories.includes(f.cat))) return false;
@@ -528,7 +528,7 @@ function listBody(scope) {
   return itemList(items, `કંઈ મળ્યું નહીં. <button type="button" class="btn-link" data-action="clear-filter" data-scope="${scope}" style="border:0;background:none;cursor:pointer;font:inherit">બધું બતાવો</button>`);
 }
 
-const countLabel = (scope) => `કુલ ${filtered(scope).length} ${{ docs: 'દસ્તાવેજ', jobs: '' }[scope] ?? 'યોજના'}`.trim();
+const countLabel = (scope) => `કુલ ${filtered(scope).length} ${{ docs: 'દસ્તાવેજ' }[scope] ?? 'યોજના'}`;
 
 // "કોના માટે: બધા ▾" — એપનું પોતાનું નાનું લિસ્ટ, ✓ પસંદ કરેલા પર (KruPa BoxSelect #352)
 function filterSelect(scope, label, chips, counts) {
@@ -550,7 +550,7 @@ function filterSelect(scope, label, chips, counts) {
 function listPage(scope, title, sub, ic, placeholder, chips, label) {
   const f = filters[scope];
   const counts = (id) =>
-    (scope === 'jobs' ? visibleJobs().filter((j) => j.type === id) : scope === 'docs' ? state.docs.filter((s) => s.group === id) : visible(state.schemes).filter((s) => s.categories.includes(id))).length;
+    (scope === 'docs' ? state.docs.filter((s) => s.group === id) : visible(state.schemes).filter((s) => s.categories.includes(id))).length;
   return `
     ${pageHead(title, sub, ic, '#/')}
     <div class="fbar">
@@ -630,117 +630,10 @@ function viewEvent(id) {
     <p class="mt"><a class="btn" href="#/contact?event=${encodeURIComponent(e.id)}">${icon('message')}ભૂલ / સૂચન જણાવો</a></p>`;
 }
 
-// ---------- ભરતી (નવી ભરતી, કોલ લેટર, આન્સર કી, પરિણામ) ----------
-// ડેટા: data/jobs.json. ફક્ત સત્તાવાર સાઇટની લિંક; લખાણ આપણું.
-
-const JOB_TYPES = {
-  bharti: { label: 'ભરતી', icon: 'briefcase', tone: 'blue' },
-  callletter: { label: 'કોલ લેટર', icon: 'idcard', tone: 'teal' },
-  answerkey: { label: 'આન્સર કી', icon: 'clipboard', tone: 'amber' },
-  result: { label: 'પરિણામ', icon: 'certificate', tone: 'green' },
-};
-const JOB_CHIPS = Object.entries(JOB_TYPES).map(([id, t]) => ({ id, label: t.label }));
-// કોલ લેટર, આન્સર કી, પરિણામ કેટલા દિવસ દેખાય
-const JOB_SHOW_DAYS = 45;
-
-const jobOrg = (j) => state.jobOrgs.find((o) => o.id === j.org) || { label: j.org, short: j.org };
-const jobTile = (j, size = '') => tile(JOB_TYPES[j.type].icon, JOB_TYPES[j.type].tone, size);
-
-function jobLine(j) {
-  const org = jobOrg(j).short || jobOrg(j).label;
-  if (j.type === 'bharti') return [org, j.posts ? `${j.posts} જગ્યા` : '', j.lastDate ? `છેલ્લી તારીખ ${formatDate(j.lastDate)}` : ''].filter(Boolean).join(' · ');
-  return [org, JOB_TYPES[j.type].label, formatDate(j.date)].filter(Boolean).join(' · ');
-}
-
-function jobSearchText(j) {
-  const o = jobOrg(j);
-  return [j.title, j.advtNo, j.qualification, o.label, o.short, JOB_TYPES[j.type].label].join(' ').toLowerCase();
-}
-
-function visibleJobs() {
-  const since = new Date(Date.now() - JOB_SHOW_DAYS * 864e5).toISOString().slice(0, 10);
-  return state.jobs
-    .filter((j) => (j.type === 'bharti' ? !isExpired(j) : (j.date || '') >= since))
-    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
-}
-
-function viewJobs(params) {
-  if (params && params.get('t') !== null) filters.jobs.cat = params.get('t');
-  if (!state.jobs.length) {
-    return `${pageHead('ભરતી', 'સરકારી ભરતી, કોલ લેટર, આન્સર કી અને પરિણામ', 'briefcase', '#/')}
-      <div class="empty">નવી ભરતી ટૂંક સમયમાં અહીં આવશે.</div>`;
-  }
-  return listPage('jobs', 'ભરતી', 'સરકારી ભરતી, કોલ લેટર, આન્સર કી અને પરિણામ', 'briefcase', 'ભરતી શોધો… (જેમ કે ક્લાર્ક, પોલીસ)', JOB_CHIPS, 'પ્રકાર');
-}
-
 // વોટ્સએપ સંદેશ (યુઝર 20/11/26: ગોઠવણી બરાબર ન હતી): એક ખાનું એક લીટી, ખાલી ખાનું નહીં,
 // એપની લિંક પહેલી (વોટ્સએપ પહેલી લિંકનું કાર્ડ બતાવે), સત્તાવાર લિંક છેલ્લે.
 const waLine = (t) => String(t || '').replace(/\s+/g, ' ').replace(/\*/g, '').trim();
 const waJoin = (blocks) => blocks.filter((b) => b && b.length).map((b) => b.join('\n')).join('\n\n');
-
-function jobShareText(j) {
-  const facts = [
-    j.posts && `👥 જગ્યા: ${waLine(j.posts)}`,
-    j.qualification && `🎓 લાયકાત: ${waLine(j.qualification)}`,
-    j.lastDate && `📅 છેલ્લી તારીખ: ${formatDate(j.lastDate)}`,
-  ].filter(Boolean);
-  const official = j.applyLink || j.notification;
-  return waJoin([
-    [`*${waLine(j.title)}*`, waLine(jobOrg(j).label)].filter(Boolean),
-    facts,
-    ['📱 પૂરી વિગત ગુજરાતીમાં:', `${appUrl()}${itemHref(j)}`],
-    official ? ['🔗 સત્તાવાર સાઇટ:', official] : null,
-  ]);
-}
-
-function viewJob(id) {
-  const j = state.jobs.find((x) => x.id === id);
-  if (!j) return `<div class="empty">આ ભરતી મળી નહીં. <a href="#/jobs">બધી ભરતી</a></div>`;
-  markSeen(j.id);
-  const t = JOB_TYPES[j.type];
-  const org = jobOrg(j);
-  const saved = store.isSaved(j.id);
-  const wa = 'https://wa.me/?text=' + encodeURIComponent(jobShareText(j));
-  const d = j.lastDate ? deadlineText(j) : null;
-  const facts = [
-    ['users', 'જગ્યા', j.posts ? String(j.posts) : ''],
-    ['forms', 'જાહેરાત ક્રમાંક', j.advtNo],
-    ['calendar', 'ફોર્મ શરૂ', j.startDate ? formatDate(j.startDate) : ''],
-    ['clock', 'છેલ્લી તારીખ', j.lastDate ? formatDate(j.lastDate) : ''],
-    ['banknote', 'ફી', j.fee],
-    ['hourglass', 'ઉંમર', j.age],
-  ].filter(([, , v]) => v);
-  const isPdf = /\.pdf($|\?)/i.test(j.notification || '');
-  return `
-    <nav class="crumb"><a class="back-btn" href="#/jobs" data-action="back" aria-label="પાછા">${icon('arrow')}</a><a href="#/jobs">ભરતી</a>${j.type === 'bharti' ? '' : ` › <span>${esc(t.label)}</span>`}</nav>
-    <div class="detail-head has-pic">
-      ${itemThumb(j, { badges: false, cls: 'hero' })}
-      <div><h1>${esc(j.title)}</h1><p class="lead">${esc(org.label)}</p></div>
-    </div>
-    ${d && d.tone !== 'ok' ? `<p class="progress mt">${icon('clock', 'ic-sm')} ${esc(d.text)}</p>` : ''}
-    <div class="actions">
-      ${j.applyLink ? `<a class="btn btn-kesari" href="${esc(j.applyLink)}" target="_blank" rel="noopener">${icon('external')}${j.type === 'bharti' ? 'સત્તાવાર સાઇટ પર અરજી' : `${esc(t.label)} જુઓ`}</a>` : ''}
-      ${j.notification ? `<a class="btn" href="${esc(j.notification)}" target="_blank" rel="noopener">${icon('forms')}સત્તાવાર જાહેરાત${isPdf ? ' (PDF)' : ''}</a>` : ''}
-      <button class="btn" data-action="save" data-id="${esc(j.id)}" aria-pressed="${saved}">${icon('star', saved ? 'ic filled' : 'ic')}<span>${saved ? 'સેવ થયેલ' : 'સેવ કરો'}</span></button>
-      <a class="btn btn-ok" href="${wa}" target="_blank" rel="noopener">${icon('share')}વોટ્સએપ પર મોકલો</a>
-    </div>
-    ${j.qualification ? `<div class="facts-main"><div class="fact"><span class="sq">${icon('book')}</span><div><div class="k">લાયકાત</div><div class="v">${esc(j.qualification)}</div></div></div></div>` : ''}
-    ${facts.length ? `<div class="facts-small">${facts.map(([ic, k, v]) => `<div class="fact">${icon(ic)}<div><div class="k">${k}</div><div class="v">${esc(v)}</div></div></div>`).join('')}</div>` : ''}
-    <div class="card side-box mt">
-      <h3>${icon('book')}સ્રોત</h3>
-      <div class="sources"><a href="${esc(j.notification || j.applyLink)}" target="_blank" rel="noopener">${esc(j.source)}</a><span>છેલ્લે અપડેટ: ${esc(formatDate(j.updatedOn))}</span>${j.verified ? '' : '<span>ચકાસણી બાકી: અરજી પહેલાં સત્તાવાર જાહેરાત વાંચો.</span>'}</div>
-    </div>`;
-}
-
-function homeJobsBox() {
-  const jobs = visibleJobs();
-  if (!jobs.length) return '';
-  return `
-    <section class="shelf">
-      ${shelfHead('briefcase', 'નવી ભરતી', '#/jobs', `બધી ${jobs.length} ભરતી`)}
-      <ul class="tgrid cap">${jobs.slice(0, 10).map((j) => itemCard(j)).join('')}</ul>
-    </section>`;
-}
 
 // ---------- વિગતનું પેજ ----------
 
@@ -842,7 +735,7 @@ function viewItem(id) {
         </div>
         <div class="card side-box">
           <h3>${icon('book')}સ્રોત</h3>
-          <div class="sources">${sources}<span>છેલ્લે અપડેટ: ${esc(formatDate(s.updatedOn))}</span>${s.verified ? '' : '<span>ચકાસણી બાકી: અરજી પહેલાં સત્તાવાર સાઇટ પર ખાતરી કરો.</span>'}</div>
+          <div class="sources">${sources}<span>છેલ્લે અપડેટ: ${esc(formatDate(s.updatedOn))}</span></div>
         </div>
       </aside>
     </div>`;
@@ -1001,7 +894,6 @@ function viewContact(params) {
 
 const NAV = [
   { route: 'home', href: '#/', ic: 'home', label: 'હોમ' },
-  { route: 'jobs', href: '#/jobs', ic: 'briefcase', label: 'ભરતી' },
   { route: 'all', href: '#/all', ic: 'book', label: 'યોજના ગાઇડ', short: 'યોજના' },
   { route: 'docs', href: '#/docs', ic: 'folder', label: 'દસ્તાવેજ ગાઇડ', short: 'દસ્તાવેજ' },
   { route: 'events', href: '#/events', ic: 'calendar', label: 'જીવનના પ્રસંગ', short: 'પ્રસંગ' },
@@ -1011,9 +903,8 @@ const NAV = [
   { route: 'contact', href: '#/contact', ic: 'message', label: 'સંપર્ક અને સૂચન' },
   { route: 'about', href: '#/about', ic: 'info', label: 'અમારા વિશે' },
 ];
-// ભરતી હોય ત્યારે જ "ભરતી" ટેબ (નહીં તો નીચે "પ્રસંગ")
-const tabRoutes = () => (state.jobs.length ? ['home', 'jobs', 'all', 'docs'] : ['home', 'all', 'docs', 'events']);
-const navItems = () => NAV.filter((n) => n.route !== 'jobs' || state.jobs.length);
+const tabRoutes = () => ['home', 'all', 'docs', 'events'];
+const navItems = () => NAV;
 
 function navLinks() {
   const k = APP.krupa || {};
@@ -1208,10 +1099,7 @@ function gsearchHits(q) {
   const items = [...visible(state.schemes), ...state.docs]
     .filter((s) => searchText(s).includes(q))
     .map((s) => ({ href: itemHref(s), html: `${itemTile(s, state.profile).replace('class="tile', 'class="tile sm')}<span><b>${esc(s.title)}</b><small>${isDoc(s) ? 'દસ્તાવેજ' : 'યોજના'}</small></span>` }));
-  const jobs = visibleJobs()
-    .filter((j) => jobSearchText(j).includes(q))
-    .map((j) => ({ href: itemHref(j), html: `${jobTile(j, 'sm')}<span><b>${esc(j.title)}</b><small>${esc(JOB_TYPES[j.type].label)}</small></span>` }));
-  return [...jobs, ...items, ...events];
+  return [...items, ...events];
 }
 function renderGs() {
   const q = $gs.value.trim().toLowerCase();
@@ -1371,13 +1259,13 @@ function currentRoute() {
   return { name: parts[0] || 'home', arg: decodeURIComponent(parts[1] || ''), params: new URLSearchParams(query) };
 }
 
-const VIEW_NAMES = ['home', 'jobs', 'job', 'all', 'docs', 'events', 'event', 'scheme', 'saved', 'today', 'help', 'profile', 'contact', 'for', 'must', ...Object.keys(INFO_PAGES)];
+const VIEW_NAMES = ['home', 'all', 'docs', 'events', 'event', 'scheme', 'saved', 'today', 'help', 'profile', 'contact', 'for', 'must', ...Object.keys(INFO_PAGES)];
 const views_known = (n) => VIEW_NAMES.includes(n);
 
 function currentTab() {
   const { name, arg } = currentRoute();
   const item = name === 'scheme' ? findItem(arg) : null;
-  return { event: 'events', job: 'jobs', scheme: item && isDoc(item) ? 'docs' : 'all', for: 'home', must: 'docs' }[name] || (views_known(name) ? name : 'home');
+  return { event: 'events', scheme: item && isDoc(item) ? 'docs' : 'all', for: 'home', must: 'docs' }[name] || (views_known(name) ? name : 'home');
 }
 
 function render() {
@@ -1389,8 +1277,6 @@ function render() {
   else {
     const views = {
       home: viewHome,
-      jobs: () => viewJobs(params),
-      job: () => viewJob(arg),
       all: () => viewAll(params),
       docs: () => viewDocs(params),
       events: viewEvents,
@@ -1664,7 +1550,6 @@ document.querySelectorAll('path[data-i]').forEach((p) => p.setAttribute('d', lin
 document.title = APP.name;
 render();
 loadData().then(() => {
-  if (state.jobs.length) renderChrome();
   render();
   notifyDue();
 });
