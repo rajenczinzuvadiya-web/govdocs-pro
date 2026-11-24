@@ -15,19 +15,18 @@ const { events } = read('events.json');
 const groupIds = new Set(groups.map((g) => g.id));
 const ids = new Set();
 
+const RETIRED = ['steps', 'stepImages', 'mistakes', 'after', 'days', 'applyLink', 'howToApply'];
+
 function checkItem(s, kind) {
   const at = `${kind === 'doc' ? 'દસ્તાવેજ' : 'યોજના'} "${s.id || '?'}"`;
   for (const f of ['id', 'title', 'summary', 'benefit', 'officialLink', 'source', 'updatedOn']) {
     if (!s[f] || typeof s[f] !== 'string') errors.push(`${at}: "${f}" ખૂટે છે`);
   }
-  // Digital Hub માં એડમિન "પુરાવા" કે "પગલાં" બંધ કરી શકે (પાના પર શું બતાવવું): ત્યાંથી આવેલા કાર્ડમાં એ ખાલી ચાલે, બંને નહીં.
-  const hub = s.from === 'hub';
-  for (const f of hub ? ['eligibility'] : ['eligibility', 'documents']) {
+  // યોજના / દસ્તાવેજ = કોને મળે + લાભ + જરૂરી પુરાવા (યુઝર 24/11/26). પગલાં, અરજીની લિંક, અરજી પછી, દિવસ, ભૂલો હવે નથી.
+  for (const f of ['eligibility', 'documents']) {
     if (!Array.isArray(s[f]) || !s[f].length) errors.push(`${at}: "${f}" ખાલી છે`);
   }
-  if (!Array.isArray(s.documents)) errors.push(`${at}: "documents" યાદી હોવી જોઈએ`);
-  if (!s.howToApply && !(s.steps && s.steps.length) && !(hub && s.documents && s.documents.length)) errors.push(`${at}: "howToApply" કે "steps" માંથી એક જોઈએ`);
-  if ('applyLink' in s && typeof s.applyLink !== 'string') errors.push(`${at}: "applyLink" લખાણ હોવું જોઈએ`);
+  for (const f of RETIRED) if (f in s) errors.push(`${at}: "${f}" હવે રાખતા નથી`);
   if (ids.has(s.id)) errors.push(`${at}: id બે વાર છે`);
   ids.add(s.id);
   if ((s.kind || 'scheme') !== kind) errors.push(`${at}: kind "${kind}" હોવું જોઈએ`);
@@ -37,8 +36,7 @@ function checkItem(s, kind) {
     errors.push(`${at}: અજાણ્યો વિભાગ "${s.group}"`);
   }
   (s.categories || []).forEach((c) => cats.has(c) || errors.push(`${at}: અજાણ્યો વર્ગ "${c}"`));
-  const links = [s.officialLink, s.applyLink, ...(s.sources || []).map((x) => x.url), s.image, ...(s.stepImages || []).filter(Boolean)];
-  if (s.stepImages && (!Array.isArray(s.stepImages) || s.stepImages.length !== (s.steps || []).length)) errors.push(`${at}: stepImages ની ગણતરી steps જેટલી હોવી જોઈએ`);
+  const links = [s.officialLink, ...(s.sources || []).map((x) => x.url), s.image];
   links.forEach((u) => u && !u.startsWith('https://') && errors.push(`${at}: લિંક https:// થી શરૂ થવી જોઈએ (${u})`));
   if (s.lastDate != null && !isDate(s.lastDate)) errors.push(`${at}: lastDate YYYY-MM-DD કે null હોવી જોઈએ`);
   if (s.updatedOn && !isDate(s.updatedOn)) errors.push(`${at}: updatedOn YYYY-MM-DD હોવી જોઈએ`);
@@ -100,6 +98,25 @@ if (helplines.length < 5) errors.push(`ફોન નંબર: ફક્ત ${he
 for (const h of helplines) {
   if (!/^[0-9]{3,12}$/.test(h.number || '')) errors.push(`ફોન નંબર "${h.number}": ફક્ત આંકડા જોઈએ`);
   if (!h.title) errors.push(`ફોન નંબર "${h.number}": નામ ખૂટે છે`);
+}
+
+// ફરજિયાત દસ્તાવેજ (data/essentials.json): દરેક id યોજના / દસ્તાવેજમાં હોવું જોઈએ, "why" ટૂંકું
+const essentials = read('essentials.json');
+const cardIds = new Set([...schemes, ...documents].map((s) => s.id));
+const checkEss = (list, at) => {
+  if (!Array.isArray(list) || !list.length) return errors.push(`ફરજિયાત દસ્તાવેજ ${at}: યાદી ખાલી છે`);
+  const seen = new Set();
+  for (const x of list) {
+    if (!cardIds.has(x.id)) errors.push(`ફરજિયાત દસ્તાવેજ ${at}: "${x.id}" કાર્ડ નથી`);
+    if (seen.has(x.id)) errors.push(`ફરજિયાત દસ્તાવેજ ${at}: "${x.id}" બે વાર`);
+    seen.add(x.id);
+    if (!x.why || x.why.length > 120) errors.push(`ફરજિયાત દસ્તાવેજ ${at}: "${x.id}" નું "why" ખાલી કે લાંબું`);
+  }
+};
+checkEss(essentials.all, 'બધા માટે');
+for (const [c, list] of Object.entries(essentials.roles || {})) {
+  if (!cats.has(c)) errors.push(`ફરજિયાત દસ્તાવેજ: અજાણ્યો વર્ગ "${c}"`);
+  checkEss(list, c);
 }
 
 errors.forEach((e) => console.log('❌', e));

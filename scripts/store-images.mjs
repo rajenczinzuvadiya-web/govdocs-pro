@@ -31,7 +31,7 @@ const shots = [
   ['3-vigat', '#/scheme/ganga-swarupa-sahay'],
   ['4-dastavej', '#/docs'],
   ['5-prasang', '#/event/balak-no-janm'],
-  ['6-swagat', 'welcome'],
+  ['6-farajiyat', '#/must'],
 ];
 
 const b = await chromium.launch();

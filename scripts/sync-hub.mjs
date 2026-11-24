@@ -41,11 +41,7 @@ function card(raw, kind, local, groupIds) {
   const sources = (Array.isArray(raw.sources) ? raw.sources : [])
     .filter((x) => x && str(x.url).startsWith('https://'))
     .map((x) => ({ label: str(x.label) || str(x.url), url: str(x.url) }));
-  // પગલું = લખાણ અને/અથવા screenshot (એ જ ક્રમમાં). બંને ખાલી હોય તે પગલું છોડાય.
-  const pics = Array.isArray(raw.stepImages) ? raw.stepImages : [];
-  const steps = (Array.isArray(raw.steps) ? raw.steps : [])
-    .map((t, i) => ({ text: str(t), image: img(pics[i]) }))
-    .filter((x) => x.text || x.image);
+  // યુઝર 24/11/26: પગલાં, અરજીની લિંક, અરજી પછી, કેટલા દિવસ, ભૂલો — હવે રાખતા નથી (ફીડમાં આવે તો પણ નહીં).
   const officialLink = str(raw.officialLink).startsWith('https://') ? str(raw.officialLink) : sources[0]?.url || local?.officialLink || '';
   const out = {
     id: raw.id,
@@ -57,23 +53,16 @@ function card(raw, kind, local, groupIds) {
     benefit: str(raw.benefit),
     eligibility: strs(raw.eligibility),
     fee: str(raw.fee),
-    days: str(raw.days),
     validity: str(raw.validity),
     documents: strs(raw.documents),
-    steps: steps.map((x) => x.text),
-    mistakes: strs(raw.mistakes),
-    after: strs(raw.after),
     lastDate: isDate(raw.lastDate) ? raw.lastDate : isDate(local?.lastDate) ? local.lastDate : null,
     officialLink,
-    // અરજીનું બટન: Digital Hub માં "અરજીની વેબસાઇટ" બંધ હોય તો '' (બટન નહીં). જૂના ફીડમાં ન હોય તો officialLink વપરાય.
-    ...('applyLink' in (raw || {}) ? { applyLink: link(raw.applyLink) } : {}),
     source: str(raw.source) || sources[0]?.label || local?.source || '',
     sources,
     words: str(raw.words),
     ...(str(raw.video).startsWith('https://') ? { video: str(raw.video) } : {}),
-    // Digital Hub માં મૂકેલો યોજનાનો ફોટો અને પગલાંના screenshot (steps સાથે એ જ ક્રમમાં, ન હોય ત્યાં '')
+    // Digital Hub માં મૂકેલો યોજનાનો ફોટો
     ...(img(raw.image) ? { image: img(raw.image) } : {}),
-    ...(steps.some((x) => x.image) ? { stepImages: steps.map((x) => x.image) } : {}),
     from: 'hub',
     updatedOn: isDate(raw.updatedOn) ? raw.updatedOn : local?.updatedOn || new Date().toISOString().slice(0, 10),
     verified: raw.verified === true,
@@ -81,8 +70,8 @@ function card(raw, kind, local, groupIds) {
   if (local?.rules) out.rules = local.rules;
   const ok =
     out.title && out.summary && out.benefit && out.officialLink && out.source &&
-    // "પુરાવા" કે "પગલાં" Digital Hub માં બંધ હોય તો ખાલી આવે — બંને ખાલી ન ચાલે.
-    out.eligibility.length && (out.documents.length || out.steps.length) &&
+    // "પુરાવા" જોઈએ જ (યોજના + જરૂરી પુરાવા, યુઝર 24/11/26).
+    out.eligibility.length && out.documents.length &&
     (kind === 'doc' ? groupIds.has(out.group) : out.categories.length);
   return ok ? out : null;
 }

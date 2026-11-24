@@ -63,9 +63,9 @@ https://www.india.gov.in
 | News app | No |
 | Government app | No (ખાનગી એપ છે) |
 
-## Data safety ફોર્મના જવાબ (22/11/26 બદલ્યા)
+## Data safety ફોર્મના જવાબ (24/11/26 બદલ્યા: નામ + ફોન નંબર ઉમેર્યા)
 
-એપ હવે બે વસ્તુ અમારા સર્વર (KruPa Digital Hub) પર મોકલે છે: તમે જાતે લખો તે "ભૂલ / સૂચન", અને એપની ભૂલની આપોઆપ નોંધ. બંને સાથે ફોને બનાવેલો 8 અક્ષરનો રેન્ડમ નંબર જાય છે. Google આને "collect" ગણે છે, એટલે "No" ખોટું ગણાય. પ્રોફાઇલ, સેવ અને ચેકલિસ્ટ ફોનમાં જ રહે છે (એ collect નથી).
+એપ હવે બે વસ્તુ અમારા સર્વર (KruPa Digital Hub) પર મોકલે છે: તમે જાતે લખો તે "ભૂલ / સૂચન" (સાથે, લખો તો, નામ અને મોબાઇલ નંબર), અને એપની ભૂલની આપોઆપ નોંધ. બંને સાથે ફોને બનાવેલો 8 અક્ષરનો રેન્ડમ નંબર જાય છે. Google આને "collect" ગણે છે, એટલે "No" ખોટું ગણાય. પ્રોફાઇલ, સેવ અને ચેકલિસ્ટ ફોનમાં જ રહે છે (એ collect નથી).
 
 **પહેલું પેજ**
 
@@ -75,10 +75,12 @@ https://www.india.gov.in
 | Is all of the user data collected by your app encrypted in transit? | Yes |
 | Do you provide a way for users to request that their data is deleted? | Yes (ગોપનીયતા નીતિમાં: ઈમેલ / વોટ્સએપથી, 7 દિવસમાં) |
 
-**Data types: આ ત્રણ જ ✓ કરો, બાકી બધું ખાલી**
+**Data types: આ પાંચ જ ✓ કરો, બાકી બધું ખાલી**
 
 | વિભાગ → ખાનું | Collected | Shared | Optional? | શા માટે (Purpose) |
 |---|---|---|---|---|
+| Personal info → Name | ✓ | No | Optional (સંપર્ક ફોર્મમાં લખે તો જ) | Developer communications |
+| Personal info → Phone number | ✓ | No | Optional (સંપર્ક ફોર્મમાં લખે તો જ) | Developer communications |
 | App activity → Other user-generated content | ✓ | No | Optional (યુઝર જાતે મોકલે તો જ) | App functionality, Developer communications |
 | App info and performance → Crash logs | ✓ | No | Required (આપોઆપ) | Analytics |
 | Device or other IDs | ✓ | No | Required | App functionality (એક ફોનમાંથી વધારે સંદેશ રોકવા) |
