@@ -1,4 +1,4 @@
-// KruPa Digital Hub (એડમિન → ગાઇડ મેનેજ, ભરતી) માં લાઇવ થયેલી યોજના, દસ્તાવેજ, પ્રસંગ, ભરતી, "આજે શું નવું" અને ફોન નંબર જાણકારના data/ માં લાવે.
+// KruPa Digital Hub (એડમિન → ગાઇડ મેનેજ) માં લાઇવ થયેલી યોજના, દસ્તાવેજ, પ્રસંગ, "આજે શું નવું" અને ફોન નંબર જાણકારના data/ માં લાવે.
 // GitHub Actions દર 3 કલાકે ચલાવે છે (.github/workflows/sync-hub.yml). હાથથી: node scripts/sync-hub.mjs [feed.json]
 //
 // નિયમો:
@@ -161,49 +161,6 @@ export function merge(feed, { schemes: S, documents: D, events: E }) {
   };
 }
 
-// ---------- ભરતી ----------
-const JOB_TYPES = new Set(['bharti', 'callletter', 'answerkey', 'result']);
-
-/**
- * Digital Hub ની ભરતી (feed.jobs) → data/jobs.json. ફીડમાં `jobs` ન હોય (જૂનું Digital Hub) તો null = કંઈ ન બદલવું.
- * Digital Hub માંથી આવેલી (`from: "hub"`) બધી બદલાય; જાણકારની પોતાની રહે. ખોટી / અધૂરી ભરતી છોડાય.
- */
-export function mergeJobs(feed, J) {
-  if (!Array.isArray(feed?.jobs)) return null;
-  const orgs = Array.isArray(feed.jobOrgs) && feed.jobOrgs.length
-    ? feed.jobOrgs.filter((o) => o && /^[a-z0-9-]{2,40}$/.test(o.id) && str(o.label)).map((o) => ({ id: o.id, label: str(o.label), short: str(o.short) || str(o.label) }))
-    : J.orgs;
-  const orgIds = new Set(orgs.map((o) => o.id));
-  const got = new Map();
-  for (const r of feed.jobs) {
-    if (!r || typeof r.id !== 'string' || !/^[a-z0-9-]{2,80}$/.test(r.id) || got.has(r.id)) continue;
-    const j = {
-      id: r.id,
-      type: JOB_TYPES.has(r.type) ? r.type : 'bharti',
-      org: orgIds.has(r.org) ? r.org : 'other',
-      title: str(r.title),
-      advtNo: str(r.advtNo),
-      posts: Number.isInteger(r.posts) && r.posts > 0 ? r.posts : null,
-      qualification: str(r.qualification),
-      age: str(r.age),
-      fee: str(r.fee),
-      date: isDate(r.date) ? r.date : '',
-      startDate: isDate(r.startDate) ? r.startDate : null,
-      lastDate: isDate(r.lastDate) ? r.lastDate : null,
-      notification: link(r.notification),
-      applyLink: link(r.applyLink),
-      source: str(r.source),
-      ...(img(r.image) ? { image: img(r.image) } : {}),
-      from: 'hub',
-      updatedOn: isDate(r.updatedOn) ? r.updatedOn : new Date().toISOString().slice(0, 10),
-      verified: r.verified === true,
-    };
-    if (j.title && j.date && j.source && (j.notification || j.applyLink)) got.set(j.id, j);
-  }
-  const jobs = [...J.jobs.filter((j) => j.from !== 'hub' && !got.has(j.id)), ...got.values()];
-  return { ...J, orgs, jobs };
-}
-
 // ---------- "આજે શું નવું" અને જરૂરી ફોન નંબર ----------
 const UPDATE_TYPES = new Set(['jankari', 'chetavani']);
 const MAX_UPDATES = 40;
@@ -283,14 +240,6 @@ async function main() {
   }
   const today = new Date().toISOString().slice(0, 10);
   let changed = 0;
-  // ભરતી પહેલાં અને અલગ: યોજનાની સલામતી-રોક (ઓછાં કાર્ડ) ભરતીને ન અટકાવે.
-  const jobsNow = read('jobs.json');
-  const jobs = mergeJobs(feed, jobsNow);
-  if (jobs && !same(jobs, jobsNow)) {
-    writeFileSync(at('jobs.json'), JSON.stringify({ ...jobs, updatedOn: today }, null, 2) + '\n');
-    changed++;
-  }
-  if (jobs) console.log(`Digital Hub: ભરતી ${jobs.jobs.filter((j) => j.from === 'hub').length}`);
   // "આજે શું નવું" અને ફોન નંબર પણ અલગ: યોજનાની રોક એમને ન અટકાવે.
   for (const [f, fn, key] of [['updates.json', mergeUpdates, 'updates'], ['helplines.json', mergeHelplines, 'helplines']]) {
     const before = read(f);
@@ -304,7 +253,7 @@ async function main() {
   const now = { schemes: read('schemes.json'), documents: read('documents.json'), events: read('events.json') };
   const out = merge(feed, now);
   if (out.skip) {
-    console.log(out.skip, changed ? '(ભરતી બદલાઈ)' : '');
+    console.log(out.skip, changed ? '(આજે શું નવું / ફોન નંબર બદલાયા)' : '');
     return;
   }
   for (const f of ['schemes', 'documents', 'events']) {
