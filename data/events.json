@@ -1,5 +1,5 @@
 {
-  "updatedOn": "2026-11-17",
+  "updatedOn": "2026-11-24",
   "events": [
     {
       "id": "balak-no-janm",
@@ -199,6 +199,30 @@
           "itemId": "palak-mata-pita",
           "type": "scheme",
           "note": "માતા-પિતા ગુમાવેલું બાળક હોય તો"
+        },
+        {
+          "title": "",
+          "itemId": "gyansetu-merit-scholarship",
+          "type": "scheme",
+          "note": "ધો. 5 પછી પ્રવેશ પરીક્ષા"
+        },
+        {
+          "title": "",
+          "itemId": "saraswati-sadhana-cycle",
+          "type": "scheme",
+          "note": "ધો. 9 ની દીકરી"
+        },
+        {
+          "title": "",
+          "itemId": "st-bus-pass-vidyarthi",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "bin-anamat-shikshan-sahay",
+          "type": "scheme",
+          "note": "બિન અનામત વર્ગ"
         }
       ],
       "from": "hub",
@@ -291,6 +315,24 @@
           "itemId": "digital-gujarat-scholarship",
           "type": "scheme",
           "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "namo-e-tablet",
+          "type": "scheme",
+          "note": "કૉલેજનું પહેલું વર્ષ"
+        },
+        {
+          "title": "",
+          "itemId": "shikshan-loan-vyaj-sahay",
+          "type": "scheme",
+          "note": "શિક્ષણ લોન લીધી હોય તો"
+        },
+        {
+          "title": "",
+          "itemId": "charitra-pramanpatra",
+          "type": "doc",
+          "note": "નોકરીમાં માગે તો"
         }
       ],
       "from": "hub",
@@ -353,6 +395,18 @@
           "itemId": "saat-fera-samuh-lagna",
           "type": "scheme",
           "note": "સમૂહ લગ્નમાં"
+        },
+        {
+          "title": "",
+          "itemId": "antarjnatiya-lagna-sahay",
+          "type": "scheme",
+          "note": "અનુસૂચિત જાતિ સાથે આંતરજ્ઞાતિય લગ્ન — 2 વર્ષમાં"
+        },
+        {
+          "title": "",
+          "itemId": "divyang-lagna-sahay",
+          "type": "scheme",
+          "note": "વર કે કન્યા દિવ્યાંગ — 2 વર્ષમાં"
         }
       ],
       "from": "hub",
@@ -427,6 +481,24 @@
           "itemId": "pm-suraksha-bima",
           "type": "scheme",
           "note": "અકસ્માતથી અવસાન હોય તો દાવો"
+        },
+        {
+          "title": "",
+          "itemId": "antyeshti-sahay",
+          "type": "scheme",
+          "note": "વૃદ્ધ સહાય લેતા વડીલનું અવસાન"
+        },
+        {
+          "title": "",
+          "itemId": "harishchandra-marnottar-sahay",
+          "type": "scheme",
+          "note": "અનુસૂચિત જાતિ — 6 મહિનામાં"
+        },
+        {
+          "title": "",
+          "itemId": "khedut-akasmat-vima",
+          "type": "scheme",
+          "note": "ખાતેદાર ખેડૂત કે કુટુંબનું અકસ્માતે અવસાન — 150 દિવસમાં"
         }
       ],
       "from": "hub",
@@ -555,6 +627,18 @@
           "itemId": "ayushman-pmjay-ma",
           "type": "scheme",
           "note": "70 વર્ષ ઉપરના દરેક વડીલને આયુષ્માન વય વંદના કાર્ડ"
+        },
+        {
+          "title": "",
+          "itemId": "varishth-nagrik-pramanpatra",
+          "type": "doc",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "shravan-tirthdarshan",
+          "type": "scheme",
+          "note": "ગ્રુપમાં જાત્રા"
         }
       ],
       "from": "hub",
@@ -596,6 +680,18 @@
         {
           "title": "",
           "itemId": "ayushman-pmjay-ma",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "divyang-lagna-sahay",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "divyang-electric-scooter",
           "type": "scheme",
           "note": ""
         }
@@ -658,6 +754,30 @@
           "title": "",
           "itemId": "kisan-credit-card",
           "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "khedut-akasmat-vima",
+          "type": "scheme",
+          "note": "પ્રીમિયમ સરકાર ભરે"
+        },
+        {
+          "title": "",
+          "itemId": "pashu-mrutyu-sahay",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "deshi-gay-nibhav-sahay",
+          "type": "scheme",
+          "note": "પ્રાકૃતિક ખેતી"
+        },
+        {
+          "title": "",
+          "itemId": "jamin-mapni",
+          "type": "doc",
           "note": ""
         }
       ],
@@ -733,6 +853,18 @@
           "itemId": "pm-ujjwala",
           "type": "scheme",
           "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "bandhkam-shramik-board-sahay",
+          "type": "scheme",
+          "note": "ઇ-નિર્માણ કાર્ડ હોય તો"
+        },
+        {
+          "title": "",
+          "itemId": "shram-kalyan-board-sahay",
+          "type": "scheme",
+          "note": "કારખાનામાં નોકરી"
         }
       ],
       "from": "hub",
@@ -807,6 +939,30 @@
           "itemId": "manav-garima",
           "type": "scheme",
           "note": "અનુસૂચિત જાતિ માટે"
+        },
+        {
+          "title": "",
+          "itemId": "vajpayee-bankable",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "jyoti-gramodyog",
+          "type": "scheme",
+          "note": "ગામમાં ગ્રામોદ્યોગ"
+        },
+        {
+          "title": "",
+          "itemId": "mahila-utkarsh",
+          "type": "scheme",
+          "note": "સખી મંડળ"
+        },
+        {
+          "title": "",
+          "itemId": "vikas-nigam-loan",
+          "type": "scheme",
+          "note": ""
         }
       ],
       "from": "hub",
@@ -874,6 +1030,36 @@
           "itemId": "pm-ujjwala",
           "type": "scheme",
           "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "pandit-dindayal-awas",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "sardar-patel-awas",
+          "type": "scheme",
+          "note": ""
+        },
+        {
+          "title": "",
+          "itemId": "kutir-jyoti",
+          "type": "scheme",
+          "note": "ગરીબ કુટુંબને મફત વીજ જોડાણ"
+        },
+        {
+          "title": "",
+          "itemId": "binkheti-na",
+          "type": "doc",
+          "note": "ખેતીની જમીન પર ઘર"
+        },
+        {
+          "title": "",
+          "itemId": "property-card",
+          "type": "doc",
+          "note": "ગામતળનું ઘર"
         }
       ],
       "from": "hub",

@@ -1,5 +1,5 @@
 {
-  "updatedOn": "2026-11-18",
+  "updatedOn": "2026-11-24",
   "schemes": [
     {
       "id": "ganga-swarupa-sahay",
@@ -258,7 +258,7 @@
         "70 વર્ષથી મોટા માટે ઉંમરનો પુરાવો (આધાર પૂરતું)"
       ],
       "lastDate": null,
-      "officialLink": "https://beneficiary.nha.gov.in/",
+      "officialLink": "https://pmjay.gov.in/",
       "source": "PMJAY (નેશનલ હેલ્થ ઓથોરિટી)",
       "sources": [
         {
@@ -784,7 +784,7 @@
         "પતિ / પત્ની અને નોમિનીની વિગત"
       ],
       "lastDate": null,
-      "officialLink": "https://www.npscra.nsdl.co.in/scheme-details.php",
+      "officialLink": "https://www.pfrda.org.in/",
       "source": "PFRDA — Atal Pension Yojana",
       "sources": [
         {
@@ -1210,7 +1210,7 @@
         "જાતિનો દાખલો (લાગુ પડે તો) અને પાસપોર્ટ સાઇઝ ફોટો"
       ],
       "lastDate": null,
-      "officialLink": "https://www.jansamarth.in/",
+      "officialLink": "https://www.mudra.org.in/",
       "source": "PM Mudra Yojana",
       "sources": [
         {
@@ -2100,6 +2100,1053 @@
       "rules": {
         "minAge": 18
       }
+    },
+    {
+      "id": "pandit-dindayal-awas",
+      "kind": "scheme",
+      "title": "પંડિત દીનદયાળ ઉપાધ્યાય આવાસ યોજના",
+      "summary": "પોતાની જમીન પર નવું ઘર બાંધવા ₹1,20,000 સુધીની સહાય.",
+      "categories": [
+        "samanya"
+      ],
+      "benefit": "ઘર બાંધવા ₹1,20,000 સુધીની સહાય, બેંક ખાતામાં.",
+      "eligibility": [
+        "બક્ષીપંચ (SEBC), આર્થિક પછાત (EBC), વિચરતી-વિમુક્ત જાતિના ગુજરાતના લોકો; કુટુંબની વાર્ષિક આવક ₹6,00,000 સુધી; ઘર બાંધવાની જમીન પોતાના નામે કે ફાળવણીનો હુકમ. ગરીબી રેખા નીચેનાને પહેલાં."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "આધાર કાર્ડ",
+        "જાતિનો દાખલો",
+        "આવકનો દાખલો",
+        "જમીનની માલિકીનો પુરાવો / ફાળવણી હુકમ (સનદ)",
+        "તલાટી-કમ-મંત્રીની સહીવાળો જમીનનો નકશો",
+        "બાંધકામ પરવાનગી પત્ર",
+        "તલાટી-કમ-મંત્રી અને સર્કલ ઇન્સ્પેક્ટરનાં પ્રમાણપત્ર",
+        "બેંક પાસબુક / રદ કરેલો ચેક"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/pduaydcw",
+      "source": "myScheme: Pandit Dindayal Upadhyay Awas Yojana",
+      "sources": [
+        {
+          "label": "myScheme: Pandit Dindayal Upadhyay Awas Yojana",
+          "url": "https://www.myscheme.gov.in/gu/schemes/pduaydcw"
+        },
+        {
+          "label": "myScheme: PDU Awas (NT-DNT)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/pduayntdnt"
+        },
+        {
+          "label": "e-Samaj Kalyan",
+          "url": "https://esamajkalyan.gujarat.gov.in/"
+        }
+      ],
+      "words": "pandit dindayal upadhyay awas yojana ghar sahay sebc obc ebc vicharti 120000",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "sardar-patel-awas",
+      "kind": "scheme",
+      "title": "સરદાર પટેલ આવાસ યોજના",
+      "summary": "ગામમાં ઘર કે પ્લોટ ન હોય એવા ગરીબ કુટુંબને પોતાનું ઘર બાંધવા સહાય.",
+      "categories": [
+        "samanya"
+      ],
+      "benefit": "ઘર બાંધવા સહાય ⚠️ ચકાસો (હાલની રકમ તાલુકા પંચાયતમાં પૂછો)",
+      "eligibility": [
+        "ગામમાં રહેતું ગરીબી રેખા નીચે (BPL) નોંધાયેલું કુટુંબ; પોતાનો પ્લોટ કે ઘર ન હોય; બીજી આવાસ યોજનાનો લાભ ન લીધો હોય; પિયત જમીન અડધા હેક્ટર કે બિનપિયત એક હેક્ટર સુધી."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "BPL યાદીમાં નામનો પુરાવો",
+        "આધાર કાર્ડ",
+        "રેશનકાર્ડ",
+        "પ્લોટ ન હોવાનું સોગંદનામું ⚠️ ચકાસો",
+        "બેંક પાસબુક"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/spay",
+      "source": "myScheme: Sardar Patel Awas Yojana",
+      "sources": [
+        {
+          "label": "myScheme: Sardar Patel Awas Yojana",
+          "url": "https://www.myscheme.gov.in/gu/schemes/spay"
+        }
+      ],
+      "words": "sardar patel awas yojana bpl ghar gramin plot",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "kutir-jyoti",
+      "kind": "scheme",
+      "title": "કુટિર જ્યોતિ / ઝૂંપડા વીજળીકરણ યોજના",
+      "summary": "ગરીબ કુટુંબના ઘરમાં મફત વીજળી જોડાણ.",
+      "categories": [
+        "samanya"
+      ],
+      "benefit": "ઘરમાં વીજળી જોડાણ મફત.",
+      "eligibility": [
+        "ગરીબી રેખા નીચે (BPL) કે ઓછી આવકનું ગુજરાતનું કુટુંબ; વાર્ષિક આવક ₹1,50,000 સુધી. કુટિર જ્યોતિ: આદિજાતિ વિસ્તારના અનુસૂચિત જનજાતિ કુટુંબ."
+      ],
+      "fee": "મફત",
+      "validity": "",
+      "documents": [
+        "ઓળખનો પુરાવો (આધાર કાર્ડ)",
+        "ગરીબ આવાસ યોજનામાં મળેલા પ્લોટ / ઘરનો ફાળવણી હુકમ",
+        "આવકનો દાખલો",
+        "જાતિનો દાખલો (કુટિર જ્યોતિ માટે)",
+        "પાસપોર્ટ સાઇઝ ફોટો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/zvy",
+      "source": "myScheme: Zupda Vijlikaran Yojana",
+      "sources": [
+        {
+          "label": "myScheme: Zupda Vijlikaran Yojana",
+          "url": "https://www.myscheme.gov.in/gu/schemes/zvy"
+        },
+        {
+          "label": "myScheme: Kutirjyoti Yojana",
+          "url": "https://www.myscheme.gov.in/gu/schemes/kyg"
+        }
+      ],
+      "words": "kutir jyoti zupda vijlikaran free light connection vij jodan bpl",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "antyeshti-sahay",
+      "kind": "scheme",
+      "title": "અંત્યેષ્ટિ સહાય (વૃદ્ધ સહાય લેનારના અવસાને)",
+      "summary": "વૃદ્ધ સહાય મેળવતા વડીલનું અવસાન થાય તો વારસદારને અંતિમક્રિયા માટે ₹5,000.",
+      "categories": [
+        "vrudh"
+      ],
+      "benefit": "એક વખત ₹5,000 સહાય.",
+      "eligibility": [
+        "ગુજરાતમાં રહેતા વારસદાર, જેમના કુટુંબના વડીલ અવસાન વખતે વૃદ્ધ સહાય મેળવતા હતા."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "વૃદ્ધ સહાયનો મંજૂરી હુકમ / પેન્શન નંબર / પેન્શન આવતું હતું તે ખાતાનો નંબર",
+        "મરણનો દાખલો",
+        "રેશનકાર્ડની નકલ",
+        "અરજદારની બેંક પાસબુક",
+        "અરજદારનો આધાર નંબર",
+        "એક કરતાં વધુ વારસદાર હોય તો બધાનું સંમતિ પત્રક"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/asygsw",
+      "source": "myScheme: Antyeshthi Sahay Yojana",
+      "sources": [
+        {
+          "label": "myScheme: Antyeshthi Sahay Yojana",
+          "url": "https://www.myscheme.gov.in/gu/schemes/asygsw"
+        }
+      ],
+      "words": "antyeshti sahay antim kriya vruddh pension maran 5000",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "harishchandra-marnottar-sahay",
+      "kind": "scheme",
+      "title": "સત્યવાદી રાજા હરિશ્ચંદ્ર મરણોત્તર સહાય",
+      "summary": "અનુસૂચિત જાતિના કુટુંબમાં અવસાન થાય ત્યારે અંતિમક્રિયા માટે ₹5,000.",
+      "categories": [
+        "samanya"
+      ],
+      "benefit": "એક વખત ₹5,000 સહાય.",
+      "eligibility": [
+        "ગુજરાતના અનુસૂચિત જાતિ (SC) ના કુટુંબ; અવસાન પછી 6 મહિનામાં અરજી; કુટુંબમાંથી એક જ વ્યક્તિને લાભ. આવક મર્યાદા ⚠️ ચકાસો"
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "મરણનો દાખલો",
+        "જાતિનો દાખલો",
+        "આધાર કાર્ડ",
+        "આવકનો પુરાવો",
+        "રહેઠાણનો પુરાવો (રેશનકાર્ડ / લાઇટ બિલ / ચૂંટણી કાર્ડ)",
+        "અરજદારના નામની બેંક પાસબુક / રદ કરેલો ચેક",
+        "પાસપોર્ટ સાઇઝ ફોટો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/srhmsy",
+      "source": "myScheme: Satyvadi Raja Harishchandra Marnotar Sahay",
+      "sources": [
+        {
+          "label": "myScheme: Satyvadi Raja Harishchandra Marnotar Sahay",
+          "url": "https://www.myscheme.gov.in/gu/schemes/srhmsy"
+        },
+        {
+          "label": "e-Samaj Kalyan",
+          "url": "https://esamajkalyan.gujarat.gov.in/"
+        }
+      ],
+      "words": "harishchandra marnottar sahay antim kriya sc anusuchit jati 5000",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "antarjnatiya-lagna-sahay",
+      "kind": "scheme",
+      "title": "ડૉ. સવિતાબેન આંબેડકર આંતરજ્ઞાતિય લગ્ન સહાય",
+      "summary": "અનુસૂચિત જાતિ અને બીજી હિન્દુ જ્ઞાતિ વચ્ચેના લગ્નમાં દંપતીને ₹2,50,000.",
+      "categories": [
+        "yuvan"
+      ],
+      "benefit": "₹1,00,000 ઘરવખરી માટે + ₹1,50,000 બંનેના સંયુક્ત નામે રાષ્ટ્રીય બચતપત્ર — કુલ ₹2,50,000.",
+      "eligibility": [
+        "દંપતીમાંથી એક ગુજરાતનું અને એક અનુસૂચિત જાતિનું; લગ્ન નોંધાયેલાં; લગ્નના 2 વર્ષમાં અરજી. આવક મર્યાદા નથી."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "લગ્ન નોંધણી પ્રમાણપત્ર",
+        "જાતિનો દાખલો",
+        "આધાર કાર્ડ",
+        "શાળા છોડ્યાનું પ્રમાણપત્ર (LC)",
+        "રહેઠાણનો પુરાવો",
+        "અરજદારના નામની બેંક પાસબુક / રદ કરેલો ચેક",
+        "પાસપોર્ટ સાઇઝ ફોટો",
+        "પહેલાં લગ્ન થયાં હોય તો છૂટાછેડા / જીવનસાથીના મરણનો પુરાવો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/dsaicmas",
+      "source": "myScheme: Dr. Savitaben Ambedkar Inter Caste Marriage",
+      "sources": [
+        {
+          "label": "myScheme: Dr. Savitaben Ambedkar Inter Caste Marriage",
+          "url": "https://www.myscheme.gov.in/gu/schemes/dsaicmas"
+        },
+        {
+          "label": "e-Samaj Kalyan",
+          "url": "https://esamajkalyan.gujarat.gov.in/"
+        }
+      ],
+      "words": "antarjnatiya lagna sahay inter caste marriage savitaben ambedkar 250000",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "divyang-lagna-sahay",
+      "kind": "scheme",
+      "title": "દિવ્યાંગ લગ્ન સહાય",
+      "summary": "દિવ્યાંગ વ્યક્તિનાં લગ્ન પર ₹50,000 (બંને દિવ્યાંગ હોય તો ₹1,00,000).",
+      "categories": [
+        "divyang"
+      ],
+      "benefit": "દિવ્યાંગ વ્યક્તિને ₹50,000; બંને દિવ્યાંગ હોય તો દરેકને ₹50,000 (કુલ ₹1,00,000).",
+      "eligibility": [
+        "લગ્ન કરનાર દિવ્યાંગ વ્યક્તિ — કન્યા 18 અને વર 21 વર્ષથી વધુ; લગ્નના 2 વર્ષમાં અરજી; એક દંપતીને એક જ વાર. દિવ્યાંગતા: મોટા ભાગના પ્રકારમાં 40% કે વધુ (સાંભળવામાં 71% થી)."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "સિવિલ સર્જનનું દિવ્યાંગતા પ્રમાણપત્ર",
+        "લગ્ન નોંધણી પ્રમાણપત્ર",
+        "વર-કન્યાનો સાથેનો લગ્નનો ફોટો",
+        "ઉંમરનો પુરાવો (બંને)",
+        "આધાર કાર્ડ",
+        "રહેઠાણનો પુરાવો",
+        "બેંક પાસબુક / રદ કરેલો ચેક",
+        "પાસપોર્ટ સાઇઝ ફોટો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/dmadls",
+      "source": "myScheme: Disable Marriage Scheme",
+      "sources": [
+        {
+          "label": "myScheme: Disable Marriage Scheme",
+          "url": "https://www.myscheme.gov.in/gu/schemes/dmadls"
+        },
+        {
+          "label": "e-Samaj Kalyan",
+          "url": "https://esamajkalyan.gujarat.gov.in/"
+        }
+      ],
+      "words": "divyang lagna sahay disable marriage viklang 50000",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "divyang-electric-scooter",
+      "kind": "scheme",
+      "title": "દિવ્યાંગને ઇલેક્ટ્રિક સ્કૂટર સહાય",
+      "summary": "હાથ-પગની દિવ્યાંગતા ધરાવતી વ્યક્તિને ઇલેક્ટ્રિક સ્કૂટર ખરીદવા ₹25,000 સુધી.",
+      "categories": [
+        "divyang"
+      ],
+      "benefit": "સ્કૂટર + દિવ્યાંગ કિટની કિંમતના 50% કે ₹25,000 — જે ઓછું હોય તે, બેંક ખાતામાં.",
+      "eligibility": [
+        "18 થી 50 વર્ષની, 40% કે વધુ હલનચલન (orthopedic) દિવ્યાંગતા ધરાવતી ગુજરાતની વ્યક્તિ; દિવ્યાંગ ઓળખપત્ર; BPL (0–20 સ્કોર); છેલ્લાં 5 વર્ષમાં લાભ ન લીધો હોય."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "UDID કાર્ડ / દિવ્યાંગ ઓળખપત્ર",
+        "સિવિલ સર્જનનું દિવ્યાંગતા પ્રમાણપત્ર",
+        "BPL સ્કોરનો પુરાવો",
+        "ઉંમરનો પુરાવો",
+        "રહેઠાણનો પુરાવો",
+        "આધાર કાર્ડ",
+        "બેંક પાસબુક / રદ કરેલો ચેક"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/spesdp",
+      "source": "myScheme: Electric Scooter to Disabled Person",
+      "sources": [
+        {
+          "label": "myScheme: Electric Scooter to Disabled Person",
+          "url": "https://www.myscheme.gov.in/gu/schemes/spesdp"
+        }
+      ],
+      "words": "divyang electric scooter viklang scooty sahay 25000",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "shravan-tirthdarshan",
+      "kind": "scheme",
+      "title": "શ્રવણ તીર્થદર્શન યોજના",
+      "summary": "60 વર્ષ ઉપરના વડીલોની જાત્રા (બસ) ના ભાડામાં સહાય.",
+      "categories": [
+        "vrudh"
+      ],
+      "benefit": "ST બસમાં વ્યક્તિ દીઠ ₹5,000 સુધી; ખાનગી બસમાં ₹7,000 સુધી (ખરો ખર્ચ ઓછો હોય તો તેટલો).",
+      "eligibility": [
+        "ગુજરાતમાં રહેતા 60 વર્ષ કે વધુ ઉંમરના વડીલ, જેમણે પહેલાં આ લાભ ન લીધો હોય; ઓછામાં ઓછા 20 યાત્રીનું ગ્રુપ, માન્ય ટ્રાવેલ એજન્ટ / આયોજક મારફત."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "યાત્રીની યાદી: નામ, સરનામું, જિલ્લો, જન્મ તારીખ, આધાર નંબર",
+        "દરેક યાત્રીનું આધાર કાર્ડ",
+        "આયોજક / એજન્ટની માન્યતાનો પુરાવો",
+        "બસની વિગત (ST / ખાનગી)"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/sty",
+      "source": "myScheme: Shravan Tirthdarshan Yojna",
+      "sources": [
+        {
+          "label": "myScheme: Shravan Tirthdarshan Yojna",
+          "url": "https://www.myscheme.gov.in/gu/schemes/sty"
+        }
+      ],
+      "words": "shravan tirth darshan yatra vadil senior citizen bus jatra",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "khedut-akasmat-vima",
+      "kind": "scheme",
+      "title": "ખેડૂત અકસ્માત વીમા સહાય (જનતા જૂથ)",
+      "summary": "ખાતેદાર ખેડૂત કે તેના કુટુંબનું અકસ્માતે અવસાન / કાયમી અપંગતા થાય તો ₹2,00,000 — પ્રીમિયમ સરકાર ભરે.",
+      "categories": [
+        "khedut"
+      ],
+      "benefit": "અવસાન / 100% કાયમી અપંગતા, બે આંખ કે બે અંગ ગુમાવે: ₹2,00,000. એક આંખ કે એક અંગ: ₹1,00,000.",
+      "eligibility": [
+        "૭/૧૨ માં નામ ધરાવતા ખાતેદાર ખેડૂત, તેના પતિ / પત્ની કે દીકરો-દીકરી; ઉંમર 5 થી 70 વર્ષ; અકસ્માતના 150 દિવસમાં અરજી. કુદરતી મરણ કે આપઘાતમાં નહીં."
+      ],
+      "fee": "મફત (પ્રીમિયમ સરકાર ભરે)",
+      "validity": "",
+      "documents": [
+        "નક્કી નમૂનામાં અરજી (પરિશિષ્ટ 1 થી 5)",
+        "૭/૧૨, ૮-અ અને ગામ નમૂના 6 ની નકલ (અવસાન પછીની તારીખની)",
+        "મરણનો દાખલો અને ઉંમરનો પુરાવો",
+        "પોસ્ટમોર્ટમ રિપોર્ટ",
+        "FIR, પંચનામું / ઇન્ક્વેસ્ટ રિપોર્ટ",
+        "નાયબ કલેક્ટર (SDM) નો રિપોર્ટ",
+        "પેઢીનામું",
+        "વાહન ચલાવતા અકસ્માત: માન્ય ડ્રાઇવિંગ લાયસન્સ",
+        "અપંગતામાં: સિવિલ સર્જન / મેડિકલ બોર્ડનું પ્રમાણપત્ર",
+        "ઇન્ડેમ્નિટી બોન્ડ"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/jjais",
+      "source": "myScheme: Janta Juth Accidental Insurance",
+      "sources": [
+        {
+          "label": "myScheme: Janta Juth Accidental Insurance",
+          "url": "https://www.myscheme.gov.in/gu/schemes/jjais"
+        },
+        {
+          "label": "myScheme: Farmers Accidental Insurance Scheme",
+          "url": "https://www.myscheme.gov.in/gu/schemes/fais"
+        }
+      ],
+      "words": "khedut akasmat vima janta juth accident insurance farmer 200000 maran",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "pashu-mrutyu-sahay",
+      "kind": "scheme",
+      "title": "પશુ મૃત્યુ સહાય (કુદરતી આફત / રોગ)",
+      "summary": "પૂર, વાવાઝોડું, ભૂકંપ, રોગચાળો, ઝેર કે સાપ કરડવાથી પશુ મરે તો પશુપાલકને વળતર.",
+      "categories": [
+        "khedut"
+      ],
+      "benefit": "ગાય / ભેંસ / ઊંટ (દૂધાળાં): ₹37,500 (3 પશુ સુધી). ઘેટાં / બકરાં: ₹4,000 (30 સુધી). બળદ / ઘોડો / ઊંટ: ₹32,000 (3 સુધી). વાછરડાં / પાડા / ગધેડાં: ₹20,000 (3 સુધી). મરઘાં-બતક: ₹100 (₹10,000 સુધી).",
+      "eligibility": [
+        "નોંધાયેલા પશુપાલક, જેમનું પશુ કુદરતી આફત, એન્થ્રેક્સ / બર્ડ ફ્લૂ જેવા રોગ, ઝેર કે સાપ કરડવાથી મર્યું હોય."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "આધાર કાર્ડ / ઓળખનો પુરાવો",
+        "બેંક ખાતાની વિગત",
+        "પશુ ચિકિત્સા અધિકારી કહે તે પુરાવા (મરણનો રિપોર્ટ, ફોટો, ટેગ) ⚠️ ચકાસો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/ciad",
+      "source": "myScheme: Compensation in Animal Death",
+      "sources": [
+        {
+          "label": "myScheme: Compensation in Animal Death",
+          "url": "https://www.myscheme.gov.in/gu/schemes/ciad"
+        }
+      ],
+      "words": "pashu mrutyu sahay animal death compensation gay bhens maran valtar",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "deshi-gay-nibhav-sahay",
+      "kind": "scheme",
+      "title": "દેશી ગાય નિભાવ ખર્ચ સહાય (પ્રાકૃતિક ખેતી)",
+      "summary": "પ્રાકૃતિક ખેતી કરતા ખેડૂતને એક દેશી ગાય માટે દર મહિને ₹900.",
+      "categories": [
+        "khedut"
+      ],
+      "benefit": "દર મહિને ₹900 (વર્ષે ₹10,800).",
+      "eligibility": [
+        "ઓછામાં ઓછી 1 એકર (40 ગુંઠા) જમીનમાં પ્રાકૃતિક ખેતી કરતા ખેડૂત, જેમની પાસે ટેગવાળી દેશી ગાય હોય; ૮-અ દીઠ એક લાભાર્થી."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "પ્રાકૃતિક ખેતીનો પુરાવો (1 એકર)",
+        "દેશી ગાયનો ટેગ નંબર / માલિકીનો પુરાવો",
+        "ગાય હયાત હોવાનું પ્રમાણપત્ર",
+        "આધાર કાર્ડ",
+        "૭/૧૨ અને ૮-અ",
+        "બેંક ખાતાની વિગત",
+        "તાલીમ પ્રમાણપત્ર (હોય તો)"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/smpacmetf",
+      "source": "myScheme: Cow Maintenance for Natural Farming",
+      "sources": [
+        {
+          "label": "myScheme: Cow Maintenance for Natural Farming",
+          "url": "https://www.myscheme.gov.in/gu/schemes/smpacmetf"
+        },
+        {
+          "label": "i-Khedut",
+          "url": "https://ikhedut.gujarat.gov.in/"
+        }
+      ],
+      "words": "deshi gay nibhav kharch sahay prakrutik kheti natural farming cow 900",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "gyansetu-merit-scholarship",
+      "kind": "scheme",
+      "title": "મુખ્યમંત્રી જ્ઞાનસેતુ મેરિટ શિષ્યવૃત્તિ",
+      "summary": "ધો. 5 પછીની પ્રવેશ પરીક્ષામાં મેરિટમાં આવનારને ધો. 6 થી 12 સુધી દર વર્ષે શિષ્યવૃત્તિ.",
+      "categories": [
+        "vidyarthi",
+        "vali"
+      ],
+      "benefit": "સરકારી / અનુદાનિત શાળા: ધો. 6–8 ₹5,000, ધો. 9–10 ₹6,000, ધો. 11–12 ₹7,000 દર વર્ષે. પસંદ કરેલી ખાનગી શાળા: ધો. 6–8 ₹20,000, ધો. 9–10 ₹22,000, ધો. 11–12 ₹25,000. બે હપ્તામાં; 80% હાજરી જરૂરી.",
+      "eligibility": [
+        "ધો. 1 થી 5 ગુજરાતની સરકારી / અનુદાનિત / RTE શાળામાં ભણેલા અને રાજ્ય પરીક્ષા બોર્ડની પ્રવેશ પરીક્ષા (CET) ના મેરિટમાં આવેલા વિદ્યાર્થી."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "CET પરીક્ષાનું પરિણામ / મેરિટ",
+        "આધાર કાર્ડ",
+        "આવકનો દાખલો",
+        "શાળાનું પ્રવેશ / બોનાફાઇડ પ્રમાણપત્ર ⚠️ ચકાસો",
+        "બેંક પાસબુક"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/mmgmy",
+      "source": "myScheme: Mukhyamantri Gyansetu Merit Scholarship",
+      "sources": [
+        {
+          "label": "myScheme: Mukhyamantri Gyansetu Merit Scholarship",
+          "url": "https://www.myscheme.gov.in/gu/schemes/mmgmy"
+        }
+      ],
+      "words": "gyansetu merit scholarship cet dho 5 shishyavrutti gyan setu",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "namo-e-tablet",
+      "kind": "scheme",
+      "title": "નમો ઇ-ટેબ્લેટ યોજના",
+      "summary": "કૉલેજ / પોલિટેક્નિકના પહેલા વર્ષના વિદ્યાર્થીને ઓછા દરે ટેબ્લેટ.",
+      "categories": [
+        "vidyarthi"
+      ],
+      "benefit": "ભણવાની સામગ્રી ભરેલું ટેબ્લેટ — ટોકન રકમે ⚠️ ચકાસો",
+      "eligibility": [
+        "ગુજરાતમાંથી ધો. 12 પાસ કરી કૉલેજ કે પોલિટેક્નિકના પહેલા વર્ષમાં પ્રવેશ લીધેલા વિદ્યાર્થી ⚠️ ચકાસો"
+      ],
+      "fee": "⚠️ ચકાસો",
+      "validity": "",
+      "documents": [
+        "ધો. 12 ની માર્કશીટ",
+        "કૉલેજ પ્રવેશનો પુરાવો",
+        "આધાર કાર્ડ",
+        "રહેઠાણનો પુરાવો",
+        "જાતિનો દાખલો (લાગુ હોય તો)"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/nets",
+      "source": "myScheme: NAMO E-Tablet Scheme",
+      "sources": [
+        {
+          "label": "myScheme: NAMO E-Tablet Scheme",
+          "url": "https://www.myscheme.gov.in/gu/schemes/nets"
+        }
+      ],
+      "words": "namo e tablet yojana college tablet student",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "saraswati-sadhana-cycle",
+      "kind": "scheme",
+      "title": "સરસ્વતી સાધના / વિદ્યા સાધના (ધો. 9 ની દીકરીને મફત સાયકલ)",
+      "summary": "ધો. 9 માં ભણતી દીકરીને શાળાએ જવા મફત સાયકલ.",
+      "categories": [
+        "vidyarthi",
+        "vali"
+      ],
+      "benefit": "મફત સાયકલ.",
+      "eligibility": [
+        "ધો. 9 માં ભણતી ગુજરાતની દીકરી — અનુસૂચિત જાતિ, બક્ષીપંચ (SEBC), આર્થિક પછાત (EBC) [સરસ્વતી સાધના] કે અનુસૂચિત જનજાતિ [વિદ્યા સાધના]; કુટુંબની વાર્ષિક આવક ₹6,00,000 સુધી."
+      ],
+      "fee": "મફત",
+      "validity": "",
+      "documents": [
+        "આધાર કાર્ડ",
+        "જાતિનો દાખલો",
+        "આવકનો દાખલો",
+        "જન્મનો દાખલો",
+        "માર્કશીટ",
+        "શાળાનું ઓળખપત્ર",
+        "પાસપોર્ટ સાઇઝ ફોટો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/fcscgsssixssy",
+      "source": "myScheme: Sarasvati Sadhna Yojana (SC)",
+      "sources": [
+        {
+          "label": "myScheme: Sarasvati Sadhna Yojana (SC)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/fcscgsssixssy"
+        },
+        {
+          "label": "myScheme: Saraswati Sadhana (SEBC)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/ssyseb"
+        },
+        {
+          "label": "myScheme: Vidhya Sadhana Yojana (ST)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/vsyg"
+        },
+        {
+          "label": "Digital Gujarat",
+          "url": "https://www.digitalgujarat.gov.in/"
+        }
+      ],
+      "words": "saraswati sadhana vidya sadhana cycle dikri dho 9 free bicycle",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "st-bus-pass-vidyarthi",
+      "kind": "scheme",
+      "title": "વિદ્યાર્થી ST બસ પાસ (ભાડામાં રાહત)",
+      "summary": "શાળા-કૉલેજ જવા ST બસના માસિક પાસમાં રાહત.",
+      "categories": [
+        "vidyarthi"
+      ],
+      "benefit": "GSRTC બસ પાસના ભાડામાં રાહત ⚠️ ચકાસો",
+      "eligibility": [
+        "સરકારી / ખાનગી શાળામાં પ્રાથમિક, માધ્યમિક, ઉચ્ચતર માધ્યમિક કે ટેકનિકલ અભ્યાસ કરતા વિદ્યાર્થી. દીકરીઓ માટે વધુ રાહત ⚠️ ચકાસો"
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "પાસપોર્ટ સાઇઝ ફોટો",
+        "શાળા / કૉલેજનું બોનાફાઇડ પ્રમાણપત્ર",
+        "વિદ્યાર્થી ઓળખપત્ર",
+        "ઓળખનો પુરાવો (આધાર)",
+        "જૂનો પાસ (હોય તો)"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/stbpfcsgngpshshtes",
+      "source": "myScheme: S.T. Bus Pass Fee Concession",
+      "sources": [
+        {
+          "label": "myScheme: S.T. Bus Pass Fee Concession",
+          "url": "https://www.myscheme.gov.in/gu/schemes/stbpfcsgngpshshtes"
+        },
+        {
+          "label": "GSRTC ઇ-પાસ",
+          "url": "https://pass.gsrtc.in/"
+        }
+      ],
+      "words": "st bus pass vidyarthi student pass gsrtc concession",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "bin-anamat-shikshan-sahay",
+      "kind": "scheme",
+      "title": "બિન અનામત વર્ગ — શિક્ષણ સહાય અને લોન (GUEEDC)",
+      "summary": "બિન અનામત વર્ગના વિદ્યાર્થીને ટ્યુશન, કોચિંગ, ભોજન બિલ સહાય અને શિક્ષણ / વિદેશ લોન.",
+      "categories": [
+        "vidyarthi",
+        "yuvan"
+      ],
+      "benefit": "ટ્યુશન સહાય: ધો. 10 માં 70% થી વધુ લાવી ધો. 11–12 વિજ્ઞાનમાં ભણતાને વર્ષે ₹15,000. ભોજન બિલ: તાલુકા બહાર હોસ્ટેલમાં રહી મેડિકલ / ટેકનિકલ ભણતાને મહિને ₹1,500 (10 મહિના). વિદેશ અભ્યાસ લોન: ₹15 લાખ સુધી, 4% સાદું વ્યાજ (ધો. 12 માં 60%). કોચિંગ અને બીજી સહાય ⚠️ ચકાસો",
+      "eligibility": [
+        "બિન અનામત વર્ગના ગુજરાતના વિદ્યાર્થી; મોટા ભાગની યોજનામાં કુટુંબની વાર્ષિક આવક ₹6,00,000 સુધી (ભોજન બિલમાં ₹4,50,000)."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "બિન અનામત વર્ગનું પ્રમાણપત્ર",
+        "આવકનો દાખલો",
+        "આધાર કાર્ડ",
+        "રહેઠાણનો પુરાવો",
+        "શાળા છોડ્યાનું પ્રમાણપત્ર (LC)",
+        "છેલ્લી માર્કશીટ (ધો. 10 / 12)",
+        "પ્રવેશ / બોનાફાઇડ પ્રમાણપત્ર, ફીની પહોંચ",
+        "બેંક પાસબુક",
+        "વિદેશ લોનમાં: પ્રવેશ પત્ર, પાસપોર્ટ, મિલકતની જામીનગીરી"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/tsyuc",
+      "source": "myScheme: Tuition Sahay Yojana (Unreserved)",
+      "sources": [
+        {
+          "label": "myScheme: Tuition Sahay Yojana (Unreserved)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/tsyuc"
+        },
+        {
+          "label": "myScheme: Food Bill Assistance",
+          "url": "https://www.myscheme.gov.in/gu/schemes/fbs"
+        },
+        {
+          "label": "myScheme: Foreign Study Loan (GUEEDC)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/fsls"
+        },
+        {
+          "label": "ગુજરાત બિન અનામત શૈક્ષણિક અને આર્થિક વિકાસ નિગમ",
+          "url": "https://gueedc.gujarat.gov.in/"
+        }
+      ],
+      "words": "bin anamat nigam gueedc tuition sahay coaching bhojan bill videsh loan unreserved",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "shikshan-loan-vyaj-sahay",
+      "kind": "scheme",
+      "title": "શિક્ષણ લોન પર 100% વ્યાજ સહાય",
+      "summary": "ઉચ્ચ અભ્યાસ માટે બેંકમાંથી લીધેલી ₹10 લાખ સુધીની લોનનું ભણતર દરમિયાનનું વ્યાજ સરકાર ભરે.",
+      "categories": [
+        "vidyarthi",
+        "vali"
+      ],
+      "benefit": "₹10,00,000 સુધીની લોનનું અભ્યાસનાં વર્ષો + 1 વર્ષ (મોરેટોરિયમ) નું પૂરું વ્યાજ.",
+      "eligibility": [
+        "ગુજરાતના વિદ્યાર્થી; ધો. 12 માં 60 પર્સેન્ટાઇલ કે વધુ; ભારતમાં કે વિદેશમાં ઉચ્ચ અભ્યાસ માટે માન્ય બેંકમાંથી શિક્ષણ લોન; કુટુંબની વાર્ષિક આવક ₹6,00,000 સુધી."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "ધો. 12 / ડિપ્લોમાની માર્કશીટ",
+        "આધાર કાર્ડ",
+        "રેશનકાર્ડ",
+        "આવકનો દાખલો",
+        "રહેઠાણનો પુરાવો",
+        "બેંકના સહી-સિક્કાવાળા: લોન કરાર, મંજૂરી પત્ર, ચુકવણી પત્ર, લોન ખાતાનું સ્ટેટમેન્ટ, વ્યાજ પ્રમાણપત્ર",
+        "બચત ખાતાની પાસબુક / રદ કરેલો ચેક",
+        "ફોટો અને સહી (50 KB સુધી)"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/issoel",
+      "source": "myScheme: Interest Subsidy Scheme on Education Loan",
+      "sources": [
+        {
+          "label": "myScheme: Interest Subsidy Scheme on Education Loan",
+          "url": "https://www.myscheme.gov.in/gu/schemes/issoel"
+        },
+        {
+          "label": "ISEL પોર્ટલ (શિક્ષણ વિભાગ)",
+          "url": "https://isel.guj.nic.in/"
+        }
+      ],
+      "words": "education loan interest subsidy vyaj sahay shikshan loan isel",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "bandhkam-shramik-board-sahay",
+      "kind": "scheme",
+      "title": "બાંધકામ શ્રમિક બોર્ડની સહાય (ઇ-નિર્માણ કાર્ડવાળા માટે)",
+      "summary": "ઇ-નિર્માણ કાર્ડ ધરાવતા બાંધકામ શ્રમિક અને કુટુંબને પ્રસૂતિ, ભણતર, દીકરી, ઘર અને મરણ વખતે સહાય.",
+      "categories": [
+        "yuvan",
+        "mata",
+        "samanya"
+      ],
+      "benefit": "પ્રસૂતિ: શ્રમિક બહેનને ₹37,500, શ્રમિકની પત્નીને ₹6,000 (પહેલી બે પ્રસૂતિ). ભણતર: બે બાળકને દર વર્ષે ધો. 1–5 ₹1,800 થી અનુસ્નાતક સુધી વધુ. દીકરીના જન્મે ભાગ્યલક્ષ્મી બોન્ડ ₹25,000 (18 વર્ષે). ઘર લોન પર 5 વર્ષ સુધી દર વર્ષે ₹30,000. અંતિમક્રિયા ₹10,000. કામ પર અકસ્માતે મૃત્યુ ₹3,00,000. ₹5 માં ભોજન (શ્રમિક અન્નપૂર્ણા), ધન્વંતરિ રથમાં મફત સારવાર.",
+      "eligibility": [
+        "ગુજરાત મકાન અને અન્ય બાંધકામ શ્રમયોગી કલ્યાણ બોર્ડમાં નોંધાયેલા (સભ્યપદ ચાલુ) બાંધકામ શ્રમિક અને તેમનું કુટુંબ. અકસ્માત મૃત્યુ સહાય નોંધણી વગરના શ્રમિકને પણ."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "ઇ-નિર્માણ કાર્ડ / બોર્ડનું ઓળખપત્ર",
+        "આધાર કાર્ડ",
+        "રેશનકાર્ડ",
+        "બેંક પાસબુક",
+        "પાસપોર્ટ સાઇઝ ફોટો",
+        "સહાય પ્રમાણે: મમતા કાર્ડ / ડૉક્ટરનું પ્રમાણપત્ર, જન્મનો દાખલો, બોનાફાઇડ અને ફીની પહોંચ, ઘરનો દસ્તાવેજ અને લોન મંજૂરી પત્ર, મરણનો દાખલો, FIR અને પોસ્ટમોર્ટમ રિપોર્ટ",
+        "સોગંદનામું / સ્વઘોષણા"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/masgbocwwb",
+      "source": "myScheme: Maternity Assistance (GBOCWWB)",
+      "sources": [
+        {
+          "label": "myScheme: Maternity Assistance (GBOCWWB)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/masgbocwwb"
+        },
+        {
+          "label": "myScheme: Education Assistance (GBOCWWB)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/eaphdsgbocwwb"
+        },
+        {
+          "label": "myScheme: Bhagyalaxmi Bond (GBOCWWB)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/mbbsgbocwwb"
+        },
+        {
+          "label": "myScheme: Housing Subsidy (GBOCWWB)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/hssgbocwwb"
+        },
+        {
+          "label": "myScheme: Accidental Death Assistance (GBOCWWB)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/adasgbocwwb"
+        },
+        {
+          "label": "Sanman પોર્ટલ (શ્રમ વિભાગ)",
+          "url": "https://sanman.gujarat.gov.in/"
+        }
+      ],
+      "words": "bandhkam shramik board e nirman sahay prasuti bhagyalaxmi bond shikshan avas antim kriya bocw",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "shram-kalyan-board-sahay",
+      "kind": "scheme",
+      "title": "ગુજરાત શ્રમ કલ્યાણ બોર્ડની સહાય (કારખાનાના કામદાર)",
+      "summary": "કારખાના / સંસ્થામાં નોકરી કરતા અને શ્રમ કલ્યાણ ફાળો ભરાતા કામદાર અને તેમનાં બાળકોને સહાય.",
+      "categories": [
+        "yuvan",
+        "samanya"
+      ],
+      "benefit": "બાળકને ધો. 10 માં 70%+ પર ₹2,500 અને ધો. 12 માં ₹5,000 ઇનામ. મહિલા કામદારના લગ્ને ₹11,000. ઘર લોન પર 3% વ્યાજ સહાય (₹30 લાખ સુધીનું ઘર). વ્યાવસાયિક કોર્સમાં ભણતા બાળકને લેપટોપના 50% કે ₹25,000. નવી સાયકલ પર ₹1,500.",
+      "eligibility": [
+        "ગુજરાતના કારખાના / સંસ્થામાં ઓછામાં ઓછું 1 વર્ષથી નોકરી કરતા કામદાર, જેમનો શ્રમ કલ્યાણ ફાળો (Labour Welfare Fund) બોર્ડમાં જમા થતો હોય."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "કામદારનું ઓળખપત્ર (કારખાના / કોન્ટ્રાક્ટરનું)",
+        "આધાર કાર્ડ",
+        "શ્રમ કલ્યાણ ફાળાનો ખાતા નંબર",
+        "સંસ્થાનું બોનાફાઇડ પ્રમાણપત્ર",
+        "બેંક પાસબુક",
+        "પાસપોર્ટ સાઇઝ ફોટો",
+        "સહાય પ્રમાણે: બાળકની માર્કશીટ, લગ્નનો પુરાવો, ઘર લોન મંજૂરી પત્ર, ખરીદીનું બિલ"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/eas-glwb",
+      "source": "myScheme: Educational Award (GLWB)",
+      "sources": [
+        {
+          "label": "myScheme: Educational Award (GLWB)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/eas-glwb"
+        },
+        {
+          "label": "myScheme: Marriage Assistance (GLWB)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/mas-glwb"
+        },
+        {
+          "label": "myScheme: Home Loan Interest Subsidy (GLWB)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/hliss-glwb"
+        },
+        {
+          "label": "myScheme: Laptop Purchase Assistance (GLWB)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/lpas-glwb"
+        },
+        {
+          "label": "Sanman પોર્ટલ (શ્રમ વિભાગ)",
+          "url": "https://sanman.gujarat.gov.in/"
+        }
+      ],
+      "words": "shram kalyan board glwb karkhana kamdar labour welfare fund laptop cycle lagna inam",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "vajpayee-bankable",
+      "kind": "scheme",
+      "title": "શ્રી વાજપેયી બેંકેબલ યોજના",
+      "summary": "નાનો ઉદ્યોગ, સેવા કે ધંધો શરૂ કરવા ₹8 લાખ સુધીની બેંક લોન પર સરકારી સહાય (સબસિડી).",
+      "categories": [
+        "yuvan",
+        "divyang",
+        "vepari"
+      ],
+      "benefit": "લોન ₹8 લાખ સુધી. સહાય: સામાન્ય — ગામમાં 25%, શહેરમાં 20%; SC / ST / મહિલા / માજી સૈનિક / 40%+ દિવ્યાંગ — ગામમાં 40%, શહેરમાં 30%. ઉદ્યોગમાં ₹1,25,000 સુધી, સેવામાં ₹1,00,000 સુધી, વેપારમાં ₹60,000–₹80,000 સુધી.",
+      "eligibility": [
+        "18 થી 65 વર્ષના ગુજરાતના બેરોજગાર; ઓછામાં ઓછું ધો. 4 પાસ, અથવા તે ધંધાની તાલીમ / 1 વર્ષનો અનુભવ / વારસાગત કારીગર. આવક મર્યાદા નથી."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "આધાર કાર્ડ",
+        "ભણતર / તાલીમ / અનુભવનું પ્રમાણપત્ર",
+        "જાતિનો દાખલો (લાગુ હોય તો)",
+        "રહેઠાણનો પુરાવો",
+        "ધંધાની જગ્યાનો પુરાવો",
+        "ભાવપત્રક (કોટેશન) / પ્રોજેક્ટ રિપોર્ટ ⚠️ ચકાસો",
+        "બેંક પાસબુક",
+        "પાસપોર્ટ સાઇઝ ફોટો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/svby",
+      "source": "myScheme: Shri Vajpayee Bankable Yojana",
+      "sources": [
+        {
+          "label": "myScheme: Shri Vajpayee Bankable Yojana",
+          "url": "https://www.myscheme.gov.in/gu/schemes/svby"
+        },
+        {
+          "label": "e-Kutir (કુટિર અને ગ્રામોદ્યોગ)",
+          "url": "https://e-kutir.gujarat.gov.in/"
+        }
+      ],
+      "words": "vajpayee bankable yojana loan subsidy dhandho rojgar svby",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "jyoti-gramodyog",
+      "kind": "scheme",
+      "title": "જ્યોતિ ગ્રામોદ્યોગ વિકાસ યોજના",
+      "summary": "20,000 સુધીની વસ્તીવાળા ગામમાં નવો ગ્રામોદ્યોગ શરૂ કરવા ₹25 લાખ સુધીના પ્રોજેક્ટ પર માર્જિન મની સહાય.",
+      "categories": [
+        "yuvan",
+        "vepari"
+      ],
+      "benefit": "₹10 લાખ સુધીના પ્રોજેક્ટ પર 25% (SC / ST / મહિલા / દિવ્યાંગને 30%); ₹10–25 લાખના ભાગ પર 10%. જમીન-મકાનનો ખર્ચ ગણાતો નથી. સહાય 2 વર્ષ ધંધો ચાલ્યા પછી ખાતામાં.",
+      "eligibility": [
+        "25 થી 50 વર્ષના, ધો. 10 પાસ, ધંધાનો 1 વર્ષનો અનુભવ કે તાલીમ ધરાવતા કારીગર / ઉદ્યોગ સાહસિક કે સક્રિય સખી મંડળ; ઉદ્યોગ 20,000 સુધીની વસ્તીવાળા ગામમાં."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "આધાર કાર્ડ / ચૂંટણી કાર્ડ",
+        "ધો. 10 ની માર્કશીટ",
+        "તાલીમ / અનુભવનું પ્રમાણપત્ર",
+        "પ્રોજેક્ટ રિપોર્ટ, મશીનરીનાં ભાવપત્રક",
+        "બેંક ખાતાની વિગત",
+        "જાતિનો દાખલો (લાગુ હોય તો)"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/jgvy",
+      "source": "myScheme: Jyoti Gramodyog Vikas Yojana",
+      "sources": [
+        {
+          "label": "myScheme: Jyoti Gramodyog Vikas Yojana",
+          "url": "https://www.myscheme.gov.in/gu/schemes/jgvy"
+        }
+      ],
+      "words": "jyoti gramodyog vikas yojana gram udyog margin money subsidy dic",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "mahila-utkarsh",
+      "kind": "scheme",
+      "title": "મુખ્યમંત્રી મહિલા ઉત્કર્ષ યોજના",
+      "summary": "મહિલાઓના સખી મંડળ / જૂથને ધંધા માટે વ્યાજ વગરની લોન.",
+      "categories": [
+        "vepari",
+        "samanya"
+      ],
+      "benefit": "જૂથને ₹1,00,000 સુધીની લોન, જામીન વગર; વ્યાજ સરકાર ભરે ⚠️ ચકાસો",
+      "eligibility": [
+        "ગુજરાતની 18 વર્ષથી વધુ ઉંમરની મહિલાઓનું સખી મંડળ / જૂથ ⚠️ ચકાસો. સરકારી કર્મચારી નહીં."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "જૂથના દરેક સભ્યનું આધાર કાર્ડ",
+        "ઓળખ અને સરનામાનો પુરાવો",
+        "જૂથનો ઠરાવ / નોંધણી ⚠️ ચકાસો",
+        "ધંધાની યોજના",
+        "જૂથનું બેંક ખાતું",
+        "પાસપોર્ટ સાઇઝ ફોટો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/mmuy",
+      "source": "myScheme: Mukhyamantri Mahila Utkarsh Yojana",
+      "sources": [
+        {
+          "label": "myScheme: Mukhyamantri Mahila Utkarsh Yojana",
+          "url": "https://www.myscheme.gov.in/gu/schemes/mmuy"
+        }
+      ],
+      "words": "mahila utkarsh yojana sakhi mandal shg vyaj vagar loan women",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "vikas-nigam-loan",
+      "kind": "scheme",
+      "title": "વિકાસ નિગમની સ્વરોજગાર લોન (જાતિ પ્રમાણે)",
+      "summary": "બક્ષીપંચ, અનુસૂચિત જાતિ, અનુસૂચિત જનજાતિ, લઘુમતી, સફાઈ કામદાર, દિવ્યાંગ, વિચરતી જાતિ જેવા વર્ગને ઓછા વ્યાજે ધંધા / વાહન / શિક્ષણ લોન.",
+      "categories": [
+        "yuvan",
+        "vepari"
+      ],
+      "benefit": "ઉદાહરણ: આદિજાતિ નિગમમાં 85 પ્રકારના ધંધા માટે ₹50,000–₹5,00,000, 4% વ્યાજ. સફાઈ કામદાર નિગમમાં ₹1–15 લાખ, 6% વ્યાજ. બીજાં નિગમમાં ધંધો, વાહન, મહિલા સમૃદ્ધિ, શિક્ષણ લોન ⚠️ ચકાસો",
+      "eligibility": [
+        "જે વર્ગનું નિગમ હોય તે વર્ગની, ગુજરાતમાં રહેતી અને સ્વરોજગાર શરૂ કરવા માગતી વ્યક્તિ; આવક મર્યાદા નિગમ પ્રમાણે ⚠️ ચકાસો"
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "આધાર કાર્ડ",
+        "જાતિનો દાખલો",
+        "આવકનો દાખલો",
+        "રેશનકાર્ડ",
+        "ઉંમરનો પુરાવો",
+        "ધંધાની જગ્યાનો પુરાવો, ભાવપત્રક",
+        "બેંક પાસબુક",
+        "જામીનદારના કાગળ ⚠️ ચકાસો",
+        "પાસપોર્ટ સાઇઝ ફોટો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/sesg",
+      "source": "myScheme: Self Employment Scheme (ST)",
+      "sources": [
+        {
+          "label": "myScheme: Self Employment Scheme (ST)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/sesg"
+        },
+        {
+          "label": "myScheme: Term Loan Scheme (GSKVN)",
+          "url": "https://www.myscheme.gov.in/gu/schemes/dcs-tl"
+        },
+        {
+          "label": "e-Samaj Kalyan",
+          "url": "https://esamajkalyan.gujarat.gov.in/"
+        }
+      ],
+      "words": "vikas nigam loan swarojgar gbcdc gscdc gtdc gmfdc mahila samruddhi vahan loan nigam",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "battery-vahan-sahay",
+      "kind": "scheme",
+      "title": "બેટરી વાહન સહાય (વિદ્યાર્થીને ટુ-વ્હીલર, રિક્ષા)",
+      "summary": "વિદ્યાર્થીને બેટરીવાળું ટુ-વ્હીલર લેવા ₹12,000 અને બેટરી રિક્ષા પર ₹48,000.",
+      "categories": [
+        "vidyarthi",
+        "yuvan"
+      ],
+      "benefit": "ટુ-વ્હીલર ₹12,000; થ્રી-વ્હીલર ₹48,000.",
+      "eligibility": [
+        "ટુ-વ્હીલર: ધો. 9 થી 12 કે કૉલેજના વિદ્યાર્થી. થ્રી-વ્હીલર: રિક્ષાચાલક, મહિલા ઉદ્યોગ સાહસિક, બેરોજગાર યુવાન, સંસ્થા. વાહન GEDA માન્ય કંપનીના ડીલર પાસેથી જ."
+      ],
+      "fee": "",
+      "validity": "",
+      "documents": [
+        "નક્કી અરજી ફોર્મ (ડીલર પાસે)",
+        "આધાર કાર્ડ",
+        "વિદ્યાર્થી માટે: ચાલુ વર્ષનું બોનાફાઇડ પ્રમાણપત્ર (ફોટો સાથે)",
+        "રિક્ષા માટે: ડ્રાઇવિંગ લાયસન્સ"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.myscheme.gov.in/gu/schemes/sfbotw",
+      "source": "myScheme: Battery Operated 2-Wheelers",
+      "sources": [
+        {
+          "label": "myScheme: Battery Operated 2-Wheelers",
+          "url": "https://www.myscheme.gov.in/gu/schemes/sfbotw"
+        },
+        {
+          "label": "myScheme: Battery Operated Three-Wheelers",
+          "url": "https://www.myscheme.gov.in/gu/schemes/sfbothw"
+        },
+        {
+          "label": "GEDA",
+          "url": "https://geda.gujarat.gov.in/"
+        }
+      ],
+      "words": "battery vahan electric two wheeler rickshaw geda subsidy student",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
     }
   ],
   "renamed": {

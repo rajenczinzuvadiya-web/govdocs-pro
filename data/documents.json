@@ -1,5 +1,5 @@
 {
-  "updatedOn": "2026-11-17",
+  "updatedOn": "2026-11-24",
   "groups": [
     {
       "id": "doc-id",
@@ -72,7 +72,7 @@
         "મોબાઈલ નંબર જોડવો / બદલવો હોય તો ફક્ત આધાર કાર્ડ અને તે મોબાઈલ સાથે રાખો"
       ],
       "lastDate": null,
-      "officialLink": "https://myaadhaar.uidai.gov.in/",
+      "officialLink": "https://uidai.gov.in/",
       "source": "UIDAI",
       "sources": [
         {
@@ -126,8 +126,9 @@
         }
       ],
       "words": "pan card paan e-pan epan income tax navu pan",
+      "image": "https://dxxxjvakvrleqalojfrm.supabase.co/storage/v1/object/public/guide-shots/35d0ae4e-4cfa-4826-9f7f-a3647a4a49dd.jpg",
       "from": "hub",
-      "updatedOn": "2026-11-04",
+      "updatedOn": "2026-11-24",
       "verified": false
     },
     {
@@ -565,7 +566,7 @@
         "કુટુંબના વડાનો ફોટો"
       ],
       "lastDate": null,
-      "officialLink": "https://www.digitalgujarat.gov.in/",
+      "officialLink": "https://dcs-dof.gujarat.gov.in/",
       "source": "અન્ન, નાગરિક પુરવઠા અને ગ્રાહકોની બાબતોનો વિભાગ, ગુજરાત",
       "sources": [
         {
@@ -1435,6 +1436,306 @@
       "words": "anubandham rojgar kacheri employment exchange naukri job registration bharti melo",
       "from": "hub",
       "updatedOn": "2026-11-04",
+      "verified": false
+    },
+    {
+      "id": "bin-anamat-pramanpatra",
+      "kind": "doc",
+      "title": "બિન અનામત વર્ગનું પ્રમાણપત્ર",
+      "summary": "અનામતમાં ન આવતી જ્ઞાતિ (બિન અનામત વર્ગ) નો દાખલો — બિન અનામત નિગમની સહાય અને લોન માટે જરૂરી.",
+      "categories": [
+        "vidyarthi",
+        "yuvan",
+        "samanya"
+      ],
+      "group": "doc-cert",
+      "benefit": "બિન અનામત નિગમની ટ્યુશન સહાય, કોચિંગ, ભોજન બિલ, શિક્ષણ / વિદેશ લોન, સ્વરોજગાર લોન અને ભરતીમાં જરૂર પડે.",
+      "eligibility": [
+        "ગુજરાતમાં રહેતા, SC / ST / SEBC ની યાદીમાં ન આવતી જ્ઞાતિના લોકો."
+      ],
+      "fee": "⚠️ ચકાસો",
+      "validity": "",
+      "documents": [
+        "આધાર કાર્ડ",
+        "રહેઠાણનો પુરાવો (રેશનકાર્ડ / લાઇટ બિલ)",
+        "જ્ઞાતિનો પુરાવો: શાળા છોડ્યાનું પ્રમાણપત્ર (LC) — પોતાનું કે પિતાનું",
+        "પાસપોર્ટ સાઇઝ ફોટો",
+        "સોગંદનામું / એકરારનામું ⚠️ ચકાસો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.digitalgujarat.gov.in/",
+      "source": "Digital Gujarat",
+      "sources": [
+        {
+          "label": "Digital Gujarat",
+          "url": "https://www.digitalgujarat.gov.in/"
+        },
+        {
+          "label": "ગુજરાત બિન અનામત શૈક્ષણિક અને આર્થિક વિકાસ નિગમ",
+          "url": "https://gueedc.gujarat.gov.in/"
+        }
+      ],
+      "words": "bin anamat binanamat unreserved certificate savarna dakhlo non reserved",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "varishth-nagrik-pramanpatra",
+      "kind": "doc",
+      "title": "વરિષ્ઠ નાગરિક પ્રમાણપત્ર",
+      "summary": "60 વર્ષ પૂરાં થયાનો સરકારી દાખલો — રાહત અને યોજનામાં ઉંમરનો પુરાવો.",
+      "categories": [
+        "vrudh"
+      ],
+      "group": "doc-cert",
+      "benefit": "ST બસ ભાડામાં રાહત, બેંક વ્યાજ, વૃદ્ધ સહાય અને બીજી યોજનામાં ઉંમરનો પુરાવો ⚠️ ચકાસો",
+      "eligibility": [
+        "ગુજરાતમાં રહેતી 60 વર્ષ કે વધુ ઉંમરની વ્યક્તિ."
+      ],
+      "fee": "⚠️ ચકાસો",
+      "validity": "કાયમ",
+      "documents": [
+        "આધાર કાર્ડ",
+        "ઉંમરનો પુરાવો (જન્મનો દાખલો / LC / ચૂંટણી કાર્ડ)",
+        "રહેઠાણનો પુરાવો (રેશનકાર્ડ / લાઇટ બિલ)",
+        "પાસપોર્ટ સાઇઝ ફોટો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.digitalgujarat.gov.in/",
+      "source": "Digital Gujarat",
+      "sources": [
+        {
+          "label": "Digital Gujarat",
+          "url": "https://www.digitalgujarat.gov.in/"
+        }
+      ],
+      "words": "senior citizen certificate varishth nagrik vruddh 60 varsh card",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "laghumati-pramanpatra",
+      "kind": "doc",
+      "title": "ધાર્મિક લઘુમતી પ્રમાણપત્ર",
+      "summary": "મુસ્લિમ, ખ્રિસ્તી, શીખ, બૌદ્ધ, જૈન કે પારસી ધર્મના હોવાનો દાખલો.",
+      "categories": [
+        "vidyarthi",
+        "samanya"
+      ],
+      "group": "doc-cert",
+      "benefit": "લઘુમતી શિષ્યવૃત્તિ, લઘુમતી નિગમની લોન અને શાળા-કૉલેજ પ્રવેશમાં ⚠️ ચકાસો",
+      "eligibility": [
+        "ગુજરાતમાં રહેતા લઘુમતી ધર્મના લોકો."
+      ],
+      "fee": "⚠️ ચકાસો",
+      "validity": "",
+      "documents": [
+        "આધાર કાર્ડ",
+        "રહેઠાણનો પુરાવો (રેશનકાર્ડ / લાઇટ બિલ)",
+        "ધર્મનો પુરાવો: LC (ધર્મ લખેલો) — પોતાનું કે માતા-પિતાનું",
+        "પાસપોર્ટ સાઇઝ ફોટો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.digitalgujarat.gov.in/",
+      "source": "Digital Gujarat",
+      "sources": [
+        {
+          "label": "Digital Gujarat",
+          "url": "https://www.digitalgujarat.gov.in/"
+        }
+      ],
+      "words": "minority certificate laghumati muslim christian jain dharmik",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "charitra-pramanpatra",
+      "kind": "doc",
+      "title": "ચારિત્ર્ય પ્રમાણપત્ર / પોલીસ ક્લિયરન્સ",
+      "summary": "વ્યક્તિ સામે કોઈ ગુનો નોંધાયેલો નથી તેનો પોલીસનો દાખલો — નોકરી, વિઝા અને ભાડા કરાર માટે.",
+      "categories": [
+        "yuvan",
+        "samanya"
+      ],
+      "group": "doc-job",
+      "benefit": "નોકરીમાં જોડાવા, વિદેશ જવા (પાસપોર્ટ PCC), ભાડૂઆત ખરાઈ.",
+      "eligibility": [
+        "નોકરી, વિદેશ, ભાડે ઘર કે લાયસન્સ માટે જેમને આ દાખલો માગવામાં આવ્યો હોય."
+      ],
+      "fee": "⚠️ ચકાસો",
+      "validity": "",
+      "documents": [
+        "આધાર કાર્ડ",
+        "રહેઠાણનો પુરાવો",
+        "પાસપોર્ટ સાઇઝ ફોટો",
+        "જે માટે જોઈએ તે કારણ (નોકરીનો ઓર્ડર / પત્ર) ⚠️ ચકાસો",
+        "વિદેશ માટે: પાસપોર્ટ"
+      ],
+      "lastDate": null,
+      "officialLink": "https://www.digitalgujarat.gov.in/",
+      "source": "Digital Gujarat",
+      "sources": [
+        {
+          "label": "Digital Gujarat",
+          "url": "https://www.digitalgujarat.gov.in/"
+        },
+        {
+          "label": "Passport Seva (PCC)",
+          "url": "https://www.passportindia.gov.in/"
+        }
+      ],
+      "words": "character certificate charitra police clearance pcc verification dakhlo",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "ferfar-nondh",
+      "kind": "doc",
+      "title": "ફેરફાર નોંધ (ગામ નમૂના નં. 6 / હક્કપત્રક)",
+      "summary": "જમીનમાં વેચાણ, વારસાઈ, બોજો કે નામ ફેરની નોંધ — અને તેની નકલ.",
+      "categories": [
+        "khedut"
+      ],
+      "group": "doc-land",
+      "benefit": "નવો માલિક / વારસદાર ૭/૧૨ માં ચડે; લોન, સહાય અને વેચાણમાં જરૂરી.",
+      "eligibility": [
+        "જમીન ખરીદનાર, વારસદાર, લોન લેનાર ખેડૂત — જેની જમીનમાં નવો ફેરફાર થયો હોય."
+      ],
+      "fee": "નકલ: મહેસૂલ વિભાગના દર પ્રમાણે ⚠️ ચકાસો",
+      "validity": "",
+      "documents": [
+        "ફેરફારનો આધાર: નોંધાયેલો દસ્તાવેજ / પેઢીનામું + મરણનો દાખલો / બેંકનો બોજા પત્ર",
+        "૭/૧૨ અને ૮-અ ની નકલ",
+        "આધાર કાર્ડ (બધા ખાતેદાર)",
+        "ખેડૂત ખાતેદાર હોવાનો પુરાવો (ખરીદનાર માટે)"
+      ],
+      "lastDate": null,
+      "officialLink": "https://anyror.gujarat.gov.in/",
+      "source": "AnyROR",
+      "sources": [
+        {
+          "label": "AnyROR",
+          "url": "https://anyror.gujarat.gov.in/"
+        },
+        {
+          "label": "iORA (મહેસૂલ વિભાગ)",
+          "url": "https://iora.gujarat.gov.in/"
+        }
+      ],
+      "words": "ferfar nondh namuna 6 hakkpatrak mutation entry varsai bojo e-dhara",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "binkheti-na",
+      "kind": "doc",
+      "title": "બિનખેતી (NA) પરવાનગી",
+      "summary": "ખેતીની જમીન પર ઘર, દુકાન કે ઉદ્યોગ બાંધવા જમીનને બિનખેતી કરવાની પરવાનગી.",
+      "categories": [
+        "khedut",
+        "vepari"
+      ],
+      "group": "doc-land",
+      "benefit": "બાંધકામ પરવાનગી, બેંક લોન અને પ્લોટ વેચાણ કાયદેસર થાય.",
+      "eligibility": [
+        "ખેતીની જમીનનો ઉપયોગ રહેઠાણ, વાણિજ્ય કે ઉદ્યોગ માટે કરવા માગતા ખાતેદાર."
+      ],
+      "fee": "જમીન અને ઉપયોગ પ્રમાણે પ્રીમિયમ / રૂપાંતર કર ⚠️ ચકાસો",
+      "validity": "",
+      "documents": [
+        "૭/૧૨, ૮-અ અને જૂની ફેરફાર નોંધો",
+        "જમીનનો નકશો / માપણી શીટ",
+        "પ્લાન અને લે-આઉટ ⚠️ ચકાસો",
+        "આધાર કાર્ડ (બધા ખાતેદાર)",
+        "જરૂર પડે તો બીજી કચેરીનાં ના-વાંધા પ્રમાણપત્ર ⚠️ ચકાસો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://iora.gujarat.gov.in/",
+      "source": "iORA (મહેસૂલ વિભાગ)",
+      "sources": [
+        {
+          "label": "iORA (મહેસૂલ વિભાગ)",
+          "url": "https://iora.gujarat.gov.in/"
+        }
+      ],
+      "words": "na permission binkheti non agriculture bin kheti plot conversion",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "jamin-mapni",
+      "kind": "doc",
+      "title": "જમીન માપણી અરજી",
+      "summary": "જમીનની હદ, ભાગ પાડવા કે ક્ષેત્રફળ ખરાઈ માટે સરકારી માપણી.",
+      "categories": [
+        "khedut"
+      ],
+      "group": "doc-land",
+      "benefit": "સરકારી માપણી શીટ — હદ નક્કી થાય, ભાગ પડે, ક્ષેત્રફળ સાચું થાય.",
+      "eligibility": [
+        "હદ વિવાદ, ભાગ પાડવા, વેચાણ કે NA પહેલાં જમીન મપાવવા માગતા ખાતેદાર."
+      ],
+      "fee": "માપણીના પ્રકાર (સાદી / તાકીદ) પ્રમાણે ⚠️ ચકાસો",
+      "validity": "",
+      "documents": [
+        "૭/૧૨ અને ૮-અ ની નકલ",
+        "આધાર કાર્ડ",
+        "ગામ નમૂના 6 ની નોંધ (નવો ફેરફાર હોય તો)",
+        "બાજુના ખાતેદારોનાં નામ ⚠️ ચકાસો"
+      ],
+      "lastDate": null,
+      "officialLink": "https://iora.gujarat.gov.in/",
+      "source": "iORA (મહેસૂલ વિભાગ)",
+      "sources": [
+        {
+          "label": "iORA (મહેસૂલ વિભાગ)",
+          "url": "https://iora.gujarat.gov.in/"
+        }
+      ],
+      "words": "jamin mapni measurement survey dilr hadd mapani land survey",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
+      "verified": false
+    },
+    {
+      "id": "property-card",
+      "kind": "doc",
+      "title": "પ્રોપર્ટી કાર્ડ (ગામતળ / સ્વામિત્વ)",
+      "summary": "ગામતળમાં ઘર / પ્લોટની માલિકીનું સરકારી કાર્ડ — સ્વામિત્વ ડ્રોન માપણી પછી મળે.",
+      "categories": [
+        "samanya"
+      ],
+      "group": "doc-land",
+      "benefit": "ઘરની માલિકીનો પુરાવો, બેંક લોન, વેચાણ અને વારસાઈમાં સરળતા.",
+      "eligibility": [
+        "ગામતળમાં ઘર કે પ્લોટ ધરાવનાર, જ્યાં સ્વામિત્વ માપણી થઈ હોય ⚠️ ચકાસો"
+      ],
+      "fee": "⚠️ ચકાસો",
+      "validity": "",
+      "documents": [
+        "ઘરવેરા આકારણીનો ઉતારો",
+        "ખરીદીનો દસ્તાવેજ / વારસાઈના પુરાવા",
+        "આધાર કાર્ડ",
+        "છેલ્લી વેરા પહોંચ"
+      ],
+      "lastDate": null,
+      "officialLink": "https://svamitva.nic.in/",
+      "source": "SVAMITVA (પંચાયતી રાજ મંત્રાલય)",
+      "sources": [
+        {
+          "label": "SVAMITVA (પંચાયતી રાજ મંત્રાલય)",
+          "url": "https://svamitva.nic.in/"
+        }
+      ],
+      "words": "property card svamitva swamitva gamtal ghar malik card drone",
+      "from": "hub",
+      "updatedOn": "2026-11-24",
       "verified": false
     }
   ]
