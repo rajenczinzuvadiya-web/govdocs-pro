@@ -82,6 +82,19 @@ for (const h of helplines) {
   if (!h.title) errors.push(`ફોન નંબર "${h.number}": નામ ખૂટે છે`);
 }
 
+// ધ્યાન રાખો (data/dhyan.json): હોમની ફરતી પટ્ટી — સૂચના, ફ્રોડ, સામાન્ય ભૂલ, જાણકારી
+const { items: dhyan } = read('dhyan.json');
+if (!Array.isArray(dhyan) || !dhyan.length) errors.push('ધ્યાન રાખો: યાદી ખાલી છે');
+const dhIds = new Set();
+for (const d of dhyan || []) {
+  const at = `ધ્યાન રાખો "${d.id}"`;
+  if (!d.id || typeof d.id !== 'string' || dhIds.has(d.id)) errors.push(`${at}: id ખૂટે છે કે બે વાર છે`);
+  dhIds.add(d.id);
+  if (!['suchna', 'fraud', 'bhool', 'jankari'].includes(d.type)) errors.push(`${at}: અજાણ્યો પ્રકાર "${d.type}"`);
+  if (!d.text || typeof d.text !== 'string' || d.text.length > 220) errors.push(`${at}: લખાણ ખાલી કે 220 અક્ષરથી લાંબું`);
+  if (d.link && !String(d.link).startsWith('https://')) errors.push(`${at}: લિંક https:// થી શરૂ થવી જોઈએ`);
+}
+
 // ફરજિયાત દસ્તાવેજ (data/essentials.json): દરેક id યોજના / દસ્તાવેજમાં હોવું જોઈએ, "why" ટૂંકું
 const essentials = read('essentials.json');
 const cardIds = new Set([...schemes, ...documents].map((s) => s.id));
