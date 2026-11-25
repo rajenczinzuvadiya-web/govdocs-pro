@@ -1,5 +1,5 @@
 // KruPa Digital Hub (એડમિન → ગાઇડ મેનેજ) માં લાઇવ થયેલી યોજના, દસ્તાવેજ, પ્રસંગ, "આજે શું નવું" અને ફોન નંબર જાણકારના data/ માં લાવે.
-// GitHub Actions દર 3 કલાકે ચલાવે છે (.github/workflows/sync-hub.yml). હાથથી: node scripts/sync-hub.mjs [feed.json]
+// GitHub Actions દર કલાકે + Digital Hub માં સેવ થાય ત્યારે તરત ચલાવે (.github/workflows/sync-hub.yml). હાથથી: node scripts/sync-hub.mjs [feed.json]
 //
 // નિયમો:
 // - Digital Hub નું કાર્ડ = મુખ્ય. એ જ id નું જાણકારનું કાર્ડ બદલાઈ જાય (`from: "hub"`).
@@ -220,6 +220,27 @@ export function mergeHelplines(feed, H) {
   return helplines.length >= 5 ? { ...H, helplines } : null;
 }
 
+export const DHYAN_TYPES = new Set(['suchna', 'fraud', 'bhool', 'jankari']);
+const MAX_DHYAN = 40;
+/**
+ * Digital Hub નું "ધ્યાન રાખો" (feed.tips) → data/dhyan.json (હોમની ફરતી પટ્ટી). યુઝર 25/11/26.
+ * Digital Hub માં એક પણ સાચી લીટી હોય તો આખી યાદી Digital Hub ની (ક્રમ પણ); ખાલી / ન હોય તો null = જાણકારની રહે.
+ */
+export function mergeDhyan(feed, D) {
+  if (!Array.isArray(feed?.tips)) return null;
+  const seen = new Set();
+  const items = [];
+  for (const r of feed.tips) {
+    if (!r || typeof r.id !== 'string' || !/^[a-z0-9-]{2,80}$/.test(r.id) || seen.has(r.id)) continue;
+    const text = str(r.text).replace(/\s+/g, ' ').slice(0, 220);
+    if (!text) continue;
+    seen.add(r.id);
+    items.push({ id: r.id, type: DHYAN_TYPES.has(r.type) ? r.type : 'suchna', text, ...(link(r.link) ? { link: link(r.link) } : {}), from: 'hub' });
+    if (items.length >= MAX_DHYAN) break;
+  }
+  return items.length ? { ...D, items } : null;
+}
+
 // ---------- ફાઇલ સાથે ચલાવવું ----------
 const same = (a, b) => JSON.stringify({ ...a, updatedOn: '' }) === JSON.stringify({ ...b, updatedOn: '' });
 
@@ -231,7 +252,8 @@ async function main() {
   if (arg) feed = JSON.parse(readFileSync(arg));
   else {
     // redirect: 'manual' — લોગિન પેજ પર મોકલે (જૂનું deploy) તો એ પણ "જવાબ નહીં" ગણાય.
-    const res = await fetch(FEED_URL, { headers: { accept: 'application/json' }, redirect: 'manual', signal: AbortSignal.timeout(30000) }).catch(() => null);
+    // ?t= : Digital Hub નું CDN જવાબ 15 મિનિટ રાખે છે — સેવ પછી તરત ચાલે ત્યારે જૂનું ન આવે એટલે દર વખતે તાજું.
+    const res = await fetch(`${FEED_URL}?t=${Date.now()}`, { headers: { accept: 'application/json' }, redirect: 'manual', signal: AbortSignal.timeout(30000) }).catch(() => null);
     feed = res && res.ok ? await res.json().catch(() => null) : null;
     if (!feed) {
       console.log(`Digital Hub એ સાચો જવાબ ન આપ્યો (${res ? res.status : 'નેટ'}). કંઈ બદલ્યું નથી.`);
@@ -241,11 +263,11 @@ async function main() {
   const today = new Date().toISOString().slice(0, 10);
   let changed = 0;
   // "આજે શું નવું" અને ફોન નંબર પણ અલગ: યોજનાની રોક એમને ન અટકાવે.
-  for (const [f, fn, key] of [['updates.json', mergeUpdates, 'updates'], ['helplines.json', mergeHelplines, 'helplines']]) {
+  for (const [f, fn, key] of [['updates.json', mergeUpdates, 'updates'], ['helplines.json', mergeHelplines, 'helplines'], ['dhyan.json', mergeDhyan, 'items']]) {
     const before = read(f);
     const after = fn(feed, before);
     if (!after) continue;
-    console.log(`Digital Hub: ${key === 'updates' ? 'આજે શું નવું' : 'ફોન નંબર'} ${after[key].length}`);
+    console.log(`Digital Hub: ${{ updates: 'આજે શું નવું', helplines: 'ફોન નંબર', items: 'ધ્યાન રાખો' }[key]} ${after[key].length}`);
     if (same(after, before)) continue;
     writeFileSync(at(f), JSON.stringify({ ...after, updatedOn: today }, null, 2) + '\n');
     changed++;

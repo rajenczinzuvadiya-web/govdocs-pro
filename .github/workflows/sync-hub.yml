@@ -1,10 +1,12 @@
 # KruPa Digital Hub (એડમિન → ગાઇડ મેનેજ) માંથી લાઇવ યોજના, દસ્તાવેજ અને પ્રસંગ જાણકારમાં લાવે.
-# દર 3 કલાકે આપોઆપ. તરત જોઈએ તો: GitHub → Actions → "Digital Hub માંથી માહિતી" → Run workflow.
+# દર કલાકે આપોઆપ, અને Digital Hub માં ગાઇડ / પ્રસંગ / ધ્યાન રાખો સેવ થાય ત્યારે તરત (Digital Hub આ workflow ચલાવે, JANKAR_SYNC_TOKEN).
+# GitHub ઘણી વાર સમયસરનું ચલાવવાનું છોડી દે છે (25/11/26: 3 કલાકને બદલે 8–14 કલાક) — એટલે દર કલાકે + તરત.
+# હાથે: GitHub → Actions → "Digital Hub માંથી માહિતી" → Run workflow.
 name: Digital Hub માંથી માહિતી
 
 on:
   schedule:
-    - cron: '17 */3 * * *'
+    - cron: '17 * * * *'
   workflow_dispatch:
 
 permissions:

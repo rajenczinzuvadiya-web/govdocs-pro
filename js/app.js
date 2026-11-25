@@ -1,7 +1,7 @@
 import { APP } from './config.js';
 import { CATEGORIES, CATEGORY_BY_ID, JATI, OCCUPATIONS, INCOME, DISTRICTS } from './options.js';
 import { store } from './store.js';
-import { matches, sortForProfile, isExpired, daysLeft, deadlineText, formatDate } from './match.js';
+import { matches, sortForProfile, isExpired, daysLeft, deadlineText, formatDate, findSchemes } from './match.js';
 import { icon, tile, glyph, linePath, socialIcon } from './icons.js';
 import { INFO_PAGES, INFO_LINKS, INFO_UPDATED } from './pages.js';
 import { sendFeedback } from './feedback.js';
@@ -12,6 +12,8 @@ const state = {
   docGroups: [],
   events: [],
   updates: [],
+  // ધ્યાન રાખો (data/dhyan.json): સૂચના, ફ્રોડ, સામાન્ય ભૂલ — હોમની ફરતી પટ્ટી
+  dhyan: [],
   helplines: [],
   profile: store.getProfile(),
   seen: new Set(store.getSeen() || []),
@@ -79,7 +81,8 @@ async function loadData() {
       get('documents.json').catch(() => ({})),
       get('events.json').catch(() => ({})),
     ]);
-    const es = await get('essentials.json').catch(() => ({}));
+    const [es, dh] = await Promise.all([get('essentials.json').catch(() => ({})), get('dhyan.json').catch(() => ({}))]);
+    state.dhyan = (dh.items || []).filter((x) => x && x.text && DHYAN_TYPES[x.type]);
     state.essentials = { all: es.all || [], roles: es.roles || {} };
     state.schemes = (s.schemes || []).map(calmCard);
     state.updates = u.updates || [];
@@ -332,16 +335,114 @@ function homeResults() {
 const schemesFor = (c) => visible(state.schemes).filter((s) => (s.categories || []).includes(c));
 const essentialCount = () => state.essentials.all.filter((x) => findItem(x.id)).length;
 
+// 4 મોટાં બટન (યુઝર 25/11/26: "સારા નથી લાગતા") — રંગીન કાર્ડ: સફેદ આઇકન, નામ, સંખ્યા, ખૂણે મોટો ઝાંખો આઇકન
 function homeAsk() {
   const tiles = [
     ['#/all', 'book', 'indigo', 'યોજના', `${visible(state.schemes).length} યોજના`],
-    ['#/docs', 'folder', 'sky', 'દસ્તાવેજ', `${state.docs.length} દસ્તાવેજ`],
+    ['#/docs', 'certificate', 'sky', 'દસ્તાવેજ', `${state.docs.length} દસ્તાવેજ`],
     ['#/events', 'calendar', 'pink', 'જીવનના પ્રસંગ', `${state.events.length} પ્રસંગ`],
-    ['#/must', 'idcard', 'green', 'ફરજિયાત દસ્તાવેજ', `દરેક પાસે હોવા જોઈએ`],
+    ['#/must', 'idcard', 'green', 'ફરજિયાત દસ્તાવેજ', 'દરેક પાસે હોવા જોઈએ'],
   ];
   return `<ul class="qgrid">${tiles
-    .map(([href, ic, tone, t, line]) => `<li><a class="qtile" href="${href}">${tile(ic, tone)}<span><b>${t}</b><small>${line}</small></span>${icon('chev', 'ic-sm chev')}</a></li>`)
+    .map(([href, ic, tone, t, line]) => `<li><a class="qtile tone-${tone}" href="${href}"><span class="q-ic" aria-hidden="true">${glyph(ic)}</span><b>${t}</b><small>${line}</small><span class="q-bg" aria-hidden="true">${glyph(ic)}</span></a></li>`)
     .join('')}</ul>`;
+}
+
+// ---------- ધ્યાન રાખો: હોમની ફરતી પટ્ટી (યુઝર 25/11/26: "ચેતવણી" ને બદલે, આપમેળે બદલાય) ----------
+const DHYAN_TYPES = {
+  suchna: { label: 'સૂચના', ic: 'info', tone: 'info' },
+  fraud: { label: 'ફ્રોડથી સાવધાન', ic: 'shield', tone: 'danger' },
+  bhool: { label: 'આ ભૂલ ન કરો', ic: 'alert', tone: 'warn' },
+  jankari: { label: 'જાણકારી', ic: 'bulb', tone: 'ok' },
+};
+const DHYAN_MS = 6000;
+let dhyanAt = 0;
+let dhyanTimer = null;
+const reduceMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function dhyanSlide(d) {
+  const t = DHYAN_TYPES[d.type];
+  return `<span class="dh-type dh-${t.tone}">${icon(t.ic, 'ic-sm')}${t.label}</span><span class="dh-text">${esc(d.text)}</span>`;
+}
+function homeDhyan() {
+  if (!state.dhyan.length) return '';
+  dhyanAt = dhyanAt % state.dhyan.length;
+  const n = state.dhyan.length;
+  return `
+    <section class="dhyan" aria-labelledby="dh-h">
+      <div class="dh-head">
+        <h2 id="dh-h">${icon('bell')}ધ્યાન રાખો</h2>
+        <a class="dh-all" href="#/dhyan">બધું જુઓ ${icon('chev', 'ic-sm')}</a>
+      </div>
+      <a class="dh-slide" href="#/dhyan" aria-live="polite">${dhyanSlide(state.dhyan[dhyanAt])}</a>
+      ${n > 1 ? `<div class="dh-dots" role="group" aria-label="બીજી વાત">${state.dhyan.map((_, i) => `<button type="button" data-dhyan="${i}" aria-label="${i + 1} / ${n}"${i === dhyanAt ? ' aria-current="true"' : ''}></button>`).join('')}</div>` : ''}
+    </section>`;
+}
+function showDhyan(i) {
+  const box = document.querySelector('.dhyan');
+  if (!box || !state.dhyan.length) return stopDhyan();
+  dhyanAt = (i + state.dhyan.length) % state.dhyan.length;
+  const slide = box.querySelector('.dh-slide');
+  slide.classList.remove('in');
+  void slide.offsetWidth;
+  slide.innerHTML = dhyanSlide(state.dhyan[dhyanAt]);
+  slide.classList.add('in');
+  box.querySelectorAll('[data-dhyan]').forEach((b, j) => (j === dhyanAt ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current')));
+}
+function stopDhyan() {
+  clearInterval(dhyanTimer);
+  dhyanTimer = null;
+}
+function startDhyan() {
+  stopDhyan();
+  const box = document.querySelector('.dhyan');
+  if (!box || state.dhyan.length < 2 || reduceMotion()) return;
+  dhyanTimer = setInterval(() => {
+    if (!document.querySelector('.dhyan')) return stopDhyan();
+    // માઉસ ઉપર હોય (કમ્પ્યુટર) કે કી-બોર્ડથી અંદર હોય તો થોભે; ફોનમાં ટપકું દબાવ્યા પછી પણ ફરતું રહે
+    const hover = matchMedia('(hover: hover)').matches && box.matches(':hover');
+    if (document.hidden || hover || box.querySelector(':focus-visible')) return;
+    showDhyan(dhyanAt + 1);
+  }, DHYAN_MS);
+}
+
+function viewDhyan() {
+  const order = ['fraud', 'bhool', 'suchna', 'jankari'];
+  const groups = order.map((t) => [t, state.dhyan.filter((d) => d.type === t)]).filter(([, l]) => l.length);
+  return `
+    ${pageHead('ધ્યાન રાખો', 'ફ્રોડ, સામાન્ય ભૂલો અને જરૂરી સૂચના', 'bell', '#/')}
+    ${groups.length ? groups.map(([t, list]) => `
+      <h2 class="section-title">${icon(DHYAN_TYPES[t].ic)}${DHYAN_TYPES[t].label} <span class="count">${list.length}</span></h2>
+      <ul class="dh-list">${list.map((d) => `<li class="dh-${DHYAN_TYPES[t].tone}"><span>${esc(d.text)}</span>${d.link ? `<a href="${esc(d.link)}" target="_blank" rel="noopener">${icon('external', 'ic-sm')}વધુ માહિતી</a>` : ''}</li>`).join('')}</ul>`).join('') : '<div class="empty">હમણાં કંઈ નથી.</div>'}`;
+}
+
+// ---------- શોધમાં આપમેળે લખાતું ઉદાહરણ (યુઝર 25/11/26) ----------
+const TYPE_WORDS = ['વૃદ્ધ પેન્શન', 'આવકનો દાખલો', 'આયુષ્માન કાર્ડ', 'રેશનકાર્ડ', 'શિષ્યવૃત્તિ', 'વિધવા સહાય', 'જાતિનો દાખલો', 'ખેડૂત સહાય', 'PAN કાર્ડ', 'દીકરી યોજના'];
+const TYPE_LEAD = 'શોધો: ';
+const graphemes = (t) => (window.Intl && Intl.Segmenter ? [...new Intl.Segmenter('gu', { granularity: 'grapheme' }).segment(t)].map((x) => x.segment) : Array.from(t));
+let typeTimer = null;
+function startTyping() {
+  clearTimeout(typeTimer);
+  const input = document.getElementById('home-search');
+  if (!input || reduceMotion()) return;
+  let w = 0, n = 0, back = false;
+  const step = () => {
+    const el = document.getElementById('home-search');
+    if (el !== input) return;
+    if (input.value || document.activeElement === input) {
+      input.placeholder = 'યોજના કે દાખલો શોધો…';
+      typeTimer = setTimeout(step, 600);
+      return;
+    }
+    const g = graphemes(TYPE_WORDS[w]);
+    n += back ? -1 : 1;
+    input.placeholder = TYPE_LEAD + g.slice(0, n).join('') + (n < g.length || back ? '|' : '');
+    let wait = back ? 45 : 110;
+    if (!back && n >= g.length) (back = true), (wait = 1600);
+    else if (back && n <= 0) (back = false), (w = (w + 1) % TYPE_WORDS.length), (wait = 350);
+    typeTimer = setTimeout(step, wait);
+  };
+  step();
 }
 
 function homeWho(p) {
@@ -357,7 +458,6 @@ function homeWho(p) {
 
 function viewHome() {
   const p = state.profile;
-  const latest = [...state.updates].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))[0];
   return `
     ${state.installPrompt ? `<button class="note note-info btn-block" style="border:0;cursor:pointer;text-align:left;margin-bottom:1rem" data-action="install">${icon('plus')}<span><strong>એપ ફોનમાં ઇન્સ્ટોલ કરો</strong>: હોમ સ્ક્રીન પરથી સીધી ખૂલશે.</span></button>` : ''}
     ${reminderNote()}
@@ -365,15 +465,13 @@ function viewHome() {
       <div class="scard-in">
         <h2>શું જાણવું છે?</h2>
         <label class="search-big">${icon('search')}
-          <input id="home-search" type="search" placeholder="યોજના કે દાખલો શોધો… (જેમ કે પેન્શન, આવક)" value="${esc(homeQuery)}" aria-label="શોધો">
+          <input id="home-search" type="search" placeholder="યોજના કે દાખલો શોધો…" value="${esc(homeQuery)}" aria-label="યોજના કે દાખલો શોધો" autocomplete="off">
         </label>
         ${homeAsk()}
       </div>
     </section>
-    ${latest ? `
-      <a class="tip ${latest.type === 'chetavani' ? 'warn' : ''}" href="#/today">${icon(latest.type === 'chetavani' ? 'alert' : 'bulb')}
-        <span><b>${latest.type === 'chetavani' ? 'ચેતવણી' : 'આજે નવું'}:</b> ${esc(latest.title)} <span class="go">જુઓ →</span></span>
-      </a>` : ''}
+    ${homeDhyan()}
+    <a class="find-cta" href="#/find">${tile('idea', 'blue')}<span><b>તમારા માટે યોજના શોધો</b><small>ઉંમર, કામ, આવક, જાતિ… પ્રમાણે</small></span>${icon('chev', 'ic-sm chev')}</a>
     <div id="home-results">${homeResults()}</div>
     ${homeWho(p)}
     ${otherApps()}
@@ -381,6 +479,50 @@ function viewHome() {
 }
 
 // ---------- વર્ગ પ્રમાણે: #/for/<વર્ગ> (હોમના "તમે કોણ છો?") ----------
+
+// ---------- તમારા માટે યોજના શોધો: #/find (યુઝર 25/11/26) ----------
+// જવાબ ફક્ત આ ફોનમાં (પ્રોફાઇલમાં `find`); ક્યાંય મોકલાતા નથી. બધું વૈકલ્પિક.
+const FIND_Q = [
+  ['gender', 'તમે', [['m', 'પુરુષ'], ['f', 'સ્ત્રી'], ['o', 'બીજું']]],
+  ['area', 'ક્યાં રહો છો?', [['village', 'ગામ'], ['city', 'શહેર']]],
+  ['student', 'અભ્યાસ ચાલુ છે?', [['yes', 'હા'], ['no', 'ના']]],
+  ['divyang', 'દિવ્યાંગ છો?', [['yes', 'હા'], ['no', 'ના']]],
+  ['bpl', 'BPL કાર્ડ છે?', [['yes', 'હા'], ['no', 'ના']]],
+  ['kids', 'ઘરમાં નાનું બાળક કે સગર્ભા?', [['yes', 'હા'], ['no', 'ના']]],
+  ['widow', 'વિધવા બહેન?', [['yes', 'હા'], ['no', 'ના']]],
+];
+let findShown = false;
+const findAnswers = () => (state.profile && state.profile.find) || {};
+
+function viewFind() {
+  const a = findAnswers();
+  const opt = (items, val) => items.map((i) => { const id = typeof i === 'string' ? i : i.id; const label = typeof i === 'string' ? i : i.label; return `<option value="${esc(id)}" ${val === id ? 'selected' : ''}>${esc(label)}</option>`; }).join('');
+  const seg = ([name, label, choices]) => `
+    <div class="fq${name === 'widow' && a.gender === 'm' ? ' hide-m' : ''}" data-q="${name}"><span class="fq-l">${label}</span>
+      <div class="seg" role="radiogroup" aria-label="${esc(label)}">${choices.map(([v, t]) => `<label><input type="radio" name="${name}" value="${v}" ${a[name] === v ? 'checked' : ''}><span>${t}</span></label>`).join('')}</div>
+    </div>`;
+  const results = findShown ? findSchemes(state.schemes, a) : [];
+  return `
+    ${pageHead('તમારા માટે યોજના શોધો', 'થોડા જવાબ આપો — તમને લાગુ પડી શકે એવી યોજના દેખાશે.', 'search', '#/')}
+    <form id="find" class="find-card card">
+      <div class="find-grid">
+        <label class="field">ઉંમર (વર્ષ)<input name="age" type="number" inputmode="numeric" min="0" max="120" value="${esc(a.age || '')}"></label>
+        <label class="field">શું કરો છો?<select name="occupation"><option value="">— પસંદ કરો —</option>${opt(OCCUPATIONS, a.occupation)}</select></label>
+        <label class="field">જાતિ<select name="jati"><option value="">— પસંદ કરો —</option>${opt(JATI, a.jati)}</select></label>
+        <label class="field">કુટુંબની વાર્ષિક આવક<select name="income"><option value="">— પસંદ કરો —</option>${opt(INCOME, a.income)}</select></label>
+      </div>
+      <div class="fq-grid">${FIND_Q.map(seg).join('')}</div>
+      <div class="find-act">
+        <button class="btn btn-primary" type="submit">${icon('search')}યોજના બતાવો</button>
+        ${Object.keys(a).length ? `<button class="btn btn-ghost" type="button" data-action="find-clear">${icon('refresh')}ફરીથી</button>` : ''}
+        <small class="muted">${icon('lock', 'ic-sm')}જવાબ ફક્ત આ ફોનમાં રહે છે.</small>
+      </div>
+    </form>
+    ${findShown ? `
+      <h2 class="section-title" id="find-res">${icon('list')}તમને લાગુ પડી શકે <span class="count">${results.length}</span></h2>
+      ${results.length ? `<ul class="tgrid">${results.map((r) => itemCard(r.s)).join('')}</ul>
+        <p class="muted find-note">આ અંદાજ છે. છેલ્લો નિર્ણય સત્તાવાર નિયમ પ્રમાણે — કાર્ડ ખોલી "કોને મળે" વાંચો.</p>` : '<div class="empty">કોઈ યોજના મળી નહીં. એક-બે જવાબ ખાલી રાખી ફરી જુઓ.</div>'}` : ''}`;
+}
 
 function essentialsFor(c) {
   const seen = new Set();
@@ -897,6 +1039,7 @@ const NAV = [
   { route: 'all', href: '#/all', ic: 'book', label: 'યોજના ગાઇડ', short: 'યોજના' },
   { route: 'docs', href: '#/docs', ic: 'folder', label: 'દસ્તાવેજ ગાઇડ', short: 'દસ્તાવેજ' },
   { route: 'events', href: '#/events', ic: 'calendar', label: 'જીવનના પ્રસંગ', short: 'પ્રસંગ' },
+  { route: 'find', href: '#/find', ic: 'search', label: 'તમારા માટે યોજના' },
   { route: 'saved', href: '#/saved', ic: 'star', label: 'સેવ કરેલ' },
   { route: 'help', href: '#/help', ic: 'call', label: 'જરૂરી ફોન નંબર' },
   { group: 'મદદ' },
@@ -914,7 +1057,9 @@ function navLinks() {
   ].filter(Boolean);
   return (
     navItems().map((n) => (n.group ? `<p class="group">${n.group}</p>` : `<a class="nl" href="${n.href}" data-route="${n.route}">${icon(n.ic)}<span>${n.label}</span></a>`)).join('') +
-    (op.length ? `<p class="group">ઓપરેટર માટે</p>${op.join('')}` : '')
+    (op.length ? `<p class="group">ઓપરેટર માટે</p>${op.join('')}` : '') +
+    // યુઝર 25/11/26: ફોનમાં ફૂટરમાં ફક્ત ©, એટલે નિયમોનાં પેજ મેનુમાં (કમ્પ્યુટરના ફૂટરમાં પણ રહે)
+    `<div class="nav-rules"><p class="group">નિયમો</p>${INFO_LINKS.filter((l) => !FOOT_SKIP.has(l.route)).map((l) => `<a class="nl" href="#/${l.route}" data-route="${l.route}">${icon(l.ic)}<span>${esc(l.label)}</span></a>`).join('')}</div>`
   );
 }
 
@@ -1259,13 +1404,13 @@ function currentRoute() {
   return { name: parts[0] || 'home', arg: decodeURIComponent(parts[1] || ''), params: new URLSearchParams(query) };
 }
 
-const VIEW_NAMES = ['home', 'all', 'docs', 'events', 'event', 'scheme', 'saved', 'today', 'help', 'profile', 'contact', 'for', 'must', ...Object.keys(INFO_PAGES)];
+const VIEW_NAMES = ['home', 'all', 'docs', 'events', 'event', 'scheme', 'saved', 'today', 'help', 'profile', 'contact', 'for', 'must', 'dhyan', 'find', ...Object.keys(INFO_PAGES)];
 const views_known = (n) => VIEW_NAMES.includes(n);
 
 function currentTab() {
   const { name, arg } = currentRoute();
   const item = name === 'scheme' ? findItem(arg) : null;
-  return { event: 'events', scheme: item && isDoc(item) ? 'docs' : 'all', for: 'home', must: 'docs' }[name] || (views_known(name) ? name : 'home');
+  return { event: 'events', scheme: item && isDoc(item) ? 'docs' : 'all', for: 'home', must: 'docs', dhyan: 'home' }[name] || (views_known(name) ? name : 'home');
 }
 
 function render() {
@@ -1289,10 +1434,17 @@ function render() {
       contact: () => viewContact(params),
       for: () => viewFor(arg),
       must: viewMust,
+      dhyan: viewDhyan,
+      find: () => viewFind(params),
     };
     html = INFO_PAGES[name] ? viewInfo(name) : (views[name] || viewHome)();
   }
+  stopDhyan();
   $view.innerHTML = html;
+  if (name === 'home' || !views_known(name)) startDhyan(), startTyping();
+  // ટૅબ / શોધનું નામ: પેજનું મથાળું + એપનું નામ (હોમ પર લાંબું, index.html જેવું) — યુઝર 25/11/26
+  const h1 = $view.querySelector('h1');
+  document.title = h1 && name !== 'home' ? `${h1.textContent.trim()} — ${APP.name}` : `${APP.name} — યોજના, સહાય અને દાખલાની માહિતી ગુજરાતીમાં`;
   setActiveNav(currentTab());
   if (name === 'today' && state.loaded) store.setSeenUpdates(state.updates.map((u) => u.id));
   renderBell();
@@ -1307,6 +1459,22 @@ $view.addEventListener('submit', (e) => {
   const form = e.target;
   e.preventDefault();
   if (form.id === 'contact-form') return sendContact(form);
+  if (form.id === 'find') {
+    const fd = new FormData(form);
+    const a = {};
+    for (const k of ['age', 'occupation', 'jati', 'income', ...FIND_Q.map((q) => q[0])]) {
+      const v = String(fd.get(k) || '').trim();
+      if (v) a[k] = v;
+    }
+    if (a.gender === 'm') delete a.widow;
+    state.profile = { ...(state.profile || { categories: [] }), find: a };
+    store.setProfile(state.profile);
+    findShown = true;
+    render();
+    const r = document.getElementById('find-res');
+    if (r) r.scrollIntoView({ block: 'start' });
+    return;
+  }
   const categories = readCategories(form);
   if (form.id === 'profile') {
     const fd = new FormData(form);
@@ -1322,6 +1490,13 @@ $view.addEventListener('submit', (e) => {
     store.setProfile(state.profile);
     toast('પ્રોફાઇલ સેવ થઈ ✓');
     location.hash = '#/';
+  }
+});
+
+$view.addEventListener('change', (e) => {
+  if (e.target.name === 'gender' && e.target.closest('#find')) {
+    const w = document.querySelector('[data-q="widow"]');
+    if (w) w.classList.toggle('hide-m', e.target.value === 'm');
   }
 });
 
@@ -1374,6 +1549,12 @@ async function sendContact(form) {
 let inAppNavigations = 0;
 
 $view.addEventListener('click', async (e) => {
+  const dot = e.target.closest('[data-dhyan]');
+  if (dot) {
+    showDhyan(Number(dot.dataset.dhyan));
+    startDhyan();
+    return;
+  }
   const el = e.target.closest('[data-action]');
   if (!el) return;
   const { action, id } = el.dataset;
@@ -1384,6 +1565,14 @@ $view.addEventListener('click', async (e) => {
     else location.hash = el.getAttribute('href') || '#/';
   }
 
+  if (action === 'find-clear') {
+    const { find, ...rest } = state.profile || {};
+    state.profile = { categories: [], ...rest };
+    store.setProfile(state.profile);
+    findShown = false;
+    render();
+    return;
+  }
   if (action === 'mine-cat') {
     const c = el.dataset.cat;
     const cats = (state.profile && state.profile.categories) || [];
@@ -1547,7 +1736,6 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
 applyLook();
 renderChrome();
 document.querySelectorAll('path[data-i]').forEach((p) => p.setAttribute('d', linePath(p.dataset.i)));
-document.title = APP.name;
 render();
 loadData().then(() => {
   render();
