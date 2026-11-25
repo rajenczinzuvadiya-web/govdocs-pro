@@ -1,5 +1,11 @@
 # જાણકાર — કામ ક્યાં પહોંચ્યું (નવું ઉપર)
 
+## 25/11/26 (4) — v0.15.1: Google Analytics ચાલુ
+- યુઝર: Analytics ઉમેરવું? Play Store માં શું જોઈએ? → યુઝરે GA4 property "Jankar" બનાવી (Law & Government, Small, Web stream). Enhanced measurement માં "browser history" page views, Site search, Form interactions બંધ કરવાનું કહ્યું (એપ જાતે page_view મોકલે, શોધેલું લખાણ ન જાય).
+- `js/config.js` → `analytics.ga = 'G-C29PY91YNR'`. ગોપનીયતા નીતિ + 146 અલગ પેજમાં ગણતરી (`build-pages`). `sw.js` v24.
+- ટેસ્ટ: લાઇવ સરનામે (Playwright route) gtag લોડ, page_view `/#/home`, `/#/all` (`?q=` નહીં), `/yojana/`; JS ભૂલ 0; `check-data` 0 ભૂલ — PASS.
+- બાકી (યુઝર): Play Console Data safety માં Analytics ની 2 વધારાની લાઇન (`store/listing.md`). 48 કલાકમાં analytics.google.com → Reports માં આંકડા.
+
 ## 25/11/26 (3) — v0.15.0: હોમ / યોજના શોધો / ફોન નંબર / સંપર્ક નવો દેખાવ, ફોટો ઝૂમ, Play Store તપાસ
 - યુઝર: PC માં આપોઆપ લખાણ અને "ધ્યાન રાખો" સ્લાઇડ / સ્વીપ નહીં; 4 કાર્ડમાં નામ આઇકનથી દૂર; YouTube માં "કરો" નીચે; ફૂટર બંને બાજુ; 💬 નાનું + શબ્દ; યોજના શોધોમાં ઉંમર કાઢો + દેખાવ; ફોન નંબરમાં ફોટો + વિગત; "સરકારી ફોર્મ" લખાણ; આજે શું નવું કામનું?; અમારા વિશે / સંપર્ક દેખાવ; Analytics?; ©; Play Store તપાસ; પ્રોફાઇલ ⇄ યોજના શોધો; એપ શેરનો સંદેશ; ફોટો મોટો / ઝૂમ; સેટિંગમાં દબાવતાં ઉપર જતું; ⬆ નીચે વચ્ચે; સેવ / વોટ્સએપ બટનની જગ્યા; પ્રસંગમાં ✓ અને નામ; "માહિતીમાં ભૂલ છે?" નું લખાણ; સોશિયલ બટન.
 - PC: Windows માં "ઍનિમેશન" બંધ હોય ત્યારે (reduced motion) લખાણ અને સ્લાઇડ બંધ થતાં — હવે ચાલુ, ફક્ત સરકવાનું ઍનિમેશન બંધ. માઉસથી પકડી ડાબે / જમણે ખેંચો (ખેંચ્યા પછી લિંક ન ખૂલે).
@@ -175,10 +181,9 @@
 3. 12 ટેસ્ટર (Gmail) ભેગા કરવા: 14 દિવસનો ટેસ્ટ.
 4. Digital Hub માં ફોટા મૂકવા: એડમિન → ગાઇડ મેનેજ → યોજના ખોલો → ઉપર "ફોટો" અને પગલાંમાં screenshot → સેવ. 3 કલાકમાં જાણકારમાં.
 5. Search Console → Sitemaps → jankar ની લાઇન પર ⋮ → Remove → ફરી `https://jankar.krupadigitalhub.in/sitemap.xml` → Submit (ફાઇલ બરાબર છે, 24/11/26). 2–3 દિવસ પછી પણ "Couldn't fetch" હોય તો "Test live URL" નો સ્ક્રીનશૉટ Claude ને.
-6. Play Console → App content → Data safety: `store/listing.md` ના **નવા** જવાબ (24/11/26: "Yes" અને 5 ખાનાં — Name, Phone number ઉમેરાયા). એપ મોકલતાં પહેલાં જરૂરી.
+6. Play Console → App content → Data safety: `store/listing.md` ના **નવા** જવાબ (24/11/26: "Yes" અને 5 ખાનાં — Name, Phone number ઉમેરાયા) **+ Analytics ની 2 લાઇન (25/11/26 થી ચાલુ)**. એપ મોકલતાં પહેલાં જરૂરી.
 7. થંબનેલ ફોટા: Digital Hub માં 1280×720, સરકારી લોગો / અશોક સ્તંભ / નેતાના ફોટા નહીં, બીજી સાઇટના ફોટા નહીં (`store/README.md`).
 8. **Digital Hub → જાણકાર તરત (25/11/26):** GitHub માં token બનાવી Vercel માં `JANKAR_SYNC_TOKEN` (પગલાં Digital Hub `docs/context/06` / ચેટ 25/11/26). ન કરો તો પણ દર કલાકે આવશે.
-9. **(વૈકલ્પિક) વપરાશનો રિપોર્ટ:** analytics.google.com → Admin → Create property "જાણકાર" → Web → `https://jankar.krupadigitalhub.in` → Measurement ID (G-…) Claude ને આપો. પછી Play Console Data safety માં `store/listing.md` ની વધારાની 2 લાઇન.
 
 ## આગળનું કામ (Claude, ક્રમ પ્રમાણે)
 ધ્યેય: રોજ નવું, આપણું લખાણ, ફક્ત સત્તાવાર લિંક, સરળ ગુજરાતી. (ભરતી 24/11/26 એ આખી કાઢી — યુઝર.)
