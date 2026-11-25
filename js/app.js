@@ -5,6 +5,7 @@ import { matches, sortForProfile, isExpired, daysLeft, deadlineText, formatDate,
 import { icon, tile, glyph, linePath, socialIcon } from './icons.js';
 import { INFO_PAGES, INFO_LINKS, INFO_UPDATED } from './pages.js';
 import { sendFeedback } from './feedback.js';
+import { installWaPicker, isAndroid, readWaApp, saveWaApp } from './wa.js';
 
 const state = {
   schemes: [],
@@ -49,6 +50,10 @@ const isDoc = (s) => s.kind === 'doc';
 const isNew = (s) => !state.seen.has(s.id);
 const itemHref = (s) => `#/scheme/${encodeURIComponent(s.id)}`;
 const appUrl = () => location.origin + location.pathname;
+// કાર્ડનું અલગ પેજ (scripts/build-pages.mjs) — શેર અને ભૂલ / સૂચનમાં આ લિંક: ખોલનારને નામ + ફોટો દેખાય, Google પણ ગણે
+const canShare = () => typeof navigator.share === 'function';
+const pageUrl = (s) => `${location.origin}/${isDoc(s) ? 'dastavej' : 'yojana'}/${encodeURIComponent(s.id)}/`;
+const eventUrl = (e) => `${location.origin}/prasang/${encodeURIComponent(e.id)}/`;
 
 function markSeen(id) {
   if (state.seen.has(id)) return;
@@ -375,18 +380,22 @@ function homeDhyan() {
         <a class="dh-all" href="#/dhyan">બધું જુઓ ${icon('chev', 'ic-sm')}</a>
       </div>
       <a class="dh-slide" href="#/dhyan" aria-live="polite">${dhyanSlide(state.dhyan[dhyanAt])}</a>
-      ${n > 1 ? `<div class="dh-dots" role="group" aria-label="બીજી વાત">${state.dhyan.map((_, i) => `<button type="button" data-dhyan="${i}" aria-label="${i + 1} / ${n}"${i === dhyanAt ? ' aria-current="true"' : ''}></button>`).join('')}</div>` : ''}
+      ${n > 1 ? `<div class="dh-nav">
+        <button type="button" class="dh-step" data-dhyan-step="-1" aria-label="પાછળની વાત">${icon('chev', 'ic flip')}</button>
+        <div class="dh-dots" role="group" aria-label="બીજી વાત">${state.dhyan.map((_, i) => `<button type="button" data-dhyan="${i}" aria-label="${i + 1} / ${n}"${i === dhyanAt ? ' aria-current="true"' : ''}></button>`).join('')}</div>
+        <button type="button" class="dh-step" data-dhyan-step="1" aria-label="આગળની વાત">${icon('chev')}</button>
+      </div>` : ''}
     </section>`;
 }
-function showDhyan(i) {
+function showDhyan(i, dir = 0) {
   const box = document.querySelector('.dhyan');
   if (!box || !state.dhyan.length) return stopDhyan();
   dhyanAt = (i + state.dhyan.length) % state.dhyan.length;
   const slide = box.querySelector('.dh-slide');
-  slide.classList.remove('in');
+  slide.classList.remove('in', 'in-back');
   void slide.offsetWidth;
   slide.innerHTML = dhyanSlide(state.dhyan[dhyanAt]);
-  slide.classList.add('in');
+  slide.classList.add(dir < 0 ? 'in-back' : 'in');
   box.querySelectorAll('[data-dhyan]').forEach((b, j) => (j === dhyanAt ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current')));
 }
 function stopDhyan() {
@@ -405,6 +414,26 @@ function startDhyan() {
     showDhyan(dhyanAt + 1);
   }, DHYAN_MS);
 }
+
+// આંગળીથી ડાબે / જમણે ખસેડો (યુઝર 25/11/26): ડાબે = આગળની, જમણે = પાછળની વાત
+let dhyanTouch = null;
+let dhyanSwiped = false;
+$view.addEventListener('touchstart', (e) => {
+  const box = e.target.closest('.dhyan');
+  dhyanTouch = box && e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null;
+}, { passive: true });
+$view.addEventListener('touchend', (e) => {
+  if (!dhyanTouch) return;
+  const t = e.changedTouches[0];
+  const dx = t.clientX - dhyanTouch.x;
+  const dy = t.clientY - dhyanTouch.y;
+  dhyanTouch = null;
+  if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+  dhyanSwiped = true;
+  setTimeout(() => (dhyanSwiped = false), 400);
+  showDhyan(dhyanAt + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+  startDhyan();
+}, { passive: true });
 
 function viewDhyan() {
   const order = ['fraud', 'bhool', 'suchna', 'jankari'];
@@ -798,7 +827,7 @@ function shareText(s) {
     s.benefit ? [`✅ *${k.benefit}*`, waLine(s.benefit)] : null,
     docs.length ? [`📄 *પુરાવા (${docs.length})*`, ...docs.map((d, i) => `${i + 1}. ${d}`)] : null,
     facts,
-    ['📱 વધુ માહિતી ગુજરાતીમાં:', `${appUrl()}${itemHref(s)}`],
+    ['📱 વધુ માહિતી ગુજરાતીમાં:', pageUrl(s)],
   ]);
 }
 
@@ -859,6 +888,7 @@ function viewItem(id) {
     <div class="actions">
       <button class="btn" data-action="save" data-id="${esc(s.id)}" aria-pressed="${saved}">${icon('star', saved ? 'ic filled' : 'ic')}<span>${saved ? 'સેવ થયેલ' : 'સેવ કરો'}</span></button>
       <a class="btn btn-ok" href="${wa}" target="_blank" rel="noopener">${icon('share')}વોટ્સએપ પર મોકલો</a>
+      ${canShare() ? `<button class="btn" type="button" data-action="share-sheet" data-id="${esc(s.id)}">${icon('external')}બીજે મોકલો</button>` : ''}
     </div>
     <div class="facts-main">
       ${s.eligibility.length ? `<div class="fact"><span class="sq">${icon('users')}</span><div><div class="k">${k.who}</div><div class="v">${s.eligibility.map(esc).join('<br>')}</div></div></div>` : ''}
@@ -949,6 +979,9 @@ function viewProfile() {
         <label class="field">કુટુંબની વાર્ષિક આવક<select name="income"><option value="">— પસંદ કરો —</option>${opt(INCOME, p.income)}</select></label>
       </div>
       <button class="btn btn-primary btn-block" type="submit">${icon('published')}સેવ કરો</button>
+      ${isAndroid() ? `<div class="card stack"><h2 class="h2">${icon('share')}વોટ્સએપ</h2>
+        <label class="field">વોટ્સએપમાં મોકલો ત્યારે ખોલવું<select data-action="wa-app">${[['auto', 'દર વખતે પૂછે (એકથી વધુ વોટ્સએપ હોય તો)'], ['whatsapp', 'WhatsApp'], ['business', 'WhatsApp Business']].map(([v, l]) => `<option value="${v}"${readWaApp() === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label>
+      </div>` : ''}
       <div class="card stack" id="settings">
         <h2 class="h2">${icon('eye')}અક્ષરનું કદ</h2>
         <div class="size-pick">${TEXT_SIZES.map(([v, label]) => `<button type="button" data-action="text-size" data-size="${v}" aria-pressed="${z === v}">અ<span>${label}</span></button>`).join('')}</div>
@@ -1006,14 +1039,18 @@ function viewContact(params) {
   const ev = params && params.get('event') ? state.events.find((x) => x.id === params.get('event')) : null;
   const title = item ? item.title : ev ? ev.title : '';
   const page = item ? itemHref(item) : ev ? `#/event/${ev.id}` : '#/contact';
+  // યુઝર 25/11/26: વોટ્સએપ / ઈમેલમાં પણ "શેના વિશે" આપોઆપ — કાર્ડનું નામ અને લિંક, પછી વ્યક્તિ પોતાનું લખે
+  const link = item ? pageUrl(item) : ev ? eventUrl(ev) : '';
+  const about = title ? `${APP.name}: "${title}" વિશે ભૂલ / સૂચન\n${link}\n\n` : `${APP.name} વિશે:\n`;
+  const subject = title ? `${APP.name}: ${title} — ભૂલ / સૂચન` : `${APP.name} — સંપર્ક`;
   const rows = [
-    c.whatsapp && `<a class="help-row" href="${contactLink(`${APP.name} વિશે:\n`)}" target="_blank" rel="noopener">${lineTile('chat', 'green')}<div><div class="num">વોટ્સએપ</div><div class="t">${esc(c.whatsapp.replace(/^91/, ''))}</div></div>${icon('chev', 'ic chev')}</a>`,
-    c.email && `<a class="help-row" href="mailto:${esc(c.email)}">${lineTile('message', 'blue')}<div><div class="num">ઈમેલ</div><div class="t">${esc(c.email)}</div></div>${icon('chev', 'ic chev')}</a>`,
+    c.whatsapp && `<a class="help-row" href="https://wa.me/${esc(c.whatsapp)}?text=${encodeURIComponent(about)}" target="_blank" rel="noopener">${lineTile('chat', 'green')}<div><div class="num">વોટ્સએપ</div><div class="t">${esc(c.whatsapp.replace(/^91/, ''))}</div></div>${icon('chev', 'ic chev')}</a>`,
+    c.email && `<a class="help-row" href="mailto:${esc(c.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(about)}">${lineTile('message', 'blue')}<div><div class="num">ઈમેલ</div><div class="t">${esc(c.email)}</div></div>${icon('chev', 'ic chev')}</a>`,
   ].filter(Boolean);
   return `
     ${pageHead('સંપર્ક અને સૂચન', 'ભૂલ દેખાય, તકલીફ હોય કે સૂચન હોય તો લખો.', 'message', '#/')}
     <div class="contact-grid">
-      <form id="contact-form" class="card stack" data-title="${esc(title)}" data-page="${esc(page)}" novalidate>
+      <form id="contact-form" class="card stack" data-title="${esc(title)}" data-page="${esc(page)}" data-link="${esc(link)}" novalidate>
         ${title ? `<p class="subject">${icon('info', 'ic-sm')}વિષય: <b>${esc(title)}</b></p>` : ''}
         <div class="seg" role="radiogroup" aria-label="પ્રકાર">
           <label><input type="radio" name="kind" value="problem" checked><span>${icon('alert', 'ic-sm')}ભૂલ / તકલીફ</span></label>
@@ -1494,6 +1531,11 @@ $view.addEventListener('submit', (e) => {
 });
 
 $view.addEventListener('change', (e) => {
+  if (e.target.matches('[data-action="wa-app"]')) {
+    saveWaApp(e.target.value);
+    toast('સેવ થયું ✓');
+    return;
+  }
   if (e.target.name === 'gender' && e.target.closest('#find')) {
     const w = document.querySelector('[data-q="widow"]');
     if (w) w.classList.toggle('hide-m', e.target.value === 'm');
@@ -1542,7 +1584,7 @@ async function sendContact(form) {
     toast('આભાર, એડમિનને મોકલ્યું.');
     return;
   }
-  const wa = contactLink(`${APP.name}: ${title ? `"${title}" ` : ''}${kind === 'problem' ? 'ભૂલ' : 'સૂચન'}\n${message}${name ? `\n\nનામ: ${name}` : ''}\n\nપેજ: ${appUrl()}${page}`);
+  const wa = contactLink(`${APP.name}: ${title ? `"${title}" ` : ''}${kind === 'problem' ? 'ભૂલ' : 'સૂચન'}\n${message}${name ? `\n\nનામ: ${name}` : ''}\n\nપેજ: ${form.dataset.link || appUrl() + page}`);
   say(`${r === 'limit' ? 'આજે ઘણા સંદેશ ગયા છે.' : 'હાલ મોકલી શકાયું નહીં.'}${wa ? ` <a href="${wa}" target="_blank" rel="noopener">વોટ્સએપ પર મોકલો</a>` : ' થોડી વાર પછી ફરી પ્રયત્ન કરો.'}`);
 }
 
@@ -1550,9 +1592,16 @@ let inAppNavigations = 0;
 
 $view.addEventListener('click', async (e) => {
   const dot = e.target.closest('[data-dhyan]');
-  if (dot) {
-    showDhyan(Number(dot.dataset.dhyan));
+  const step = e.target.closest('[data-dhyan-step]');
+  if (dot || step) {
+    showDhyan(dot ? Number(dot.dataset.dhyan) : dhyanAt + Number(step.dataset.dhyanStep), step ? Number(step.dataset.dhyanStep) : 0);
     startDhyan();
+    return;
+  }
+  // આંગળી ખસેડ્યા પછીનું ક્લિક (swipe) લિંક ન ખોલે
+  if (dhyanSwiped && e.target.closest('.dh-slide')) {
+    e.preventDefault();
+    dhyanSwiped = false;
     return;
   }
   const el = e.target.closest('[data-action]');
@@ -1565,6 +1614,12 @@ $view.addEventListener('click', async (e) => {
     else location.hash = el.getAttribute('href') || '#/';
   }
 
+  if (action === 'share-sheet') {
+    // ફોનનું "શેર" લિસ્ટ: બધાં વોટ્સએપ (Business, Dual), Telegram, SMS… જેમાં મોકલવું હોય તે
+    const s = findItem(id);
+    if (s) navigator.share({ title: s.title, text: shareText(s) }).catch(() => {});
+    return;
+  }
   if (action === 'find-clear') {
     const { find, ...rest } = state.profile || {};
     state.profile = { categories: [], ...rest };
@@ -1735,6 +1790,7 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
 
 applyLook();
 renderChrome();
+installWaPicker();
 document.querySelectorAll('path[data-i]').forEach((p) => p.setAttribute('d', linePath(p.dataset.i)));
 render();
 loadData().then(() => {

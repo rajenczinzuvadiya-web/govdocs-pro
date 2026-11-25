@@ -33,6 +33,8 @@
 | 🔎 તમારા માટે યોજના શોધો: લિંગ, ઉંમર, કામ, ગામ / શહેર, જાતિ, આવક, દિવ્યાંગ, BPL… | `#/find`, `js/match.js` (`findSchemes`) |
 | અમારા વિશે, સંપર્ક, ગોપનીયતા નીતિ, નિયમો, ડિસ્ક્લેમર, કોપીરાઇટ નીતિ | ફોનમાં "વધુ" મેનુ, કમ્પ્યુટરમાં ફૂટર → `js/pages.js` |
 | વોટ્સએપ / Facebook પર લિંકનો ફોટો (1200×630) | `icons/share.jpg` ← `scripts/share-image.mjs` |
+| દરેક યોજના / દસ્તાવેજ / પ્રસંગનું અલગ પેજ, sitemap — sync પછી આપોઆપ | `yojana/<id>/` … ← `scripts/build-pages.mjs` |
+| વોટ્સએપ: Android માં એકથી વધુ વોટ્સએપ હોય તો ફોન પૂછે; પ્રોફાઇલમાં પસંદગી; "બીજે મોકલો" | `js/wa.js` |
 | સંપર્ક અને સૂચન ફોર્મ (નામ, મોબાઇલ વૈકલ્પિક) → Digital Hub એડમિન | `#/contact`, `js/feedback.js` |
 | Play Store નું લખાણ, ફોટા અને અપલોડની રીત | `store/` |
 
@@ -65,8 +67,8 @@ data/events.json    જીવનના પ્રસંગ (KruPa Digital Hub મ
 data/helplines.json જરૂરી ફોન નંબર
 sw.js               ઑફલાઇન
 manifest.json       ફોનમાં ઇન્સ્ટોલ / Play Store (TWA) માટે
-privacy.html        Play Store ની લિંક: એપના #/privacy પર લઈ જાય
-terms.html          એપના #/terms પર લઈ જાય
+privacy.html, terms.html, about.html, disclaimer.html, dmca.html   નિયમોનાં સાચાં પેજ (Play Store ની લિંક) ← scripts/build-pages.mjs
+yojana/, dastavej/, prasang/   દરેક કાર્ડ / પ્રસંગનું અલગ પેજ (Google, શેર) ← scripts/build-pages.mjs; sitemap.xml, 404.html પણ
 js/pages.js         માહિતીનાં પેજનું લખાણ
 icons/icon-source.png  આઇકનનું મૂળ ચિત્ર (1024, આખો ચોરસ; બદલો પછી node scripts/make-icons.mjs)
 store/feature-bg.png   Play Store ના મોટા ફોટાનું ચિત્ર (નામ script ઉમેરે)
