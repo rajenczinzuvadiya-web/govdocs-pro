@@ -6,6 +6,8 @@ import { icon, tile, glyph, linePath, socialIcon } from './icons.js';
 import { INFO_PAGES, INFO_LINKS, INFO_UPDATED } from './pages.js';
 import { sendFeedback } from './feedback.js';
 import { installWaPicker, isAndroid, readWaApp, saveWaApp } from './wa.js';
+import { openViewer, closeViewer } from './viewer.js';
+import { trackPage, trackEvent } from './analytics.js';
 
 const state = {
   schemes: [],
@@ -184,6 +186,7 @@ function thumb(o) {
       ${o.chip ? `<span class="th-chip">${esc(o.chip)}</span>` : ''}
     </span>
     ${src ? `<img src="${esc(src)}" alt="" loading="lazy" decoding="async">` : ''}
+    ${src && /\bhero\b/.test(o.cls || '') ? `<button type="button" class="th-zoom" data-zoom-src="${esc(src)}">${icon('expand', 'ic-sm')}મોટો જુઓ</button>` : ''}
     ${o.badges ? `<span class="th-badges">${o.badges}</span>` : ''}
   </span>`;
 }
@@ -222,9 +225,12 @@ function eventCard(e, mine) {
   return tcard(`#/event/${e.id}`, thumb({ img: e.image, tone: 'blue', emo: e.icon, name: e.title, badges }), e.title, n ? `${n} / ${e.items.length} થઈ ગયું` : `${e.items.length} કામ`);
 }
 
+// યુઝર 25/11/26 (3): નંબરનું પણ ફોટો + વિગત પેજ (#/help/<નંબર>). કાર્ડ → વિગત; "ફોન કરો" સીધો ફોન.
+const helpThumb = (h, cls = 'th-num') => thumb({ img: h.image, tone: h.tone || 'green', ic: 'phone', big: h.display || h.number, cls });
 function helpCard(h) {
   const num = h.display || h.number;
-  return tcard(`tel:${esc(h.number)}`, thumb({ tone: h.tone || 'green', ic: 'phone', big: num, cls: 'th-num' }), h.title, '', `<span class="tc-call">${icon('call', 'ic-sm')}ફોન કરો</span>`);
+  return `<li class="hcard"><a class="tcard" href="#/help/${esc(h.number)}">${helpThumb(h)}<span class="tc-body"><span class="tc-text"><span class="tc-title">${esc(h.title)}</span>${h.about ? `<span class="tc-line">${esc(h.about)}</span>` : ''}</span>${icon('chev', 'ic-sm chev')}</span></a>
+    <a class="hc-call" href="tel:${esc(h.number)}" aria-label="${esc(num)} પર ફોન કરો">${icon('call', 'ic-sm')}ફોન કરો</a></li>`;
 }
 
 function itemList(items, empty) {
@@ -242,7 +248,7 @@ function renderFooter() {
   const y = new Date().getFullYear();
   document.getElementById('foot').innerHTML = `
     <nav class="foot-links" aria-label="માહિતી">${INFO_LINKS.filter((l) => !FOOT_SKIP.has(l.route)).map((l) => `<a href="#/${l.route}">${esc(l.label)}</a>`).join('')}</nav>
-    <p class="fcopy">© ${y > COPY_FROM ? `${COPY_FROM}–${y}` : COPY_FROM} KruPa Digital Hub</p>`;
+    <p class="fcopy">© ${y > COPY_FROM ? `${COPY_FROM}–${y}` : COPY_FROM} ${esc(APP.name)} · KruPa Digital Hub</p>`;
 }
 
 // ---------- છેલ્લી તારીખની યાદ ----------
@@ -349,7 +355,7 @@ function homeAsk() {
     ['#/must', 'idcard', 'green', 'ફરજિયાત દસ્તાવેજ', 'દરેક પાસે હોવા જોઈએ'],
   ];
   return `<ul class="qgrid">${tiles
-    .map(([href, ic, tone, t, line]) => `<li><a class="qtile tone-${tone}" href="${href}"><span class="q-ic" aria-hidden="true">${glyph(ic)}</span><b>${t}</b><small>${line}</small><span class="q-bg" aria-hidden="true">${glyph(ic)}</span></a></li>`)
+    .map(([href, ic, tone, t, line]) => `<li><a class="qtile tone-${tone}" href="${href}"><span class="q-ic" aria-hidden="true">${glyph(ic)}</span><span class="q-t"><b>${t}</b><small>${line}</small></span><span class="q-bg" aria-hidden="true">${glyph(ic)}</span></a></li>`)
     .join('')}</ul>`;
 }
 
@@ -363,7 +369,7 @@ const DHYAN_TYPES = {
 const DHYAN_MS = 6000;
 let dhyanAt = 0;
 let dhyanTimer = null;
-const reduceMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+// યુઝર 25/11/26: કમ્પ્યુટરમાં (Windows માં "ઍનિમેશન" બંધ હોય ત્યારે પણ) આપમેળે બદલાય અને લખાય — ફક્ત સરકવાનું ઍનિમેશન CSS માં બંધ થાય.
 
 function dhyanSlide(d) {
   const t = DHYAN_TYPES[d.type];
@@ -379,7 +385,7 @@ function homeDhyan() {
         <h2 id="dh-h">${icon('bell')}ધ્યાન રાખો</h2>
         <a class="dh-all" href="#/dhyan">બધું જુઓ ${icon('chev', 'ic-sm')}</a>
       </div>
-      <a class="dh-slide" href="#/dhyan" aria-live="polite">${dhyanSlide(state.dhyan[dhyanAt])}</a>
+      <a class="dh-slide" href="#/dhyan" aria-live="polite" draggable="false">${dhyanSlide(state.dhyan[dhyanAt])}</a>
       ${n > 1 ? `<div class="dh-nav">
         <button type="button" class="dh-step" data-dhyan-step="-1" aria-label="પાછળની વાત">${icon('chev', 'ic flip')}</button>
         <div class="dh-dots" role="group" aria-label="બીજી વાત">${state.dhyan.map((_, i) => `<button type="button" data-dhyan="${i}" aria-label="${i + 1} / ${n}"${i === dhyanAt ? ' aria-current="true"' : ''}></button>`).join('')}</div>
@@ -405,7 +411,7 @@ function stopDhyan() {
 function startDhyan() {
   stopDhyan();
   const box = document.querySelector('.dhyan');
-  if (!box || state.dhyan.length < 2 || reduceMotion()) return;
+  if (!box || state.dhyan.length < 2) return;
   dhyanTimer = setInterval(() => {
     if (!document.querySelector('.dhyan')) return stopDhyan();
     // માઉસ ઉપર હોય (કમ્પ્યુટર) કે કી-બોર્ડથી અંદર હોય તો થોભે; ફોનમાં ટપકું દબાવ્યા પછી પણ ફરતું રહે
@@ -435,6 +441,26 @@ $view.addEventListener('touchend', (e) => {
   startDhyan();
 }, { passive: true });
 
+// કમ્પ્યુટર: માઉસથી પકડી ડાબે / જમણે ખેંચો (યુઝર 25/11/26: "પીસીમાં સ્વીપ થતું નથી")
+let dhyanDrag = null;
+$view.addEventListener('pointerdown', (e) => {
+  if (e.pointerType !== 'mouse' || e.button !== 0 || !e.target.closest('.dhyan') || e.target.closest('button, .dh-all')) return;
+  dhyanDrag = { x: e.clientX, y: e.clientY };
+});
+window.addEventListener('pointerup', (e) => {
+  if (!dhyanDrag || e.pointerType !== 'mouse') return;
+  const dx = e.clientX - dhyanDrag.x;
+  const dy = e.clientY - dhyanDrag.y;
+  dhyanDrag = null;
+  if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.5 || !document.querySelector('.dhyan')) return;
+  dhyanSwiped = true;
+  setTimeout(() => (dhyanSwiped = false), 400);
+  const sel = window.getSelection && window.getSelection();
+  if (sel) sel.removeAllRanges();
+  showDhyan(dhyanAt + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+  startDhyan();
+});
+
 function viewDhyan() {
   const order = ['fraud', 'bhool', 'suchna', 'jankari'];
   const groups = order.map((t) => [t, state.dhyan.filter((d) => d.type === t)]).filter(([, l]) => l.length);
@@ -453,7 +479,7 @@ let typeTimer = null;
 function startTyping() {
   clearTimeout(typeTimer);
   const input = document.getElementById('home-search');
-  if (!input || reduceMotion()) return;
+  if (!input) return;
   let w = 0, n = 0, back = false;
   const step = () => {
     const el = document.getElementById('home-search');
@@ -500,7 +526,7 @@ function viewHome() {
       </div>
     </section>
     ${homeDhyan()}
-    <a class="find-cta" href="#/find">${tile('idea', 'blue')}<span><b>તમારા માટે યોજના શોધો</b><small>ઉંમર, કામ, આવક, જાતિ… પ્રમાણે</small></span>${icon('chev', 'ic-sm chev')}</a>
+    <a class="find-cta" href="#/find">${tile('idea', 'blue')}<span><b>તમારા માટે યોજના શોધો</b><small>તમે કોણ છો, શું કરો છો, આવક, જાતિ… પ્રમાણે</small></span>${icon('chev', 'ic-sm chev')}</a>
     <div id="home-results">${homeResults()}</div>
     ${homeWho(p)}
     ${otherApps()}
@@ -510,41 +536,43 @@ function viewHome() {
 // ---------- વર્ગ પ્રમાણે: #/for/<વર્ગ> (હોમના "તમે કોણ છો?") ----------
 
 // ---------- તમારા માટે યોજના શોધો: #/find (યુઝર 25/11/26) ----------
-// જવાબ ફક્ત આ ફોનમાં (પ્રોફાઇલમાં `find`); ક્યાંય મોકલાતા નથી. બધું વૈકલ્પિક.
+// યુઝર 25/11/26 (3): ઉંમર કાઢી, દેખાવ સુધાર્યો, પ્રોફાઇલ સાથે જોડ્યું — "તમે કોણ છો?", કામ, જાતિ, આવક
+// પ્રોફાઇલમાં જ સેવ થાય (બંને પેજ પર એક જ જવાબ); લિંગ, ગામ / શહેર, BPL પ્રોફાઇલના `find` માં.
+// બધું ફક્ત આ ફોનમાં; ક્યાંય મોકલાતું નથી. બધું વૈકલ્પિક — પસંદ કરેલા પર ફરી ટેપ કરો એટલે ખાલી.
 const FIND_Q = [
-  ['gender', 'તમે', [['m', 'પુરુષ'], ['f', 'સ્ત્રી'], ['o', 'બીજું']]],
-  ['area', 'ક્યાં રહો છો?', [['village', 'ગામ'], ['city', 'શહેર']]],
-  ['student', 'અભ્યાસ ચાલુ છે?', [['yes', 'હા'], ['no', 'ના']]],
-  ['divyang', 'દિવ્યાંગ છો?', [['yes', 'હા'], ['no', 'ના']]],
-  ['bpl', 'BPL કાર્ડ છે?', [['yes', 'હા'], ['no', 'ના']]],
-  ['kids', 'ઘરમાં નાનું બાળક કે સગર્ભા?', [['yes', 'હા'], ['no', 'ના']]],
-  ['widow', 'વિધવા બહેન?', [['yes', 'હા'], ['no', 'ના']]],
+  ['gender', 'તમે', 'user', [['m', 'પુરુષ'], ['f', 'સ્ત્રી'], ['o', 'બીજું']]],
+  ['area', 'ક્યાં રહો છો?', 'home', [['village', 'ગામ'], ['city', 'શહેર']]],
+  ['bpl', 'BPL કાર્ડ છે?', 'wallet', [['yes', 'હા'], ['no', 'ના']]],
 ];
 let findShown = false;
-const findAnswers = () => (state.profile && state.profile.find) || {};
+// જવાબ: પ્રોફાઇલ (વર્ગ, કામ, જાતિ, આવક) + find (લિંગ, રહેઠાણ, BPL). જૂના જવાબ (student, divyang…) પણ ચાલે.
+function findAnswers() {
+  const p = state.profile || {};
+  const f = p.find || {};
+  return { ...f, cats: p.categories || [], occupation: p.occupation || f.occupation || '', jati: p.jati || f.jati || '', income: p.income || f.income || '', age: p.age || '' };
+}
+const findChips = (name, items, val, type = 'radio') =>
+  `<div class="fchips">${items.map(([v, t]) => `<label class="fchip"><input type="${type}" name="${name}" value="${esc(v)}" ${(Array.isArray(val) ? val.includes(v) : val === v) ? 'checked' : ''}><span>${esc(t)}</span></label>`).join('')}</div>`;
+const findBox = (ic, label, body, cls = '') => `<fieldset class="fbox ${cls}"><legend>${icon(ic, 'ic-sm')}${label}</legend>${body}</fieldset>`;
 
 function viewFind() {
   const a = findAnswers();
-  const opt = (items, val) => items.map((i) => { const id = typeof i === 'string' ? i : i.id; const label = typeof i === 'string' ? i : i.label; return `<option value="${esc(id)}" ${val === id ? 'selected' : ''}>${esc(label)}</option>`; }).join('');
-  const seg = ([name, label, choices]) => `
-    <div class="fq${name === 'widow' && a.gender === 'm' ? ' hide-m' : ''}" data-q="${name}"><span class="fq-l">${label}</span>
-      <div class="seg" role="radiogroup" aria-label="${esc(label)}">${choices.map(([v, t]) => `<label><input type="radio" name="${name}" value="${v}" ${a[name] === v ? 'checked' : ''}><span>${t}</span></label>`).join('')}</div>
-    </div>`;
+  const cats = CATEGORIES.filter((c) => c.id !== 'samanya').map((c) => [c.id, c.label]);
   const results = findShown ? findSchemes(state.schemes, a) : [];
   return `
-    ${pageHead('તમારા માટે યોજના શોધો', 'થોડા જવાબ આપો — તમને લાગુ પડી શકે એવી યોજના દેખાશે.', 'search', '#/')}
-    <form id="find" class="find-card card">
-      <div class="find-grid">
-        <label class="field">ઉંમર (વર્ષ)<input name="age" type="number" inputmode="numeric" min="0" max="120" value="${esc(a.age || '')}"></label>
-        <label class="field">શું કરો છો?<select name="occupation"><option value="">— પસંદ કરો —</option>${opt(OCCUPATIONS, a.occupation)}</select></label>
-        <label class="field">જાતિ<select name="jati"><option value="">— પસંદ કરો —</option>${opt(JATI, a.jati)}</select></label>
-        <label class="field">કુટુંબની વાર્ષિક આવક<select name="income"><option value="">— પસંદ કરો —</option>${opt(INCOME, a.income)}</select></label>
+    ${pageHead('તમારા માટે યોજના શોધો', 'જેટલું ખબર હોય એટલું પસંદ કરો — બાકી ખાલી રાખો.', 'search', '#/')}
+    <form id="find" class="find-card">
+      <div class="fboxes">
+        ${findBox('users', 'તમે કોણ છો? <small>(એક કે વધુ)</small>', findChips('categories', cats, a.cats, 'checkbox'), 'wide')}
+        ${findBox('briefcase', 'શું કરો છો?', findChips('occupation', OCCUPATIONS.map((o) => [o, o]), a.occupation), 'wide')}
+        ${findBox('tag', 'જાતિ', findChips('jati', JATI.map((j) => [j.id, j.label]), a.jati), 'wide-sm')}
+        ${findBox('banknote', 'કુટુંબની વાર્ષિક આવક', findChips('income', INCOME.map((i) => [i.id, i.label]), a.income), 'wide-sm')}
+        ${FIND_Q.map(([name, label, ic, choices], i) => findBox(ic, label, findChips(name, choices, a[name]), i === 0 ? 'wide-sm' : '')).join('')}
       </div>
-      <div class="fq-grid">${FIND_Q.map(seg).join('')}</div>
       <div class="find-act">
-        <button class="btn btn-primary" type="submit">${icon('search')}યોજના બતાવો</button>
-        ${Object.keys(a).length ? `<button class="btn btn-ghost" type="button" data-action="find-clear">${icon('refresh')}ફરીથી</button>` : ''}
-        <small class="muted">${icon('lock', 'ic-sm')}જવાબ ફક્ત આ ફોનમાં રહે છે.</small>
+        <button class="btn btn-primary btn-lg" type="submit">${icon('search')}યોજના બતાવો</button>
+        <button class="btn btn-ghost" type="button" data-action="find-clear">${icon('refresh')}બધું ખાલી કરો</button>
+        <small class="muted">${icon('lock', 'ic-sm')}જવાબ ફક્ત આ ફોનમાં, તમારી <a href="#/profile">પ્રોફાઇલ</a>માં રહે છે.</small>
       </div>
     </form>
     ${findShown ? `
@@ -632,7 +660,7 @@ function viewMust() {
 function otherApps() {
   const k = APP.krupa || {};
   const apps = [
-    k.digitalHub && { id: 'digitalhub', href: k.digitalHub, logo: 'icons/digital-hub.png', name: 'KruPa Digital Hub', head: 'આપનું કામ, <em>હવે ઝડપી અને સરળ</em>', line: 'ગુજરાતનાં સરકારી ફોર્મ ભરો અને પ્રિન્ટ કરો.' },
+    k.digitalHub && { id: 'digitalhub', href: k.digitalHub, logo: 'icons/digital-hub.png', name: 'KruPa Digital Hub', head: 'આપનું કામ, <em>હવે ઝડપી અને સરળ</em>', line: 'VCE / ઓપરેટર માટે: અરજી અને દાખલાનાં ફોર્મ ઝડપથી ભરી A4 પર પ્રિન્ટ.' },
     k.docHub && { id: 'dochub', href: k.docHub, logo: 'icons/doc-hub.png', name: 'KruPa Doc Hub', head: 'સમય બચાવો, <em>સરળ અને ઝડપી કામ</em>', line: 'ઝેરોક્ષ / પ્રિન્ટની દુકાન માટે: ફોટો → સીધો, સાફ A4 / PDF' },
   ].filter(Boolean);
   if (!apps.length) return '';
@@ -660,7 +688,7 @@ function followUs() {
       <p class="oapps-kick">અમને ફોલો કરો</p>
       <p class="follow-name">KruPa Digital Hub</p>
       <div class="follow-grid">${links
-        .map((l) => `<a href="${esc(l.href)}" target="_blank" rel="noopener" style="background:${esc(l.color)}" data-social="${esc(l.id)}">${socialIcon(l.id)}${esc(l.action)}</a>`)
+        .map((l) => `<a href="${esc(l.href)}" target="_blank" rel="noopener" data-social="${esc(l.id)}" aria-label="${esc(l.action)}"><span class="fl-ic" style="background:${esc(l.color)}">${socialIcon(l.id)}</span><span class="fl-t"><b>${esc(l.label)}</b><small>${esc(l.verb || 'ફોલો કરો')}</small></span>${icon('external', 'ic-sm fl-go')}</a>`)
         .join('')}</div>
     </section>`;
 }
@@ -761,6 +789,18 @@ function eventItemTitle(it) {
   return it.title || (linked ? linked.title : '');
 }
 
+// પ્રસંગનો વોટ્સએપ સંદેશ (યોજનાના સંદેશ જેવો): નામ, કામ / દસ્તાવેજ 1-2-3, સહાય, લિંક
+function eventShareText(e) {
+  const docs = e.items.filter((it) => it.type !== 'scheme').map(eventItemTitle).map(waLine).filter(Boolean);
+  const helps = e.items.filter((it) => it.type === 'scheme').map(eventItemTitle).map(waLine).filter(Boolean);
+  return waJoin([
+    [`*${waLine(e.title)}*`, waLine(e.summary)].filter(Boolean),
+    docs.length ? [`📄 *કરવાનાં કામ / દસ્તાવેજ (${docs.length})*`, ...docs.map((d, i) => `${i + 1}. ${d}`)] : null,
+    helps.length ? [`🎁 *મળી શકે એવી સહાય (${helps.length})*`, ...helps.map((d, i) => `${i + 1}. ${d}`)] : null,
+    ['📱 વધુ માહિતી ગુજરાતીમાં:', eventUrl(e)],
+  ]);
+}
+
 function eventProgress(e, ready) {
   const n = ready.filter((i) => i < e.items.length).length;
   return n === e.items.length ? '✓ બધું થઈ ગયું' : `${n} / ${e.items.length} થઈ ગયું`;
@@ -776,11 +816,10 @@ function viewEvent(id) {
     const done = ready.includes(i);
     return `
       <li class="ev-item ${done ? 'done' : ''}">
-        <button type="button" class="ev-tick" data-action="event-tick" data-id="${key}" data-i="${i}" aria-pressed="${done}" aria-label="થઈ ગયું"><span class="box"></span></button>
-        <div class="ev-body">
-          ${linked ? `<a href="${itemHref(linked)}">${esc(eventItemTitle(it))} ${icon('chev', 'ic-sm')}</a>` : `<b>${esc(eventItemTitle(it))}</b>`}
-          ${it.note ? `<span class="muted">${esc(it.note)}</span>` : ''}
-        </div>
+        <button type="button" class="ev-tick" data-action="event-tick" data-id="${key}" data-i="${i}" aria-pressed="${done}" aria-label="${esc(eventItemTitle(it))}: થઈ ગયું"><span class="box"></span></button>
+        ${linked
+          ? `<a class="ev-body" href="${itemHref(linked)}"><b>${esc(eventItemTitle(it))}</b>${it.note ? `<span class="muted">${esc(it.note)}</span>` : ''}<span class="ev-open">વિગત અને પુરાવા ${icon('chev', 'ic-sm')}</span></a>`
+          : `<button type="button" class="ev-body" data-action="event-tick" data-id="${key}" data-i="${i}" tabindex="-1" aria-hidden="true"><b>${esc(eventItemTitle(it))}</b>${it.note ? `<span class="muted">${esc(it.note)}</span>` : ''}</button>`}
       </li>`;
   };
   const pairs = e.items.map((it, i) => [it, i]);
@@ -789,7 +828,12 @@ function viewEvent(id) {
   return `
     <nav class="crumb"><a class="back-btn" href="#/events" data-action="back" aria-label="પાછા">${icon('arrow')}</a><a href="#/events">જીવનના પ્રસંગ</a></nav>
     <div class="detail-head has-pic">${thumb({ img: e.image, tone: 'blue', emo: e.icon, name: e.title, cls: 'hero' })}
-      <div><h1>${esc(e.title)}</h1><p class="lead">${esc(e.summary)}</p></div>
+      <div class="dh-main"><h1>${esc(e.title)}</h1><p class="lead">${esc(e.summary)}</p>
+        <div class="actions">
+          <a class="btn btn-ok" href="https://wa.me/?text=${encodeURIComponent(eventShareText(e))}" target="_blank" rel="noopener">${icon('share')}વોટ્સએપ પર મોકલો</a>
+          ${canShare() ? `<button class="btn" type="button" data-action="share-event" data-id="${esc(e.id)}">${icon('external')}બીજે મોકલો</button>` : ''}
+        </div>
+      </div>
     </div>
     <p class="progress mt" id="event-progress">${eventProgress(e, ready)}</p>
     <div class="parts one" style="margin-top:1rem">
@@ -879,17 +923,17 @@ function viewItem(id) {
     </nav>
     <div class="detail-head has-pic">
       ${itemThumb(s, { badges: false, cls: 'hero' })}
-      <div>
+      <div class="dh-main">
         <h1>${esc(s.title)}</h1>
         <p class="lead">${esc(s.summary)}</p>
+        <div class="actions">
+          <button class="btn" data-action="save" data-id="${esc(s.id)}" aria-pressed="${saved}">${icon('star', saved ? 'ic filled' : 'ic')}<span>${saved ? 'સેવ થયેલ' : 'સેવ કરો'}</span></button>
+          <a class="btn btn-ok" href="${wa}" target="_blank" rel="noopener">${icon('share')}વોટ્સએપ પર મોકલો</a>
+          ${canShare() ? `<button class="btn" type="button" data-action="share-sheet" data-id="${esc(s.id)}">${icon('external')}બીજે મોકલો</button>` : ''}
+        </div>
       </div>
     </div>
-    ${events.length ? `<div class="related"><span>આ પ્રસંગમાં કામ આવે:</span>${events.map((e) => `<a class="chip" href="#/event/${e.id}"><span aria-hidden="true">${e.icon}</span>${esc(e.title)}</a>`).join('')}</div>` : ''}
-    <div class="actions">
-      <button class="btn" data-action="save" data-id="${esc(s.id)}" aria-pressed="${saved}">${icon('star', saved ? 'ic filled' : 'ic')}<span>${saved ? 'સેવ થયેલ' : 'સેવ કરો'}</span></button>
-      <a class="btn btn-ok" href="${wa}" target="_blank" rel="noopener">${icon('share')}વોટ્સએપ પર મોકલો</a>
-      ${canShare() ? `<button class="btn" type="button" data-action="share-sheet" data-id="${esc(s.id)}">${icon('external')}બીજે મોકલો</button>` : ''}
-    </div>
+    ${events.length ? `<div class="related"><span>${icon('calendar', 'ic-sm')}આ પ્રસંગમાં કામ આવે:</span>${events.map((e) => `<a class="chip" href="#/event/${e.id}"><span aria-hidden="true">${e.icon}</span>${esc(e.title)}</a>`).join('')}</div>` : ''}
     <div class="facts-main">
       ${s.eligibility.length ? `<div class="fact"><span class="sq">${icon('users')}</span><div><div class="k">${k.who}</div><div class="v">${s.eligibility.map(esc).join('<br>')}</div></div></div>` : ''}
       ${s.benefit ? `<div class="fact good"><span class="sq">${icon('gift')}</span><div><div class="k">${k.benefit}</div><div class="v">${esc(s.benefit)}</div></div></div>` : ''}
@@ -900,10 +944,10 @@ function viewItem(id) {
         ${(s.documents || []).length ? `<section class="card docs-card"><h2 class="box-title">${icon('list')}કયા પુરાવા જોઈએ <span class="count">${s.documents.length}</span></h2>${docChecklist(s)}</section>` : ''}
       </div>
       <aside class="parts-side">
-        <div class="card side-box">
-          <h3>${icon('alert')}માહિતીમાં ભૂલ છે?</h3>
-          <p class="small muted">ફી, તારીખ કે નિયમ બદલાયા હોય તો જણાવો, અમે ચકાસીને સુધારીશું.</p>
-          <a class="btn btn-block" href="#/contact?about=${encodeURIComponent(s.id)}">${icon('message')}ભૂલ / સૂચન જણાવો</a>
+        <div class="card side-box fb-box">
+          <h3>${icon('message')}કંઈ ખોટું કે જૂનું લાગ્યું?</h3>
+          <p class="small muted">ફી, તારીખ, નિયમ કે પુરાવામાં ફેરફાર હોય, કે કંઈ ખૂટતું હોય — અમને જણાવો. ચકાસીને સુધારીશું.</p>
+          <a class="btn btn-primary btn-block" href="#/contact?about=${encodeURIComponent(s.id)}">${icon('message')}ભૂલ / સૂચન જણાવો</a>
         </div>
         <div class="card side-box">
           <h3>${icon('book')}સ્રોત</h3>
@@ -945,6 +989,34 @@ function viewToday() {
     }</div>`;
 }
 
+function helpShareText(h) {
+  return waJoin([
+    [`*📞 ${waLine(h.display || h.number)} — ${waLine(h.title)}*`, waLine(h.about)].filter(Boolean),
+    h.points && h.points.length ? ['*ક્યારે ફોન કરવો*', ...h.points.map((t) => `• ${waLine(t)}`)] : null,
+    ['📱 બીજા જરૂરી નંબર:', `${appUrl()}#/help`],
+  ]);
+}
+
+function viewHelpOne(num) {
+  const h = state.helplines.find((x) => x.number === num);
+  if (!h) return viewHelp();
+  const shown = h.display || h.number;
+  return `
+    <nav class="crumb"><a class="back-btn" href="#/help" data-action="back" aria-label="પાછા">${icon('arrow')}</a><a href="#/help">જરૂરી ફોન નંબર</a></nav>
+    <div class="detail-head has-pic">${helpThumb(h, 'th-num hero')}
+      <div class="dh-main"><h1>${esc(h.title)}</h1>${h.about ? `<p class="lead">${esc(h.about)}</p>` : ''}
+        <div class="actions">
+          <a class="btn btn-danger btn-lg call-big" href="tel:${esc(h.number)}">${icon('call')}${esc(shown)} પર ફોન કરો</a>
+          <a class="btn btn-ok" href="https://wa.me/?text=${encodeURIComponent(helpShareText(h))}" target="_blank" rel="noopener">${icon('share')}વોટ્સએપ પર મોકલો</a>
+        </div>
+      </div>
+    </div>
+    ${h.points && h.points.length ? `<section class="card mt"><h2 class="box-title">${icon('list')}ક્યારે ફોન કરવો</h2>${dots(h.points)}</section>` : ''}
+    <p class="muted small mt">નંબર બદલાયો હોય કે લાગે નહીં તો <a href="#/contact">અમને જણાવો</a>. જીવ જોખમમાં હોય તો 112.</p>
+    <h2 class="section-title mt">${icon('call')}બીજા જરૂરી નંબર</h2>
+    <ul class="tgrid compact">${state.helplines.filter((x) => x !== h).map(helpCard).join('')}</ul>`;
+}
+
 function viewHelp() {
   return `
     ${pageHead('જરૂરી ફોન નંબર', '', 'phone', '#/')}
@@ -979,6 +1051,7 @@ function viewProfile() {
         <label class="field">કુટુંબની વાર્ષિક આવક<select name="income"><option value="">— પસંદ કરો —</option>${opt(INCOME, p.income)}</select></label>
       </div>
       <button class="btn btn-primary btn-block" type="submit">${icon('published')}સેવ કરો</button>
+      <a class="find-cta" href="#/find">${tile('idea', 'blue')}<span><b>તમારા માટે યોજના શોધો</b><small>આ જ જવાબ પરથી — સેવ કર્યા પછી ખોલો</small></span>${icon('chev', 'ic-sm chev')}</a>
       ${isAndroid() ? `<div class="card stack"><h2 class="h2">${icon('share')}વોટ્સએપ</h2>
         <label class="field">વોટ્સએપમાં મોકલો ત્યારે ખોલવું<select data-action="wa-app">${[['auto', 'દર વખતે પૂછે (એકથી વધુ વોટ્સએપ હોય તો)'], ['whatsapp', 'WhatsApp'], ['business', 'WhatsApp Business']].map(([v, l]) => `<option value="${v}"${readWaApp() === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label>
       </div>` : ''}
@@ -1002,7 +1075,71 @@ function contactHtml() {
   return parts.length ? parts.join(' · ') : 'એપના મેનુમાં "સંપર્ક અને સૂચન" જુઓ.';
 }
 
+// સંપર્કનાં કાર્ડ (યુઝર 25/11/26 (3): નંબર અને ઈમેલનો દેખાવ) — સંપર્ક પેજ અને "અમારા વિશે" બંનેમાં
+const prettyPhone = (w) => String(w || '').replace(/^91(?=\d{10}$)/, '').replace(/^(\d{5})(\d{5})$/, '$1 $2');
+function contactCards(waText = '', mailSubject = APP.name, mailBody = '') {
+  const c = APP.contact || {};
+  const cards = [
+    c.whatsapp && `
+      <div class="ccard cc-wa">
+        <span class="cc-ic">${socialIcon('whatsapp')}</span>
+        <div class="cc-body"><span class="cc-k">વોટ્સએપ</span><b class="cc-v">${esc(prettyPhone(c.whatsapp))}</b><small>ફક્ત મેસેજ — ભૂલ, સૂચન કે સવાલ</small></div>
+        <div class="cc-act">
+          <a class="btn btn-ok" href="https://wa.me/${esc(c.whatsapp)}${waText ? `?text=${encodeURIComponent(waText)}` : ''}" target="_blank" rel="noopener">${icon('chat')}મેસેજ કરો</a>
+          <button class="btn btn-ghost" type="button" data-action="copy" data-text="${esc(prettyPhone(c.whatsapp).replace(' ', ''))}" aria-label="નંબર કૉપી કરો">${icon('copy')}કૉપી</button>
+        </div>
+      </div>`,
+    c.email && `
+      <div class="ccard cc-mail">
+        <span class="cc-ic">${icon('mail')}</span>
+        <div class="cc-body"><span class="cc-k">ઈમેલ</span><b class="cc-v">${esc(c.email)}</b><small>વિગતે લખવું હોય કે ફોટો મોકલવો હોય</small></div>
+        <div class="cc-act">
+          <a class="btn btn-primary" href="mailto:${esc(c.email)}?subject=${encodeURIComponent(mailSubject)}${mailBody ? `&body=${encodeURIComponent(mailBody)}` : ''}">${icon('mail')}ઈમેલ લખો</a>
+          <button class="btn btn-ghost" type="button" data-action="copy" data-text="${esc(c.email)}" aria-label="ઈમેલ કૉપી કરો">${icon('copy')}કૉપી</button>
+        </div>
+      </div>`,
+  ].filter(Boolean);
+  return cards.length ? `<div class="ccards">${cards.join('')}</div>` : '';
+}
+
+// "અમારા વિશે" (યુઝર 25/11/26 (3): દેખાવ સુધાર્યો) — ઉપર ઓળખ + આંકડા, વચ્ચે માહિતી, નીચે સંપર્કનાં કાર્ડ
+function viewAbout() {
+  const pg = INFO_PAGES.about;
+  const fill = (t) => esc(t).replace(/\{APP\}/g, esc(APP.name));
+  const stats = [
+    ['book', visible(state.schemes).length, 'યોજના'],
+    ['folder', state.docs.length, 'દસ્તાવેજ'],
+    ['calendar', state.events.length, 'જીવનના પ્રસંગ'],
+    ['call', state.helplines.length, 'જરૂરી ફોન નંબર'],
+  ].filter(([, n]) => n);
+  const parts = pg.parts.filter((x) => !x.contact);
+  return `
+    ${pageHead(pg.title, '', 'info', '#/')}
+    <section class="about-hero">
+      <img src="icons/icon-192.png" alt="" width="72" height="72">
+      <div class="ah-t"><h2 class="wordmark">${esc(APP.name)}</h2><p>${esc(pg.sub)}</p>
+        <p class="ah-tags"><span>${icon('published', 'ic-sm')}મફત</span><span>${icon('lock', 'ic-sm')}લોગિન વગર</span><span>${icon('book', 'ic-sm')}સરળ ગુજરાતી</span></p>
+      </div>
+      ${stats.length ? `<ul class="ah-stats">${stats.map(([ic, n, t]) => `<li>${icon(ic)}<b>${n}</b><span>${t}</span></li>`).join('')}</ul>` : ''}
+    </section>
+    <p class="note note-info mt">${icon('info')}<span>${APP.name} ખાનગી માહિતી એપ છે — સરકારી એપ નથી. અરજી હંમેશાં સત્તાવાર સાઇટ પર કે કચેરીમાં જ કરો.</span></p>
+    <article class="card info-doc mt">${parts
+      .filter((x) => x.title !== 'સરકારી એપ નથી')
+      .map((x, i) => `
+      <section>
+        <h2><span class="n">${i + 1}</span>${fill(x.title)}</h2>
+        ${x.text ? `<p>${fill(x.text)}</p>` : ''}
+        ${x.points ? `<ul>${x.points.map((t) => `<li>${fill(t)}</li>`).join('')}</ul>` : ''}
+      </section>`)
+      .join('')}
+    </article>
+    <h2 class="section-title mt">${icon('message')}સંપર્ક</h2>
+    ${contactCards(`${APP.name} વિશે:\n`, `${APP.name} — સંપર્ક`).replace('class="ccards"', 'class="ccards two"')}
+    <p class="mt"><a class="btn" href="#/contact">${icon('message')}ભૂલ / સૂચન ફોર્મ ખોલો</a></p>`;
+}
+
 function viewInfo(route) {
+  if (route === 'about') return viewAbout();
   const pg = INFO_PAGES[route];
   const link = INFO_LINKS.find((l) => l.route === route);
   const fill = (t) => esc(t).replace(/\{APP\}/g, esc(APP.name)).replace(/\{CONTACT\}/g, contactHtml());
@@ -1034,7 +1171,6 @@ function contactLink(text, subject = APP.name) {
 }
 
 function viewContact(params) {
-  const c = APP.contact || {};
   const item = params && params.get('about') ? findItem(params.get('about')) : null;
   const ev = params && params.get('event') ? state.events.find((x) => x.id === params.get('event')) : null;
   const title = item ? item.title : ev ? ev.title : '';
@@ -1043,14 +1179,16 @@ function viewContact(params) {
   const link = item ? pageUrl(item) : ev ? eventUrl(ev) : '';
   const about = title ? `${APP.name}: "${title}" વિશે ભૂલ / સૂચન\n${link}\n\n` : `${APP.name} વિશે:\n`;
   const subject = title ? `${APP.name}: ${title} — ભૂલ / સૂચન` : `${APP.name} — સંપર્ક`;
-  const rows = [
-    c.whatsapp && `<a class="help-row" href="https://wa.me/${esc(c.whatsapp)}?text=${encodeURIComponent(about)}" target="_blank" rel="noopener">${lineTile('chat', 'green')}<div><div class="num">વોટ્સએપ</div><div class="t">${esc(c.whatsapp.replace(/^91/, ''))}</div></div>${icon('chev', 'ic chev')}</a>`,
-    c.email && `<a class="help-row" href="mailto:${esc(c.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(about)}">${lineTile('message', 'blue')}<div><div class="num">ઈમેલ</div><div class="t">${esc(c.email)}</div></div>${icon('chev', 'ic chev')}</a>`,
-  ].filter(Boolean);
   return `
     ${pageHead('સંપર્ક અને સૂચન', 'ભૂલ દેખાય, તકલીફ હોય કે સૂચન હોય તો લખો.', 'message', '#/')}
     <div class="contact-grid">
+      <aside class="contact-side">
+        <h2 class="box-title">${icon('call')}સીધો સંપર્ક</h2>
+        ${contactCards(about, subject, about)}
+        <p class="small muted">${icon('lock', 'ic-sm')}આધાર, બેંક નંબર કે OTP ક્યારેય ન મોકલો. અમે ક્યારેય માંગતા નથી.</p>
+      </aside>
       <form id="contact-form" class="card stack" data-title="${esc(title)}" data-page="${esc(page)}" data-link="${esc(link)}" novalidate>
+        <h2 class="box-title">${icon('forms')}અહીં જ લખીને મોકલો</h2>
         ${title ? `<p class="subject">${icon('info', 'ic-sm')}વિષય: <b>${esc(title)}</b></p>` : ''}
         <div class="seg" role="radiogroup" aria-label="પ્રકાર">
           <label><input type="radio" name="kind" value="problem" checked><span>${icon('alert', 'ic-sm')}ભૂલ / તકલીફ</span></label>
@@ -1065,7 +1203,6 @@ function viewContact(params) {
         <p class="small report-msg" role="status" hidden></p>
         <button class="btn btn-primary btn-block btn-lg" type="submit">${icon('published')}મોકલો</button>
       </form>
-      ${rows.length ? `<div class="help-list one">${rows.join('')}</div>` : ''}
     </div>`;
 }
 
@@ -1363,7 +1500,8 @@ function openHelplines() {
     <div class="dialog-head"><h2>ઇમરજન્સી નંબર</h2><button class="top-btn" type="button" data-close="1" aria-label="બંધ કરો">${icon('close')}</button></div>
     ${list.length
       ? `<div class="help-list one mt">${list.map((h) => `<a class="help-row" href="tel:${esc(h.number)}">${lineTile('call', safeTone(h.tone || 'green'))}<div><div class="num">${esc(h.display || h.number)}</div><div class="t">${esc(h.title)}</div></div>${icon('chev', 'ic chev')}</a>`).join('')}</div>`
-      : '<p>નંબર લોડ ન થયા. ઇન્ટરનેટ ચાલુ કરીને ફરી ખોલો.</p>'}`);
+      : '<p>નંબર લોડ ન થયા. ઇન્ટરનેટ ચાલુ કરીને ફરી ખોલો.</p>'}
+    ${list.length ? `<p class="mt"><a class="btn btn-block" href="#/help">${icon('info')}દરેક નંબરની વિગત જુઓ</a></p>` : ''}`);
 }
 const $sos = document.getElementById('sos-btn');
 if ($sos) $sos.addEventListener('click', openHelplines);
@@ -1393,9 +1531,24 @@ function appConfirm(msg, okLabel, danger = false) {
 }
 let confirmResolve = null;
 
+// યુઝર 25/11/26 (3): એપ મોકલો ત્યારે પણ યોજનાના સંદેશ જેવું — શું છે, શેમાં કામ આવે, લિંક (વોટ્સએપ ફોટો સાથે બતાવે)
+function shareAppText() {
+  const n = (x) => (x ? `${x} ` : '');
+  return waJoin([
+    [`*📱 ${APP.name} — ${APP.about}*`],
+    [
+      `✅ ${n(visible(state.schemes).length)}યોજના: કોને મળે, કેટલો લાભ`,
+      `📄 ${n(state.docs.length)}દસ્તાવેજ: કયા પુરાવા જોઈએ`,
+      `📅 ${n(state.events.length)}જીવનના પ્રસંગ: શું કઢાવવું, કઈ સહાય`,
+      '🔎 તમારા માટે કઈ યોજના — થોડા જવાબ આપો',
+      '📞 જરૂરી ફોન નંબર અને ફ્રોડથી સાવધાન',
+    ],
+    ['🆓 મફત · લોગિન વગર · સરળ ગુજરાતી'],
+    ['👇 ખોલો:', appUrl()],
+  ]);
+}
 function shareAppLink() {
-  const text = [`*${APP.name}*`, APP.about, '', `મફત એપ: ${appUrl()}`].join('\n');
-  return 'https://wa.me/?text=' + encodeURIComponent(text);
+  return 'https://wa.me/?text=' + encodeURIComponent(shareAppText());
 }
 
 $modal.addEventListener('click', (e) => {
@@ -1450,7 +1603,9 @@ function currentTab() {
   return { event: 'events', scheme: item && isDoc(item) ? 'docs' : 'all', for: 'home', must: 'docs', dhyan: 'home' }[name] || (views_known(name) ? name : 'home');
 }
 
-function render() {
+// keep = true: એ જ પેજ ફરી દોરવું, જ્યાં હતા ત્યાં જ રહેવું (યુઝર 25/11/26: અક્ષર / દેખાવ દબાવતાં ઉપર જતું)
+function render(keep = false) {
+  const y = window.scrollY;
   const { name, arg, params } = currentRoute();
   let html;
   if (!state.loaded) html = '<div class="empty">લોડ થાય છે…</div>';
@@ -1466,7 +1621,7 @@ function render() {
       scheme: () => viewItem(arg),
       saved: viewSaved,
       today: viewToday,
-      help: viewHelp,
+      help: () => (arg ? viewHelpOne(arg) : viewHelp()),
       profile: viewProfile,
       contact: () => viewContact(params),
       for: () => viewFor(arg),
@@ -1485,7 +1640,8 @@ function render() {
   setActiveNav(currentTab());
   if (name === 'today' && state.loaded) store.setSeenUpdates(state.updates.map((u) => u.id));
   renderBell();
-  window.scrollTo(0, 0);
+  window.scrollTo(0, keep ? y : 0);
+  if (state.loaded) trackPage(document.title);
 }
 
 // ---------- ઘટનાઓ ----------
@@ -1498,13 +1654,12 @@ $view.addEventListener('submit', (e) => {
   if (form.id === 'contact-form') return sendContact(form);
   if (form.id === 'find') {
     const fd = new FormData(form);
-    const a = {};
-    for (const k of ['age', 'occupation', 'jati', 'income', ...FIND_Q.map((q) => q[0])]) {
-      const v = String(fd.get(k) || '').trim();
-      if (v) a[k] = v;
-    }
-    if (a.gender === 'm') delete a.widow;
-    state.profile = { ...(state.profile || { categories: [] }), find: a };
+    const one = (k) => String(fd.get(k) || '').trim();
+    const find = {};
+    for (const [k] of FIND_Q) if (one(k)) find[k] = one(k);
+    const cats = fd.getAll('categories').map(String).filter((c) => CATEGORY_BY_ID[c]);
+    // "તમે કોણ છો?", કામ, જાતિ, આવક = પ્રોફાઇલના જ જવાબ (બંને પેજ પર એક સરખું)
+    state.profile = { ...(state.profile || {}), categories: cats, occupation: one('occupation'), jati: one('jati'), income: one('income'), find };
     store.setProfile(state.profile);
     findShown = true;
     render();
@@ -1516,6 +1671,7 @@ $view.addEventListener('submit', (e) => {
   if (form.id === 'profile') {
     const fd = new FormData(form);
     state.profile = {
+      ...(state.profile || {}),
       categories,
       age: fd.get('age') || '',
       jati: fd.get('jati') || '',
@@ -1535,10 +1691,6 @@ $view.addEventListener('change', (e) => {
     saveWaApp(e.target.value);
     toast('સેવ થયું ✓');
     return;
-  }
-  if (e.target.name === 'gender' && e.target.closest('#find')) {
-    const w = document.querySelector('[data-q="widow"]');
-    if (w) w.classList.toggle('hide-m', e.target.value === 'm');
   }
 });
 
@@ -1590,6 +1742,19 @@ async function sendContact(form) {
 
 let inAppNavigations = 0;
 
+// યોજના શોધો: પસંદ કરેલા પર ફરી ટેપ = ખાલી (બધા જવાબ વૈકલ્પિક)
+$view.addEventListener('pointerdown', (e) => {
+  const l = e.target.closest('.fchip');
+  if (l) l.dataset.was = String(l.querySelector('input').checked);
+});
+$view.addEventListener('click', (e) => {
+  const inp = e.target.closest('.fchip input[type=radio]');
+  if (!inp) return;
+  const l = inp.closest('.fchip');
+  if (l.dataset.was === 'true') inp.checked = false;
+  l.dataset.was = String(inp.checked);
+});
+
 $view.addEventListener('click', async (e) => {
   const dot = e.target.closest('[data-dhyan]');
   const step = e.target.closest('[data-dhyan-step]');
@@ -1602,6 +1767,13 @@ $view.addEventListener('click', async (e) => {
   if (dhyanSwiped && e.target.closest('.dh-slide')) {
     e.preventDefault();
     dhyanSwiped = false;
+    return;
+  }
+  // ફોટો મોટો જુઓ: "મોટો જુઓ" બટન, વિગતનો મોટો ફોટો કે સમાચારનો ફોટો
+  const zb = e.target.closest('[data-zoom-src]');
+  const zi = e.target.closest('.thumb.hero img, .news-pic');
+  if (zb || zi) {
+    openViewer(zb ? zb.dataset.zoomSrc : zi.currentSrc || zi.src);
     return;
   }
   const el = e.target.closest('[data-action]');
@@ -1620,12 +1792,24 @@ $view.addEventListener('click', async (e) => {
     if (s) navigator.share({ title: s.title, text: shareText(s) }).catch(() => {});
     return;
   }
+  if (action === 'copy') {
+    const t = el.dataset.text || '';
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject())
+      .then(() => toast('કૉપી થયું ✓'))
+      .catch(() => toast(t));
+    return;
+  }
+  if (action === 'share-event') {
+    const ev = state.events.find((x) => x.id === id);
+    if (ev) navigator.share({ title: ev.title, text: eventShareText(ev) }).catch(() => {});
+    return;
+  }
   if (action === 'find-clear') {
-    const { find, ...rest } = state.profile || {};
-    state.profile = { categories: [], ...rest };
-    store.setProfile(state.profile);
+    // ફક્ત ફોર્મ ખાલી; "યોજના બતાવો" દબાવો ત્યારે જ પ્રોફાઇલમાં સેવ
+    el.closest('form').querySelectorAll('input').forEach((i) => (i.checked = false));
     findShown = false;
-    render();
+    const f = el.closest('form');
+    while (f.nextElementSibling) f.nextElementSibling.remove();
     return;
   }
   if (action === 'mine-cat') {
@@ -1635,7 +1819,7 @@ $view.addEventListener('click', async (e) => {
     state.profile = { ...(state.profile || {}), categories: on ? [...cats, c] : cats.filter((x) => x !== c) };
     store.setProfile(state.profile);
     toast(on ? 'પ્રોફાઇલમાં ઉમેર્યું ✓' : 'પ્રોફાઇલમાંથી કાઢ્યું');
-    render();
+    render(true);
   }
   if (action === 'must') {
     const i = Number(el.dataset.i);
@@ -1649,7 +1833,7 @@ $view.addEventListener('click', async (e) => {
   if (action === 'text-size') {
     store.setZoom(Number(el.dataset.size));
     applyLook();
-    render();
+    render(true);
   }
   if (action === 'save') {
     const s = findItem(id);
@@ -1676,8 +1860,9 @@ $view.addEventListener('click', async (e) => {
     const i = Number(el.dataset.i);
     const ready = store.toggleDoc(id, i);
     const done = ready.includes(i);
-    el.setAttribute('aria-pressed', String(done));
-    el.closest('.ev-item').classList.toggle('done', done);
+    const row = el.closest('.ev-item');
+    row.querySelector('.ev-tick').setAttribute('aria-pressed', String(done));
+    row.classList.toggle('done', done);
     const ev = state.events.find((x) => 'event:' + x.id === id);
     const prog = document.getElementById('event-progress');
     if (ev && prog) prog.textContent = eventProgress(ev, ready);
@@ -1714,7 +1899,7 @@ $view.addEventListener('click', async (e) => {
 
   if (action === 'look') {
     setLookLevel(Number(el.dataset.level));
-    render();
+    render(true);
   }
 
   if (action === 'clear-filter') {
@@ -1753,18 +1938,32 @@ $view.addEventListener('click', async (e) => {
   }
 });
 
+// ગણતરી (Analytics ચાલુ હોય તો): વોટ્સએપ પર મોકલ્યું, ફોન કર્યો — ફક્ત પેજ / નંબર
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href]');
+  if (!a) return;
+  const h = a.getAttribute('href');
+  if (/^https:\/\/wa\.me\/\?text=/.test(h)) trackEvent('share', { method: 'whatsapp', page: location.hash.split('?')[0] || '#/' });
+  else if (h.startsWith('tel:')) trackEvent('call', { number: h.slice(4) });
+}, true);
+
 // થંબનેલનો ફોટો ન ખૂલે (ખોટી લિંક, નેટ નથી) તો ફોટો કાઢો: નીચેનું આપોઆપ થંબનેલ દેખાય.
 document.addEventListener(
   'error',
   (e) => {
     const t = e.target;
-    if (t instanceof HTMLImageElement && t.parentElement && t.parentElement.classList.contains('thumb')) t.remove();
+    if (t instanceof HTMLImageElement && t.parentElement && t.parentElement.classList.contains('thumb')) {
+      const z = t.parentElement.querySelector('.th-zoom');
+      if (z) z.remove();
+      t.remove();
+    }
   },
   true
 );
 
 window.addEventListener('hashchange', () => {
   inAppNavigations++;
+  closeViewer();
   closeModal();
   closeDrawer();
   closePm();

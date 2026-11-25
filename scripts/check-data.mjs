@@ -80,6 +80,10 @@ if (helplines.length < 5) errors.push(`ફોન નંબર: ફક્ત ${he
 for (const h of helplines) {
   if (!/^[0-9]{3,12}$/.test(h.number || '')) errors.push(`ફોન નંબર "${h.number}": ફક્ત આંકડા જોઈએ`);
   if (!h.title) errors.push(`ફોન નંબર "${h.number}": નામ ખૂટે છે`);
+  // વિગત (યુઝર 25/11/26): about = એક લીટી, points = ક્યારે ફોન કરવો, image = https ફોટો (વૈકલ્પિક)
+  if (h.about != null && typeof h.about !== 'string') errors.push(`ફોન નંબર "${h.number}": about લખાણ જોઈએ`);
+  if (h.points != null && !(Array.isArray(h.points) && h.points.every((x) => typeof x === 'string' && x.trim()))) errors.push(`ફોન નંબર "${h.number}": points લખાણની યાદી જોઈએ`);
+  if (h.image != null && !/^https:\/\/[^\s"'<>]+$/.test(h.image)) errors.push(`ફોન નંબર "${h.number}": image https લિંક જોઈએ`);
 }
 
 // અલગ પેજ (scripts/build-pages.mjs): દરેક કાર્ડ / પ્રસંગનું પેજ હોવું જોઈએ (એપ શેરમાં એ લિંક મોકલે છે)

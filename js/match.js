@@ -79,7 +79,7 @@ export function deadlineText(scheme) {
 }
 
 // ---------- તમારા માટે યોજના શોધો (#/find, યુઝર 25/11/26) ----------
-// જવાબ (બધા વૈકલ્પિક): gender m/f/o, age, occupation, area village/city, jati, divyang yes/no,
+// જવાબ (બધા વૈકલ્પિક): cats (પ્રોફાઇલના વર્ગ), gender m/f/o, age (પ્રોફાઇલમાં હોય તો), occupation, area village/city, jati, divyang yes/no,
 // student yes/no, bpl yes/no, income (INCOME id), widow yes/no, kids yes/no (18 થી નાનાં બાળક / સગર્ભા).
 // ન ભરેલા જવાબને આધારે યોજના છુપાવવી નહીં (matches() નો જ નિયમ).
 
@@ -89,7 +89,9 @@ const FARM = ['ખેતી', 'ખેત મજૂરી', 'પશુપાલ�
 export function personCats(a = {}) {
   const age = Number(a.age);
   const hasAge = a.age !== '' && a.age != null && !Number.isNaN(age);
-  const out = new Set(['samanya']);
+  // "તમે કોણ છો?" (પ્રોફાઇલના વર્ગ) — યુઝર 25/11/26 (3): યોજના શોધો અને પ્રોફાઇલ એક જ જવાબ
+  const out = new Set(['samanya', ...(Array.isArray(a.cats) ? a.cats : [])]);
+  if (a.occupation === 'નિવૃત્ત') out.add('vrudh');
   if (FARM.includes(a.occupation)) out.add('khedut');
   if (a.student === 'yes' || a.occupation === 'અભ્યાસ') out.add('vidyarthi');
   if (a.occupation === 'નોકરી શોધું છું' || (hasAge && age >= 18 && age <= 35 && a.occupation !== 'નિવૃત્ત')) out.add('yuvan');
@@ -100,7 +102,8 @@ export function personCats(a = {}) {
     if (a.gender !== 'm') out.add('mata');
   }
   if (hasAge && age >= 60) out.add('vrudh');
-  if (a.widow === 'yes' && a.gender !== 'm') out.add('vidhva');
+  if (a.widow === 'yes') out.add('vidhva');
+  if (a.gender === 'm') out.delete('vidhva'), out.delete('mata');
   if (a.divyang === 'yes') out.add('divyang');
   return [...out];
 }

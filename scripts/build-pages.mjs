@@ -94,9 +94,9 @@ ${body}
 </main>
 <footer class="foot">
   <nav aria-label="માહિતી">${FOOT_LINKS.map(([h, l]) => `<a href="${h}">${esc(l)}</a>`).join('')}</nav>
-  <p>© 2026 KruPa Digital Hub · સરકારી સાઇટ નથી</p>
+  <p>© 2026 ${esc(APP.name)} · KruPa Digital Hub · સરકારી સાઇટ નથી</p>
 </footer>
-<script type="module">import { installWaPicker } from '/js/wa.js'; installWaPicker();</script>
+<script type="module">import { installWaPicker } from '/js/wa.js'; installWaPicker();${APP.analytics && APP.analytics.ga ? " import { trackPage } from '/js/analytics.js'; trackPage(document.title);" : ''}</script>
 </body>
 </html>
 `;
