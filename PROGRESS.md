@@ -177,8 +177,8 @@
 5. Search Console → Sitemaps → jankar ની લાઇન પર ⋮ → Remove → ફરી `https://jankar.krupadigitalhub.in/sitemap.xml` → Submit (ફાઇલ બરાબર છે, 24/11/26). 2–3 દિવસ પછી પણ "Couldn't fetch" હોય તો "Test live URL" નો સ્ક્રીનશૉટ Claude ને.
 6. Play Console → App content → Data safety: `store/listing.md` ના **નવા** જવાબ (24/11/26: "Yes" અને 5 ખાનાં — Name, Phone number ઉમેરાયા). એપ મોકલતાં પહેલાં જરૂરી.
 7. થંબનેલ ફોટા: Digital Hub માં 1280×720, સરકારી લોગો / અશોક સ્તંભ / નેતાના ફોટા નહીં, બીજી સાઇટના ફોટા નહીં (`store/README.md`).
-9. **(વૈકલ્પિક) વપરાશનો રિપોર્ટ:** analytics.google.com → Admin → Create property "જાણકાર" → Web → `https://jankar.krupadigitalhub.in` → Measurement ID (G-…) Claude ને આપો. પછી Play Console Data safety માં `store/listing.md` ની વધારાની 2 લાઇન.
 8. **Digital Hub → જાણકાર તરત (25/11/26):** GitHub માં token બનાવી Vercel માં `JANKAR_SYNC_TOKEN` (પગલાં Digital Hub `docs/context/06` / ચેટ 25/11/26). ન કરો તો પણ દર કલાકે આવશે.
+9. **(વૈકલ્પિક) વપરાશનો રિપોર્ટ:** analytics.google.com → Admin → Create property "જાણકાર" → Web → `https://jankar.krupadigitalhub.in` → Measurement ID (G-…) Claude ને આપો. પછી Play Console Data safety માં `store/listing.md` ની વધારાની 2 લાઇન.
 
 ## આગળનું કામ (Claude, ક્રમ પ્રમાણે)
 ધ્યેય: રોજ નવું, આપણું લખાણ, ફક્ત સત્તાવાર લિંક, સરળ ગુજરાતી. (ભરતી 24/11/26 એ આખી કાઢી — યુઝર.)
