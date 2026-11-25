@@ -28,16 +28,19 @@ jobs:
           node-version: 22
       - name: Digital Hub માંથી લાવો
         run: node scripts/sync-hub.mjs
+      - name: અલગ પેજ બનાવો (યોજના / દસ્તાવેજ / પ્રસંગ + sitemap)
+        run: node scripts/build-pages.mjs
       - name: ડેટા ચકાસો
         run: node scripts/check-data.mjs
       - name: સેવ કરો અને લાઇવ કરો
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if git diff --quiet -- data; then echo "નવું કંઈ નથી"; exit 0; fi
+          git add -N yojana dastavej prasang 2>/dev/null || true
+          if git diff --quiet -- data yojana dastavej prasang sitemap.xml 404.html privacy.html terms.html about.html disclaimer.html dmca.html; then echo "નવું કંઈ નથી"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data
+          git add data yojana dastavej prasang sitemap.xml 404.html privacy.html terms.html about.html disclaimer.html dmca.html
           git commit -m "Data from KruPa Digital Hub"
           git push
           gh api -X POST "repos/${{ github.repository }}/pages/builds" > /dev/null || echo "Pages build: GitHub will pick up the push"

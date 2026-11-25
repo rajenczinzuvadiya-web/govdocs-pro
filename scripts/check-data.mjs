@@ -82,6 +82,18 @@ for (const h of helplines) {
   if (!h.title) errors.push(`ફોન નંબર "${h.number}": નામ ખૂટે છે`);
 }
 
+// અલગ પેજ (scripts/build-pages.mjs): દરેક કાર્ડ / પ્રસંગનું પેજ હોવું જોઈએ (એપ શેરમાં એ લિંક મોકલે છે)
+{
+  const { existsSync } = await import('node:fs');
+  const page = (dir, id) => new URL(`../${dir}/${id}/index.html`, import.meta.url);
+  const missing = [
+    ...schemes.map((s) => ['yojana', s.id]),
+    ...documents.map((s) => ['dastavej', s.id]),
+    ...events.map((e) => ['prasang', e.id]),
+  ].filter(([d, id]) => !existsSync(page(d, id)));
+  if (missing.length) errors.push(`અલગ પેજ નથી (${missing.length}): ${missing.slice(0, 3).map(([d, id]) => `${d}/${id}`).join(', ')}… → node scripts/build-pages.mjs`);
+}
+
 // ધ્યાન રાખો (data/dhyan.json): હોમની ફરતી પટ્ટી — સૂચના, ફ્રોડ, સામાન્ય ભૂલ, જાણકારી
 const { items: dhyan } = read('dhyan.json');
 if (!Array.isArray(dhyan) || !dhyan.length) errors.push('ધ્યાન રાખો: યાદી ખાલી છે');
