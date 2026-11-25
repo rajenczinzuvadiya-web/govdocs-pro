@@ -177,7 +177,7 @@
 
 ## યુઝરે કરવાનું (નવી ચેટમાં પહેલાં આ યાદ કરાવવું)
 1. GitHub Pages માં "Enforce HTTPS" ✓ (ન થાય તો 1 કલાક પછી).
-2. **Play Console (25/11/26):** એકાઉન્ટ બન્યું (Personal, "KruPa Digital Hub", krupadigitalhub@gmail.com, $25 ભર્યા). બાકી: (ક) પેમેન્ટ પ્રોફાઇલમાં નામનો ક્રમ PAN પ્રમાણે કરવાની અરજી મોકલી — Google નો ઈમેલ (5 દિવસ) આવે પછી જ "Verify your identity" માં PAN; (ખ) Trader status → not a trader; (ગ) ફોનમાં Play Console એપથી લોગિન; (ઘ) ફોન OTP ઓળખ પછી. પછી PWABuilder (`store/README.md` પગલાં 3–7), zip માંની `assetlinks.json` Claude ને.
+2. **Play Console (25/11/26):** એકાઉન્ટ બન્યું (Personal, "KruPa Digital Hub", krupadigitalhub@gmail.com, $25 ભર્યા ✓, Trader = Non-trader ✓, Android ફોન ✓). ઓળખ: ચૂંટણી કાર્ડ + બેંક સ્ટેટમેન્ટ અપલોડ, Google ચકાસે છે; પ્રોફાઇલનું નામ એ દસ્તાવેજ જેવું જ (નામ-પિતા-અટક) — Google માં હવે એ જ ક્રમ રાખવો. ભૂલથી નામનો ક્રમ બદલવાની અરજી ગઈ છે: Google Payments નો ઈમેલ આવે ત્યારે Reply માં "please cancel my name change request". ઓળખ મંજૂર થાય પછી ફોન OTP. પછી PWABuilder (`store/README.md` પગલાં 3–7; ફોર્મનો screenshot Claude ને), zip માંની `assetlinks.json` Claude ને.
 3. 12 ટેસ્ટર (Gmail) ભેગા કરવા: 14 દિવસનો ટેસ્ટ.
 4. Digital Hub માં ફોટા મૂકવા: એડમિન → ગાઇડ મેનેજ → યોજના ખોલો → ઉપર "ફોટો" અને પગલાંમાં screenshot → સેવ. 3 કલાકમાં જાણકારમાં.
 5. Search Console → Sitemaps → jankar ની લાઇન પર ⋮ → Remove → ફરી `https://jankar.krupadigitalhub.in/sitemap.xml` → Submit (ફાઇલ બરાબર છે, 24/11/26). 2–3 દિવસ પછી પણ "Couldn't fetch" હોય તો "Test live URL" નો સ્ક્રીનશૉટ Claude ને.
