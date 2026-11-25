@@ -269,23 +269,36 @@ button { font: inherit; color: inherit; }
 .foot-links a { display: inline-flex; align-items: center; min-height: 2.5rem; color: var(--muted); text-decoration: none; }
 .foot-links a:hover { color: var(--primary); text-decoration: underline; }
 .fcopy { padding: .1rem 1rem .9rem; text-align: center; font-size: .8rem; }
-/* ફોન: નીચેનાં ગોળ બટન (💬 ⬆) ફૂટરની લિંક પર ન આવે, એટલે બાજુમાં જગ્યા */
-@media (max-width: 1023px) { .foot { padding: 0 3.75rem; } .fcopy { padding-top: .9rem; } }
-/* યુઝર 25/11/26: ફોનમાં ફૂટરમાં ફક્ત ©; નિયમોનાં પેજ "વધુ" મેનુમાં. કમ્પ્યુટર પર ફૂટરમાં (સાઇડબારમાં નહીં). */
-@media (min-width: 1024px) { .foot-links { display: flex; } .side .nav-rules { display: none; } }
+/* ફોન: નીચેનાં બટન (💬 સૂચન, ⬆ ઉપર) © પર ન આવે, એટલે © બટનની ઉપર */
+@media (max-width: 1023px) { .foot { padding: 0 1rem 3.6rem; } .fcopy { padding-top: .9rem; } }
+/* યુઝર 25/11/26: ફોનમાં ફૂટરમાં ફક્ત ©; નિયમોનાં પેજ "વધુ" મેનુમાં. કમ્પ્યુટર પર ફૂટરમાં (સાઇડબારમાં નહીં):
+   ડાબે લિંક, જમણે © — એક જ હાર (યુઝર 25/11/26 (3)). જમણે નીચેના બટન માટે જમણે જગ્યા. */
+@media (min-width: 1024px) {
+  .foot { display: flex; align-items: center; justify-content: space-between; gap: .5rem 1.5rem; flex-wrap: wrap; padding: .35rem 15rem .35rem 2rem; }
+  .foot-links { display: flex; justify-content: flex-start; padding: 0; }
+  .fcopy { padding: .6rem 0; text-align: right; }
+  .side .nav-rules { display: none; }
+}
 
 /* 💬 સંપર્ક (જમણે નીચે) અને ⬆ ઉપર (ડાબે નીચે), KruPa ContactFab / ScrollTopButton */
+/* યુઝર 25/11/26 (3): 💬 નાનું લાગતું → આઇકન + શબ્દ; ⬆ ડાબે નાનું → નીચે વચ્ચે "ઉપર જાઓ" */
 .fab, .totop {
-  position: fixed; z-index: 35; display: grid; place-items: center; border-radius: 999px; cursor: pointer; text-decoration: none;
-  bottom: calc(5rem + env(safe-area-inset-bottom));
+  position: fixed; z-index: 35; display: inline-flex; align-items: center; justify-content: center; gap: .45rem; border-radius: 999px; cursor: pointer; text-decoration: none;
+  bottom: calc(5rem + env(safe-area-inset-bottom)); min-height: 3rem; font: inherit; font-weight: 700; white-space: nowrap;
 }
-.fab { right: 1rem; width: 3rem; height: 3rem; border: 0; background: var(--sidebar); color: #fff; box-shadow: 0 6px 18px rgba(22,32,61,.3); }
+.fab { right: 1rem; padding: 0 1.1rem 0 .95rem; border: 0; background: var(--sidebar); color: #fff; font-size: .95rem; box-shadow: 0 6px 18px rgba(22,32,61,.3); }
+.fab .ic { width: 1.35rem; height: 1.35rem; }
 .fab:hover { filter: brightness(1.15); }
-.totop { left: 1rem; width: 2.75rem; height: 2.75rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-md); }
-.totop:hover { color: var(--primary); border-color: var(--primary); }
+.fab-long { display: none; }
+.totop[hidden] { display: none; }
+.totop { left: 50%; transform: translateX(-50%); min-height: 2.6rem; padding: 0 1rem 0 .8rem; border: 1px solid var(--primary-ring); background: var(--surface); color: var(--primary); font-size: .9rem; box-shadow: var(--shadow-md); }
+.totop .ic { width: 1.1rem; height: 1.1rem; }
+.totop:hover { border-color: var(--primary); background: var(--primary-soft); }
 @media (min-width: 1024px) {
-  .fab { right: 1.5rem; bottom: 1.25rem; width: 2.9rem; height: 2.9rem; }
-  .totop { left: calc(16rem + 1.25rem); bottom: 1.25rem; }
+  .fab { right: 1.5rem; bottom: 1.25rem; min-height: 3.1rem; padding: 0 1.3rem 0 1.1rem; font-size: 1rem; }
+  .fab-long { display: inline; }
+  .fab-short { display: none; }
+  .totop { left: calc(8rem + 50%); bottom: 1.25rem; }
 }
 
 /* સ્વાગત વખતે એપનું ખોખું છુપાવવું (KruPa લોગિન પેજ જેવું) */
@@ -810,10 +823,18 @@ fieldset.card > legend + * { clear: both; }
 .follow { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--line); text-align: center; }
 .follow-name { margin-top: .4rem; font-size: 1.5rem; font-weight: 800; color: var(--primary); }
 .follow-grid { display: grid; gap: .75rem; max-width: 56rem; margin: 1.25rem auto 0; }
-@media (min-width: 560px) { .follow-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.follow-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 420px) { .follow-grid a { gap: .55rem; padding: .6rem .65rem; } .fl-ic { width: 2.3rem; height: 2.3rem; } .fl-go { display: none; } }
 @media (min-width: 1024px) { .follow-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-.follow-grid a { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 3rem; padding: 0 1rem; border-radius: .75rem; color: #fff; font-size: .9rem; font-weight: 700; text-decoration: none; box-shadow: var(--shadow); transition: transform .15s, filter .15s; }
-.follow-grid a:hover { transform: translateY(-2px); filter: brightness(1.1); }
+/* યુઝર 25/11/26 (3): "કરો" નીચે જતો — હવે કાર્ડ: બ્રાન્ડ રંગનો tile + નામ + નાની લીટી (એપનાં બીજાં કાર્ડ જેવું) */
+.follow-grid a { display: flex; align-items: center; gap: .75rem; min-width: 0; padding: .7rem .9rem; border-radius: .9rem; border: 1px solid var(--line); background: var(--surface); color: var(--ink); text-align: left; text-decoration: none; box-shadow: var(--shadow); transition: transform .15s, border-color .15s; }
+.follow-grid a:hover { transform: translateY(-2px); border-color: var(--primary-ring); }
+.fl-ic { flex: none; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: .75rem; color: #fff; }
+.fl-ic .ic { width: 1.35rem; height: 1.35rem; }
+.fl-t { display: grid; flex: 1; min-width: 0; line-height: 1.3; }
+.fl-t b { font-weight: 800; }
+.fl-t small { color: var(--muted); font-size: .85rem; }
+.fl-go { flex: none; color: var(--muted); }
 
 /* માહિતીનાં પેજ (અમારા વિશે, ગોપનીયતા નીતિ…) */
 .info-doc { padding: 1.25rem; }
@@ -908,27 +929,30 @@ fieldset.card > legend + * { clear: both; }
 }
 
 /* ---------- હોમ (25/11/26): 4 રંગીન ટાઇલ, ધ્યાન રાખો, યોજના શોધો ---------- */
+/* યુઝર 25/11/26 (3): નામ આઇકનની નીચે દૂર જતું — હવે આઇકનની બાજુમાં, વચ્ચે */
 .qtile {
-  position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: .1rem; height: 100%; min-height: 6.5rem;
+  position: relative; overflow: hidden; display: flex; align-items: center; gap: .7rem; height: 100%; min-height: 5rem;
   padding: .85rem .95rem; border-radius: 1rem; color: #fff; text-decoration: none; box-shadow: var(--shadow); min-width: 0; isolation: isolate;
   transition: transform .15s ease, box-shadow .15s ease;
 }
 .qtile:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 .qtile:focus-visible { outline: 3px solid var(--primary-ring); outline-offset: 2px; }
-.qtile .q-ic { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; margin-bottom: auto; border-radius: .7rem; background: rgba(255, 255, 255, .22); }
-.qtile .q-ic svg { width: 1.25rem; height: 1.25rem; fill: #fff; }
-.qtile b { margin-top: .55rem; font-size: 1.05rem; font-weight: 800; line-height: 1.25; overflow-wrap: anywhere; }
+.qtile .q-ic { flex: none; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: .75rem; background: rgba(255, 255, 255, .22); }
+.qtile .q-ic svg { width: 1.3rem; height: 1.3rem; fill: #fff; }
+.qtile .q-t { display: grid; gap: .1rem; min-width: 0; }
+.qtile b { font-size: 1.05rem; font-weight: 800; line-height: 1.25; overflow-wrap: anywhere; }
 .qtile small { font-size: .82rem; opacity: .92; line-height: 1.3; }
 .qtile .q-bg { position: absolute; right: -.6rem; bottom: -.8rem; z-index: -1; opacity: .16; }
 .qtile .q-bg svg { width: 5.5rem; height: 5.5rem; fill: #fff; }
-@media (min-width: 900px) { .qtile { min-height: 7.5rem; } .qtile b { font-size: 1.15rem; } }
+@media (min-width: 900px) { .qtile { min-height: 6rem; padding: 1rem 1.1rem; gap: .9rem; } .qtile .q-ic { width: 3rem; height: 3rem; } .qtile .q-ic svg { width: 1.5rem; height: 1.5rem; } .qtile b { font-size: 1.2rem; } }
+@media (max-width: 420px) { .qtile { gap: .5rem; padding: .7rem .65rem; min-height: 4.6rem; } .qtile .q-ic { width: 2.1rem; height: 2.1rem; border-radius: .6rem; } .qtile .q-ic svg { width: 1.1rem; height: 1.1rem; } .qtile b { font-size: .95rem; } .qtile small { font-size: .74rem; } }
 
 .dhyan { margin-top: 1rem; padding: .8rem 1rem .7rem; border-radius: 1rem; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
 .dh-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
 .dh-head h2 { display: inline-flex; align-items: center; gap: .4rem; font-size: 1rem; font-weight: 800; color: var(--primary); }
 .dh-all { display: inline-flex; align-items: center; gap: .15rem; min-height: 2.5rem; margin: -.4rem -.3rem -.4rem 0; padding: 0 .3rem; font-size: .85rem; font-weight: 700; color: var(--primary); text-decoration: none; }
 .dh-all:hover { text-decoration: underline; }
-.dh-slide { display: flex; flex-direction: column; align-items: flex-start; gap: .35rem; min-height: 4.6rem; margin-top: .35rem; color: var(--ink); text-decoration: none; }
+.dh-slide { user-select: none; -webkit-user-drag: none; cursor: grab; display: flex; flex-direction: column; align-items: flex-start; gap: .35rem; min-height: 4.6rem; margin-top: .35rem; color: var(--ink); text-decoration: none; }
 .dh-slide.in { animation: dhIn .35s ease-out; }
 @keyframes dhIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: none; } }
 .dh-type { display: inline-flex; align-items: center; gap: .3rem; padding: .15rem .55rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
@@ -964,17 +988,108 @@ fieldset.card > legend + * { clear: both; }
 .find-cta .tile { width: 2.6rem; height: 2.6rem; flex: none; }
 .find-cta .chev { color: var(--primary); flex: none; }
 .find-cta:hover { border-color: var(--primary); }
-.find-card { display: grid; gap: 1rem; }
-.find-grid { display: grid; gap: .75rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-@media (min-width: 1024px) { .find-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-.find-grid .field { min-width: 0; }
-.find-grid select, .find-grid input { width: 100%; min-width: 0; }
-.fq-grid { display: grid; gap: .6rem 1rem; grid-template-columns: 1fr; }
-@media (min-width: 640px) { .fq-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (min-width: 1280px) { .fq-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-.fq { display: flex; align-items: center; justify-content: space-between; gap: .5rem; flex-wrap: wrap; min-width: 0; }
-.fq-l { font-weight: 600; font-size: .92rem; }
-.fq.hide-m { display: none; }
-.find-act { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+/* યોજના શોધો (યુઝર 25/11/26 (3): દેખાવ સુધાર્યો) — દરેક સવાલ એક ખાનું, જવાબ = ટેપ કરવાનાં ગોળ બટન */
+.find-card { display: grid; gap: 1rem; margin-top: 1rem; }
+.fboxes { display: grid; gap: .75rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 719px) { .fbox.wide, .fbox.wide-sm { grid-column: 1 / -1; } .fbox { padding: .75rem .8rem .85rem; } }
+@media (min-width: 720px) { .fboxes { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fbox.wide { grid-column: 1 / -1; } }
+@media (min-width: 1280px) { .fboxes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.fbox { min-width: 0; margin: 0; padding: .85rem 1rem 1rem; border-radius: 1rem; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
+.fbox legend { float: left; width: 100%; display: flex; align-items: center; gap: .45rem; margin-bottom: .65rem; padding: 0; font-weight: 800; font-size: 1rem; color: var(--ink); }
+.fbox legend .ic-sm { color: var(--primary); }
+.fbox legend small { font-weight: 600; color: var(--muted); font-size: .82rem; }
+.fchips { clear: both; display: flex; flex-wrap: wrap; gap: .45rem; }
+.fchip { position: relative; display: block; min-width: 0; }
+.fchip input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.fchip span { display: inline-flex; align-items: center; gap: .3rem; min-height: 2.6rem; padding: .35rem .95rem; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); font-weight: 600; font-size: .92rem; line-height: 1.3; cursor: pointer; transition: background .15s, border-color .15s; }
+.fchip:hover span { border-color: var(--primary-ring); }
+.fchip input:checked + span { border-color: var(--primary); background: var(--primary); color: var(--on-primary); }
+.fchip input:checked + span::before { content: "✓"; font-weight: 800; }
+.fchip input:focus-visible + span { outline: 2px solid var(--primary); outline-offset: 2px; }
+.find-act { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; padding: .85rem 1rem; border-radius: 1rem; background: var(--primary-soft); border: 1px solid var(--primary-ring); }
+.find-act small a { color: var(--primary); font-weight: 700; }
 .find-act small { display: inline-flex; align-items: center; gap: .3rem; font-size: .82rem; }
 .find-note { margin-top: .75rem; font-size: .85rem; }
+
+/* ---------- 25/11/26 (3) ---------- */
+/* વિગતનું મથાળું: ડાબે ફોટો, જમણે નામ + ટૂંકમાં + બટન (સેવ, વોટ્સએપ, બીજે મોકલો); નીચે "આ પ્રસંગમાં કામ આવે" */
+.dh-main { min-width: 0; flex: 1; }
+.dh-main .actions { margin-top: 1rem; }
+@media (min-width: 900px) { .detail-head.has-pic { align-items: flex-start; } .detail-head.has-pic .dh-main { padding-top: .25rem; } }
+.related > span { display: inline-flex; align-items: center; gap: .35rem; }
+.fb-box { border-color: var(--primary-ring); background: var(--primary-soft); }
+.fb-box h3 { color: var(--primary); }
+
+/* ફોટો મોટો જુઓ */
+.thumb.hero { position: relative; }
+.thumb.hero img { cursor: zoom-in; }
+.th-zoom { position: absolute; right: .6rem; bottom: .6rem; z-index: 2; display: inline-flex; align-items: center; gap: .3rem; min-height: 2.25rem; padding: 0 .75rem; border: 0; border-radius: 999px; background: rgba(10, 15, 28, .72); color: #fff; font: inherit; font-size: .82rem; font-weight: 700; cursor: pointer; }
+.th-zoom:hover { background: rgba(10, 15, 28, .88); }
+.news-pic { cursor: zoom-in; }
+body.vw-open { overflow: hidden; }
+.viewer { position: fixed; inset: 0; z-index: 90; display: flex; flex-direction: column; background: rgba(5, 8, 16, .94); color: #fff; }
+.vw-bar { display: flex; align-items: center; justify-content: center; gap: .4rem; padding: .6rem; padding-top: calc(.6rem + env(safe-area-inset-top)); }
+.vw-bar button { display: inline-grid; place-items: center; min-width: 2.75rem; height: 2.75rem; padding: 0 .7rem; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; background: rgba(255,255,255,.08); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.vw-bar button:hover { background: rgba(255,255,255,.18); }
+.vw-bar [data-vclose] { margin-left: .6rem; background: rgba(255,255,255,.18); }
+.vw-pct { min-width: 3.5rem; text-align: center; font-weight: 700; font-size: .9rem; }
+.vw-stage { position: relative; flex: 1; min-height: 0; display: grid; place-items: center; overflow: hidden; touch-action: none; cursor: zoom-in; padding: .5rem; }
+.vw-stage.zoomed { cursor: grab; }
+.vw-stage img { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: center; user-select: none; -webkit-user-drag: none; border-radius: .25rem; }
+
+/* પ્રસંગની યાદી (યુઝર 25/11/26 (3)): ✓ ખાનું અને નામ એક હારમાં; ✓ = થઈ ગયું, બાકીનું આખું = વિગત ખોલો */
+.ev-item { align-items: center; padding: 0 .25rem 0 0; }
+.ev-body { display: grid; gap: .15rem; align-content: center; flex: 1; min-width: 0; min-height: 3.25rem; padding: .55rem .5rem .55rem 0; border: 0; background: none; font: inherit; color: var(--ink); text-align: left; text-decoration: none; cursor: pointer; }
+.ev-body b { font-weight: 700; line-height: 1.4; overflow-wrap: anywhere; }
+a.ev-body b { color: var(--primary); }
+a.ev-body:hover b { text-decoration: underline; }
+.ev-body .muted { font-size: .9rem; }
+.ev-open { display: inline-flex; align-items: center; gap: .15rem; font-size: .8rem; font-weight: 700; color: var(--primary); }
+
+/* જરૂરી ફોન નંબર: કાર્ડ → વિગત, "ફોન કરો" સીધો */
+.hcard { position: relative; }
+.hcard .tcard { height: 100%; padding-bottom: 2.9rem; }
+.hc-call { position: absolute; left: .75rem; bottom: .7rem; display: inline-flex; align-items: center; gap: .3rem; min-height: 2.25rem; padding: 0 .8rem; border-radius: .6rem; background: var(--ok-soft); color: var(--ok); font-size: .85rem; font-weight: 700; text-decoration: none; }
+.hc-call:hover { background: var(--ok); color: #fff; }
+.call-big { flex: 1 1 100%; }
+@media (min-width: 640px) { .call-big { flex: 0 0 auto; } }
+.card > .dots { border: 0; padding: .5rem 0 0; background: none; }
+
+/* સંપર્કનાં કાર્ડ (યુઝર 25/11/26 (3)): મોટો નંબર / ઈમેલ, મેસેજ + કૉપી */
+.contact-side { order: 2; display: grid; gap: .75rem; align-content: start; min-width: 0; }
+.contact-side .small { display: flex; gap: .35rem; align-items: flex-start; }
+.ccards { display: grid; gap: .75rem; }
+.ccard { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .75rem .85rem; align-items: center; padding: 1rem; border-radius: 1rem; border: 1px solid var(--line); border-left: 4px solid var(--primary); background: var(--surface); box-shadow: var(--shadow); min-width: 0; }
+.cc-wa { border-left-color: #1f9d55; }
+.cc-ic { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: .9rem; color: #fff; background: var(--primary); }
+.cc-wa .cc-ic { background: #1f9d55; }
+.cc-ic .ic { width: 1.5rem; height: 1.5rem; }
+.cc-body { display: grid; gap: .05rem; min-width: 0; }
+.cc-k { font-size: .8rem; font-weight: 700; color: var(--muted); }
+.cc-v { font-size: 1.35rem; font-weight: 800; line-height: 1.25; color: var(--ink); letter-spacing: .01em; overflow-wrap: anywhere; }
+.cc-mail .cc-v { font-size: 1.1rem; }
+.cc-body small { color: var(--muted); font-size: .82rem; }
+.cc-act { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: .5rem; }
+.cc-act .btn { flex: 1 1 auto; }
+.cc-act .btn-ghost { flex: 0 0 auto; }
+@media (min-width: 640px) and (max-width: 1023px) { .ccards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .ccards.two { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* અમારા વિશે */
+.about-hero { display: grid; gap: 1rem; align-items: center; grid-template-columns: auto minmax(0, 1fr); margin-top: 1rem; padding: 1.25rem; border-radius: 1.25rem; background: linear-gradient(135deg, var(--sidebar), #2c4bb0); color: #fff; box-shadow: var(--shadow-md); }
+.about-hero img { width: 72px; height: 72px; border-radius: 1.1rem; background: #fff; }
+.ah-t h2 { font-size: 1.6rem; font-weight: 800; color: #fff; }
+.ah-t p { opacity: .92; line-height: 1.5; }
+.ah-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; }
+.ah-tags span { display: inline-flex; align-items: center; gap: .3rem; padding: .2rem .65rem; border-radius: 999px; background: rgba(255,255,255,.16); font-size: .82rem; font-weight: 700; }
+.ah-stats { grid-column: 1 / -1; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+.ah-stats li { display: grid; justify-items: start; gap: .1rem; padding: .7rem .8rem; border-radius: .9rem; background: rgba(255,255,255,.12); }
+.ah-stats b { font-size: 1.5rem; font-weight: 800; line-height: 1.1; }
+.ah-stats span { font-size: .82rem; opacity: .9; }
+@media (min-width: 900px) {
+  .about-hero { grid-template-columns: auto minmax(0, 1fr) auto; padding: 1.5rem 1.75rem; }
+  .ah-stats { grid-column: auto; grid-template-columns: repeat(4, minmax(6.5rem, 1fr)); }
+}
+.cc-wa .btn-ok { background: #1f9d55; border-color: #1f9d55; color: #fff; }
+.cc-wa .btn-ok:hover { color: #fff; filter: brightness(1.08); }
+.cc-act .btn-ghost, .find-act .btn-ghost { color: var(--primary); }

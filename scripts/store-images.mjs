@@ -32,6 +32,7 @@ const shots = [
   ['4-dastavej', '#/docs'],
   ['5-prasang', '#/event/balak-no-janm'],
   ['6-farajiyat', '#/must'],
+  ['7-shodho', '#/find'],
 ];
 
 const b = await chromium.launch();

@@ -1,6 +1,6 @@
 // ઑફલાઇન: એપ ફોનમાં સેવ રહે, અને છેલ્લી ડાઉનલોડ થયેલી માહિતી નેટ વગર પણ દેખાય.
 // કોડ બદલો ત્યારે VERSION વધારવું, એટલે યુઝર્સના ફોનમાં નવું વર્ઝન આવે.
-const VERSION = 'v22';
+const VERSION = 'v23';
 const SHELL = `shell-${VERSION}`;
 const DATA = 'data';
 
@@ -17,6 +17,9 @@ const SHELL_FILES = [
   'js/pages.js',
   'js/report.js',
   'js/feedback.js',
+  'js/wa.js',
+  'js/viewer.js',
+  'js/analytics.js',
   'fonts/hind-vadodara-gujarati-400-normal.woff2',
   'fonts/hind-vadodara-gujarati-600-normal.woff2',
   'fonts/hind-vadodara-gujarati-700-normal.woff2',
