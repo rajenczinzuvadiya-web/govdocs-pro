@@ -1,5 +1,10 @@
 # જાણકાર — કામ ક્યાં પહોંચ્યું (નવું ઉપર)
 
+## 26/11/26 — Play Console: ઓળખ મંજૂર, ફોન નંબર ચકાસ્યો
+- યુઝર: "Verify your contact phone number" → Contact details માં +91 નંબર, "Send me a text" → કોડ → ચકાસ્યો ✓. Contact name ફક્ત Google ના સંપર્ક માટે (જાહેર નહીં), ઓળખ સાથે સંબંધ નથી — બદલ્યું નહીં.
+- આગળ (યુઝર): PWABuilder (`store/README.md` પગલું 3).
+- આગળનું કામ 1 (Digital Hub એડમિન) માટે `krupa-digital-hub` repo ની લખવાની પરવાનગી હજી નથી.
+
 ## 25/11/26 (4) — v0.15.1: Google Analytics ચાલુ
 - યુઝર: Analytics ઉમેરવું? Play Store માં શું જોઈએ? → યુઝરે GA4 property "Jankar" બનાવી (Law & Government, Small, Web stream). Enhanced measurement માં "browser history" page views, Site search, Form interactions બંધ કરવાનું કહ્યું (એપ જાતે page_view મોકલે, શોધેલું લખાણ ન જાય).
 - `js/config.js` → `analytics.ga = 'G-C29PY91YNR'`. ગોપનીયતા નીતિ + 146 અલગ પેજમાં ગણતરી (`build-pages`). `sw.js` v24.
@@ -177,7 +182,7 @@
 
 ## યુઝરે કરવાનું (નવી ચેટમાં પહેલાં આ યાદ કરાવવું)
 1. GitHub Pages માં "Enforce HTTPS" ✓ (ન થાય તો 1 કલાક પછી).
-2. **Play Console (25/11/26):** એકાઉન્ટ બન્યું (Personal, "KruPa Digital Hub", krupadigitalhub@gmail.com, $25 ભર્યા ✓, Trader = Non-trader ✓, Android ફોન ✓). ઓળખ: ચૂંટણી કાર્ડ + બેંક સ્ટેટમેન્ટ અપલોડ, Google ચકાસે છે; પ્રોફાઇલનું નામ એ દસ્તાવેજ જેવું જ (નામ-પિતા-અટક) — Google માં હવે એ જ ક્રમ રાખવો. ભૂલથી નામનો ક્રમ બદલવાની અરજી ગઈ છે: Google Payments નો ઈમેલ આવે ત્યારે Reply માં "please cancel my name change request". ઓળખ મંજૂર થાય પછી ફોન OTP. પછી PWABuilder (`store/README.md` પગલાં 3–7; ફોર્મનો screenshot Claude ને), zip માંની `assetlinks.json` Claude ને.
+2. **Play Console:** એકાઉન્ટ (Personal, "KruPa Digital Hub", $25 ✓, Non-trader ✓, Android ફોન ✓), ઓળખ મંજૂર ✓, સંપર્ક ફોન નંબર ચકાસ્યો ✓ (26/11/26). Google Payments નો ઈમેલ આવે તો Reply માં "please cancel my name change request". **હવે:** PWABuilder (`store/README.md` પગલું 3; ફોર્મનો screenshot Claude ને; `signing.keystore` + `signing-key-info.txt` Google Drive માં), zip માંની `assetlinks.json` Claude ને.
 3. 12 ટેસ્ટર (Gmail) ભેગા કરવા: 14 દિવસનો ટેસ્ટ.
 4. Digital Hub માં ફોટા મૂકવા: એડમિન → ગાઇડ મેનેજ → યોજના ખોલો → ઉપર "ફોટો" અને પગલાંમાં screenshot → સેવ. 3 કલાકમાં જાણકારમાં.
 5. Search Console → Sitemaps → jankar ની લાઇન પર ⋮ → Remove → ફરી `https://jankar.krupadigitalhub.in/sitemap.xml` → Submit (ફાઇલ બરાબર છે, 24/11/26). 2–3 દિવસ પછી પણ "Couldn't fetch" હોય તો "Test live URL" નો સ્ક્રીનશૉટ Claude ને.
