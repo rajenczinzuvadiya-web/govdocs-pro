@@ -92,7 +92,9 @@ async function loadData() {
     state.dhyan = (dh.items || []).filter((x) => x && x.text && DHYAN_TYPES[x.type]);
     state.essentials = { all: es.all || [], roles: es.roles || {} };
     state.schemes = (s.schemes || []).map(calmCard);
-    state.updates = u.updates || [];
+    // યુઝર 26/11/26: "આજે શું નવું" ફક્ત છેલ્લા 30 દિવસની પોસ્ટ; કંઈ ન હોય તો 🔔 દેખાય જ નહીં.
+    const since = new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10);
+    state.updates = (u.updates || []).filter((x) => x && x.date && x.date >= since);
     state.docs = (d.documents || []).map(calmCard);
     state.docGroups = d.groups || [];
     state.events = (ev.events || []).map(calm);
@@ -214,15 +216,14 @@ function tcard(href, th, title, line, extra = '') {
   return `<li><a class="tcard" href="${href}">${th}<span class="tc-body"><span class="tc-text"><span class="tc-title">${esc(title)}</span>${line ? `<span class="tc-line">${esc(line)}</span>` : ''}${extra}</span>${icon('chev', 'ic-sm chev')}</span></a></li>`;
 }
 
+// યુઝર 26/11/26: યોજના / દસ્તાવેજ / પ્રસંગના કાર્ડમાં ફોટા નીચે ફક્ત નામ (નામ + વિગત બંને હોય તો નામ તરત ધ્યાનમાં ન આવે)
 function itemCard(s) {
-  const line = isDoc(s) ? s.summary || (groupOf(s.group) || {}).label || '' : s.summary;
-  return tcard(itemHref(s), itemThumb(s), s.title, line);
+  return tcard(itemHref(s), itemThumb(s), s.title, '');
 }
 
 function eventCard(e, mine) {
-  const n = store.getDocs('event:' + e.id).filter((i) => i < e.items.length).length;
   const badges = mine ? `<span class="thb thb-mine">તમારા માટે</span>` : '';
-  return tcard(`#/event/${e.id}`, thumb({ img: e.image, tone: 'blue', emo: e.icon, name: e.title, badges }), e.title, n ? `${n} / ${e.items.length} થઈ ગયું` : `${e.items.length} કામ`);
+  return tcard(`#/event/${e.id}`, thumb({ img: e.image, tone: 'blue', emo: e.icon, name: e.title, badges }), e.title, '');
 }
 
 // યુઝર 25/11/26 (3): નંબરનું પણ ફોટો + વિગત પેજ (#/help/<નંબર>). કાર્ડ → વિગત; "ફોન કરો" સીધો ફોન.
@@ -801,29 +802,44 @@ function eventShareText(e) {
   ]);
 }
 
+// પ્રગતિ ફક્ત "કરવાનાં કામ" ની (સહાય પર ✓ નથી)
 function eventProgress(e, ready) {
-  const n = ready.filter((i) => i < e.items.length).length;
-  return n === e.items.length ? '✓ બધું થઈ ગયું' : `${n} / ${e.items.length} થઈ ગયું`;
+  const tasks = e.items.map((it, i) => [it, i]).filter(([it]) => it.type !== 'scheme');
+  const n = tasks.filter(([, i]) => ready.includes(i)).length;
+  return n === tasks.length ? '✓ બધાં કામ થઈ ગયાં' : `${n} / ${tasks.length} થઈ ગયાં`;
 }
 
+// પ્રસંગ પેજ (યુઝર 26/11/26: "કરવાનાં કામ" અને "સહાય" એક સરખાં લાગતાં, "ભૂલ / સૂચન" બરાબર ન હતું):
+// ડાબે કામનું ✓ લિસ્ટ (એક ખાનામાં, 1-2-3), જમણે સહાય = લીલું tile + નામ + એક લીટી + › (✓ નહીં), નીચે "કંઈ ખોટું લાગ્યું?" ખાનું.
 function viewEvent(id) {
   const e = state.events.find((x) => x.id === id);
   if (!e) return `<div class="empty">આ પ્રસંગ મળ્યો નહીં. <a href="#/events">બધા પ્રસંગ</a></div>`;
   const key = 'event:' + e.id;
   const ready = store.getDocs(key);
-  const row = ([it, i]) => {
+  const task = ([it, i], n) => {
     const linked = it.itemId ? findItem(it.itemId) : null;
     const done = ready.includes(i);
+    const text = `<b>${esc(eventItemTitle(it))}</b>${it.note ? `<span class="muted">${esc(it.note)}</span>` : ''}`;
     return `
       <li class="ev-item ${done ? 'done' : ''}">
         <button type="button" class="ev-tick" data-action="event-tick" data-id="${key}" data-i="${i}" aria-pressed="${done}" aria-label="${esc(eventItemTitle(it))}: થઈ ગયું"><span class="box"></span></button>
+        <span class="ev-n" aria-hidden="true">${n + 1}</span>
         ${linked
-          ? `<a class="ev-body" href="${itemHref(linked)}"><b>${esc(eventItemTitle(it))}</b>${it.note ? `<span class="muted">${esc(it.note)}</span>` : ''}<span class="ev-open">વિગત અને પુરાવા ${icon('chev', 'ic-sm')}</span></a>`
-          : `<button type="button" class="ev-body" data-action="event-tick" data-id="${key}" data-i="${i}" tabindex="-1" aria-hidden="true"><b>${esc(eventItemTitle(it))}</b>${it.note ? `<span class="muted">${esc(it.note)}</span>` : ''}</button>`}
+          ? `<a class="ev-body" href="${itemHref(linked)}">${text}<span class="ev-open">વિગત અને પુરાવા ${icon('chev', 'ic-sm')}</span></a>`
+          : `<button type="button" class="ev-body" data-action="event-tick" data-id="${key}" data-i="${i}" tabindex="-1" aria-hidden="true">${text}</button>`}
       </li>`;
   };
+  const help = ([it]) => {
+    const linked = it.itemId ? findItem(it.itemId) : null;
+    const line = it.note || (linked && linked.summary) || '';
+    const amt = linked ? rupee(linked) : '';
+    const inner = `<span class="eh-tile">${icon('gift')}</span>
+      <span class="eh-text"><b>${esc(eventItemTitle(it))}</b>${line ? `<span class="muted">${esc(line)}</span>` : ''}</span>
+      ${amt ? `<span class="eh-amt">${esc(amt)}</span>` : ''}${linked ? icon('chev', 'ic-sm chev') : ''}`;
+    return `<li>${linked ? `<a class="ev-help" href="${itemHref(linked)}">${inner}</a>` : `<div class="ev-help">${inner}</div>`}</li>`;
+  };
   const pairs = e.items.map((it, i) => [it, i]);
-  const docs = pairs.filter(([it]) => it.type !== 'scheme');
+  const tasks = pairs.filter(([it]) => it.type !== 'scheme');
   const helps = pairs.filter(([it]) => it.type === 'scheme');
   return `
     <nav class="crumb"><a class="back-btn" href="#/events" data-action="back" aria-label="પાછા">${icon('arrow')}</a><a href="#/events">જીવનના પ્રસંગ</a></nav>
@@ -835,14 +851,23 @@ function viewEvent(id) {
         </div>
       </div>
     </div>
-    <p class="progress mt" id="event-progress">${eventProgress(e, ready)}</p>
-    <div class="parts one" style="margin-top:1rem">
-      <div class="parts-main">
-        ${docs.length ? `<section class="part"><h2><span class="sq">${icon('forms')}</span>કરવાનાં કામ / દસ્તાવેજ</h2><ul class="ev-list">${docs.map(row).join('')}</ul></section>` : ''}
-        ${helps.length ? `<section class="part"><h2><span class="sq">${icon('gift')}</span>મળી શકે એવી સહાય</h2><ul class="ev-list">${helps.map(row).join('')}</ul></section>` : ''}
+    <div class="ev-grid">
+      ${tasks.length ? `<section class="card ev-box ev-tasks">
+        <h2 class="ev-h"><span class="sq">${icon('list')}</span><span>કરવાનાં કામ / દસ્તાવેજ<small>થઈ જાય એટલે ☐ પર ટેપ કરો</small></span><span class="ev-prog" id="event-progress">${eventProgress(e, ready)}</span></h2>
+        <ul class="ev-list">${tasks.map(task).join('')}</ul>
+      </section>` : ''}
+      <div class="ev-side">
+        ${helps.length ? `<section class="card ev-box ev-helps">
+          <h2 class="ev-h"><span class="sq">${icon('gift')}</span><span>મળી શકે એવી સહાય<small>નામ પર ટેપ કરો: કોને મળે, લાભ અને પુરાવા</small></span></h2>
+          <ul class="ev-hlist">${helps.map(help).join('')}</ul>
+        </section>` : ''}
+        <div class="card side-box fb-box">
+          <h3>${icon('message')}કંઈ ખોટું કે ખૂટતું લાગ્યું?</h3>
+          <p class="small muted">આ પ્રસંગમાં કોઈ કામ, દસ્તાવેજ કે સહાય ખૂટતી હોય કે ખોટી હોય — અમને જણાવો. ચકાસીને સુધારીશું.</p>
+          <a class="btn btn-primary btn-block" href="#/contact?event=${encodeURIComponent(e.id)}">${icon('message')}ભૂલ / સૂચન જણાવો</a>
+        </div>
       </div>
-    </div>
-    <p class="mt"><a class="btn" href="#/contact?event=${encodeURIComponent(e.id)}">${icon('message')}ભૂલ / સૂચન જણાવો</a></p>`;
+    </div>`;
 }
 
 // વોટ્સએપ સંદેશ (યુઝર 20/11/26: ગોઠવણી બરાબર ન હતી): એક ખાનું એક લીટી, ખાલી ખાનું નહીં,
@@ -1490,6 +1515,7 @@ function renderBell() {
   const b = document.getElementById('bell-badge');
   b.textContent = n > 9 ? '9+' : String(n);
   b.hidden = !n;
+  document.getElementById('bell').hidden = !state.updates.length;
   document.getElementById('bell').setAttribute('aria-label', n ? `આજે શું નવું: ${n}` : 'આજે શું નવું');
 }
 

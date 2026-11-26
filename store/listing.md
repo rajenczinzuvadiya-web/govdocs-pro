@@ -57,7 +57,7 @@ https://www.india.gov.in
 | App category | Education |
 | Tags | Education, Reference |
 | Contact email | krupadigitalhub@gmail.com (Play Store પર જાહેર દેખાશે) |
-| Phone (વૈકલ્પિક) | +91 7777919128 |
+| Phone (વૈકલ્પિક) | ખાલી રાખો (યુઝર 26/11/26: નંબર જાહેર નહીં) |
 | Privacy policy | `https://jankar.krupadigitalhub.in/privacy.html` (સાચું પેજ, 25/11/26 થી; એપમાં પણ એ જ લખાણ) |
 | Ads | No, my app does not contain ads |
 | Target audience | 18 and over |
@@ -74,7 +74,7 @@ https://www.india.gov.in
 |---|---|
 | Does your app collect or share any of the required user data types? | **Yes** |
 | Is all of the user data collected by your app encrypted in transit? | Yes |
-| Do you provide a way for users to request that their data is deleted? | Yes (ગોપનીયતા નીતિમાં: ઈમેલ / વોટ્સએપથી, 7 દિવસમાં) |
+| Do you provide a way for users to request that their data is deleted? | Yes (ગોપનીયતા નીતિમાં: ઈમેલથી, 7 દિવસમાં) |
 
 **Data types: આ પાંચ જ ✓ કરો, બાકી બધું ખાલી**
 

@@ -51,14 +51,34 @@ export function waIntent(href, app = 'auto') {
   return `intent://send${q ? `?${q}` : ''}#Intent;scheme=whatsapp;${PACKAGES[app] ? `package=${PACKAGES[app]};` : ''}S.browser_fallback_url=${encodeURIComponent(href)};end`;
 }
 
-/** આખા પેજ પર: Android માં દરેક wa.me લિંક intent થી ખૂલે. */
+// યુઝર 26/11/26: કમ્પ્યુટરના વોટ્સએપમાં (Windows) લિંકથી આવેલા સંદેશમાં ✅ 📄 💰 જેવાં ચિહ્ન "?" થઈ જાય.
+// ફોનમાં બરાબર દેખાય, એટલે ફક્ત કમ્પ્યુટર પરથી મોકલતી વખતે સંદેશમાંથી ચિહ્ન કાઢી નાખવાં.
+const isPhone = () => isAndroid() || /iPhone|iPad|iPod/i.test(navigator.userAgent || '');
+export const plainText = (t) =>
+  String(t)
+    .replace(/[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}\u{1F3FB}-\u{1F3FF}\uFE0F\u200D\u20E3]/gu, '')
+    .replace(/^[ \t]+/gm, '')
+    .replace(/^\*[ \t]+/gm, '*');
+export function desktopWaHref(href) {
+  const l = parseWa(href);
+  if (!l || !l.text || !/\p{Extended_Pictographic}/u.test(l.text)) return null;
+  return `https://wa.me/${l.phone}?text=${encodeURIComponent(plainText(l.text))}`;
+}
+
+/** આખા પેજ પર: Android માં દરેક wa.me લિંક intent થી ખૂલે; કમ્પ્યુટર પર સંદેશમાંથી ચિહ્ન કાઢે. */
 export function installWaPicker() {
   document.addEventListener(
     'click',
     (e) => {
       if (e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
       const a = e.target.closest && e.target.closest('a[href]');
-      if (!a || !parseWa(a.href) || !isAndroid()) return;
+      if (!a || !parseWa(a.href)) return;
+      if (!isPhone()) {
+        const h = desktopWaHref(a.href);
+        if (h) a.href = h;
+        return;
+      }
+      if (!isAndroid()) return;
       const intent = waIntent(a.href, readWaApp());
       if (!intent) return;
       e.preventDefault();
