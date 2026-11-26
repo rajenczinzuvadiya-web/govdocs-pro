@@ -1,5 +1,5 @@
 {
-  "updatedOn": "2026-11-25",
+  "updatedOn": "2026-11-26",
   "schemes": [
     {
       "id": "ganga-swarupa-sahay",
@@ -345,8 +345,9 @@
         }
       ],
       "words": "pm awas gramin pmay awas yojana ghar makan house pakku ghar",
+      "image": "https://dxxxjvakvrleqalojfrm.supabase.co/storage/v1/object/public/guide-shots/5b693d8d-1658-4d47-9398-22d19405085a.jpg",
       "from": "hub",
-      "updatedOn": "2026-11-01",
+      "updatedOn": "2026-11-26",
       "verified": false
     },
     {
@@ -601,8 +602,9 @@
         }
       ],
       "words": "namo lakshmi laxmi yojana girl student dhoran 9 10 11 12 50000 dikri",
+      "image": "https://dxxxjvakvrleqalojfrm.supabase.co/storage/v1/object/public/guide-shots/c2b4398f-ead5-4082-9306-d7e5acdb6103.jpg",
       "from": "hub",
-      "updatedOn": "2026-11-01",
+      "updatedOn": "2026-11-26",
       "verified": false,
       "rules": {
         "maxIncome": 600000
@@ -644,8 +646,9 @@
         }
       ],
       "words": "pm matru vandana pmmvy pregnant sagarbha mata 5000 6000 anganwadi mamta card",
+      "image": "https://dxxxjvakvrleqalojfrm.supabase.co/storage/v1/object/public/guide-shots/2f2165f3-630a-4621-967c-75cf28f6dcc7.jpg",
       "from": "hub",
-      "updatedOn": "2026-11-01",
+      "updatedOn": "2026-11-26",
       "verified": false
     },
     {
@@ -722,8 +725,9 @@
         }
       ],
       "words": "pmsby pm suraksha bima accident insurance akasmat vimo 20 rupiya",
+      "image": "https://dxxxjvakvrleqalojfrm.supabase.co/storage/v1/object/public/guide-shots/37c7d4df-0874-41fc-9c94-20fa8a1a06a1.jpg",
       "from": "hub",
-      "updatedOn": "2026-11-01",
+      "updatedOn": "2026-11-26",
       "verified": false,
       "rules": {
         "minAge": 18,
@@ -764,8 +768,9 @@
         }
       ],
       "words": "pmjjby pm jeevan jyoti bima life insurance jivan vimo 436",
+      "image": "https://dxxxjvakvrleqalojfrm.supabase.co/storage/v1/object/public/guide-shots/186f61b8-77ff-4278-926e-5981b7d3ef88.jpg",
       "from": "hub",
-      "updatedOn": "2026-11-01",
+      "updatedOn": "2026-11-26",
       "verified": false,
       "rules": {
         "minAge": 18,
@@ -942,8 +947,9 @@
         }
       ],
       "words": "ambedkar awas aavas yojana sc ghar makan housing sahay 120000",
+      "image": "https://dxxxjvakvrleqalojfrm.supabase.co/storage/v1/object/public/guide-shots/faf094d8-1db3-49e3-b8dd-7a7d2ff48041.jpg",
       "from": "hub",
-      "updatedOn": "2026-11-01",
+      "updatedOn": "2026-11-26",
       "verified": false
     },
     {
@@ -984,8 +990,9 @@
         }
       ],
       "words": "ujjwala ujwala gas connection lpg baatlo cylinder free mafat gas subsidy 300",
+      "image": "https://dxxxjvakvrleqalojfrm.supabase.co/storage/v1/object/public/guide-shots/257ddce2-9673-4d6e-85f4-00454d283276.jpg",
       "from": "hub",
-      "updatedOn": "2026-11-01",
+      "updatedOn": "2026-11-26",
       "verified": false,
       "rules": {
         "minAge": 18
@@ -1026,8 +1033,9 @@
         }
       ],
       "words": "surya ghar suryaghar solar rooftop free bijli 300 unit subsidy 78000 vij",
+      "image": "https://dxxxjvakvrleqalojfrm.supabase.co/storage/v1/object/public/guide-shots/999f2215-0c43-4681-801d-69190a51c537.jpg",
       "from": "hub",
-      "updatedOn": "2026-11-01",
+      "updatedOn": "2026-11-26",
       "verified": false
     },
     {
