@@ -255,6 +255,38 @@ export function mergeDhyan(feed, D) {
   return items.length ? { ...D, items } : null;
 }
 
+// ---------- જરૂરી દસ્તાવેજ ----------
+/**
+ * Digital Hub નું "જરૂરી દસ્તાવેજ" (feed.essentials) → data/essentials.json (યુઝર 27/11/26). આખી યાદી Digital Hub ની
+ * (ક્રમ પણ). `cardIds` = આ વખતે જાણકારમાં રહેલાં કાર્ડ: બીજું id છૂટે (check-data ભૂલ ન આપે). ફીડમાં ન હોય કે
+ * "બધા માટે" ખાલી થાય તો null = જાણકારની યાદી રહે.
+ */
+export function mergeEssentials(feed, E, cardIds) {
+  const raw = feed?.essentials;
+  if (!raw || typeof raw !== 'object') return null;
+  const list = (l) => {
+    const seen = new Set();
+    const out = [];
+    for (const x of Array.isArray(l) ? l : []) {
+      const id = str(x?.id);
+      const why = str(x?.why).replace(/\s+/g, ' ');
+      if (!cardIds.has(id) || !why || why.length > 120 || seen.has(id)) continue;
+      seen.add(id);
+      out.push({ id, why });
+    }
+    return out;
+  };
+  const all = list(raw.all);
+  if (!all.length) return null;
+  const roles = {};
+  for (const [c, l] of Object.entries(raw.roles && typeof raw.roles === 'object' ? raw.roles : {})) {
+    if (!CATS.has(c)) continue;
+    const got = list(l);
+    if (got.length) roles[c] = got;
+  }
+  return { ...E, all, roles };
+}
+
 // ---------- ફાઇલ સાથે ચલાવવું ----------
 const same = (a, b) => JSON.stringify({ ...a, updatedOn: '' }) === JSON.stringify({ ...b, updatedOn: '' });
 
@@ -288,8 +320,23 @@ async function main() {
   }
   const now = { schemes: read('schemes.json'), documents: read('documents.json'), events: read('events.json') };
   const out = merge(feed, now);
+  // જરૂરી દસ્તાવેજ: આ વખતે જાણકારમાં રહેનારાં કાર્ડ સામે (કાર્ડ ન બદલાય તો હાલનાં).
+  const cards = out.skip ? now : out;
+  const cardIds = new Set([...cards.schemes.schemes, ...cards.documents.documents].map((c) => c.id));
+  const esBefore = read('essentials.json');
+  // Digital Hub માં સેવ ન થયું હોય ત્યારે પણ બંધ થયેલું કાર્ડ જાણકારની યાદીમાંથી જાય.
+  const es =
+    mergeEssentials(feed, esBefore, cardIds) ??
+    mergeEssentials({ essentials: esBefore }, esBefore, cardIds);
+  if (es) {
+    console.log(`Digital Hub: જરૂરી દસ્તાવેજ ${es.all.length} + ${Object.keys(es.roles).length} વર્ગ`);
+    if (!same(es, esBefore)) {
+      writeFileSync(at('essentials.json'), JSON.stringify({ ...es, updatedOn: today }, null, 2) + '\n');
+      changed++;
+    }
+  }
   if (out.skip) {
-    console.log(out.skip, changed ? '(આજે શું નવું / ફોન નંબર બદલાયા)' : '');
+    console.log(out.skip, changed ? '(આજે શું નવું / ફોન નંબર / જરૂરી દસ્તાવેજ બદલાયા)' : '');
     return;
   }
   for (const f of ['schemes', 'documents', 'events']) {
