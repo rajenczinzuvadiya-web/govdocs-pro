@@ -1,6 +1,8 @@
 // યુઝર વર્ગ અને પ્રોફાઇલના વિકલ્પો
 
 export const CATEGORIES = [
+  // યુઝર 27/11/26: "સામાન્ય માણસ" સૌથી પહેલું
+  { id: 'samanya', label: 'સામાન્ય માણસ', icon: 'people', tone: 'slate', hint: 'રેશનકાર્ડ, આયુષ્માન, આવાસ' },
   { id: 'khedut', label: 'ખેડૂત', icon: 'wheat', tone: 'green', hint: 'ખેતી સહાય, પાક નુકસાન, મંડી ભાવ' },
   { id: 'vidyarthi', label: 'વિદ્યાર્થી', icon: 'graduation', tone: 'sky', hint: 'શિષ્યવૃત્તિ, પરીક્ષા, પ્રવેશ' },
   { id: 'yuvan', label: 'બેરોજગાર / યુવાન', icon: 'briefcase', tone: 'indigo', hint: 'ભરતીની અરજી, તાલીમ, સ્વરોજગાર લોન' },
@@ -11,7 +13,6 @@ export const CATEGORIES = [
   { id: 'divyang', label: 'દિવ્યાંગ', icon: 'wheelchair', tone: 'teal', hint: 'સહાય, સાધનો, પ્રમાણપત્ર' },
   { id: 'shikshak', label: 'શિક્ષક', icon: 'school', tone: 'purple', hint: 'TET / TAT, OJAS ભરતી અરજી, મફત તાલીમ' },
   { id: 'vepari', label: 'નાના વેપારી / દુકાનદાર', icon: 'store', tone: 'orange', hint: 'વ્યવસાય લોન, Udyam' },
-  { id: 'samanya', label: 'સામાન્ય માણસ', icon: 'people', tone: 'slate', hint: 'રેશનકાર્ડ, આયુષ્માન, આવાસ' },
 ];
 
 export const CATEGORY_BY_ID = Object.fromEntries(CATEGORIES.map((c) => [c.id, c]));

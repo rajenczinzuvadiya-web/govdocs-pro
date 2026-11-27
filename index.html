@@ -40,6 +40,34 @@
   </script>
 </head>
 <body>
+  <!-- Splash (યુઝર 27/11/26): ફક્ત ઇન્સ્ટોલ થયેલી એપ (Play Store / હોમ સ્ક્રીન) ખૂલે ત્યારે, ટૅબ દીઠ એક વાર.
+       ફોનના પોતાના splash (સફેદ + આઇકન, manifest) પછી એ જ આઇકન એ જ જગ્યાએ, પછી નામ. ટેપ = તરત બંધ. -->
+  <div id="splash" aria-hidden="true">
+    <div class="sp-stage"><i class="sp-ring"></i><i class="sp-ring sp-r2"></i><img data-src="icons/icon-512.png" alt="" width="132" height="132"></div>
+    <b class="sp-name">જાણકાર</b>
+    <span class="sp-line">યોજના, સહાય અને દાખલાની માહિતી</span>
+    <span class="sp-by">KruPa Digital Hub</span>
+  </div>
+  <script>
+    (function () {
+      try {
+        var seen = null;
+        try { seen = !!sessionStorage.getItem('gj:splash'); sessionStorage.setItem('gj:splash', '1'); } catch (e) {}
+        var app = matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches || navigator.standalone === true || document.referrer.indexOf('android-app://') === 0;
+        if (seen !== false || navigator.webdriver || !app) return;
+        var d = document.documentElement, el = document.getElementById('splash'), t0 = Date.now(), done = false;
+        var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var im = el.querySelector('img'); im.src = im.dataset.src;
+        d.classList.add('splash-on');
+        var end = function () { if (done) return; done = true; el.classList.add('sp-out'); setTimeout(function () { d.classList.remove('splash-on'); }, 350); };
+        var ready = function () { setTimeout(end, Math.max(0, (still ? 600 : 1700) - (Date.now() - t0))); };
+        if (document.readyState === 'complete') ready(); else addEventListener('load', ready);
+        setTimeout(end, 3000);
+        addEventListener('pointerdown', end, { once: true, capture: true });
+        addEventListener('keydown', end, { once: true, capture: true });
+      } catch (e) {}
+    })();
+  </script>
   <noscript><p><a href="/yojana/">બધી યોજના</a> · <a href="/dastavej/">દસ્તાવેજ</a> · <a href="/prasang/">જીવનના પ્રસંગ</a></p></noscript>
   <div class="shell">
     <aside class="side" aria-label="મુખ્ય મેનુ">

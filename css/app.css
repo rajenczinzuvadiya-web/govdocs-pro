@@ -810,14 +810,15 @@ fieldset.card > legend + * { clear: both; }
 .oapps-kick { font-size: .875rem; font-weight: 700; color: var(--kesari); }
 .oapps-grid { display: grid; gap: 1rem; margin: 1.25rem auto 0; max-width: 64rem; }
 @media (min-width: 768px) { .oapps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.oapp { display: grid; justify-items: center; align-content: start; gap: .6rem; padding: 1.5rem; border: 1px solid var(--line); border-radius: 1.5rem; background: var(--surface); box-shadow: var(--shadow); color: var(--ink); text-decoration: none; transition: transform .15s, box-shadow .15s, border-color .15s; }
+.oapp { position: relative; display: grid; justify-items: center; align-content: start; gap: .6rem; padding: 1.5rem; border: 1px solid var(--line); border-radius: 1.5rem; background: var(--surface); box-shadow: var(--shadow); color: var(--ink); text-decoration: none; transition: transform .15s, box-shadow .15s, border-color .15s; }
 .oapp:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: var(--shadow-md); }
 .oapp img { width: 64px; height: 64px; border-radius: 1rem; }
 .oapp b { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
 .oapp-head { font-size: 1.1rem; font-weight: 700; }
 .oapp-head em { font-style: normal; color: var(--kesari); }
 .oapp small { font-size: .9rem; color: var(--muted); }
-.oapp-go { display: inline-flex; align-items: center; gap: .25rem; min-height: 2.75rem; margin-top: .4rem; padding: 0 1.25rem; border-radius: .75rem; background: var(--primary); color: var(--on-primary); font-size: .875rem; font-weight: 700; }
+.oapp .oapp-go { position: absolute; top: 1rem; right: 1rem; color: var(--muted); }
+.oapp:hover .oapp-go { color: var(--primary); }
 
 /* "અમને ફોલો કરો" (હોમના છેલ્લે) — Digital Hub જેવાં રંગીન બટન */
 .follow { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--line); text-align: center; }
@@ -923,7 +924,8 @@ fieldset.card > legend + * { clear: both; }
   .oapp b { font-size: 1.05rem; }
   .oapp-head { display: none; }
   .oapp small { font-size: .85rem; line-height: 1.35; }
-  .oapp-go { min-height: 0; margin: 0; padding: 0; background: none; color: var(--primary); }
+  .oapp { padding-right: 2.5rem; }
+  .oapp .oapp-go { top: 50%; right: .9rem; transform: translateY(-50%); }
   .follow { margin-top: 1.5rem; padding-top: 1.25rem; }
   .follow-name { font-size: 1.2rem; }
 }
@@ -947,31 +949,36 @@ fieldset.card > legend + * { clear: both; }
 @media (min-width: 900px) { .qtile { min-height: 6rem; padding: 1rem 1.1rem; gap: .9rem; } .qtile .q-ic { width: 3rem; height: 3rem; } .qtile .q-ic svg { width: 1.5rem; height: 1.5rem; } .qtile b { font-size: 1.2rem; } }
 @media (max-width: 420px) { .qtile { gap: .5rem; padding: .7rem .65rem; min-height: 4.6rem; } .qtile .q-ic { width: 2.1rem; height: 2.1rem; border-radius: .6rem; } .qtile .q-ic svg { width: 1.1rem; height: 1.1rem; } .qtile b { font-size: .95rem; } .qtile small { font-size: .74rem; } }
 
-.dhyan { margin-top: 1rem; padding: .8rem 1rem .7rem; border-radius: 1rem; border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
+.dhyan { --dh: var(--primary); --dh-soft: var(--primary-soft); margin-top: 1rem; padding: .7rem 1rem .4rem; border-radius: 1rem; border: 1px solid var(--line); border-left: 4px solid var(--dh); background: var(--surface); box-shadow: var(--shadow); touch-action: pan-y; transition: border-color .3s; }
+/* યુઝર 27/11/26: 🔔 ની બાજુમાં ચાલતી વાતનો પ્રકાર, એના રંગમાં (કાયમી "ધ્યાન રાખો" નહીં) */
+.dhyan[data-tone="danger"] { --dh: var(--danger); --dh-soft: var(--danger-soft); }
+.dhyan[data-tone="warn"] { --dh: #b45309; --dh-soft: rgba(217, 119, 28, .12); }
+.dhyan[data-tone="ok"] { --dh: var(--ok); --dh-soft: var(--ok-soft); }
+:root[data-theme="dark"] .dhyan[data-tone="warn"] { --dh: #f0a04b; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dhyan[data-tone="warn"] { --dh: #f0a04b; } }
 .dh-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
-.dh-head h2 { display: inline-flex; align-items: center; gap: .4rem; font-size: 1rem; font-weight: 800; color: var(--primary); }
-.dh-all { display: inline-flex; align-items: center; gap: .15rem; min-height: 2.5rem; margin: -.4rem -.3rem -.4rem 0; padding: 0 .3rem; font-size: .85rem; font-weight: 700; color: var(--primary); text-decoration: none; }
+.dh-title { display: inline-flex; align-items: center; gap: .55rem; min-width: 0; font-size: 1rem; font-weight: 800; color: var(--dh); }
+.dh-bell { display: grid; place-items: center; flex: none; width: 2.1rem; height: 2.1rem; border-radius: .65rem; background: var(--dh-soft); color: var(--dh); }
+.dh-bell .ic { width: 1.15rem; height: 1.15rem; }
+.dh-kind { display: inline-flex; align-items: center; gap: .3rem; min-width: 0; }
+.dh-all { flex: none; display: inline-flex; align-items: center; gap: .15rem; min-height: 2.5rem; margin: -.4rem -.3rem -.4rem 0; padding: 0 .3rem; font-size: .85rem; font-weight: 700; color: var(--primary); text-decoration: none; }
 .dh-all:hover { text-decoration: underline; }
-.dh-slide { user-select: none; -webkit-user-drag: none; cursor: grab; display: flex; flex-direction: column; align-items: flex-start; gap: .35rem; min-height: 4.6rem; margin-top: .35rem; color: var(--ink); text-decoration: none; }
-.dh-slide.in { animation: dhIn .35s ease-out; }
+.dh-slide { user-select: none; -webkit-user-drag: none; cursor: grab; display: block; min-height: 3rem; margin-top: .45rem; color: var(--ink); text-decoration: none; }
+.dh-text { font-size: .95rem; line-height: 1.5; }
+.dh-slide.in, .dh-title.in { animation: dhIn .35s ease-out; }
+.dh-slide.in-back, .dh-title.in-back { animation: dhBack .35s ease-out; }
 @keyframes dhIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: none; } }
+@keyframes dhBack { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+/* list page badges */
 .dh-type { display: inline-flex; align-items: center; gap: .3rem; padding: .15rem .55rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
 .dh-danger { background: var(--danger-soft); color: var(--danger); }
 .dh-warn { background: rgba(217, 119, 28, .12); color: #b45309; }
 .dh-info { background: var(--primary-soft); color: var(--primary); }
 .dh-ok { background: var(--ok-soft); color: var(--ok); }
-.dh-text { font-size: .95rem; line-height: 1.5; }
-.dhyan { touch-action: pan-y; }
-.dh-nav { display: flex; align-items: center; justify-content: space-between; gap: .25rem; margin-top: .2rem; }
-.dh-step { flex: none; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--primary); cursor: pointer; }
-.dh-step:hover { border-color: var(--primary); }
-.dh-step .flip { transform: rotate(180deg); }
-.dh-slide.in-back { animation: dhBack .35s ease-out; }
-@keyframes dhBack { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
 .dh-dots { display: flex; justify-content: center; flex-wrap: wrap; gap: 0; min-width: 0; }
 .dh-dots button { width: 1.5rem; height: 1.5rem; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
 .dh-dots button::after { content: ""; width: .45rem; height: .45rem; border-radius: 999px; background: var(--line); transition: width .2s; }
-.dh-dots button[aria-current="true"]::after { width: 1.1rem; background: var(--primary); }
+.dh-dots button[aria-current="true"]::after { width: 1.1rem; background: var(--dh); }
 .dh-list { list-style: none; padding: 0; margin: .5rem 0 1.25rem; display: grid; gap: .5rem; }
 @media (min-width: 1024px) { .dh-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .dh-list li { display: grid; gap: .35rem; padding: .75rem .9rem; border-radius: .8rem; border: 1px solid var(--line); border-left-width: 4px; background: var(--surface); color: var(--ink); line-height: 1.5; }
@@ -981,7 +988,7 @@ fieldset.card > legend + * { clear: both; }
 .dh-list li.dh-ok { border-left-color: var(--ok); }
 .dh-list a { display: inline-flex; align-items: center; gap: .3rem; min-height: 2.25rem; font-size: .85rem; font-weight: 700; color: var(--primary); }
 
-.find-cta { display: flex; align-items: center; gap: .75rem; margin-top: 1rem; padding: .8rem 1rem; border-radius: 1rem; border: 1px solid var(--primary-ring); background: var(--primary-soft); color: var(--ink); text-decoration: none; }
+.find-cta { display: flex; align-items: center; gap: .75rem; margin-top: .6rem; padding: .8rem 1rem; border-radius: 1rem; border: 1px solid var(--primary-ring); background: var(--primary-soft); color: var(--ink); text-decoration: none; }
 .find-cta > span:not(.tile) { display: grid; flex: 1; min-width: 0; line-height: 1.35; }
 .find-cta b { font-weight: 800; color: var(--primary); }
 .find-cta small { color: var(--muted); font-size: .85rem; }
@@ -1125,3 +1132,45 @@ a.ev-help:hover b { color: var(--ok); }
 .cc-wa .btn-ok { background: #1f9d55; border-color: #1f9d55; color: #fff; }
 .cc-wa .btn-ok:hover { color: #fff; filter: brightness(1.08); }
 .cc-act .btn-ghost, .find-act .btn-ghost { color: var(--primary); }
+
+/* ---------- Splash (યુઝર 27/11/26): ફક્ત ઇન્સ્ટોલ થયેલી એપમાં, index.html ની script ચાલુ કરે ----------
+   સફેદ પાછળ (manifest નું background_color = ફોનનો પોતાનો splash), આઇકન વચ્ચે, બે આછાં વર્તુળ ફેલાય, પછી નામ. */
+#splash { display: none; }
+html.splash-on #splash {
+  position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .35rem;
+  padding: 1rem; background: radial-gradient(circle at 50% 42%, #eef2fb 0, #ffffff 55%); color: #16203d; text-align: center;
+}
+html.splash-on body { overflow: hidden; }
+#splash.sp-out { opacity: 0; transition: opacity .3s ease; }
+.sp-stage { position: relative; display: grid; place-items: center; width: 132px; height: 132px; margin-bottom: 1.1rem; }
+.sp-stage img { position: relative; width: 132px; height: 132px; border-radius: 30px; box-shadow: 0 14px 34px rgba(30, 47, 107, .28); animation: spPop .6s cubic-bezier(.2, .9, .3, 1.25) both; }
+.sp-ring { position: absolute; inset: 0; border-radius: 34px; border: 2px solid rgba(30, 47, 107, .35); animation: spRing 1.4s ease-out .35s both; }
+.sp-ring.sp-r2 { border-color: rgba(217, 119, 28, .45); animation-delay: .6s; }
+.sp-name { font-size: 2.2rem; font-weight: 800; color: #1e2f6b; line-height: 1.2; animation: spUp .5s ease-out .45s both; }
+.sp-line { font-size: 1rem; font-weight: 600; color: #566080; animation: spUp .5s ease-out .65s both; }
+.sp-by { position: absolute; bottom: calc(1.75rem + env(safe-area-inset-bottom)); left: 0; right: 0; font-size: .85rem; font-weight: 700; color: #d9771c; letter-spacing: .02em; animation: spUp .5s ease-out .85s both; }
+@keyframes spPop { from { opacity: 0; transform: scale(.72); } to { opacity: 1; transform: none; } }
+@keyframes spRing { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(1.75); } }
+@keyframes spUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ---------- "જાણકાર એપ" ઇન્સ્ટોલ પટ્ટી (js/install.js; યુઝર 27/11/26, Digital Hub જેવી) ---------- */
+.install-bar {
+  position: fixed; left: .75rem; right: .75rem; bottom: calc(4.75rem + env(safe-area-inset-bottom)); z-index: 45;
+  display: flex; align-items: center; gap: .75rem; max-width: 28rem; margin: 0 auto; padding: .7rem .6rem .7rem .75rem;
+  border: 1px solid var(--line); border-radius: 1rem; background: var(--surface); color: var(--ink); box-shadow: 0 10px 30px rgba(22, 32, 61, .22);
+  animation: ibIn .3s ease-out;
+}
+@keyframes ibIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.install-bar img { flex: none; width: 44px; height: 44px; border-radius: .7rem; }
+.ib-t { display: grid; flex: 1; min-width: 0; line-height: 1.35; }
+.ib-t > b { font-size: .95rem; font-weight: 800; color: var(--primary); }
+.ib-t small { font-size: .8rem; color: var(--muted); }
+.ib-t small b { color: var(--ink); font-weight: 700; }
+.ib-go { flex: none; min-height: 2.5rem; padding: 0 1rem; border: 0; border-radius: .65rem; background: var(--primary); color: var(--on-primary); font: inherit; font-size: .9rem; font-weight: 700; cursor: pointer; }
+.ib-go:hover { filter: brightness(1.12); }
+.ib-x { flex: none; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border: 0; border-radius: .6rem; background: none; color: var(--muted); cursor: pointer; }
+.ib-x:hover { background: var(--primary-soft); color: var(--ink); }
+/* પટ્ટી હોય ત્યારે નીચેનાં બટન (💬 સૂચન, ⬆ ઉપર) એની પાછળ ન દબાય */
+html.ib-on .totop { display: none; }
+@media (max-width: 1023px) { html.ib-on .fab { display: none; } }
+@media (min-width: 1024px) { .install-bar { left: 16rem; right: 0; bottom: 1.25rem; } }
