@@ -2,7 +2,7 @@
 export const APP = {
   name: 'જાણકાર',
   // દરેક નવા પ્રકાશન વખતે વધારવું (ફક્ત નોંધ માટે, એપમાં દેખાતું નથી).
-  version: '0.16.0',
+  version: '0.17.0',
   // એપ શું છે તેની એક સાદી લીટી (સ્વાગત પેજ અને વોટ્સએપથી એપ મોકલો ત્યારે).
   about: 'યોજના, સહાય અને દાખલાની માહિતી, ગુજરાતીમાં.',
   // KruPa ની બીજી બે એપ (હોમ પર "અમારી બીજી એપ", ફૂટર, મેનુમાં "ઓપરેટર માટે")
@@ -27,4 +27,8 @@ export const APP = {
   // ખાલી = બંધ. ચાલુ થાય એટલે ગોપનીયતા નીતિમાં એની વાત આપોઆપ આવે (pages.js); Play Console ની Data safety પણ બદલવી (store/listing.md).
   // ફક્ત લાઇવ સાઇટ (jankar.krupadigitalhub.in) પર ગણાય, ટેસ્ટમાં નહીં.
   analytics: { ga: 'G-C29PY91YNR' },
+  // Play Store (યુઝર 27/11/26): એપ Play Store પર લાઇવ થાય એટલે live: true કરો.
+  // ત્યારે Android ફોનમાં "ઇન્સ્ટોલ" પટ્ટી સીધી Play Store ખોલે (અપડેટ, રેટિંગ, ગણતરી ત્યાં);
+  // કમ્પ્યુટર પર બ્રાઉઝરનું ઇન્સ્ટોલ, iPhone માં "Add to Home Screen" ની રીત — એમ જ.
+  playStore: { id: 'in.krupadigitalhub.jankar', live: false },
 };

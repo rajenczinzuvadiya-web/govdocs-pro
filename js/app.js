@@ -6,6 +6,7 @@ import { icon, tile, glyph, linePath, socialIcon } from './icons.js';
 import { INFO_PAGES, INFO_LINKS, INFO_UPDATED } from './pages.js';
 import { sendFeedback } from './feedback.js';
 import { installWaPicker, isAndroid, readWaApp, saveWaApp } from './wa.js';
+import { canInstall, setupInstall } from './install.js';
 import { openViewer, closeViewer } from './viewer.js';
 import { trackPage, trackEvent } from './analytics.js';
 
@@ -20,7 +21,6 @@ const state = {
   helplines: [],
   profile: store.getProfile(),
   seen: new Set(store.getSeen() || []),
-  installPrompt: null,
   // ફરજિયાત દસ્તાવેજ (data/essentials.json): બધા માટે + વર્ગ પ્રમાણે
   essentials: { all: [], roles: {} },
   loaded: false,
@@ -342,6 +342,8 @@ function homeResults() {
     ${itemList(hits, 'કંઈ મળ્યું નહીં. બીજો શબ્દ લખી જુઓ, જેમ કે "પેન્શન" કે "aavak".')}`;
 }
 
+// યુઝર 27/11/26: "તમારા માટે યોજના શોધો" હવે "શું જાણવું છે?" ના ખાનામાં જ, 4 કાર્ડ નીચે આખી પહોળાઈની હાર
+// (5મું નાનું કાર્ડ 2-2 ની ગોઠવણ તોડે; અલગ ખાનું હોમ લાંબું કરે).
 // હોમ (યુઝર 24/11/26): ટૂંકું — "શું જાણવું છે?" (શોધ + 4 ભાગ) અને "તમે કોણ છો?" (વર્ગ). પછી તરત બીજી એપ અને ફોલો.
 // ફોન નંબર હોમ પર નહીં: ઉપરની પટ્ટીમાં "ઇમરજન્સી નંબર" બટન.
 const schemesFor = (c) => visible(state.schemes).filter((s) => (s.categories || []).includes(c));
@@ -372,37 +374,39 @@ let dhyanAt = 0;
 let dhyanTimer = null;
 // યુઝર 25/11/26: કમ્પ્યુટરમાં (Windows માં "ઍનિમેશન" બંધ હોય ત્યારે પણ) આપમેળે બદલાય અને લખાય — ફક્ત સરકવાનું ઍનિમેશન CSS માં બંધ થાય.
 
-function dhyanSlide(d) {
-  const t = DHYAN_TYPES[d.type];
-  return `<span class="dh-type dh-${t.tone}">${icon(t.ic, 'ic-sm')}${t.label}</span><span class="dh-text">${esc(d.text)}</span>`;
+// યુઝર 27/11/26: "ધ્યાન રાખો" શબ્દ કાયમ નહીં — 🔔 ની બાજુમાં જે વાત ચાલે છે એનો પ્રકાર (ફ્રોડથી સાવધાન, સૂચના…),
+// એ જ રંગમાં, વાત સાથે બદલાય. ‹ › ગોળ બટન કાઢ્યાં: આંગળી / માઉસથી ખસેડો કે ટપકું દબાવો.
+function dhyanHead(d) {
+  return `<span class="dh-bell">${icon('bell')}</span><span class="dh-kind">${DHYAN_TYPES[d.type].label}</span>`;
 }
 function homeDhyan() {
   if (!state.dhyan.length) return '';
   dhyanAt = dhyanAt % state.dhyan.length;
   const n = state.dhyan.length;
+  const d = state.dhyan[dhyanAt];
   return `
-    <section class="dhyan" aria-labelledby="dh-h">
+    <section class="dhyan" data-tone="${DHYAN_TYPES[d.type].tone}" aria-label="ધ્યાન રાખો">
       <div class="dh-head">
-        <h2 id="dh-h">${icon('bell')}ધ્યાન રાખો</h2>
+        <h2 class="dh-title" aria-live="polite">${dhyanHead(d)}</h2>
         <a class="dh-all" href="#/dhyan">બધું જુઓ ${icon('chev', 'ic-sm')}</a>
       </div>
-      <a class="dh-slide" href="#/dhyan" aria-live="polite" draggable="false">${dhyanSlide(state.dhyan[dhyanAt])}</a>
-      ${n > 1 ? `<div class="dh-nav">
-        <button type="button" class="dh-step" data-dhyan-step="-1" aria-label="પાછળની વાત">${icon('chev', 'ic flip')}</button>
-        <div class="dh-dots" role="group" aria-label="બીજી વાત">${state.dhyan.map((_, i) => `<button type="button" data-dhyan="${i}" aria-label="${i + 1} / ${n}"${i === dhyanAt ? ' aria-current="true"' : ''}></button>`).join('')}</div>
-        <button type="button" class="dh-step" data-dhyan-step="1" aria-label="આગળની વાત">${icon('chev')}</button>
-      </div>` : ''}
+      <a class="dh-slide" href="#/dhyan" draggable="false"><span class="dh-text">${esc(d.text)}</span></a>
+      ${n > 1 ? `<div class="dh-dots" role="group" aria-label="બીજી વાત">${state.dhyan.map((_, i) => `<button type="button" data-dhyan="${i}" aria-label="${i + 1} / ${n}"${i === dhyanAt ? ' aria-current="true"' : ''}></button>`).join('')}</div>` : ''}
     </section>`;
 }
 function showDhyan(i, dir = 0) {
   const box = document.querySelector('.dhyan');
   if (!box || !state.dhyan.length) return stopDhyan();
   dhyanAt = (i + state.dhyan.length) % state.dhyan.length;
+  const d = state.dhyan[dhyanAt];
   const slide = box.querySelector('.dh-slide');
-  slide.classList.remove('in', 'in-back');
+  const head = box.querySelector('.dh-title');
+  [slide, head].forEach((el) => el.classList.remove('in', 'in-back'));
   void slide.offsetWidth;
-  slide.innerHTML = dhyanSlide(state.dhyan[dhyanAt]);
-  slide.classList.add(dir < 0 ? 'in-back' : 'in');
+  head.innerHTML = dhyanHead(d);
+  slide.innerHTML = `<span class="dh-text">${esc(d.text)}</span>`;
+  box.dataset.tone = DHYAN_TYPES[d.type].tone;
+  [slide, head].forEach((el) => el.classList.add(dir < 0 ? 'in-back' : 'in'));
   box.querySelectorAll('[data-dhyan]').forEach((b, j) => (j === dhyanAt ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current')));
 }
 function stopDhyan() {
@@ -515,7 +519,6 @@ function homeWho(p) {
 function viewHome() {
   const p = state.profile;
   return `
-    ${state.installPrompt ? `<button class="note note-info btn-block" style="border:0;cursor:pointer;text-align:left;margin-bottom:1rem" data-action="install">${icon('plus')}<span><strong>એપ ફોનમાં ઇન્સ્ટોલ કરો</strong>: હોમ સ્ક્રીન પરથી સીધી ખૂલશે.</span></button>` : ''}
     ${reminderNote()}
     <section class="scard">
       <div class="scard-in">
@@ -524,10 +527,10 @@ function viewHome() {
           <input id="home-search" type="search" placeholder="યોજના કે દાખલો શોધો…" value="${esc(homeQuery)}" aria-label="યોજના કે દાખલો શોધો" autocomplete="off">
         </label>
         ${homeAsk()}
+        <a class="find-cta" href="#/find">${tile('idea', 'blue')}<span><b>તમારા માટે યોજના શોધો</b><small>તમે કોણ છો, શું કરો છો, આવક, જાતિ… પ્રમાણે</small></span>${icon('chev', 'ic-sm chev')}</a>
       </div>
     </section>
     ${homeDhyan()}
-    <a class="find-cta" href="#/find">${tile('idea', 'blue')}<span><b>તમારા માટે યોજના શોધો</b><small>તમે કોણ છો, શું કરો છો, આવક, જાતિ… પ્રમાણે</small></span>${icon('chev', 'ic-sm chev')}</a>
     <div id="home-results">${homeResults()}</div>
     ${homeWho(p)}
     ${otherApps()}
@@ -658,6 +661,7 @@ function viewMust() {
 
 // "અમારી બીજી એપ" (યુઝર 17/11/26): હોમના છેલ્લે KruPa ની બીજી બે એપ — Digital Hub અને Doc Hub પણ
 // પોતાના મુખ્ય પાને બાકીની બે એ જ રીતે બતાવે છે. સાદી લિંક, નવા ટૅબમાં.
+// યુઝર 27/11/26: "જુઓ" બટન કાઢ્યું — આખું કાર્ડ જ લિંક, ખૂણે "અમને ફોલો કરો" જેવું ↗ આઇકન.
 function otherApps() {
   const k = APP.krupa || {};
   const apps = [
@@ -674,7 +678,7 @@ function otherApps() {
           <b>${esc(a.name)}</b>
           <span class="oapp-head">${a.head}</span>
           <small>${esc(a.line)}</small>
-          <span class="oapp-go">જુઓ ${icon('arrow', 'ic-sm')}</span>
+          ${icon('external', 'ic-sm oapp-go')}
         </a>`).join('')}
       </div>
     </section>`;
@@ -1389,6 +1393,7 @@ function pmHtml() {
       <a href="#/profile">${icon('user')}પ્રોફાઇલ બદલો</a>
       <a href="#/saved">${icon('star')}સેવ કરેલ</a>
       <a href="${shareAppLink()}" target="_blank" rel="noopener">${icon('share')}એપ વોટ્સએપ પર મોકલો</a>
+      ${canInstall() ? `<button type="button" class="mi" data-install>${icon('download')}એપ ઇન્સ્ટોલ કરો</button>` : ''}
       <div class="menu-sep"></div>
       <div class="menu-setting only-phone">ઝૂમ ${zoomStepper()}</div>
       <label class="shade"><span class="shade-top">દેખાવ <small>${SHADE_NAMES[lv]}</small></span>
@@ -1422,7 +1427,7 @@ $pm.addEventListener('click', (e) => {
     stepZoom(Number(z.dataset.zoom));
     return;
   }
-  if (e.target.closest('a')) closePm();
+  if (e.target.closest('a, [data-install]')) closePm();
 });
 $pm.addEventListener('input', (e) => {
   if (!e.target.matches('[data-shade-range]')) return;
@@ -1783,9 +1788,9 @@ $view.addEventListener('click', (e) => {
 
 $view.addEventListener('click', async (e) => {
   const dot = e.target.closest('[data-dhyan]');
-  const step = e.target.closest('[data-dhyan-step]');
-  if (dot || step) {
-    showDhyan(dot ? Number(dot.dataset.dhyan) : dhyanAt + Number(step.dataset.dhyanStep), step ? Number(step.dataset.dhyanStep) : 0);
+  if (dot) {
+    const to = Number(dot.dataset.dhyan);
+    showDhyan(to, to < dhyanAt ? -1 : 1);
     startDhyan();
     return;
   }
@@ -1934,17 +1939,6 @@ $view.addEventListener('click', async (e) => {
     render();
   }
 
-  if (action === 'install' && state.installPrompt) {
-    state.installPrompt.prompt();
-    try {
-      await state.installPrompt.userChoice;
-    } catch {
-      /* ignore */
-    }
-    state.installPrompt = null;
-    el.remove();
-  }
-
   if (action === 'reset') {
     const ok = await appConfirm('તમારી પ્રોફાઇલ, સેવ કરેલું અને ✓ ચેકલિસ્ટ આ ફોનમાંથી કાઢી નાખીએ?', 'હા, કાઢી નાખો', true);
     if (!ok) return;
@@ -1997,15 +1991,7 @@ window.addEventListener('hashchange', () => {
   render();
 });
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  state.installPrompt = e;
-  if (currentRoute().name === 'home' && state.loaded) render();
-});
-window.addEventListener('appinstalled', () => {
-  state.installPrompt = null;
-  toast('એપ ઇન્સ્ટોલ થઈ ગઈ ✓');
-});
+window.addEventListener('appinstalled', () => toast('એપ ઇન્સ્ટોલ થઈ ગઈ ✓'));
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
   applyLook();
   if (pmOpen()) renderPm();
@@ -2016,6 +2002,7 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
 applyLook();
 renderChrome();
 installWaPicker();
+setupInstall();
 document.querySelectorAll('path[data-i]').forEach((p) => p.setAttribute('d', linePath(p.dataset.i)));
 render();
 loadData().then(() => {

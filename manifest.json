@@ -11,15 +11,69 @@
   "theme_color": "#1e2f6b",
   "lang": "gu-IN",
   "dir": "ltr",
-  "categories": ["education", "news", "lifestyle"],
+  "categories": [
+    "education",
+    "news",
+    "lifestyle"
+  ],
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "shortcuts": [
-    { "name": "યોજના", "url": "./#/all", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "દસ્તાવેજ", "url": "./#/docs", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "જરૂરી ફોન નંબર", "url": "./#/help", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
-  ]
+    {
+      "name": "યોજના",
+      "url": "./#/all",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "દસ્તાવેજ",
+      "url": "./#/docs",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "જરૂરી ફોન નંબર",
+      "url": "./#/help",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=in.krupadigitalhub.jankar",
+      "id": "in.krupadigitalhub.jankar"
+    }
+  ],
+  "prefer_related_applications": false
 }

@@ -53,9 +53,14 @@ Play Store પર ફરી અપલોડ ફક્ત નામ કે આઇ
 3. "Package For Stores" દબાવો.
 4. "Android" માં "Generate Package" દબાવો.
 5. Package ID માં લખો: `in.krupadigitalhub.jankar` (પછી ક્યારેય બદલાશે નહીં).
-6. "Download" દબાવો. એક zip ફાઇલ આવશે.
-7. **zip માંની `signing.keystore` અને `signing-key-info.txt` Google Drive માં સાચવી રાખો.** આ ખોવાય તો એપ ક્યારેય અપડેટ નહીં થાય.
-8. zip માંની `assetlinks.json` Claude ને આપો. Claude તેને વેબસાઇટ પર મૂકશે, એટલે એપ ઉપર બ્રાઉઝરની પટ્ટી વગર ખૂલશે.
+6. **Splash (એપ ખૂલે ત્યારની પહેલી સ્ક્રીન):** "All Settings" ખોલો →
+   - "Splash screen color" / "Background color": `#FFFFFF`
+   - "Splash screen fade out duration": `300`
+   - "Icon" એમ જ રહેવા દો (વેબસાઇટનો જ આઇકન આવે છે).
+   ફોન પહેલાં સફેદ પાછળ આઇકન બતાવશે, પછી એપ પોતાનું splash (આઇકન + "જાણકાર" + લીટી) બતાવી હોમ ખોલશે. Play Store પર splash અલગ અપલોડ કરવાનું નથી.
+7. "Download" દબાવો. એક zip ફાઇલ આવશે.
+8. **zip માંની `signing.keystore` અને `signing-key-info.txt` Google Drive માં સાચવી રાખો.** આ ખોવાય તો એપ ક્યારેય અપડેટ નહીં થાય.
+9. zip માંની `assetlinks.json` Claude ને આપો. Claude તેને વેબસાઇટ પર મૂકશે, એટલે એપ ઉપર બ્રાઉઝરની પટ્ટી વગર ખૂલશે.
 
 ## પગલું 4: Play Console માં એપ બનાવો
 
