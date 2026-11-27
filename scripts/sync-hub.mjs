@@ -8,6 +8,7 @@
 // - સલામતી: Digital Hub થોડાં જ કાર્ડ આપે (ભૂલ, બંધ સાઇટ) તો કંઈ બદલાતું નથી.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { CATEGORIES } from '../js/options.js';
+import { NEWS_TYPE_IDS } from '../js/news.js';
 
 export const FEED_URL = 'https://www.krupadigitalhub.in/api/jankar';
 const MIN_CARDS = 20;
@@ -162,7 +163,8 @@ export function merge(feed, { schemes: S, documents: D, events: E }) {
 }
 
 // ---------- "આજે શું નવું" અને જરૂરી ફોન નંબર ----------
-const UPDATE_TYPES = new Set(['jankari', 'chetavani']);
+// form = ફોર્મ ચાલુ, result = પરિણામ / હપ્તો (યુઝર 27/11/26, js/news.js)
+const UPDATE_TYPES = new Set(NEWS_TYPE_IDS);
 const MAX_UPDATES = 40;
 export const TONES = new Set(['green', 'lime', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'pink', 'rose', 'orange', 'amber', 'brown', 'slate', 'red']);
 
@@ -185,6 +187,9 @@ export function mergeUpdates(feed, U) {
       link: link(r.link),
       source: str(r.source),
       ...(img(r.image) ? { image: img(r.image) } : {}),
+      // યોજનાની લિંક અને ફોર્મની છેલ્લી તારીખ (Digital Hub મોકલે ત્યારે)
+      ...(/^[a-z0-9-]{2,80}$/.test(str(r.itemId)) ? { itemId: str(r.itemId) } : {}),
+      ...(isDate(r.lastDate) && str(r.itemId) ? { lastDate: r.lastDate } : {}),
       from: 'hub',
       verified: r.verified === true,
     };

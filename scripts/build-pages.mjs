@@ -11,6 +11,7 @@ import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { APP } from '../js/config.js';
 import { CATEGORIES, CATEGORY_BY_ID } from '../js/options.js';
 import { INFO_PAGES, INFO_LINKS, INFO_UPDATED } from '../js/pages.js';
+import { applyPostDates } from '../js/news.js';
 
 export const SITE = 'https://jankar.krupadigitalhub.in';
 const ROOT = new URL('../', import.meta.url);
@@ -260,7 +261,8 @@ function notFound() {
 
 // ---------- બધું ----------
 export function buildAll(data, today = new Date().toISOString().slice(0, 10)) {
-  const schemes = calm(data.schemes.schemes || []).filter((s) => ID_RE.test(s.id || ''));
+  // પોસ્ટમાં લખેલી છેલ્લી તારીખ (data/updates.json → itemId + lastDate) અહીં પણ, એપ જેવું જ
+  const schemes = applyPostDates(calm(data.schemes.schemes || []), (data.updates && data.updates.updates) || []).filter((s) => ID_RE.test(s.id || ''));
   const docs = calm(data.documents.documents || []).filter((s) => ID_RE.test(s.id || ''));
   const events = calm(data.events.events || []).filter((e) => ID_RE.test(e.id || ''));
   const cards = [...schemes.map((s) => ({ ...s, kind: 'scheme' })), ...docs.map((s) => ({ ...s, kind: 'doc' }))];
@@ -292,7 +294,7 @@ ${urls.map((u) => `  <url><loc>${esc(SITE + u.path)}</loc>${u.lastmod ? `<lastmo
 }
 
 function main() {
-  const data = { schemes: read('schemes.json'), documents: read('documents.json'), events: read('events.json') };
+  const data = { schemes: read('schemes.json'), documents: read('documents.json'), events: read('events.json'), updates: read('updates.json') };
   // તારીખ ડેટાની (આજની નહીં): કંઈ ન બદલાય તો ફાઇલ પણ ન બદલાય, ને દર કલાકે નકામો commit ન થાય.
   const today = [data.schemes.updatedOn, data.documents.updatedOn, data.events.updatedOn].filter(Boolean).sort().pop() || '2026-11-25';
   const out = buildAll(data, today);
