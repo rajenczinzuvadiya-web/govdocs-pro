@@ -443,6 +443,8 @@ button { font: inherit; color: inherit; }
 .thb-urgent { background: #dc2626; }
 .thb-soon, .thb-mine { background: #b45309; }
 .thb-saved { background: #1d4ed8; }
+.thb-open { background: #15803d; }
+.thb-over { background: #475569; }
 
 .section-title { display: flex; align-items: center; gap: .5rem; margin: 1.75rem 0 .75rem; font-size: 1.1rem; font-weight: 700; color: var(--primary); }
 .section-title .count { font-size: .85rem; color: var(--muted); font-weight: 600; }
@@ -715,6 +717,27 @@ button.help-row { width: 100%; font: inherit; color: inherit; text-align: left; 
 .news article.warn { border-left: 4px solid var(--kesari); }
 .news h3 { font-size: 1.05rem; line-height: 1.4; }
 .news .when { display: flex; align-items: center; gap: .5rem; font-size: .8rem; color: var(--muted); font-weight: 600; }
+/* યુઝર 27/11/26: પ્રકાર પ્રમાણે ડાબી રંગીન પટ્ટી + મથાળાનો રંગ */
+.news article.news-ok { border-left: 4px solid var(--ok); }
+.news article.news-ok .when b { color: var(--ok); }
+.news article.news-warn { border-left: 4px solid var(--kesari); }
+.news article.news-warn .when b { color: var(--kesari); }
+.news article.news-info { border-left: 4px solid var(--primary); }
+.news article.news-info .when b { color: var(--primary); }
+.news .when b { font-weight: 700; }
+.news .row .btn { flex: 1 1 auto; justify-content: center; }
+.news-due { display: flex; align-items: center; gap: .4rem; font-weight: 700; font-size: .9rem; color: var(--ok); }
+.news-due.due-urgent { color: var(--danger); }
+.news-chips { margin-top: 1rem; }
+.due-box .section-title { margin-top: 1rem; color: var(--danger); }
+.due-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+@media (min-width: 1024px) { .due-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.due-card { display: flex; align-items: center; gap: .75rem; padding: .8rem 1rem; border-radius: 1rem; border: 1px solid var(--danger); background: var(--danger-soft); color: var(--ink); text-decoration: none; }
+.due-card > span:not(.tile) { display: grid; flex: 1; min-width: 0; line-height: 1.35; }
+.due-card b { font-weight: 800; overflow-wrap: anywhere; }
+.due-card small { color: var(--danger); font-weight: 700; font-size: .85rem; }
+.due-card .tile { width: 2.6rem; height: 2.6rem; flex: none; }
+.due-card .chev { color: var(--danger); flex: none; }
 
 /* ---------- પૉપઅપ (વચ્ચે, KruPa #228) ---------- */
 .overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: .75rem; background: rgba(10, 15, 28, .5); }

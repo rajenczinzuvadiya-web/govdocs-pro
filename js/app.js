@@ -9,6 +9,7 @@ import { installWaPicker, isAndroid, readWaApp, saveWaApp } from './wa.js';
 import { canInstall, setupInstall } from './install.js';
 import { openViewer, closeViewer } from './viewer.js';
 import { trackPage, trackEvent } from './analytics.js';
+import { NEWS_TYPES, applyPostDates, buildNews, dueItems } from './news.js';
 
 const state = {
   schemes: [],
@@ -91,10 +92,11 @@ async function loadData() {
     const [es, dh] = await Promise.all([get('essentials.json').catch(() => ({})), get('dhyan.json').catch(() => ({}))]);
     state.dhyan = (dh.items || []).filter((x) => x && x.text && DHYAN_TYPES[x.type]);
     state.essentials = { all: es.all || [], roles: es.roles || {} };
-    state.schemes = (s.schemes || []).map(calmCard);
+    // પોસ્ટમાં લખેલી છેલ્લી તારીખ (itemId + lastDate) યોજના પર પણ લાગે (js/news.js, યુઝર 27/11/26)
+    state.schemes = applyPostDates((s.schemes || []).map(calmCard), u.updates);
     // યુઝર 26/11/26: "આજે શું નવું" ફક્ત છેલ્લા 30 દિવસની પોસ્ટ; કંઈ ન હોય તો 🔔 દેખાય જ નહીં.
-    const since = new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10);
-    state.updates = (u.updates || []).filter((x) => x && x.date && x.date >= since);
+    // યુઝર 27/11/26: + છેલ્લી તારીખ હજી ન ગઈ હોય એવી પોસ્ટ + જે યોજનાનું ફોર્મ ચાલુ છે એની આપોઆપ પોસ્ટ.
+    state.updates = buildNews(u.updates, state.schemes);
     state.docs = (d.documents || []).map(calmCard);
     state.docGroups = d.groups || [];
     state.events = (ev.events || []).map(calm);
@@ -201,7 +203,9 @@ function itemThumb(s, { badges = true, cls = '' } = {}) {
     if (isNew(s)) b.push(`<span class="thb thb-new">${icon('sparkle', 'ic-sm')}નવું</span>`);
     if (!isDoc(s)) {
       const d = deadlineText(s);
-      if (d.tone !== 'ok') b.push(`<span class="thb thb-${d.tone}">${icon('clock', 'ic-sm')}${esc(d.text)}</span>`);
+      // યુઝર 27/11/26: છેલ્લી તારીખ દૂર હોય ત્યારે લીલો "ફોર્મ ચાલુ" બિલ્લો (નજીક હોય તો લાલ "x દિવસ બાકી")
+      if (d.tone === 'soon') b.push(`<span class="thb thb-open">${icon('forms', 'ic-sm')}ફોર્મ ચાલુ</span>`);
+      else if (d.tone !== 'ok') b.push(`<span class="thb thb-${d.tone}">${icon('clock', 'ic-sm')}${esc(d.text)}</span>`);
     }
     if (store.isSaved(s.id)) b.push(`<span class="thb thb-saved">${icon('starfill', 'ic-sm')}સેવ</span>`);
   }
@@ -996,26 +1000,64 @@ function viewSaved() {
     <div class="mt">${itemList(saved, 'હજુ કંઈ સેવ નથી કર્યું. યોજના કે દાખલો ખોલીને "સેવ કરો" દબાવો.')}</div>`;
 }
 
-function viewToday() {
-  const items = [...state.updates].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+// ---------- આજે શું નવું (યુઝર 27/11/26: છેલ્લી તારીખ નજીક, પ્રકાર પ્રમાણે, યોજનાનું પેજ, વોટ્સએપ) ----------
+let newsType = '';
+
+function newsShareText(u, s) {
+  const t = NEWS_TYPES[u.type] || NEWS_TYPES.jankari;
+  return waJoin([
+    [`*${u.type === 'form' || u.type === 'result' ? t.label + ': ' : ''}${waLine(u.title)}*`, waLine(u.summary)],
+    u.lastDate ? [`📅 છેલ્લી તારીખ: ${formatDate(u.lastDate)}`] : null,
+    ['📱 વધુ માહિતી ગુજરાતીમાં:', s ? pageUrl(s) : `${appUrl()}#/today`],
+  ]);
+}
+
+function newsCard(u) {
+  const t = NEWS_TYPES[u.type] || NEWS_TYPES.jankari;
+  const s = u.itemId ? findItem(u.itemId) : null;
+  const img = pic(u.image);
+  const d = u.lastDate ? deadlineText({ lastDate: u.lastDate }) : null;
+  const wa = 'https://wa.me/?text=' + encodeURIComponent(newsShareText(u, s));
   return `
-    ${pageHead('આજે શું નવું આવ્યું?', 'નવી માહિતી અને જરૂરી ચેતવણી', 'bell', '#/')}
-    <div class="news">${
-      items.length
-        ? items
-            .map(
-              (u) => `
-      <article class="card ${u.type === 'chetavani' ? 'warn' : ''}">
-        ${pic(u.image) ? `<img class="news-pic" src="${esc(pic(u.image))}" alt="" loading="lazy" decoding="async">` : ''}
-        <span class="when">${icon(u.type === 'chetavani' ? 'alert' : 'info', 'ic-sm')}${u.type === 'chetavani' ? 'ચેતવણી' : 'જાણકારી'} · ${esc(formatDate(u.date))}</span>
+      <article class="card news-${t.tone}">
+        ${img ? `<img class="news-pic" src="${esc(img)}" alt="" loading="lazy" decoding="async">` : ''}
+        <span class="when">${icon(t.icon, 'ic-sm')}<b>${t.label}</b> · ${esc(formatDate(u.date))}</span>
         <h3>${esc(u.title)}</h3>
         <p class="muted">${esc(u.summary)}</p>
-        ${u.link ? `<div class="row"><a class="btn" href="${esc(u.link)}" target="_blank" rel="noopener">${icon('external')}મૂળ સ્રોત</a></div>` : ''}
-      </article>`
-            )
-            .join('')
-        : '<div class="empty">હમણાં કોઈ નવી માહિતી નથી.</div>'
-    }</div>`;
+        ${d && d.tone !== 'over' ? `<p class="news-due due-${d.tone}">${icon('clock', 'ic-sm')}${d.tone === 'soon' ? `છેલ્લી તારીખ: ${esc(formatDate(u.lastDate))}` : `${esc(d.text)} · છેલ્લી તારીખ ${esc(formatDate(u.lastDate))}`}</p>` : ''}
+        <div class="row">
+          ${s ? `<a class="btn btn-primary" href="${itemHref(s)}">${icon('list')}પૂરી માહિતી જુઓ</a>` : ''}
+          ${u.link ? `<a class="btn" href="${esc(u.link)}" target="_blank" rel="noopener">${icon('external')}મૂળ સ્રોત</a>` : ''}
+          <a class="btn btn-ok" href="${wa}" target="_blank" rel="noopener">${icon('share')}વોટ્સએપ પર મોકલો</a>
+        </div>
+      </article>`;
+}
+
+function viewToday() {
+  const all = state.updates;
+  const due = dueItems(state.schemes);
+  // પ્રકારનાં બટન: ફક્ત જે પ્રકારની પોસ્ટ હોય તે, અને બે કે વધુ પ્રકાર હોય ત્યારે જ
+  const types = Object.keys(NEWS_TYPES).filter((k) => all.some((u) => u.type === k));
+  if (!types.includes(newsType)) newsType = '';
+  const items = newsType ? all.filter((u) => u.type === newsType) : all;
+  const chip = (k, label, n) =>
+    `<button type="button" class="chip${newsType === k ? ' active' : ''}" data-action="news-type" data-type="${k}" aria-pressed="${newsType === k}">${label}<span class="count">${n}</span></button>`;
+  return `
+    ${pageHead('આજે શું નવું આવ્યું?', 'નવી માહિતી, ચાલુ ફોર્મ અને જરૂરી ચેતવણી', 'bell', '#/')}
+    ${
+      due.length
+        ? `<section class="due-box" aria-label="છેલ્લી તારીખ નજીક">
+      <h2 class="section-title">${icon('clock')}છેલ્લી તારીખ નજીક<span class="count">${due.length}</span></h2>
+      <ul class="due-list">${due
+        .map(
+          (s) => `<li><a class="due-card" href="${itemHref(s)}">${tile('forms', 'red')}<span><b>${esc(s.title)}</b><small>${esc(deadlineText(s).text)} · છેલ્લી તારીખ ${esc(formatDate(s.lastDate))}</small></span>${icon('chev', 'ic-sm chev')}</a></li>`
+        )
+        .join('')}</ul>
+    </section>`
+        : ''
+    }
+    ${types.length > 1 ? `<div class="chips news-chips" role="group" aria-label="પ્રકાર">${chip('', 'બધું', all.length)}${types.map((k) => chip(k, NEWS_TYPES[k].label, all.filter((u) => u.type === k).length)).join('')}</div>` : ''}
+    <div class="news mt">${items.length ? items.map(newsCard).join('') : '<div class="empty">હમણાં કોઈ નવી માહિતી નથી.</div>'}</div>`;
 }
 
 function helpShareText(h) {
@@ -1897,6 +1939,12 @@ $view.addEventListener('click', async (e) => {
     const ev = state.events.find((x) => 'event:' + x.id === id);
     const prog = document.getElementById('event-progress');
     if (ev && prog) prog.textContent = eventProgress(ev, ready);
+  }
+
+  if (action === 'news-type') {
+    newsType = el.dataset.type || '';
+    render(true);
+    return;
   }
 
   if (action === 'filter') {

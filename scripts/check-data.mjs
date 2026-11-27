@@ -2,6 +2,7 @@
 // ચલાવો: node scripts/check-data.mjs
 import { readFileSync } from 'node:fs';
 import { CATEGORIES } from '../js/options.js';
+import { NEWS_TYPE_IDS } from '../js/news.js';
 
 const cats = new Set(CATEGORIES.map((c) => c.id));
 const errors = [];
@@ -69,7 +70,13 @@ const upIds = new Set();
 for (const u of updates) {
   const at = `આજે શું નવું "${u.id || '?'}"`;
   for (const f of ['id', 'title', 'summary', 'date']) if (!u[f] || typeof u[f] !== 'string') errors.push(`${at}: "${f}" ખૂટે છે`);
-  if (!['jankari', 'chetavani'].includes(u.type)) errors.push(`${at}: અજાણ્યો પ્રકાર "${u.type}"`);
+  if (!NEWS_TYPE_IDS.includes(u.type)) errors.push(`${at}: અજાણ્યો પ્રકાર "${u.type}" (${NEWS_TYPE_IDS.join(' / ')})`);
+  // યુઝર 27/11/26: itemId = કાર્ડની લિંક ("પૂરી માહિતી જુઓ"), lastDate = ફોર્મની છેલ્લી તારીખ (યોજના પર પણ લાગે)
+  // Digital Hub ની પોસ્ટમાં કાર્ડ પછી કાઢી નાખ્યું હોય તો ચાલે (એપ બટન ન બતાવે); જાણકારની પોતાની પોસ્ટમાં ભૂલ
+  if (u.itemId != null && !ids.has(u.itemId) && u.from !== 'hub') errors.push(`${at}: itemId "${u.itemId}" કોઈ કાર્ડ પર નથી`);
+  if (u.lastDate != null && !isDate(u.lastDate)) errors.push(`${at}: lastDate YYYY-MM-DD હોવી જોઈએ`);
+  if (u.lastDate && u.date && u.lastDate < u.date) errors.push(`${at}: lastDate પોસ્ટની તારીખ પહેલાંની છે`);
+  if (u.lastDate && !u.itemId) errors.push(`${at}: lastDate સાથે itemId (કઈ યોજના) જોઈએ`);
   if (u.date && !isDate(u.date)) errors.push(`${at}: date YYYY-MM-DD હોવી જોઈએ`);
   [u.link, u.image].forEach((x) => x && !x.startsWith('https://') && errors.push(`${at}: લિંક https:// થી શરૂ થવી જોઈએ (${x})`));
   if (upIds.has(u.id)) errors.push(`${at}: id બે વાર છે`);
