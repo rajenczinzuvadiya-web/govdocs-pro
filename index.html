@@ -40,12 +40,12 @@
   </script>
 </head>
 <body>
-  <!-- Splash (યુઝર 27/11/26): ફક્ત ઇન્સ્ટોલ થયેલી એપ (Play Store / હોમ સ્ક્રીન) ખૂલે ત્યારે, ટૅબ દીઠ એક વાર.
-       ફોનના પોતાના splash (સફેદ + આઇકન, manifest) પછી એ જ આઇકન એ જ જગ્યાએ, પછી નામ. ટેપ = તરત બંધ. -->
+  <!-- Splash (યુઝર 27/11/26, 28/11/26): ફક્ત ઇન્સ્ટોલ થયેલી એપ (Play Store / હોમ સ્ક્રીન) ખૂલે ત્યારે, ટૅબ દીઠ એક વાર.
+       ફોનનો પોતાનો splash = સફેદ + મોટો ગોળ આઇકન (maskable) સ્ક્રીનની વચ્ચે. આપણો એ જ ગોળ આઇકન એ જ માપ / જગ્યાએથી શરૂ થઈ
+       નાનો થઈ ઉપર જાય, પછી નામ (ઝટકો ન લાગે). ટેપ = તરત બંધ. -->
   <div id="splash" aria-hidden="true">
-    <div class="sp-stage"><i class="sp-ring"></i><i class="sp-ring sp-r2"></i><img data-src="icons/icon-512.png" alt="" width="132" height="132"></div>
-    <b class="sp-name">જાણકાર</b>
-    <span class="sp-line">યોજના, સહાય અને દાખલાની માહિતી</span>
+    <div class="sp-icon"><i class="sp-ring"></i><img data-src="icons/icon-maskable-512.png" alt="" width="512" height="512"></div>
+    <div class="sp-text"><b class="sp-name">જાણકાર</b><span class="sp-line">યોજના, સહાય અને દાખલાની માહિતી</span></div>
     <span class="sp-by">KruPa Digital Hub</span>
   </div>
   <script>
@@ -59,8 +59,8 @@
         var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
         var im = el.querySelector('img'); im.src = im.dataset.src;
         d.classList.add('splash-on');
-        var end = function () { if (done) return; done = true; el.classList.add('sp-out'); setTimeout(function () { d.classList.remove('splash-on'); }, 350); };
-        var ready = function () { setTimeout(end, Math.max(0, (still ? 600 : 1700) - (Date.now() - t0))); };
+        var end = function () { if (done) return; done = true; el.classList.add('sp-out'); setTimeout(function () { d.classList.remove('splash-on'); }, 420); };
+        var ready = function () { setTimeout(end, Math.max(0, (still ? 600 : 1500) - (Date.now() - t0))); };
         if (document.readyState === 'complete') ready(); else addEventListener('load', ready);
         setTimeout(end, 3000);
         addEventListener('pointerdown', end, { once: true, capture: true });
