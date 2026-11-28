@@ -1156,24 +1156,28 @@ a.ev-help:hover b { color: var(--ok); }
 .cc-wa .btn-ok:hover { color: #fff; filter: brightness(1.08); }
 .cc-act .btn-ghost, .find-act .btn-ghost { color: var(--primary); }
 
-/* ---------- Splash (યુઝર 27/11/26): ફક્ત ઇન્સ્ટોલ થયેલી એપમાં, index.html ની script ચાલુ કરે ----------
-   સફેદ પાછળ (manifest નું background_color = ફોનનો પોતાનો splash), આઇકન વચ્ચે, બે આછાં વર્તુળ ફેલાય, પછી નામ. */
+/* ---------- Splash (યુઝર 27/11/26, 28/11/26): ફક્ત ઇન્સ્ટોલ થયેલી એપમાં, index.html ની script ચાલુ કરે ----------
+   ફોનનો splash: સફેદ + ગોળ આઇકન (≈ 53% પહોળો) બરાબર વચ્ચે. આપણો આઇકન ત્યાંથી જ શરૂ થઈ નાનો થઈ ઉપર જાય, પછી નામ.
+   બંધ થતાં પહેલાં લખાણ ઝાંખું, પછી સફેદ પાછળ (હોમ પર "જાણકાર" લખાણ ઓવરલેપ ન દેખાય).
+   reduced motion માં ઍનિમેશન નહીં: એટલે મૂળ (CSS) સ્થિતિ = છેલ્લી સ્થિતિ. */
 #splash { display: none; }
-html.splash-on #splash {
-  position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .35rem;
-  padding: 1rem; background: radial-gradient(circle at 50% 42%, #eef2fb 0, #ffffff 55%); color: #16203d; text-align: center;
-}
+html.splash-on #splash { position: fixed; inset: 0; z-index: 100; display: block; overflow: hidden; background: #ffffff; color: #16203d; text-align: center; }
 html.splash-on body { overflow: hidden; }
-#splash.sp-out { opacity: 0; transition: opacity .3s ease; }
-.sp-stage { position: relative; display: grid; place-items: center; width: 132px; height: 132px; margin-bottom: 1.1rem; }
-.sp-stage img { position: relative; width: 132px; height: 132px; border-radius: 30px; box-shadow: 0 14px 34px rgba(30, 47, 107, .28); animation: spPop .6s cubic-bezier(.2, .9, .3, 1.25) both; }
-.sp-ring { position: absolute; inset: 0; border-radius: 34px; border: 2px solid rgba(30, 47, 107, .35); animation: spRing 1.4s ease-out .35s both; }
-.sp-ring.sp-r2 { border-color: rgba(217, 119, 28, .45); animation-delay: .6s; }
-.sp-name { font-size: 2.2rem; font-weight: 800; color: #1e2f6b; line-height: 1.2; animation: spUp .5s ease-out .45s both; }
-.sp-line { font-size: 1rem; font-weight: 600; color: #566080; animation: spUp .5s ease-out .65s both; }
-.sp-by { position: absolute; bottom: calc(1.75rem + env(safe-area-inset-bottom)); left: 0; right: 0; font-size: .85rem; font-weight: 700; color: #d9771c; letter-spacing: .02em; animation: spUp .5s ease-out .85s both; }
-@keyframes spPop { from { opacity: 0; transform: scale(.72); } to { opacity: 1; transform: none; } }
-@keyframes spRing { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(1.75); } }
+#splash.sp-out { opacity: 0; transition: opacity .25s ease .14s; }
+#splash.sp-out > * { opacity: 0 !important; transition: opacity .14s ease; }
+.sp-icon {
+  position: absolute; left: 50%; top: calc(50% - 4.25rem); width: 7.5rem; height: 7.5rem; transform: translate(-50%, -50%);
+  animation: spIcon .55s cubic-bezier(.3, .7, .2, 1) .12s both;
+}
+.sp-icon img { display: block; width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 12px 30px rgba(30, 47, 107, .25); animation: spShadow .55s ease-out .12s both; }
+.sp-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(217, 119, 28, .5); opacity: 0; animation: spRing 1.1s ease-out .6s forwards; }
+.sp-text { position: absolute; left: 1rem; right: 1rem; top: calc(50% + .5rem); display: grid; gap: .3rem; }
+.sp-name { font-size: 2.2rem; font-weight: 800; color: #1e2f6b; line-height: 1.2; animation: spUp .45s ease-out .5s both; }
+.sp-line { font-size: 1rem; font-weight: 600; color: #566080; animation: spUp .45s ease-out .65s both; }
+.sp-by { position: absolute; bottom: calc(1.75rem + env(safe-area-inset-bottom)); left: 0; right: 0; font-size: .85rem; font-weight: 700; color: #d9771c; letter-spacing: .02em; animation: spUp .45s ease-out .8s both; }
+@keyframes spIcon { from { top: 50%; width: min(53vw, 15rem); height: min(53vw, 15rem); } }
+@keyframes spShadow { from { box-shadow: 0 0 0 rgba(30, 47, 107, 0); } }
+@keyframes spRing { from { opacity: .9; transform: scale(1); } to { opacity: 0; transform: scale(1.6); } }
 @keyframes spUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
 /* ---------- "જાણકાર એપ" ઇન્સ્ટોલ પટ્ટી (js/install.js; યુઝર 27/11/26, Digital Hub જેવી) ---------- */

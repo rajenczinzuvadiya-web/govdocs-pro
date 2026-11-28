@@ -86,13 +86,33 @@ Dashboard માં દરેક કામ પર ક્લિક કરો. જ
 
 ## પગલું 6: 12 લોકો સાથે 14 દિવસનો ટેસ્ટ (ફરજિયાત)
 
-નવા વ્યક્તિગત એકાઉન્ટ માટે Google નો નિયમ છે.
+નવા વ્યક્તિગત એકાઉન્ટ માટે Google નો નિયમ છે. **12 થી વધુ (15–20) લોકો રાખો**, કોઈ વચ્ચે એપ કાઢી નાખે તો પણ 12 રહે.
 
-1. ડાબી બાજુ "Testing" → "Closed testing" → "Create track" દબાવો.
-2. "Create new release" દબાવો અને zip માંની `.aab` ફાઇલ અપલોડ કરો.
-3. "Testers" માં ઓછામાં ઓછા 12 લોકોના Gmail ઉમેરો (VCE, વિદ્યાર્થી, ઓળખીતા).
-4. "Copy link" થી ટેસ્ટની લિંક એ લોકોને વોટ્સએપ પર મોકલો.
-5. દરેક જણ લિંક ખોલીને એપ ઇન્સ્ટોલ કરે, અને 14 દિવસ સુધી ફોનમાં રાખે.
+**A. ટેસ્ટરનાં Gmail ભેગાં કરો**
+1. 15–20 ઓળખીતા (VCE, વિદ્યાર્થી, મિત્રો, ઘરના) — દરેક પાસે **Android ફોન** અને એ ફોનમાં ચાલતું **Gmail** હોવું જોઈએ (iPhone નહીં).
+2. વોટ્સએપ પર પૂછો: "તમારા ફોનમાં Play Store કયા Gmail થી ચાલે છે?" — એ જ Gmail લખી લો.
+
+**B. Play Console માં ટેસ્ટ બનાવો**
+1. ડાબી બાજુ "Test and release" → "Testing" → "Closed testing" → "Create track" (કે હાજર "Alpha" → "Manage track").
+2. "Testers" ટૅબ → "Create email list" → નામ `Jankar testers` → બધાં Gmail પેસ્ટ કરો (અલ્પવિરામ `,` થી અલગ) → "Save changes".
+3. "Feedback URL or email address" માં: krupadigitalhub@gmail.com → "Save".
+4. "Countries / regions" ટૅબ → "Add countries / regions" → India ✓ → "Save".
+5. "Create new release" → zip માંની `.aab` ફાઇલ ખેંચીને મૂકો → Release name એમ જ → Release notes: `પહેલું ટેસ્ટ વર્ઝન` → "Next" → "Save" → "Send for review" (પહેલી વાર Google 1–3 દિવસ ચકાસે).
+6. મંજૂર થાય એટલે "Testers" ટૅબમાં નીચે "Join on Android" ની લિંક → "Copy link".
+
+**C. ટેસ્ટરને વોટ્સએપ પર મોકલો** (નીચેનો મેસેજ, લિંક બદલીને)
+
+> 🙏 નમસ્તે, મારી "જાણકાર" એપ Play Store પર મૂકવા માટે 14 દિવસનો ટેસ્ટ છે. મદદ કરશો?
+> 1. આ લિંક ફોનમાં ખોલો (એ જ Gmail થી જે મને આપ્યું): LINK
+> 2. "Become a tester" દબાવો.
+> 3. પછી "Download it on Google Play" → "Install".
+> 4. **14 દિવસ સુધી એપ ફોનમાંથી કાઢશો નહીં**, અને બની શકે તો રોજ એક વાર ખોલો.
+> કંઈ ભૂલ દેખાય તો એપમાં "સૂચન" બટનથી જણાવો. આભાર 🙏
+
+**D. 14 દિવસ દરમ્યાન**
+1. Play Console → "Closed testing" → "Testers" માં જુઓ કે 12 થી વધુ લોકો "opted in" છે. ઓછા હોય તો નવા Gmail ઉમેરી લિંક મોકલો (14 દિવસ ફરી ગણાય નહીં, પણ 12 પૂરા થાય ત્યારથી ગણાય).
+2. ટેસ્ટરનાં સૂચન Claude ને આપો. સુધારા વેબસાઇટ પર જાય એટલે એપમાં આપોઆપ આવે.
+3. 7–10 દિવસે એક નવું `.aab` (Version code 2) "Create new release" થી મૂકો — Google "ટેસ્ટ દરમ્યાન સુધારા કર્યા?" પૂછે છે.
 
 ## પગલું 7: બધા લોકો માટે ચાલુ કરો
 
