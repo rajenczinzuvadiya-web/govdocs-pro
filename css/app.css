@@ -269,6 +269,10 @@ button { font: inherit; color: inherit; }
 .foot-links a { display: inline-flex; align-items: center; min-height: 2.5rem; color: var(--muted); text-decoration: none; }
 .foot-links a:hover { color: var(--primary); text-decoration: underline; }
 .fcopy { padding: .1rem 1rem .9rem; text-align: center; font-size: .8rem; }
+.fnote { display: block; margin-top: .15rem; font-size: .75rem; }
+/* હોમ: "ફક્ત માહિતી" (યુઝર 28/11/26) — નાની, શાંત લીટી, ચેતવણી જેવી નહીં */
+.only-info { display: flex; gap: .4rem; align-items: flex-start; justify-content: center; margin: .75rem 0 0; font-size: .8rem; line-height: 1.45; color: var(--muted); text-align: left; }
+.only-info .ic { flex: none; margin-top: .15rem; }
 /* ફોન: નીચેનાં બટન (💬 સૂચન, ⬆ ઉપર) © પર ન આવે, એટલે © બટનની ઉપર */
 @media (max-width: 1023px) { .foot { padding: 0 1rem 3.6rem; } .fcopy { padding-top: .9rem; } }
 /* યુઝર 25/11/26: ફોનમાં ફૂટરમાં ફક્ત ©; નિયમોનાં પેજ "વધુ" મેનુમાં. કમ્પ્યુટર પર ફૂટરમાં (સાઇડબારમાં નહીં):

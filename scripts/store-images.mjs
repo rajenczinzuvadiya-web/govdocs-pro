@@ -49,6 +49,8 @@ for (const [name, route] of shots) {
   }, [profile, route === 'welcome']);
   await p.goto(U + (route === 'welcome' ? '#/' : route), { waitUntil: 'networkidle' });
   await p.reload({ waitUntil: 'networkidle' });
+  // હોમના ફોટામાં "સૂચન" બટન "ફક્ત માહિતી" લીટી પર ચડી ભૂલ જેવું લાગે (28/11/26) — ફક્ત આ ફોટામાં છુપાવો
+  if (name === '1-home') await p.addStyleTag({ content: '.fab { visibility: hidden; }' });
   await p.screenshot({ path: `${OUT}screenshots/${name}.png` });
 }
 

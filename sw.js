@@ -1,6 +1,6 @@
 // ઑફલાઇન: એપ ફોનમાં સેવ રહે, અને છેલ્લી ડાઉનલોડ થયેલી માહિતી નેટ વગર પણ દેખાય.
 // કોડ બદલો ત્યારે VERSION વધારવું, એટલે યુઝર્સના ફોનમાં નવું વર્ઝન આવે.
-const VERSION = 'v29';
+const VERSION = 'v30';
 const SHELL = `shell-${VERSION}`;
 const DATA = 'data';
 
@@ -38,8 +38,17 @@ const SHELL_FILES = [
   'icons/doc-hub.png',
 ];
 
+// યોજનાનો ડેટા પણ ઇન્સ્ટોલ વખતે જ ફોનમાં (28/11/26): પહેલી વાર ખોલ્યા પછી તરત નેટ વગર ખોલો તો પણ યોજના દેખાય.
+// પહેલાં ડેટા ફક્ત બીજી વાર ખોલો ત્યારે સેવ થતો. એક ફાઇલ ન મળે તો પણ ઇન્સ્ટોલ અટકે નહીં.
+const DATA_FILES = ['schemes', 'updates', 'documents', 'events', 'essentials', 'dhyan', 'helplines'].map((f) => `data/${f}.json`);
+
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(SHELL).then((c) => c.addAll(SHELL_FILES)).then(() => self.skipWaiting()));
+  event.waitUntil(
+    Promise.all([
+      caches.open(SHELL).then((c) => c.addAll(SHELL_FILES)),
+      caches.open(DATA).then((c) => Promise.all(DATA_FILES.map((f) => c.add(new Request(f, { cache: 'no-cache' })).catch(() => {})))),
+    ]).then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', (event) => {
