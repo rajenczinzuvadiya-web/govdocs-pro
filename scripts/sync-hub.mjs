@@ -210,7 +210,7 @@ export function mergeHelplines(feed, H) {
   if (!Array.isArray(feed?.helplines)) return null;
   const seen = new Set();
   const helplines = [];
-  // વિગત (about, points, image): Digital Hub માં હોય તો ત્યાંની, નહીં તો જાણકારમાં લખેલી રહે
+  // વિગત (about, points): Digital Hub માં હોય તો ત્યાંની, નહીં તો જાણકારમાં લખેલી રહે. ફોટો ફક્ત Digital Hub નો.
   const old = new Map(((H && H.helplines) || []).map((h) => [h.number, h]));
   for (const r of feed.helplines) {
     const number = str(r?.number).replace(/[\s-]/g, '');
@@ -224,7 +224,8 @@ export function mergeHelplines(feed, H) {
         const o = old.get(number) || {};
         const about = str(r.about) || o.about;
         const points = Array.isArray(r.points) ? r.points.map(str).filter(Boolean) : o.points;
-        const image = /^https:\/\/[^\s"'<>]+$/.test(str(r.image)) ? str(r.image) : o.image;
+        // ફોટો ફક્ત Digital Hub નો (યુઝર 28/11/26): ત્યાં કાઢ્યો તો અહીંથી પણ જાય
+        const image = /^https:\/\/[^\s"'<>]+$/.test(str(r.image)) ? str(r.image) : '';
         return { ...(about ? { about } : {}), ...(points && points.length ? { points } : {}), ...(image ? { image } : {}) };
       })(),
       // દેખાવ: Digital Hub માં લખ્યું હોય તેમ (1800-180-1551), ફોન ફક્ત આંકડાથી.
