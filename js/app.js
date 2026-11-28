@@ -253,7 +253,7 @@ function renderFooter() {
   const y = new Date().getFullYear();
   document.getElementById('foot').innerHTML = `
     <nav class="foot-links" aria-label="માહિતી">${INFO_LINKS.filter((l) => !FOOT_SKIP.has(l.route)).map((l) => `<a href="#/${l.route}">${esc(l.label)}</a>`).join('')}</nav>
-    <p class="fcopy">© ${y > COPY_FROM ? `${COPY_FROM}–${y}` : COPY_FROM} ${esc(APP.name)} · KruPa Digital Hub</p>`;
+    <p class="fcopy">© ${y > COPY_FROM ? `${COPY_FROM}–${y}` : COPY_FROM} ${esc(APP.name)} · KruPa Digital Hub<span class="fnote">ફક્ત માહિતી · સરકારી એપ નથી · અરજી કે સેવા અમે આપતા નથી</span></p>`;
 }
 
 // ---------- છેલ્લી તારીખની યાદ ----------
@@ -532,6 +532,7 @@ function viewHome() {
         </label>
         ${homeAsk()}
         <a class="find-cta" href="#/find">${tile('idea', 'blue')}<span><b>તમારા માટે યોજના શોધો</b><small>તમે કોણ છો, શું કરો છો, આવક, જાતિ… પ્રમાણે</small></span>${icon('chev', 'ic-sm chev')}</a>
+        <p class="only-info">${icon('info', 'ic-sm')}<span>${APP.name} ફક્ત માહિતી આપે છે. અરજી, દાખલો કે સહાય અમે આપતા નથી.</span></p>
       </div>
     </section>
     ${homeDhyan()}
@@ -983,7 +984,8 @@ function viewItem(id) {
           <a class="btn btn-primary btn-block" href="#/contact?about=${encodeURIComponent(s.id)}">${icon('message')}ભૂલ / સૂચન જણાવો</a>
         </div>
         <div class="card side-box">
-          <h3>${icon('book')}સ્રોત</h3>
+          <h3>${icon('book')}સ્રોત અને અરજી</h3>
+          <p class="small muted">અરજી નીચેની સત્તાવાર સાઇટ પર કે કચેરીમાં જ થાય. ${APP.name} ફક્ત માહિતી આપે છે, અરજી કે સેવા નહીં.</p>
           <div class="sources">${sources}<span>છેલ્લે અપડેટ: ${esc(formatDate(s.updatedOn))}</span></div>
         </div>
       </aside>
@@ -1193,7 +1195,7 @@ function viewAbout() {
       </div>
       ${stats.length ? `<ul class="ah-stats">${stats.map(([ic, n, t]) => `<li>${icon(ic)}<b>${n}</b><span>${t}</span></li>`).join('')}</ul>` : ''}
     </section>
-    <p class="note note-info mt">${icon('info')}<span>${APP.name} ખાનગી માહિતી એપ છે — સરકારી એપ નથી. અરજી હંમેશાં સત્તાવાર સાઇટ પર કે કચેરીમાં જ કરો.</span></p>
+    <p class="note note-info mt">${icon('info')}<span>${APP.name} ખાનગી માહિતી એપ છે — સરકારી એપ નથી. અમે ફક્ત માહિતી આપીએ છીએ: અરજી, દાખલો, સહાય કે કોઈ સરકારી સેવા આપતા નથી. અરજી હંમેશાં સત્તાવાર સાઇટ પર કે કચેરીમાં જ કરો.</span></p>
     <article class="card info-doc mt">${parts
       .filter((x) => x.title !== 'સરકારી એપ નથી')
       .map((x, i) => `
@@ -1256,6 +1258,7 @@ function viewContact(params) {
       <aside class="contact-side">
         <h2 class="box-title">${icon('call')}સીધો સંપર્ક</h2>
         ${contactCards(about, subject, about)}
+        <p class="small muted">${icon('info', 'ic-sm')}અમે ફક્ત માહિતી આપીએ છીએ. અરજી, દાખલો કાઢવો કે સહાય મંજૂર કરવી એ અમારું કામ નથી, એ માટે સત્તાવાર કચેરી કે સાઇટ.</p>
         <p class="small muted">${icon('lock', 'ic-sm')}આધાર, બેંક નંબર કે OTP ક્યારેય ન મોકલો. અમે ક્યારેય માંગતા નથી.</p>
       </aside>
       <form id="contact-form" class="card stack" data-title="${esc(title)}" data-page="${esc(page)}" data-link="${esc(link)}" novalidate>

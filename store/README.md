@@ -57,6 +57,8 @@ Play Store પર ફરી અપલોડ ફક્ત નામ કે આઇ
    - "Splash screen color" / "Background color": `#FFFFFF`
    - "Splash screen fade out duration": `300`
    - "Icon" એમ જ રહેવા દો (વેબસાઇટનો જ આઇકન આવે છે).
+   - "Notification delegation": **Enabled** (✓) રહેવા દો — સેવ કરેલી યોજનાની છેલ્લી તારીખની યાદ એનાથી આવે.
+   - "Location delegation", "Google Play billing": બંધ (✗).
    ફોન પહેલાં સફેદ પાછળ આઇકન બતાવશે, પછી એપ પોતાનું splash (આઇકન + "જાણકાર" + લીટી) બતાવી હોમ ખોલશે. Play Store પર splash અલગ અપલોડ કરવાનું નથી.
 7. "Download" દબાવો. એક zip ફાઇલ આવશે.
 8. **zip માંની `signing.keystore` અને `signing-key-info.txt` Google Drive માં સાચવી રાખો.** આ ખોવાય તો એપ ક્યારેય અપડેટ નહીં થાય.

@@ -95,7 +95,7 @@ ${body}
 </main>
 <footer class="foot">
   <nav aria-label="માહિતી">${FOOT_LINKS.map(([h, l]) => `<a href="${h}">${esc(l)}</a>`).join('')}</nav>
-  <p>© 2026 ${esc(APP.name)} · KruPa Digital Hub · સરકારી સાઇટ નથી</p>
+  <p>© 2026 ${esc(APP.name)} · KruPa Digital Hub · ફક્ત માહિતી, સરકારી સાઇટ નથી · અરજી કે સેવા અમે આપતા નથી</p>
 </footer>
 <script type="module">import { installWaPicker } from '/js/wa.js'; installWaPicker();${APP.analytics && APP.analytics.ga ? " import { trackPage } from '/js/analytics.js'; trackPage(document.title);" : ''}</script>
 </body>
@@ -155,7 +155,7 @@ ${expired ? `<p class="due">છેલ્લી તારીખ (${ddmmyy(s.lastD
   <a class="btn btn-wa" href="${esc(waShare(s.title, SITE + path))}">વોટ્સએપ પર મોકલો</a>
 </div>
 ${related.length ? `<h2 class="sec">${kind === 'doc' ? 'બીજા દસ્તાવેજ' : 'બીજી યોજના'}</h2><ul class="links two">${related.map((x) => `<li><a href="${pagePath(kind, x.id)}"><b>${esc(x.title)}</b>${x.summary ? `<small>${esc(clip(x.summary, 110))}</small>` : ''}</a></li>`).join('')}</ul>` : ''}
-<p class="note">માહિતી: ${esc(ddmmyy(s.updatedOn) || ddmmyy(ctx.today))} સુધીની, સરકારી સાઇટ પરથી આપણા સરળ શબ્દોમાં. ${esc(APP.name)} સરકારી એપ નથી; નિયમ, ફી કે તારીખ બદલાઈ શકે — અરજી પહેલાં સત્તાવાર સાઇટ પર ખાતરી કરો. ભૂલ દેખાય તો <a href="/#/contact?about=${esc(encodeURIComponent(s.id))}">જણાવો</a>.</p>`;
+<p class="note">માહિતી: ${esc(ddmmyy(s.updatedOn) || ddmmyy(ctx.today))} સુધીની, સરકારી સાઇટ પરથી આપણા સરળ શબ્દોમાં. ${esc(APP.name)} સરકારી એપ નથી, ફક્ત માહિતી આપે છે (અરજી કે સેવા નહીં); નિયમ, ફી કે તારીખ બદલાઈ શકે — અરજી પહેલાં સત્તાવાર સાઇટ પર ખાતરી કરો. ભૂલ દેખાય તો <a href="/#/contact?about=${esc(encodeURIComponent(s.id))}">જણાવો</a>.</p>`;
   return {
     path,
     lastmod: s.updatedOn || ctx.today,
